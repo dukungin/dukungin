@@ -4,6 +4,19 @@ import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+// ============================================================
+// DETEKSI ENVIRONMENT
+// ============================================================
+const isProduction = import.meta.env.VITE_NODE_ENV === 'production';
+
+const MIDTRANS_CLIENT_KEY = isProduction
+  ? import.meta.env.VITE_MIDTRANS_CLIENT_KEY
+  : import.meta.env.VITE_DEV_MIDTRANS_CLIENT_KEY;
+
+const SNAP_URL = isProduction
+  ? 'https://app.midtrans.com/snap/snap.js'
+  : 'https://app.sandbox.midtrans.com/snap/snap.js';
+
 const SupporterPage = () => {
   const { username } = useParams();
   const [streamer, setStreamer] = useState(null);
@@ -27,11 +40,8 @@ const SupporterPage = () => {
     }
 
     const script = document.createElement('script');
-    script.src =
-      import.meta.env.VITE_NODE_ENV === 'production'
-        ? 'https://app.midtrans.com/snap/snap.js'
-        : 'https://app.sandbox.midtrans.com/snap/snap.js';
-    script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY);
+    script.src = SNAP_URL;
+    script.setAttribute('data-client-key', MIDTRANS_CLIENT_KEY);
     script.onload = () => setSnapReady(true);
     document.head.appendChild(script);
 
@@ -75,6 +85,10 @@ const SupporterPage = () => {
         localStorage.setItem('midtrans_pending_username', streamer.username);
         localStorage.setItem('midtrans_pending_url', res.data.url || '');
       }
+
+      console.log('[Snap] isProduction:', isProduction);
+      console.log('[Snap] CLIENT_KEY used:', MIDTRANS_CLIENT_KEY);
+      console.log('[Snap] Token:', res.data.token);
 
       // Pilihan 1: Buka Snap popup
       if (res.data.token && snapReady && window.snap) {
