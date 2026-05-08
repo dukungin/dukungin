@@ -58,7 +58,7 @@ const Auth = () => {
     
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-      const res = await axios.post(`http://localhost:5101${endpoint}`, formData);
+      const res = await axios.post(`https://server-dukungin-production.up.railway.app${endpoint}`, formData);
       
       // BACKEND SUCCESS: Status 200 atau 201
       if (isLogin) {
@@ -132,7 +132,7 @@ const Auth = () => {
       const finalPin = pin.join('');
 
       const res = await axios.post(
-        'http://localhost:5101/api/auth/verify-pin',
+        'https://server-dukungin-production.up.railway.app/api/auth/verify-pin',
         {
           email: verifyEmail,
           pin: finalPin
@@ -154,7 +154,7 @@ const Auth = () => {
   const handleResendPin = async () => {
     try {
       const res = await axios.post(
-        'http://localhost:5101/api/auth/resend-pin',
+        'https://server-dukungin-production.up.railway.app/api/auth/resend-pin',
         { email: verifyEmail }
       );
 
@@ -174,7 +174,7 @@ const Auth = () => {
       setLoading(true);
 
       const res = await axios.post(
-        'http://localhost:5101/api/auth/forgot-password',
+        'https://server-dukungin-production.up.railway.app/api/auth/forgot-password',
         { email: emailReset }
       );
 

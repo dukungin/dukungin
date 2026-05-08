@@ -19,7 +19,7 @@ const OverlayAlert = () => {
     if (!token) return;
 
     axios
-      .get(`http://localhost:5101/api/overlay/config/${token}`)
+      .get(`https://server-dukungin-production.up.railway.app/api/overlay/config/${token}`)
       .then((res) => {
         setConfig(res.data);
         // ✅ Sync ke ref setiap kali config update
@@ -33,7 +33,7 @@ const OverlayAlert = () => {
     if (!token) return;
 
     // ✅ Buat koneksi di dalam effect
-    const socket = io('http://localhost:5101');
+    const socket = io('https://server-dukungin-production.up.railway.app');
     
     socket.emit('join-overlay', token);
 

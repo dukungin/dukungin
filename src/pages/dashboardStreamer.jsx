@@ -34,7 +34,7 @@ const WithdrawPage = () => {
 
   const fetchCurrentBalance = async () => {
     try {
-      const res = await axios.get('http://localhost:5101/api/overlay/my-settings', {
+      const res = await axios.get('https://server-dukungin-production.up.railway.app/api/overlay/my-settings', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       // Asumsi data user dikirim bersama settings atau buat endpoint khusus profile
@@ -54,7 +54,7 @@ const WithdrawPage = () => {
 
     setLoading(true);
     try {
-      await axios.post('http://localhost:5101/api/xendit/withdraw', {
+      await axios.post('https://server-dukungin-production.up.railway.app/api/xendit/withdraw', {
         ...formData,
         paymentMethod: method
       }, {
