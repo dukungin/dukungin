@@ -52,7 +52,7 @@ const Auth = () => {
     return () => clearInterval(interval);
   }, [isVerify, resendTimer, canResend]);
 
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     
@@ -60,50 +60,34 @@ const Auth = () => {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
       const res = await axios.post(`https://server-dukungin-production.up.railway.app${endpoint}`, formData);
       
-      // BACKEND SUCCESS: Status 200 atau 201
       if (isLogin) {
         localStorage.setItem('token', res.data.token);
-        // Ambil message "Login Berhasil" dari res.data.message backend
         notify("Berhasil!", res.data.message, "success"); 
         setTimeout(() => navigate('/dashboard'), 2000);
-     } else {
+      } else {
+        // REGISTER SUCCESS
         notify("Cek Email!", res.data.message, "success");
-
         setVerifyEmail(formData.email);
-
+        
+        // Reset form dan pindah ke verifikasi
         setTimeout(() => {
           setIsVerify(true);
-          setNotification(prev => ({ ...prev, show: false })); // 🔥 tutup modal
-        }, 1500);
-
-        return; // 🔥 penting supaya stop
+          setNotification(prev => ({ ...prev, show: false }));
+        }, 2000);
       }
     } catch (err) {
-        const status = err.response?.status;
-        const errorMessage = err.response?.data?.message || "Terjadi kesalahan koneksi";
-
-        // Jika status 403 (Belum Verifikasi)
-        if (status === 403) {
-          notify("Verifikasi Diperlukan", errorMessage, "error");
-          setVerifyEmail(formData.email);
-          // Beri jeda sedikit agar user bisa baca modal sebelum pindah ke form PIN
-          setTimeout(() => {
-            setIsVerify(true);
-            setNotification(prev => ({ ...prev, show: false }));
-          }, 2000);
-          return;
-        }
-
-        // Error lainnya
-        setNotification({
-          show: true,
-          title: isLogin ? "Gagal Masuk" : "Registrasi Gagal",
-          message: errorMessage,
-          type: 'error' 
-        });
-      } finally {
-        setLoading(false);
-      }
+      console.error("Auth Error:", err.response?.data);
+      const errorMessage = err.response?.data?.message || "Koneksi terputus atau server error";
+      
+      setNotification({
+        show: true,
+        title: "Gagal",
+        message: errorMessage,
+        type: 'error' 
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChangePin = (value, index) => {
