@@ -1,15 +1,17 @@
-import {
-    History,
-    Layout,
-    LogOut,
-    ShieldAlert,
-    User,
-    Wallet,
-    X
+import { 
+  History, 
+  Layout, 
+  LogOut, 
+  ShieldAlert, 
+  User, 
+  Wallet, 
+  X,
+  AlertCircle 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// Helper decode JWT
 const getTokenPayload = () => {
   const token = localStorage.getItem('token');
   if (!token) return null;
@@ -22,12 +24,12 @@ const getTokenPayload = () => {
 
 const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const payload = getTokenPayload();
   const isSuperAdmin = payload?.role === 'superAdmin';
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    alert("Berhasil logout!");
     navigate('/login'); 
   };
 
@@ -39,78 +41,128 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
   ];
 
   return (
-    <aside className={`
-      fixed lg:sticky top-0 left-0 h-screen w-72 bg-white border-r border-slate-100 p-8 flex flex-col z-[60] transition-transform duration-300
-      ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-    `}>
-      {/* LOGO AREA */}
-      <div className="flex items-center justify-between mb-12">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
-            D
+    <>
+      {/* MODAL LOGOUT MODERN */}
+      <AnimatePresence>
+        {showLogoutConfirm && (
+          <div className="fixed inset-0 z-[999] flex items-center justify-center p-6">
+            {/* Backdrop Blur */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowLogoutConfirm(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+            />
+
+            {/* Modal Box */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md bg-white rounded-[2.5rem] p-10 shadow-2xl text-center overflow-hidden"
+            >
+              <div className="w-20 h-20 mx-auto mb-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center">
+                <AlertCircle size={40} />
+              </div>
+
+              <h3 className="text-2xl font-black text-slate-800 mb-2">Konfirmasi Keluar</h3>
+              <p className="text-slate-500 font-medium mb-8">
+                Apakah kamu yakin ingin mengakhiri sesi ini?
+              </p>
+
+              <div className="flex flex-col gap-3">
+                <button 
+                  onClick={handleLogout}
+                  className="w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-200 hover:bg-red-700 active:scale-[0.98] transition-all"
+                >
+                  Ya, Logout
+                </button>
+                <button 
+                  onClick={() => setShowLogoutConfirm(false)}
+                  className="w-full py-4 bg-slate-100 text-slate-600 rounded-2xl font-black text-lg hover:bg-slate-200 active:scale-[0.98] transition-all"
+                >
+                  Batal
+                </button>
+              </div>
+            </motion.div>
           </div>
-          <h1 className="text-lg font-black tracking-tight text-slate-800">DUKUNG.In</h1>
-        </div>
-        <button 
-          onClick={() => setIsSidebarOpen(false)} 
-          className="lg:hidden p-2 text-slate-400"
-        >
-          <X />
-        </button>
-      </div>
+        )}
+      </AnimatePresence>
 
-      {/* NAVIGATION */}
-      <nav className="flex-1 space-y-4">
-        {menuItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => {
-              setActiveTab(item.id);
-              setIsSidebarOpen(false);
-            }}
-            className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
-              activeTab === item.id 
-                ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
-                : 'text-slate-400 hover:bg-slate-200'
-            }`}
-          >
-            {item.icon}
-            <span className="text-sm">{item.label}</span>
-          </button>
-        ))}
-
-        {/* Menu SuperAdmin — hanya muncul kalau role superAdmin */}
-        {isSuperAdmin && (
-          <>
-            <div className="pt-4 pb-2">
-              <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest px-1">Super Admin</p>
+      {/* SIDEBAR ASIDE */}
+      <aside className={`
+        fixed lg:sticky top-0 left-0 h-screen w-full md:w-72 bg-white border-r border-slate-100 p-8 flex flex-col z-[60] transition-transform duration-300
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        {/* LOGO AREA */}
+        <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
+              D
             </div>
+            <h1 className="text-xl font-black tracking-tight text-slate-800">DUKUNG.IN</h1>
+          </div>
+          <button onClick={() => setIsSidebarOpen(false)} className="cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500">
+            <X size={30} />
+          </button>
+        </div>
+
+        <div className="pt-0 pb-2 px-1">
+          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">All Streamer</p>
+        </div>
+        {/* NAVIGATION */}
+        <nav className="flex-1 space-y-4">
+          {menuItems.map((item) => (
             <button
+              key={item.id}
               onClick={() => {
-                setActiveTab('admin');
+                setActiveTab(item.id);
                 setIsSidebarOpen(false);
               }}
               className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
-                activeTab === 'admin'
-                  ? 'bg-red-600 text-white shadow-xl shadow-red-100'
-                  : 'text-red-400 hover:bg-red-50'
+                activeTab === item.id 
+                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
+                  : 'text-slate-400 hover:bg-slate-200'
               }`}
             >
-              <ShieldAlert size={20} />
-              <span className="text-sm">Kelola Penarikan</span>
+              {item.icon}
+              <span className="text-sm">{item.label}</span>
             </button>
-          </>
-        )}
-      </nav>
+          ))}
 
-      {/* LOGOUT BUTTON */}
-      <button 
-        onClick={handleLogout}
-        className="flex items-center gap-4 p-4 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black mt-auto transition-all"
-      >
-        <LogOut size={20} /> Logout
-      </button>
-    </aside>
+          {isSuperAdmin && (
+            <>
+              <div className="pt-6 pb-2 px-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Super Admin</p>
+              </div>
+              <button
+                onClick={() => {
+                  setActiveTab('admin');
+                  setIsSidebarOpen(false);
+                }}
+                className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
+                  activeTab === 'admin'
+                    ? 'bg-red-600 text-white shadow-xl shadow-red-100'
+                    : 'text-red-400 hover:bg-red-50'
+                }`}
+              >
+                <ShieldAlert size={20} />
+                <span className="text-sm">Kelola Penarikan</span>
+              </button>
+            </>
+          )}
+        </nav>
+
+        {/* LOGOUT BUTTON */}
+        <button 
+          onClick={() => setShowLogoutConfirm(true)} // Pemicu modal
+          className="flex items-center gap-4 p-4 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black mt-auto transition-all"
+        >
+          <LogOut size={20} /> Logout
+        </button>
+      </aside>
+    </>
   );
 };
 
