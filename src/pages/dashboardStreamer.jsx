@@ -16,9 +16,9 @@ import {
   User,
   Wallet
 } from 'lucide-react';
-import React, { useState } from 'react';
-import Sidebar from '../components/sidebar';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
+import Sidebar from '../components/sidebar';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 
@@ -369,36 +369,6 @@ const DashboardStreamer = () => {
   const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '' });
   const [donationToasts, setDonationToasts] = useState([]);
 
-  useEffect(() => {
-    if (!user.overlayToken) return;
-
-    const socket = io(BASE_URL);
-
-    socket.on('connect', () => {
-      console.log('[Socket] Connected:', socket.id);
-      socket.emit('join-overlay', user.overlayToken);
-      console.log('[Socket] Joined room:', user.overlayToken);
-    });
-
-    socket.on('new-donation', (data) => {
-      console.log('[Socket] new-donation received:', data);
-      const id = Date.now();
-      setDonationToasts(prev => [...prev, { id, ...data }]);
-      // Auto remove setelah 6 detik
-      setTimeout(() => {
-        setDonationToasts(prev => prev.filter(t => t.id !== id));
-      }, 6000);
-    });
-
-    socket.on('disconnect', () => {
-      console.log('[Socket] Disconnected');
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [user.overlayToken]);
-
   // ── Queries ──────────────────────────────────────────────────────────────────
 
   const { data: profileData, isLoading: profileLoading } = useQuery({
@@ -476,6 +446,33 @@ const DashboardStreamer = () => {
     overlayToken: profileData?.user?.overlayToken || profileData?.User?.overlayToken || '',
     overlayUrl: `${window.location.origin}/overlay/${profileData?.user?.overlayToken || profileData?.User?.overlayToken || ''}`
   };
+
+  useEffect(() => {
+    if (!user.overlayToken) return;
+
+    const socket = io(BASE_URL);
+
+    socket.on('connect', () => {
+      console.log('[Socket] Connected:', socket.id);
+      socket.emit('join-overlay', user.overlayToken);
+      console.log('[Socket] Joined room:', user.overlayToken);
+    });
+
+    socket.on('new-donation', (data) => {
+      console.log('[Socket] new-donation received:', data);
+      const id = Date.now();
+      setDonationToasts(prev => [...prev, { id, ...data }]);
+      setTimeout(() => {
+        setDonationToasts(prev => prev.filter(t => t.id !== id));
+      }, 6000);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('[Socket] Disconnected');
+    });
+
+    return () => socket.disconnect();
+  }, [user.overlayToken]);
 
   const settings = localSettings || {
     minDonate: 10000,
