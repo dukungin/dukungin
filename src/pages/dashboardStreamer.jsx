@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 import Sidebar from '../components/sidebar';
+import { io } from 'socket.io-client';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 
@@ -366,6 +367,37 @@ const DashboardStreamer = () => {
   const [showToast, setShowToast] = useState(false);
   const [localSettings, setLocalSettings] = useState(null);
   const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '' });
+  const [donationToasts, setDonationToasts] = useState([]);
+
+  useEffect(() => {
+    if (!user.overlayToken) return;
+
+    const socket = io(BASE_URL);
+
+    socket.on('connect', () => {
+      console.log('[Socket] Connected:', socket.id);
+      socket.emit('join-overlay', user.overlayToken);
+      console.log('[Socket] Joined room:', user.overlayToken);
+    });
+
+    socket.on('new-donation', (data) => {
+      console.log('[Socket] new-donation received:', data);
+      const id = Date.now();
+      setDonationToasts(prev => [...prev, { id, ...data }]);
+      // Auto remove setelah 6 detik
+      setTimeout(() => {
+        setDonationToasts(prev => prev.filter(t => t.id !== id));
+      }, 6000);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('[Socket] Disconnected');
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user.overlayToken]);
 
   // ── Queries ──────────────────────────────────────────────────────────────────
 
@@ -480,6 +512,51 @@ const DashboardStreamer = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Donation Toast Notifications */}
+      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 max-w-sm w-full">
+        <AnimatePresence>
+          {donationToasts.map((toast) => (
+            <motion.div
+              key={toast.id}
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 100, opacity: 0 }}
+              className="bg-white rounded-3xl p-5 shadow-2xl border border-slate-100 flex items-start gap-4"
+            >
+              {/* Icon */}
+              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0">
+                💜
+              </div>
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Donasi Masuk!</span>
+                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                </div>
+                <p className="font-black text-slate-800 text-sm truncate">
+                  {toast.donorName}
+                </p>
+                <p className="text-indigo-600 font-black text-lg">
+                  Rp {Number(toast.amount).toLocaleString('id-ID')}
+                </p>
+                {toast.message && (
+                  <p className="text-slate-500 text-xs font-medium italic mt-1 line-clamp-2">
+                    "{toast.message}"
+                  </p>
+                )}
+              </div>
+              {/* Close */}
+              <button
+                onClick={() => setDonationToasts(prev => prev.filter(t => t.id !== toast.id))}
+                className="text-slate-300 hover:text-slate-500 transition-colors flex-shrink-0 text-lg leading-none"
+              >
+                ×
+              </button>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
 
       {/* Mobile Navbar */}
       <div className="lg:hidden fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 z-50 px-6 py-4 flex justify-between items-center">
