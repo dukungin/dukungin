@@ -59,9 +59,11 @@ const SupporterPage = () => {
       .catch(() => alert('Streamer tidak ditemukan'));
   }, [username]);
 
+  console.log(streamer)
+
   const handleDonate = async () => {
     if (!form.amount || form.amount < 1000) return alert('Minimal donasi Rp 1.000');
-    if (!streamer?.id) return alert('Data streamer belum siap.');
+    if (!streamer?._id) return alert('Data streamer belum siap.');
 
     try {
       setLoading(true);
@@ -70,7 +72,7 @@ const SupporterPage = () => {
         amount: Math.round(Number(form.amount)),
         donorName: form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
         message: form.message,
-        userId: streamer.id,
+        userId: streamer._id,
         email: form.email.trim() || 'guest@mail.com',
       };
 
