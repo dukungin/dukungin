@@ -196,7 +196,7 @@ const AdminWithdrawalPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="bg-white w-full rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
         <div className="flex items-center justify-between px-10 py-5 border-b border-slate-100">
           <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Semua Request Penarikan</p>
           <span className="px-4 py-2 bg-red-100 text-red-600 rounded-full text-[10px] font-black uppercase tracking-widest">Super Admin Only</span>
@@ -228,8 +228,8 @@ const AdminWithdrawalPage = () => {
                         <td className="px-8 py-5 text-center">
                           {wd.status === 'PENDING' && (
                             <div className="flex gap-2 justify-center">
-                              <button onClick={() => updateMutation.mutate({ id: wd._id, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="px-4 py-2 bg-green-600 text-white rounded-xl text-[10px] font-black hover:bg-green-700 transition-all disabled:opacity-50">Approve</button>
-                              <button onClick={() => updateMutation.mutate({ id: wd._id, status: 'FAILED' })} disabled={updateMutation.isPending} className="px-4 py-2 bg-red-600 text-white rounded-xl text-[10px] font-black hover:bg-red-700 transition-all disabled:opacity-50">Tolak</button>
+                              <button onClick={() => updateMutation.mutate({ id: wd._id, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="cursor-pointer active:scale-[0.97] hover:brightness-95 px-4 py-2 bg-green-600 text-white rounded-xl text-[10px] font-black hover:bg-green-700 transition-all disabled:opacity-50">Approve</button>
+                              <button onClick={() => updateMutation.mutate({ id: wd._id, status: 'FAILED' })} disabled={updateMutation.isPending} className="cursor-pointer active:scale-[0.97] hover:brightness-95 px-4 py-2 bg-red-600 text-white rounded-xl text-[10px] font-black hover:bg-red-700 transition-all disabled:opacity-50">Tolak</button>
                             </div>
                           )}
                         </td>
