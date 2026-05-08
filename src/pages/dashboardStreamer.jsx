@@ -208,7 +208,7 @@ const AdminWithdrawalPage = () => {
               <table className="w-full text-left min-w-[900px]">
                 <thead>
                   <tr className="bg-slate-200/50 border-b border-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest">
-                    {['Streamer','Jumlah','Metode','Rekening','Nama','Ref','Status','Aksi'].map(h => <th key={h} className="px-8 py-6">{h}</th>)}
+                    {['Streamer','Jumlah','Metode','Nama','Status','Aksi'].map(h => <th key={h} className="px-8 py-6">{h}</th>)}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
@@ -219,9 +219,7 @@ const AdminWithdrawalPage = () => {
                         <td className="px-8 py-5 font-black text-slate-700">@{wd.userId?.username || '-'}<p className="text-[10px] text-slate-400 font-medium">{wd.userId?.email}</p></td>
                         <td className="px-8 py-5 text-indigo-600 font-black">Rp {Number(wd.amount).toLocaleString('id-ID')}</td>
                         <td className="px-8 py-5 font-bold text-slate-600">{wd.paymentMethod}</td>
-                        <td className="px-8 py-5 font-bold text-slate-600">{wd.channelCode} - {wd.accountNumber}</td>
                         <td className="px-8 py-5 font-bold text-slate-600">{wd.accountName}</td>
-                        <td className="px-8 py-5 font-mono text-[10px] text-slate-400">{wd.midtransReference}</td>
                         <td className="px-8 py-5 text-center">
                           <span className={`px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest ${wd.status === 'COMPLETED' ? 'bg-green-100 text-green-600' : wd.status === 'FAILED' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>
                             {wd.status}
@@ -850,10 +848,10 @@ const DashboardStreamer = () => {
                 {/* OBS URL + Simpan */}
                 <div className="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100">
                   <div className="bg-slate-200 p-6 rounded-[2rem] border-2 border-dashed border-slate-200 mb-8">
-                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">OBS URL</label>
+                    <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
                     <div className="flex gap-3">
                       <input readOnly value={user.overlayUrl} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 font-bold outline-none overflow-hidden text-ellipsis" />
-                      <button onClick={() => copyToClipboard(user.overlayUrl)} className="text-slate-400 hover:text-indigo-600"><Copy size={18} /></button>
+                      <button onClick={() => copyToClipboard(user.overlayUrl)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
                     </div>
                   </div>
                   <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
