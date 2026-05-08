@@ -34,7 +34,7 @@
 
 //   const fetchCurrentBalance = async () => {
 //     try {
-//       const res = await axios.get('https://server-dukungin-production.up.railway.app/api/overlay/my-settings', {
+//       const res = await axios.get('https://server-dukungin-production.up.railway.app/api/overlay/settings', {
 //         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
 //       });
 //       // Asumsi data user dikirim bersama settings atau buat endpoint khusus profile
@@ -618,7 +618,7 @@ const authHeader = () => ({
 // ─── API Functions ────────────────────────────────────────────────────────────
 
 const fetchProfile = async () => {
-  const res = await axios.get(`${BASE_URL}/api/overlay/my-settings`, {
+  const res = await axios.get(`${BASE_URL}/api/overlay/settings`, {
     headers: authHeader()
   });
   return res.data;
