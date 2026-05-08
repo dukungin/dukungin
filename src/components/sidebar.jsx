@@ -2,22 +2,31 @@ import {
     History,
     Layout,
     LogOut,
+    ShieldAlert,
     User,
     Wallet,
     X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+// Helper decode JWT
+const getTokenPayload = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return null;
+  }
+};
+
 const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
+  const payload = getTokenPayload();
+  const isSuperAdmin = payload?.role === 'superAdmin';
 
   const handleLogout = () => {
-    // 1. Hapus token dari localStorage
     localStorage.removeItem('token');
-    // 2. (Opsional) Hapus data user lainnya jika ada
-    // localStorage.clear(); 
-    
-    // 3. Arahkan ke halaman login
     alert("Berhasil logout!");
     navigate('/login'); 
   };
@@ -69,6 +78,29 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
             <span className="text-sm">{item.label}</span>
           </button>
         ))}
+
+        {/* Menu SuperAdmin — hanya muncul kalau role superAdmin */}
+        {isSuperAdmin && (
+          <>
+            <div className="pt-4 pb-2">
+              <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest px-1">Super Admin</p>
+            </div>
+            <button
+              onClick={() => {
+                setActiveTab('admin');
+                setIsSidebarOpen(false);
+              }}
+              className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
+                activeTab === 'admin'
+                  ? 'bg-red-600 text-white shadow-xl shadow-red-100'
+                  : 'text-red-400 hover:bg-red-50'
+              }`}
+            >
+              <ShieldAlert size={20} />
+              <span className="text-sm">Kelola Penarikan</span>
+            </button>
+          </>
+        )}
       </nav>
 
       {/* LOGOUT BUTTON */}
