@@ -74,13 +74,13 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               <div className="flex flex-col gap-3">
                 <button 
                   onClick={handleLogout}
-                  className="w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-200 hover:bg-red-700 active:scale-[0.98] transition-all"
+                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-200 hover:bg-red-700 active:scale-[0.98] transition-all"
                 >
                   Ya, Logout
                 </button>
                 <button 
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="w-full py-4 bg-slate-100 text-slate-600 rounded-2xl font-black text-lg hover:bg-slate-200 active:scale-[0.98] transition-all"
+                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-slate-100 text-slate-600 rounded-2xl font-black text-lg hover:bg-slate-200 active:scale-[0.98] transition-all"
                 >
                   Batal
                 </button>
