@@ -784,17 +784,6 @@ const DashboardStreamer = () => {
   const [donationToasts, setDonationToasts] = useState([]);
   const [profileForm, setProfileForm] = useState({ username: '', email: '', bio: '' });
 
-  // Sync ke profileData saat data pertama kali load
-  useEffect(() => {
-    if (profileData) {
-      setProfileForm({
-        username: profileData?.user?.username || profileData?.User?.username || '',
-        email: profileData?.user?.email || profileData?.User?.email || '',
-        bio: '',
-      });
-    }
-  }, [profileData]);
-
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: fetchProfile,
@@ -824,6 +813,17 @@ const DashboardStreamer = () => {
     onSuccess: () => { setPasswordForm({ oldPassword: '', newPassword: '' }); alert('Password berhasil diubah!'); },
     onError: (err) => alert(err.response?.data?.message || 'Gagal ganti password'),
   });
+  
+  // Sync ke profileData saat data pertama kali load
+  useEffect(() => {
+    if (profileData) {
+      setProfileForm({
+        username: profileData?.user?.username || profileData?.User?.username || '',
+        email: profileData?.user?.email || profileData?.User?.email || '',
+        bio: '',
+      });
+    }
+  }, [profileData]);
 
   const user = {
     username:     profileData?.user?.username     || profileData?.User?.username     || 'Streamer',
