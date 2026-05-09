@@ -1858,7 +1858,7 @@ const DashboardStreamer = () => {
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-      <main className="flex-1 px-6 md:px-7 py-12 lg:py-4 max-w-7xl z-[4] mx-auto w-full relative">
+      <main className="flex-1 px-6 md:px-7 py-20 lg:py-4 w-8xl z-[4] mx-auto w-full relative">
         <header className="flex flex-col mt-4 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-12 relative">
           <div className="z-10">
             <h2 className="text-4xl md:text-3xl font-black text-slate-800 tracking-tight leading-none">
