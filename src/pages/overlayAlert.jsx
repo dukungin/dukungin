@@ -1,99 +1,35 @@
-// import React, { useEffect, useState, useRef } from 'react';
-// import { useParams } from 'react-router-dom';
-// import { io } from 'socket.io-client';
-// import { motion, AnimatePresence } from 'framer-motion';
-// import axios from 'axios';
-
-// const OverlayAlert = () => {
-//   const { token } = useParams();
-//   const [alert, setAlert] = useState(null);
-//   const [config, setConfig] = useState(null);
-//   const audioRef = useRef(null);
-
-//   // ✅ FIX: Simpan config ke ref agar socket listener selalu baca
-//   //         nilai terbaru tanpa perlu re-register ulang
-//   const configRef = useRef(null);
-
-//   // 1. Ambil Konfigurasi Visual dari Backend
-//   useEffect(() => {
-//     if (!token) return;
-
-//     axios
-//       .get(`https://server-dukungin-production.up.railway.app/api/overlay/config/${token}`)
-//       .then((res) => {
-//         setConfig(res.data);
-//         // ✅ Sync ke ref setiap kali config update
-//         configRef.current = res.data;
-//       })
-//       .catch(() => console.error('Invalid Token'));
-//   }, [token]);
-
-//   // 2. Listen Real-time Donasi
-//   useEffect(() => {
-//     if (!token) return;
-
-//     // ✅ Buat koneksi di dalam effect
-//     const socket = io('https://server-dukungin-production.up.railway.app');
-    
-//     socket.emit('join-room', token);
-
-//     socket.on('new-donation', (data) => {
-//       setAlert(data);
-//       if (audioRef.current) audioRef.current.play().catch(() => {});
-//       const duration = configRef.current?.duration || 5000;
-//       setTimeout(() => setAlert(null), duration);
-//     });
-
-//     return () => {
-//       socket.off('new-donation');
-//       socket.disconnect(); // ✅ Cleanup koneksi
-//     };
-//   }, [token]);
-
-//   if (!config) return null;
-
-//   return (
-//     <div className="w-screen h-screen flex items-center justify-center bg-transparent overflow-hidden">
-//       <audio ref={audioRef} src={config.soundUrl || '/default-alert.mp3'} />
-
-//       <AnimatePresence>
-//         {alert && (
-//           <motion.div
-//             initial={{ scale: 0, opacity: 0, y: 100 }}
-//             animate={{ scale: 1, opacity: 1, y: 0 }}
-//             exit={{ scale: 0, opacity: 0, transition: { duration: 0.5 } }}
-//             style={{
-//               backgroundColor: config.backgroundColor,
-//               color: config.textColor,
-//               borderRadius: config.overlayTheme === 'modern' ? '2rem' : '0px',
-//             }}
-//             className="p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-center min-w-[400px] border-4 border-white/20 backdrop-blur-md"
-//           >
-//             <h2 className="text-sm font-black uppercase tracking-[0.3em] mb-4 opacity-70">
-//               New Donation!
-//             </h2>
-//             <h1 className="text-4xl font-black mb-2">{alert.donorName}</h1>
-//             <div className="text-3xl font-bold mb-6">
-//               Rp {parseInt(alert.amount).toLocaleString('id-ID')}
-//             </div>
-//             <div className="text-xl italic font-medium bg-black/10 p-4 rounded-xl">
-//               "{alert.message}"
-//             </div>
-//           </motion.div>
-//         )}
-//       </AnimatePresence>
-//     </div>
-//   );
-// };
-
-// export default OverlayAlert;
-
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+
+// ─── Helper: konversi YouTube URL → embed URL ─────────────────────────────────
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+
+  const watchMatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
+  if (watchMatch) return `https://www.youtube.com/embed/${watchMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${watchMatch[1]}`;
+
+  const shortMatch = url.match(/youtu\.be\/([\w-]+)/);
+  if (shortMatch) return `https://www.youtube.com/embed/${shortMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortMatch[1]}`;
+
+  const shortsMatch = url.match(/youtube\.com\/shorts\/([\w-]+)/);
+  if (shortsMatch) return `https://www.youtube.com/embed/${shortsMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortsMatch[1]}`;
+
+  return null;
+};
+
+// ─── Helper: deteksi tipe media ───────────────────────────────────────────────
+const detectMediaType = (url, mediaType) => {
+  if (!url) return null;
+  if (getYouTubeEmbedUrl(url)) return 'youtube';
+  if (mediaType === 'video') return 'video';
+  if (mediaType === 'image') return 'image';
+  if (/\.(mp4|webm|mov|ogg)$/i.test(url)) return 'video';
+  if (/\.(jpg|jpeg|png|gif|webp)$/i.test(url)) return 'image';
+  return 'image';
+};
 
 const OverlayAlert = () => {
   const { token } = useParams();
@@ -140,6 +76,7 @@ const OverlayAlert = () => {
   const fg        = config.textColor    || '#ffffff';
   const theme     = config.theme        || 'modern';
   const animation = config.animation    || 'bounce';
+  const maxW      = config.maxWidth     || 340;
 
   const animVariants = {
     bounce: {
@@ -166,80 +103,130 @@ const OverlayAlert = () => {
 
   const anim = animVariants[animation] || animVariants.bounce;
 
-  const cardStyle = {
-    backgroundColor: theme === 'minimal' ? 'transparent' : bg,
-    color: fg,
-    fontFamily: "'Inter', 'Segoe UI', sans-serif",
-    minWidth: `${config.maxWidth || 340}px`,
-    maxWidth: `${config.maxWidth || 340}px`,
-    borderRadius: theme === 'modern' ? '20px' : theme === 'classic' ? '4px' : '0px',
-    boxShadow: theme === 'minimal' ? 'none' : '0 20px 50px rgba(0,0,0,0.5)',
-    overflow: 'hidden',
-    border: theme === 'minimal'
-      ? `3px solid ${bg}`
-      : '2px solid rgba(255,255,255,0.15)',
+  // ─── Render Media ───────────────────────────────────────────────────────────
+  const renderMedia = () => {
+    if (!alert?.mediaUrl) return null;
+    const detectedType = detectMediaType(alert.mediaUrl, alert.mediaType);
+
+    if (detectedType === 'youtube') {
+      const embedUrl = getYouTubeEmbedUrl(alert.mediaUrl);
+      return (
+        <div style={{
+          width: '100%',
+          aspectRatio: '16/9',
+          borderRadius: theme === 'modern' ? '12px' : '4px',
+          overflow: 'hidden',
+          marginBottom: 12,
+          background: '#000',
+        }}>
+          <iframe
+            src={embedUrl}
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            style={{ display: 'block', border: 'none', width: '100%', height: '100%' }}
+          />
+        </div>
+      );
+    }
+
+    if (detectedType === 'video') {
+      return (
+        <div style={{
+          width: '100%',
+          aspectRatio: '16/9',
+          borderRadius: theme === 'modern' ? '12px' : '4px',
+          overflow: 'hidden',
+          marginBottom: 12,
+          background: '#000',
+        }}>
+          <video
+            src={alert.mediaUrl}
+            autoPlay
+            loop
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+      );
+    }
+
+    // image
+    return (
+      <div style={{
+        width: '100%',
+        borderRadius: theme === 'modern' ? '12px' : '4px',
+        overflow: 'hidden',
+        marginBottom: 12,
+      }}>
+        <img
+          src={alert.mediaUrl}
+          alt="media"
+          style={{ width: '100%', display: 'block', objectFit: 'cover', maxHeight: '220px' }}
+        />
+      </div>
+    );
   };
 
+  // ─── Render Konten per Tema ─────────────────────────────────────────────────
   const renderInner = () => {
     if (theme === 'modern') return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '18px 20px' }}>
-        <div style={{
-          width: 48, height: 48, borderRadius: 12,
-          background: 'rgba(255,255,255,0.18)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 22, flexShrink: 0,
-        }}>💜</div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 10, fontWeight: 800, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
-            Donasi Masuk!
-          </div>
-          <div style={{ fontSize: 16, fontWeight: 900, lineHeight: 1.2, marginBottom: 4 }}>
-            @{alert.donorName} · Rp {parseInt(alert.amount).toLocaleString('id-ID')}
-          </div>
-          {alert.message && (
-            <div style={{ fontSize: 12, opacity: 0.75, fontStyle: 'italic' }}>
-              "{alert.message}"
+      <div style={{ padding: '16px 18px' }}>
+        {renderMedia()}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{
+            width: 44, height: 44, borderRadius: 10,
+            background: 'rgba(255,255,255,0.18)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 20, flexShrink: 0,
+          }}>💜</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 10, fontWeight: 800, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 3 }}>
+              Donasi Masuk!
             </div>
-          )}
+            <div style={{ fontSize: 15, fontWeight: 900, lineHeight: 1.2, marginBottom: 3 }}>
+              @{alert.donorName} · Rp {parseInt(alert.amount).toLocaleString('id-ID')}
+            </div>
+            {alert.message && (
+              <div style={{ fontSize: 11, opacity: 0.75, fontStyle: 'italic' }}>
+                "{alert.message}"
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
 
     if (theme === 'classic') return (
-      <div style={{ padding: '18px 22px', borderLeft: `4px solid rgba(255,255,255,0.4)` }}>
-        <div style={{ fontSize: 10, fontWeight: 700, opacity: 0.6, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+      <div style={{ padding: '16px 20px', borderLeft: '4px solid rgba(255,255,255,0.4)' }}>
+        {renderMedia()}
+        <div style={{ fontSize: 10, fontWeight: 700, opacity: 0.6, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5 }}>
           Donasi Masuk!
         </div>
-        <div style={{ fontSize: 20, fontWeight: 900, marginBottom: 2 }}>
-          @{alert.donorName}
-        </div>
-        <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>
+        <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 2 }}>@{alert.donorName}</div>
+        <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 5 }}>
           Rp {parseInt(alert.amount).toLocaleString('id-ID')}
         </div>
         {alert.message && (
-          <div style={{ fontSize: 12, opacity: 0.65, fontStyle: 'italic' }}>
-            "{alert.message}"
-          </div>
+          <div style={{ fontSize: 11, opacity: 0.65, fontStyle: 'italic' }}>"{alert.message}"</div>
         )}
       </div>
     );
 
     // minimal
     return (
-      <div style={{ padding: '14px 18px', borderLeft: `3px solid ${bg}`, background: 'rgba(0,0,0,0.75)' }}>
-        <div style={{ fontSize: 10, opacity: 0.55, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+      <div style={{ padding: '12px 16px', borderLeft: `3px solid ${bg}`, background: 'rgba(0,0,0,0.75)' }}>
+        {renderMedia()}
+        <div style={{ fontSize: 10, opacity: 0.55, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 3 }}>
           Donasi Masuk
         </div>
-        <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 2 }}>
+        <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 2 }}>
           Rp {parseInt(alert.amount).toLocaleString('id-ID')}
         </div>
-        <div style={{ fontSize: 13, opacity: 0.85, marginBottom: 4 }}>
-          @{alert.donorName}
-        </div>
+        <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 3 }}>@{alert.donorName}</div>
         {alert.message && (
-          <div style={{ fontSize: 11, opacity: 0.6, fontStyle: 'italic' }}>
-            "{alert.message}"
-          </div>
+          <div style={{ fontSize: 11, opacity: 0.6, fontStyle: 'italic' }}>"{alert.message}"</div>
         )}
       </div>
     );
@@ -260,11 +247,20 @@ const OverlayAlert = () => {
       <AnimatePresence>
         {alert && (
           <motion.div
-            key={alert.donorName + alert.amount}
+            key={alert.donorName + alert.amount + Date.now()}
             initial={anim.initial}
             animate={anim.animate}
             exit={anim.exit}
-            style={cardStyle}
+            style={{
+              backgroundColor: theme === 'minimal' ? 'transparent' : bg,
+              color: fg,
+              fontFamily: "'Inter', 'Segoe UI', sans-serif",
+              width: `${maxW}px`,
+              borderRadius: theme === 'modern' ? '20px' : theme === 'classic' ? '4px' : '0px',
+              boxShadow: theme === 'minimal' ? 'none' : '0 20px 50px rgba(0,0,0,0.5)',
+              overflow: 'hidden',
+              border: theme === 'minimal' ? `3px solid ${bg}` : '2px solid rgba(255,255,255,0.15)',
+            }}
           >
             {renderInner()}
           </motion.div>
