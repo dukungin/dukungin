@@ -752,6 +752,26 @@ const HistoryPage = () => {
   );
 };
 
+// ─── Sub Components ───────────────────────────────────────────────────────────
+
+const InputField = ({ label, ...props }) => (
+  <div className="w-full">
+    <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">{label}</label>
+    <input
+      className="w-full bg-slate-200 border-2 border-slate-50 rounded-2xl p-5 focus:border-indigo-500 focus:bg-white outline-none transition-all font-bold text-sm shadow-sm"
+      {...props}
+      onChange={e => props.onChange?.(e.target.value)}
+    />
+  </div>
+);
+
+const SectionHeader = ({ icon, title, color }) => (
+  <div className="flex items-center gap-4">
+    <div className={`${color} p-3 rounded-2xl text-white shadow-lg`}>{icon}</div>
+    <h3 className="text-xl font-black text-slate-800 tracking-tight">{title}</h3>
+  </div>
+);
+
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 
 const DashboardStreamer = () => {
@@ -1115,25 +1135,5 @@ const DashboardStreamer = () => {
     </div>
   );
 };
-
-// ─── Sub Components ───────────────────────────────────────────────────────────
-
-const InputField = ({ label, ...props }) => (
-  <div className="w-full">
-    <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">{label}</label>
-    <input
-      className="w-full bg-slate-200 border-2 border-slate-50 rounded-2xl p-5 focus:border-indigo-500 focus:bg-white outline-none transition-all font-bold text-sm shadow-sm"
-      {...props}
-      onChange={e => props.onChange?.(e.target.value)}
-    />
-  </div>
-);
-
-const SectionHeader = ({ icon, title, color }) => (
-  <div className="flex items-center gap-4">
-    <div className={`${color} p-3 rounded-2xl text-white shadow-lg`}>{icon}</div>
-    <h3 className="text-xl font-black text-slate-800 tracking-tight">{title}</h3>
-  </div>
-);
 
 export default DashboardStreamer;
