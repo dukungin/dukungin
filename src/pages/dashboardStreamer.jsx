@@ -1117,40 +1117,51 @@ const DashboardStreamer = () => {
   };
 
   useEffect(() => {
-    if (!user.overlayToken) return;
+    const overlayToken = user.overlayToken;
+    if (!overlayToken) return;
+
+    console.log("%c🔌 Dashboard mencoba connect socket...", "color: orange", { overlayToken });
 
     const socket = io("https://server-dukungin-production.up.railway.app", {
       reconnection: true,
       reconnectionAttempts: 5,
+      timeout: 10000,
     });
 
     socket.on("connect", () => {
-      console.log("%c✅ Dashboard Socket Connected", "color: lime");
-      socket.emit("join-room", user.overlayToken);   // ← Samakan dengan console test
+      console.log("%c✅ Dashboard Socket Connected", "color: lime; font-size: 14px");
+      socket.emit("join-room", overlayToken);
     });
 
     socket.on("new-donation", (data) => {
-      console.log("%c🎉 Donation diterima di Dashboard!", "color: gold", data);
+      console.log("%c🎉 [DASHBOARD] new-donation diterima!", "color: gold; font-size: 15px", data);
       
       const id = Date.now();
-      setDonationToasts(prev => [...prev, { id, ...data }]);
+      setDonationToasts(prev => {
+        console.log("✅ Toast state diupdate, jumlah toast:", prev.length + 1);
+        return [...prev, { id, ...data }];
+      });
 
+      // Refresh data
       queryClient.invalidateQueries({ queryKey: ['donationHistory'] });
       queryClient.invalidateQueries({ queryKey: ['donationStats'] });
 
+      // Auto dismiss
       setTimeout(() => {
         setDonationToasts(prev => prev.filter(t => t.id !== id));
-      }, 6000);
+      }, 7000);
     });
 
-    socket.on("disconnect", () => {
-      console.log("%c❌ Dashboard Socket Disconnected", "color: orange");
+    socket.on("disconnect", (reason) => {
+      console.log("%c❌ Dashboard Socket Disconnected:", reason, "color: red");
     });
 
+    // Cleanup
     return () => {
+      console.log("%c🧹 Dashboard socket cleanup", "color: gray");
       socket.disconnect();
     };
-  }, [user.overlayToken, queryClient]);
+  }, [user.overlayToken]);
 
   const settings = localSettings || DEFAULT_SETTINGS;
   const copyToClipboard = (text) => { navigator.clipboard.writeText(text); alert('URL Berhasil disalin!'); };
