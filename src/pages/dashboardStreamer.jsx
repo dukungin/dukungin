@@ -1118,18 +1118,39 @@ const DashboardStreamer = () => {
 
   useEffect(() => {
     if (!user.overlayToken) return;
-    const socket = io(BASE_URL);
-    socket.on('connect', () => socket.emit('join-overlay', user.overlayToken));
-    socket.on('new-donation', (data) => {
+
+    const socket = io("https://server-dukungin-production.up.railway.app", {
+      reconnection: true,
+      reconnectionAttempts: 5,
+    });
+
+    socket.on("connect", () => {
+      console.log("%c✅ Dashboard Socket Connected", "color: lime");
+      socket.emit("join-room", user.overlayToken);   // ← Samakan dengan console test
+    });
+
+    socket.on("new-donation", (data) => {
+      console.log("%c🎉 Donation diterima di Dashboard!", "color: gold", data);
+      
       const id = Date.now();
       setDonationToasts(prev => [...prev, { id, ...data }]);
-      // Invalidate history & stats agar auto update saat donasi masuk
+
       queryClient.invalidateQueries({ queryKey: ['donationHistory'] });
       queryClient.invalidateQueries({ queryKey: ['donationStats'] });
-      setTimeout(() => setDonationToasts(prev => prev.filter(t => t.id !== id)), 6000);
+
+      setTimeout(() => {
+        setDonationToasts(prev => prev.filter(t => t.id !== id));
+      }, 6000);
     });
-    return () => socket.disconnect();
-  }, [user.overlayToken]);
+
+    socket.on("disconnect", () => {
+      console.log("%c❌ Dashboard Socket Disconnected", "color: orange");
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user.overlayToken, queryClient]);
 
   const settings = localSettings || DEFAULT_SETTINGS;
   const copyToClipboard = (text) => { navigator.clipboard.writeText(text); alert('URL Berhasil disalin!'); };
