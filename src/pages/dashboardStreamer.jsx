@@ -17,13 +17,16 @@ import {
   Timer,
   Trash2,
   TrendingUp,
+  Trophy,
   User,
   Video,
+  Vote,
   Wallet,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import Sidebar from '../components/sidebar';
+import { PollManager, SubathonManager, LeaderboardSettings } from '../components/streamerExtras';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const authHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
@@ -2258,6 +2261,39 @@ const DashboardStreamer = () => {
               <p className="text-6xl mb-4">🔒</p>
               <p className="font-black text-xl">Akses Ditolak</p>
               <p className="font-medium text-sm mt-2">Halaman ini hanya untuk Super Admin</p>
+            </motion.div>
+          )}
+
+          {activeTab === 'poll' && (
+            <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="max-w-2xl space-y-5">
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+                  <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
+                  <PollManager overlayToken={user.overlayToken} />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'subathon' && (
+            <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="max-w-2xl space-y-5">
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+                  <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" />
+                  <SubathonManager overlayToken={user.overlayToken} />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'leaderboard' && (
+            <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="max-w-2xl space-y-5">
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+                  <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
+                  <LeaderboardSettings />
+                </div>
+              </div>
             </motion.div>
           )}
 

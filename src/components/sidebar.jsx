@@ -7,7 +7,10 @@ import {
   Wallet, 
   X,
   AlertCircle, 
-  Users
+  Users,
+  Vote,
+  Timer,
+  Trophy
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -40,6 +43,9 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     { id: 'history', label: 'Donation History', icon: <History size={20} /> },
     { id: 'profile', label: 'My Profile', icon: <User size={20} /> },
     { id: 'wallet', label: 'Withdrawal', icon: <Wallet size={20} /> },
+    { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' },
+    { id: 'subathon', icon: <Timer size={20} />,   label: 'Subathon' },
+    { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' }
   ];
 
   return (
