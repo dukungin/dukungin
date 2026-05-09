@@ -49,6 +49,9 @@ const updateWDStatus  = async ({ id, status }) => (await axios.put(`${BASE_URL}/
 const DEFAULT_SETTINGS = {
   minDonate: 10000,
   maxDonate: 5000000,
+  overlayEnabled: true,       // ← NEW
+  customIcon: '',             // ← NEW (kosong = default 💜)
+  showTimestamp: true,        // ← NEW
   theme: 'modern',
   primaryColor: '#6366f1',
   textColor: '#ffffff',
@@ -64,6 +67,35 @@ const DEFAULT_SETTINGS = {
     { minAmount: 50000, maxAmount: null,  duration: 20 },
   ],
   mediaTriggers: [],
+};
+
+const ICON_PRESETS = [
+  { emoji: '💜', label: 'Default' },
+  { emoji: '❤️',  label: 'Merah'   },
+  { emoji: '🔥',  label: 'Api'     },
+  { emoji: '⭐',  label: 'Bintang' },
+  { emoji: '🎮',  label: 'Gamer'   },
+  { emoji: '🎵',  label: 'Musik'   },
+  { emoji: '🐉',  label: 'Naga'    },
+  { emoji: '💰',  label: 'Duit'    },
+  { emoji: '🎯',  label: 'Target'  },
+  { emoji: '👑',  label: 'Raja'    },
+  { emoji: '🌟',  label: 'Gemilang'},
+  { emoji: '🚀',  label: 'Roket'   },
+];
+
+const renderIconPreview = (customIcon, size = 20) => {
+  if (!customIcon) return '💜';
+  if (customIcon.startsWith('http') || customIcon.startsWith('/')) {
+    return (
+      <img
+        src={customIcon}
+        alt="icon"
+        style={{ width: size, height: size, objectFit: 'contain', borderRadius: 4, display: 'inline-block' }}
+      />
+    );
+  }
+  return customIcon;
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -455,11 +487,18 @@ const YouTubeLivePreview = ({ settings, username }) => {
       <div>
         {theme === 'modern' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px' }}>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>💜</div>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>
+              {renderIconPreview(settings.customIcon, 16)}
+            </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 9, fontWeight: 700, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Donasi Masuk!</div>
               <div style={{ fontSize: 13, fontWeight: 800, lineHeight: 1.2 }}>@{currentDonor.name} · Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
               <div style={{ fontSize: 9, opacity: 0.7, fontStyle: 'italic', marginTop: 2 }}>"{currentDonor.msg}"</div>
+              {settings.showTimestamp !== false && (
+              <div style={{ fontSize: 8, opacity: 0.5, fontFamily: 'monospace', marginTop: 3 }}>
+                🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+              </div>
+            )}
             </div>
           </div>
         )}
@@ -469,6 +508,11 @@ const YouTubeLivePreview = ({ settings, username }) => {
             <div style={{ fontSize: 15, fontWeight: 800 }}>@{currentDonor.name}</div>
             <div style={{ fontSize: 12, fontWeight: 700 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
             <div style={{ fontSize: 9, opacity: 0.6, fontStyle: 'italic', marginTop: 2 }}>"{currentDonor.msg}"</div>
+            {settings.showTimestamp !== false && (
+              <div style={{ fontSize: 8, opacity: 0.5, fontFamily: 'monospace', marginTop: 3 }}>
+                🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+              </div>
+            )}
           </div>
         )}
         {theme === 'minimal' && (
@@ -477,6 +521,11 @@ const YouTubeLivePreview = ({ settings, username }) => {
             <div style={{ fontSize: 16, fontWeight: 700 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
             <div style={{ fontSize: 10, opacity: 0.8 }}>@{currentDonor.name}</div>
             <div style={{ fontSize: 9, opacity: 0.55, fontStyle: 'italic', marginTop: 1 }}>"{currentDonor.msg}"</div>
+            {settings.showTimestamp !== false && (
+              <div style={{ fontSize: 8, opacity: 0.5, fontFamily: 'monospace', marginTop: 3 }}>
+                🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -1188,7 +1237,9 @@ const DashboardStreamer = () => {
           {donationToasts.map(toast => (
             <motion.div key={toast.id} initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 100, opacity: 0 }}
               className="bg-white rounded-2xl p-5 shadow-2xl border border-slate-100 flex items-start gap-4">
-              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0">💜</div>
+              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0">
+                {renderIconPreview(settings.customIcon, 24)}
+              </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Donasi Masuk!</span>
@@ -1251,6 +1302,99 @@ const DashboardStreamer = () => {
                 {/* Card 1: Konfigurasi Alert */}
                 <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
                   <SectionHeader icon={<Settings size={20} />} title="Konfigurasi Alert" color="bg-indigo-500" />
+                  
+                   <div className="mt-8 space-y-6">
+                      {/* ── Toggle Overlay On/Off ── */}
+                      <div className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div>
+                          <p className="font-black text-slate-700 text-sm">Aktifkan Overlay OBS</p>
+                          <p className="text-[11px] text-slate-400 font-medium mt-0.5">
+                            Jika dimatikan, alert tidak akan muncul di OBS sama sekali
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => upd('overlayEnabled', !settings.overlayEnabled)}
+                          className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
+                            settings.overlayEnabled ? 'bg-indigo-600' : 'bg-slate-300'
+                          }`}>
+                          <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
+                            settings.overlayEnabled ? 'translate-x-8' : 'translate-x-1'
+                          }`} />
+                        </button>
+                      </div>
+                  
+                      {/* ── Toggle Show Timestamp ── */}
+                      <div className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div>
+                          <p className="font-black text-slate-700 text-sm">Tampilkan Jam Donasi</p>
+                          <p className="text-[11px] text-slate-400 font-medium mt-0.5">
+                            Tampilkan waktu (HH:MM:SS) kapan donasi diterima di overlay
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => upd('showTimestamp', !settings.showTimestamp)}
+                          className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
+                            settings.showTimestamp ? 'bg-indigo-600' : 'bg-slate-300'
+                          }`}>
+                          <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
+                            settings.showTimestamp ? 'translate-x-8' : 'translate-x-1'
+                          }`} />
+                        </button>
+                      </div>
+                  
+                      {/* ── Custom Icon ── */}
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
+                          Icon Alert
+                        </label>
+                  
+                        {/* Quick preset picker */}
+                        <div className="grid grid-cols-6 gap-2">
+                          {ICON_PRESETS.map(({ emoji, label }) => (
+                            <button
+                              key={emoji}
+                              onClick={() => upd('customIcon', emoji === '💜' ? '' : emoji)}
+                              title={label}
+                              className={`flex flex-col items-center gap-1 p-3 rounded-2xl border-2 text-lg transition-all cursor-pointer active:scale-[0.95] ${
+                                (settings.customIcon || '💜') === emoji || (!settings.customIcon && emoji === '💜')
+                                  ? 'border-indigo-600 bg-indigo-50 shadow-md shadow-indigo-100'
+                                  : 'border-slate-100 hover:border-slate-300 bg-slate-50'
+                              }`}>
+                              <span>{emoji}</span>
+                              <span className="text-[8px] font-black text-slate-400 leading-none">{label}</span>
+                            </button>
+                          ))}
+                        </div>
+                  
+                        {/* Custom URL input */}
+                        <div className="flex gap-3 items-center">
+                          <div className="relative flex-1">
+                            <input
+                              value={settings.customIcon || ''}
+                              onChange={e => upd('customIcon', e.target.value)}
+                              placeholder="Atau ketik emoji / URL gambar icon..."
+                              className="w-full p-4 pr-14 bg-slate-100 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500 transition-all"
+                            />
+                            {/* Preview */}
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xl">
+                              {renderIconPreview(settings.customIcon, 22)}
+                            </div>
+                          </div>
+                          {settings.customIcon && (
+                            <button
+                              onClick={() => upd('customIcon', '')}
+                              className="px-4 py-3 bg-red-50 text-red-500 rounded-2xl font-black text-xs border border-red-100 hover:bg-red-100 transition-all cursor-pointer active:scale-[0.97]">
+                              Reset
+                            </button>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-slate-400 font-medium ml-1 italic">
+                          *Pilih emoji di atas, ketik emoji manual, atau paste URL gambar (jpg/png/gif)
+                        </p>
+                      </div>
+                  
+                    </div>
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                     <InputField label="Minimal Donasi" type="number" value={settings.minDonate} onChange={v => upd('minDonate', v)} />
                     <InputField label="Maksimal Donasi" type="number" value={settings.maxDonate} onChange={v => upd('maxDonate', v)} />
