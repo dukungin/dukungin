@@ -35,6 +35,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
   const menuItems = [
     { id: 'settings', label: 'Overlay Editor', icon: <Layout size={20} /> },
+    { id: 'community', label: 'Community', icon: <Users size={20} /> },
     { id: 'history', label: 'Donation History', icon: <History size={20} /> },
     { id: 'profile', label: 'My Profile', icon: <User size={20} /> },
     { id: 'wallet', label: 'Withdrawal', icon: <Wallet size={20} /> },

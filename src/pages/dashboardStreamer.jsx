@@ -752,6 +752,166 @@ const HistoryPage = () => {
   );
 };
 
+const fetchDiscover    = async ({ page = 1, search = '' } = {}) => {
+  const params = new URLSearchParams({ page, limit: 12, search });
+  return (await axios.get(`${BASE_URL}/api/follows/discover?${params}`, { headers: authHeader() })).data;
+};
+const fetchMyFollowers = async (userId) =>
+  (await axios.get(`${BASE_URL}/api/follows/${userId}/followers`, { headers: authHeader() })).data;
+const fetchMyFollowing = async (userId) =>
+  (await axios.get(`${BASE_URL}/api/follows/${userId}/following`, { headers: authHeader() })).data;
+const toggleFollowApi  = async (userId) =>
+  (await axios.post(`${BASE_URL}/api/follows/${userId}/toggle`, {}, { headers: authHeader() })).data;
+
+// ─── CommunityPage ────────────────────────────────────────────────────────────
+const CommunityPage = ({ currentUserId }) => {
+  const queryClient = useQueryClient();
+  const [subTab, setSubTab]   = useState('discover'); // 'discover' | 'followers' | 'following'
+  const [search, setSearch]   = useState('');
+  const [searchInput, setSearchInput] = useState('');
+
+  const { data: discoverData, isLoading: discoverLoading } = useQuery({
+    queryKey: ['discover', search],
+    queryFn: () => fetchDiscover({ search }),
+    enabled: subTab === 'discover',
+  });
+
+  const { data: followersData, isLoading: followersLoading } = useQuery({
+    queryKey: ['myFollowers', currentUserId],
+    queryFn: () => fetchMyFollowers(currentUserId),
+    enabled: subTab === 'followers' && !!currentUserId,
+  });
+
+  const { data: followingData, isLoading: followingLoading } = useQuery({
+    queryKey: ['myFollowing', currentUserId],
+    queryFn: () => fetchMyFollowing(currentUserId),
+    enabled: subTab === 'following' && !!currentUserId,
+  });
+
+  const toggleMutation = useMutation({
+    mutationFn: toggleFollowApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['discover'] });
+      queryClient.invalidateQueries({ queryKey: ['myFollowers'] });
+      queryClient.invalidateQueries({ queryKey: ['myFollowing'] });
+    },
+    onError: (err) => alert(err.response?.data?.message || 'Gagal'),
+  });
+
+  const subTabs = [
+    { id: 'discover',  label: 'Discover',  count: discoverData?.pagination?.total },
+    { id: 'followers', label: 'Followers',  count: followersData?.pagination?.total },
+    { id: 'following', label: 'Following',  count: followingData?.pagination?.total },
+  ];
+
+  const renderUsers = (users, isLoading, showFollowBtn = true) => {
+    if (isLoading) return (
+      <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
+        <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
+        Memuat...
+      </div>
+    );
+    if (!users?.length) return (
+      <div className="text-center py-20 text-slate-400">
+        <p className="text-4xl mb-3">👥</p>
+        <p className="font-black text-slate-500">Belum ada streamer</p>
+      </div>
+    );
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {users.map(u => (
+          <div key={u._id} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
+                {u.username.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-black text-slate-800 truncate">@{u.username}</p>
+                <p className="text-[10px] text-slate-400 font-medium truncate">{u.email}</p>
+              </div>
+            </div>
+            {u.followersCount !== undefined && (
+              <p className="text-[10px] text-slate-400 font-bold">
+                <span className="text-indigo-600 font-black">{u.followersCount}</span> followers
+              </p>
+            )}
+            {showFollowBtn && u._id !== currentUserId && (
+              <button
+                onClick={() => toggleMutation.mutate(u._id)}
+                disabled={toggleMutation.isPending}
+                className={`w-full py-2.5 rounded-2xl font-black text-xs transition-all active:scale-[0.97] disabled:opacity-60 ${
+                  u.isFollowing
+                    ? 'bg-slate-100 text-slate-500 hover:bg-red-50 hover:text-red-500'
+                    : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-100'
+                }`}>
+                {u.isFollowing ? 'Unfollow' : '+ Follow'}
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl p-8 text-white relative overflow-hidden">
+        <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/10 rounded-full" />
+        <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
+        <div className="relative z-10">
+          <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">Streamer Network</p>
+          <h2 className="text-3xl font-black tracking-tight">Community.</h2>
+          <p className="text-indigo-200 text-sm font-medium mt-1">Temukan & ikuti sesama streamer</p>
+        </div>
+      </div>
+
+      {/* Sub Tabs */}
+      <div className="flex gap-2 flex-wrap">
+        {subTabs.map(t => (
+          <button key={t.id} onClick={() => setSubTab(t.id)}
+            className={`px-5 py-2.5 rounded-2xl font-black text-sm transition-all ${
+              subTab === t.id
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
+                : 'bg-white text-slate-400 border border-slate-100 hover:border-indigo-200 hover:text-indigo-600'
+            }`}>
+            {t.label}
+            {t.count !== undefined && (
+              <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${
+                subTab === t.id ? 'bg-white/20' : 'bg-slate-100'
+              }`}>{t.count}</span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Search — hanya di discover */}
+      {subTab === 'discover' && (
+        <div className="flex gap-3">
+          <input
+            value={searchInput}
+            onChange={e => setSearchInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && setSearch(searchInput)}
+            placeholder="Cari username streamer..."
+            className="flex-1 bg-white border-2 border-slate-100 rounded-2xl px-5 py-3.5 font-bold text-sm outline-none focus:border-indigo-400 transition-all"
+          />
+          <button
+            onClick={() => setSearch(searchInput)}
+            className="px-6 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 transition-all active:scale-[0.97]">
+            Cari
+          </button>
+        </div>
+      )}
+
+      {/* Content */}
+      {subTab === 'discover'  && renderUsers(discoverData?.users,   discoverLoading,  true)}
+      {subTab === 'followers' && renderUsers(followersData?.users,  followersLoading, false)}
+      {subTab === 'following' && renderUsers(followingData?.users,  followingLoading, true)}
+    </div>
+  );
+};
+
 // ─── Sub Components ───────────────────────────────────────────────────────────
 
 const InputField = ({ label, ...props }) => (
@@ -907,6 +1067,7 @@ const DashboardStreamer = () => {
               {activeTab === 'settings' ? 'Dashboard'
                 : activeTab === 'history' ? 'Riwayat'
                 : activeTab === 'wallet' ? 'Wallet'
+                : activeTab === 'community' ? 'Community'
                 : activeTab === 'profile' ? 'Profil'
                 : 'Admin'}
               <span className="text-indigo-600">.</span>
@@ -919,6 +1080,12 @@ const DashboardStreamer = () => {
         </header>
 
         <AnimatePresence mode="wait">
+
+          {activeTab === 'community' && (
+            <motion.div key="community" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <CommunityPage currentUserId={profileData?.user?._id || profileData?.User?._id} />
+            </motion.div>
+          )}
 
           {/* ── SETTINGS ── */}
           {activeTab === 'settings' && (
