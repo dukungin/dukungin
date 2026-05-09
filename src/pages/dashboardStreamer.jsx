@@ -1035,7 +1035,7 @@ const DashboardStreamer = () => {
           {activeTab === 'profile' && (
             <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6">
               <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-20 -mt-20 z-0" />
+                {/* <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-20 -mt-20 z-0" /> */}
                 <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                   <div className="w-32 h-32 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-[2.5rem] flex items-center justify-center text-5xl font-black text-white shadow-xl">
                     {user.username.charAt(0).toUpperCase()}
@@ -1045,6 +1045,8 @@ const DashboardStreamer = () => {
                       <h2 className="text-4xl font-black text-slate-800 tracking-tighter">@{user.username}</h2>
                       <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
                     </div>
+                    <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
+                    <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
                     <p className="text-slate-400 font-medium">{user.email}</p>
                     <div className="pt-2"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Account Status</p><p className="font-bold text-indigo-600">Active</p></div>
                   </div>
