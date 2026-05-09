@@ -129,7 +129,7 @@ const Auth = () => {
             </svg>
           </div>
           <div className="relative z-10">
-            <div className="w-max px-4 py-1.5 bg-white rounded-xl flex items-center justify-center text-indigo-600 font-black text-sm shadow-xl mb-6">Dukung-In</div>
+            <div className="w-max px-4 py-1.5 bg-white rounded-xl flex items-center justify-center text-indigo-600 font-black text-sm shadow-xl mb-6">Sawer-In</div>
             <h2 className="text-4xl font-black text-white leading-tight">Mulai Terima <br/> Dukungan Real-time.</h2>
             <p className="text-indigo-100 mt-4 font-medium text-lg w-[90%]">Dashboard paling clean untuk para streamer Indonesia.</p>
           </div>
