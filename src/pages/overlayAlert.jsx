@@ -35,7 +35,7 @@ const OverlayAlert = () => {
     // ✅ Buat koneksi di dalam effect
     const socket = io('https://server-dukungin-production.up.railway.app');
     
-    socket.emit('join-overlay', token);
+    socket.emit('join-room', token);
 
     socket.on('new-donation', (data) => {
       setAlert(data);
