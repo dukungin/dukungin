@@ -871,7 +871,7 @@ const CommunityPage = ({ currentUserId }) => {
       <div className="flex gap-2 flex-wrap">
         {subTabs.map(t => (
           <button key={t.id} onClick={() => setSubTab(t.id)}
-            className={`px-5 py-2.5 rounded-2xl font-black text-sm transition-all ${
+            className={`cursor-pointer active:scale-[0.97] hover:brightness-90 px-5 py-2.5 rounded-2xl font-black text-sm transition-all ${
               subTab === t.id
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
                 : 'bg-white text-slate-400 border border-slate-100 hover:border-indigo-200 hover:text-indigo-600'
