@@ -139,67 +139,177 @@ const fetchLeaderboard   = async (username) =>
 const BannedWordsEditor = () => {
   const queryClient = useQueryClient();
   const [input, setInput] = useState('');
+  // ← tambah state lokal untuk action & replacement
+  const [localAction, setLocalAction] = useState('block');
+  const [localReplacement, setLocalReplacement] = useState('');
 
-  const { data, isLoading } = useQuery({ queryKey: ['bannedWords'], queryFn: fetchBannedWords });
+ const { data, isLoading } = useQuery({ queryKey: ['bannedWords'], queryFn: fetchBannedWords });
   const words = data?.words || [];
 
-  const mutation = useMutation({
+  const [synced, setSynced] = useState(false); // ← tambah flag
+
+  // ← sync dari server ke local state saat data pertama kali load
+  useEffect(() => {
+    if (data && !synced) { // ← hanya sync SEKALI saat data pertama kali masuk
+      setLocalAction(data.action || 'block');
+      setLocalReplacement(data.replacement || '');
+      setSynced(true);
+    }
+  }, [data]);
+
+  const saveMutation = useMutation({
     mutationFn: saveBannedWords,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['bannedWords'] }),
+    onSuccess: (responseData) => {
+      // Update cache langsung tanpa refetch, jadi useEffect tidak terpicu
+      queryClient.setQueryData(['bannedWords'], responseData);
+    },
+  });
+
+  // ← save selalu pakai localAction & localReplacement, bukan dari data
+  const save = (overrides = {}) => saveMutation.mutate({
+    words,
+    action: localAction,
+    replacement: localReplacement,
+    ...overrides,
   });
 
   const add = () => {
     const w = input.trim().toLowerCase();
     if (!w || words.includes(w)) return;
-    mutation.mutate({ words: [...words, w] });
+    save({ words: [...words, w] });
     setInput('');
   };
 
-  const remove = (word) => mutation.mutate({ words: words.filter(w => w !== word) });
+  const remove = (word) => save({ words: words.filter(w => w !== word) });
+
+  const ACTION_OPTIONS = [
+    {
+      id: 'block',
+      emoji: '🚫',
+      title: 'Tolak Pesan',
+      desc: 'Donasi dengan kata terlarang langsung ditolak. Donor dapat notifikasi error.',
+      color: 'border-red-400 bg-red-50 text-red-700',
+      active: 'border-red-500 bg-red-50',
+    },
+    {
+      id: 'censor',
+      emoji: '✱',
+      title: 'Sensor Kata',
+      desc: 'Kata diganti dengan bintang (***). Donasi tetap masuk, pesan disensor.',
+      color: 'border-amber-400 bg-amber-50 text-amber-700',
+      active: 'border-amber-500 bg-amber-50',
+    },
+    {
+      id: 'replace',
+      emoji: '✏️',
+      title: 'Ganti Teks',
+      desc: 'Kata diganti dengan teks pilihanmu. Cocok untuk branding atau humor.',
+      color: 'border-indigo-400 bg-indigo-50 text-indigo-700',
+      active: 'border-indigo-500 bg-indigo-50',
+    },
+  ];
 
   return (
-    <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-6">
+    <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-7">
       <SectionHeader icon={<ShieldCheck size={20} />} title="Filter Kata Terlarang" color="bg-red-500" />
-      <p className="text-xs text-slate-400 font-medium">
-        Pesan donasi yang mengandung kata-kata ini akan ditolak otomatis.
-      </p>
 
-      <div className="flex gap-3">
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && add()}
-          placeholder="Tambah kata terlarang..."
-          className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-2xl px-5 py-3 font-bold text-sm outline-none focus:border-red-400 transition-all"
-        />
-        <button onClick={add}
-          className="cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-black text-sm transition-all flex items-center gap-2">
-          <Plus size={16} /> Tambah
-        </button>
+      {/* Action selector */}
+      <div className="space-y-3">
+        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Aksi saat kata terlarang terdeteksi</label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+           {ACTION_OPTIONS.map(opt => (
+            <button
+              key={opt.id}
+              onClick={() => {
+                setLocalAction(opt.id);
+                saveMutation.mutate({
+                  words,
+                  action: opt.id,
+                  replacement: localReplacement,
+                });
+              }}
+              className={`cursor-pointer active:scale-[0.97] text-left p-4 rounded-2xl border-2 transition-all space-y-1.5 ${
+                localAction === opt.id
+                  ? opt.active + ' shadow-md'
+                  : 'border-slate-100 bg-slate-50 hover:border-slate-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-xl">{opt.emoji}</span>
+                {/* ↓ ganti action → localAction */}
+                <span className={`font-black text-sm ${localAction === opt.id ? '' : 'text-slate-700'}`}>{opt.title}</span>
+                {localAction === opt.id && (
+                  <span className="ml-auto">
+                    <CheckCircle2 size={15} className="text-indigo-600" />
+                  </span>
+                )}
+              </div>
+              {/* ↓ ganti action → localAction */}
+              <p className={`text-[11px] font-medium leading-relaxed ${localAction === opt.id ? 'text-slate-600' : 'text-slate-400'}`}>
+                {opt.desc}
+              </p>
+            </button>
+          ))}
+        </div>
+
+        {localAction === 'replace' && (  // ← pakai localAction
+        <div className="space-y-2">
+          <input
+            value={localReplacement}
+            onChange={e => setLocalReplacement(e.target.value)}
+            onBlur={() => save({ replacement: localReplacement })} // ← save saat blur
+            placeholder="contoh: [dihapus], ❤️, [sensor]"
+            className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-2xl px-5 py-3 font-bold text-sm outline-none focus:border-indigo-400 transition-all"
+          />
+        </div>
+      )}
+
       </div>
 
-      {isLoading
-        ? <div className="text-slate-400 text-sm font-bold animate-pulse">Memuat...</div>
-        : words.length === 0
-          ? (
-            <div className="rounded-2xl border-2 border-dashed border-slate-200 py-8 text-center text-slate-400">
-              <p className="text-2xl mb-2">🚫</p>
-              <p className="font-black text-sm">Belum ada kata terlarang</p>
-            </div>
-          )
-          : (
-            <div className="flex flex-wrap gap-2">
-              {words.map(word => (
-                <span key={word}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-2xl text-sm font-black border border-red-100">
-                  {word}
-                  <button onClick={() => remove(word)} className="cursor-pointer hover:text-red-800 transition-colors">
-                    <Trash2 size={12} />
-                  </button>
-                </span>
-              ))}
-            </div>
-          )}
+      {/* Divider */}
+      <div className="border-t border-slate-100" />
+
+      {/* Word input */}
+      <div className="space-y-4">
+        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Daftar kata terlarang</label>
+        <div className="flex gap-3">
+          <input
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && add()}
+            placeholder="Ketik kata lalu tekan Enter..."
+            className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-2xl px-5 py-3 font-bold text-sm outline-none focus:border-red-400 transition-all"
+          />
+          <button onClick={add}
+            className="cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-black text-sm transition-all flex items-center gap-2">
+            <Plus size={16} /> Tambah
+          </button>
+        </div>
+
+        {isLoading
+          ? <div className="text-slate-400 text-sm font-bold animate-pulse">Memuat...</div>
+          : words.length === 0
+            ? (
+              <div className="rounded-2xl border-2 border-dashed border-slate-200 py-8 text-center text-slate-400">
+                <p className="text-2xl mb-2">🚫</p>
+                <p className="font-black text-sm">Belum ada kata terlarang</p>
+                <p className="text-[11px] font-medium mt-1">Semua pesan dari donor akan diterima</p>
+              </div>
+            )
+            : (
+              <div className="flex flex-wrap gap-2">
+                {words.map(word => (
+                  <span key={word}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-2xl text-sm font-black border border-red-100">
+                    {word}
+                    <button onClick={() => remove(word)} className="cursor-pointer hover:text-red-800 transition-colors">
+                      <Trash2 size={12} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+      </div>
     </div>
   );
 };
@@ -389,7 +499,7 @@ const QrCodeCard = ({ username }) => {
           className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
           {copied ? <><CheckCircle2 size={16} /> Tersalin!</> : <><Copy size={16} /> Salin URL</>}
         </button>
-        
+        <a
           href={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(donateUrl)}&color=0f172a&format=png`}
           download={`qr-donasi-${username}.png`}
           target="_blank"
@@ -1815,8 +1925,8 @@ const DashboardStreamer = () => {
 
                 {/* OBS URL + Simpan */}
                 <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
-                  <div className="bg-slate-200 p-6 rounded-[2rem] border-2 border-dashed border-slate-200 mb-8">
-                    <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
+                  <div className="bg-slate-200 p-6 rounded-xl border-2 border-dashed border-slate-200 mb-8">
+                    <label className="block text-[10px] font-black bg-yellow-300 w-max text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
                     <div className="flex gap-3">
                       <input readOnly value={user.overlayUrl} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 font-bold outline-none overflow-hidden text-ellipsis" />
                       <button onClick={() => copyToClipboard(user.overlayUrl)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
@@ -1827,6 +1937,60 @@ const DashboardStreamer = () => {
                     <Save size={20} />
                     {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                   </button>
+                </div>
+
+                {/* Widget URLs untuk OBS */}
+                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-4">
+                  <div className="flex items-center gap-2 mb-5">
+                    <span className="text-sm font-black text-slate-600">Widget URLs untuk OBS</span>
+                    <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-[9px] font-black uppercase tracking-widest">Browser Source</span>
+                  </div>
+
+                  {[
+                    {
+                      label: 'Milestones',
+                      emoji: '🎯',
+                      path: 'milestones',
+                      desc: 'Progress bar target donasi',
+                      size: '400×280px',
+                    },
+                    {
+                      label: 'Leaderboard',
+                      emoji: '🏆',
+                      path: 'leaderboard',
+                      desc: 'Top 10 donor terbesar',
+                      size: '360×420px',
+                    },
+                    {
+                      label: 'QR Code',
+                      emoji: '◼',
+                      path: 'qrcode',
+                      desc: 'QR scan ke halaman donasi',
+                      size: '280×320px',
+                    },
+                  ].map(({ label, emoji, path, desc, size }) => {
+                    const widgetUrl = `${BASE_URL}/widget/${user.overlayToken}/${path}`;
+                    return (
+                      <div key={path} className="flex items-center gap-4 bg-white rounded-2xl p-4 border border-slate-300">
+                        <div className="w-10 h-10 bg-slate-100 rounded-2xl flex items-center justify-center text-xl flex-shrink-0">
+                          {emoji}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="font-black text-slate-700 text-sm">{label}</span>
+                            <span className="text-[9px] text-slate-400 font-bold">{size}</span>
+                          </div>
+                          <p className="text-[10px] text-slate-400 font-medium truncate">{desc}</p>
+                          <p className="text-[10px] font-mono text-indigo-500 truncate mt-0.5">{widgetUrl}</p>
+                        </div>
+                        <button
+                          onClick={() => copyToClipboard(widgetUrl)}
+                          className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-600 text-slate-400 rounded-xl transition-all flex-shrink-0">
+                          <Copy size={15} />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </section>
 
