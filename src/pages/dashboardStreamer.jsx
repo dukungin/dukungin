@@ -210,13 +210,13 @@ const BannedWordsEditor = () => {
   ];
 
   return (
-    <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-7">
+    <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100 space-y-7">
       <SectionHeader icon={<ShieldCheck size={20} />} title="Filter Kata Terlarang" color="bg-red-500" />
 
       {/* Action selector */}
       <div className="space-y-3">
         <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Aksi saat kata terlarang terdeteksi</label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
            {ACTION_OPTIONS.map(opt => (
             <button
               key={opt.id}
@@ -238,11 +238,11 @@ const BannedWordsEditor = () => {
                 <span className="text-xl">{opt.emoji}</span>
                 {/* ↓ ganti action → localAction */}
                 <span className={`font-black text-sm ${localAction === opt.id ? '' : 'text-slate-700'}`}>{opt.title}</span>
-                {localAction === opt.id && (
+                {/* {localAction === opt.id && (
                   <span className="ml-auto">
                     <CheckCircle2 size={15} className="text-indigo-600" />
                   </span>
-                )}
+                )} */}
               </div>
               {/* ↓ ganti action → localAction */}
               <p className={`text-[11px] font-medium leading-relaxed ${localAction === opt.id ? 'text-slate-600' : 'text-slate-400'}`}>
@@ -334,7 +334,7 @@ const MilestonesEditor = () => {
   const upd    = (i, key, val) => setLocal(list.map((m, idx) => idx === i ? { ...m, [key]: val } : m));
 
   return (
-    <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-6">
+    <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100 space-y-6">
       <SectionHeader icon={<TrendingUp size={20} />} title="Milestones" color="bg-green-500" />
       <p className="text-xs text-slate-400 font-medium">
         Tampilkan progress target donasi di halaman publik kamu. Donor bisa melihat seberapa dekat goal tercapai.
@@ -377,7 +377,7 @@ const MilestonesEditor = () => {
             </button>
             {list.length > 0 && (
               <button onClick={() => mutation.mutate(list)} disabled={mutation.isPending}
-                className="cursor-pointer active:scale-[0.97] w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                className="cursor-pointer active:scale-[0.97] w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
                 <Save size={16} /> {mutation.isPending ? 'Menyimpan...' : 'Simpan Milestones'}
               </button>
             )}
@@ -387,19 +387,181 @@ const MilestonesEditor = () => {
   );
 };
 
-const SoundTiersEditor = ({ tiers = [], onChange }) => {
-  const add    = () => onChange([...tiers, { minAmount: 50000, maxAmount: null, soundUrl: '', label: '' }]);
-  const remove = (i) => onChange(tiers.filter((_, idx) => idx !== i));
-  const upd    = (i, key, val) => onChange(tiers.map((t, idx) => idx === i ? { ...t, [key]: key === 'minAmount' || key === 'maxAmount' ? (val === '' ? null : Number(val)) : val } : t));
+const SOUND_PRESETS = [
+  { label: 'Ding 🔔', url: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' },
+  { label: 'Pop 💬', url: 'https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3' },
+  { label: 'Cash 💰', url: 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3' },
+  { label: 'Chime ✨', url: 'https://assets.mixkit.co/active_storage/sfx/2867/2867-preview.mp3' },
+  { label: 'Alert 🚨', url: 'https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3' },
+  { label: 'Tada 🎉', url: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3' },
+  // Tambahan Suara Perhiasan & Uang:
+  { label: 'Gold 🪙', url: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3' },
+  { label: 'Whooo 🗣️', url: 'https://assets.mixkit.co/active_storage/sfx/2010/2010-preview.mp3' },
+  { label: 'Treasure 💎', url: 'https://assets.mixkit.co/active_storage/sfx/1945/1945-preview.mp3' },
+  { label: 'Machine 🎰', url: 'https://assets.mixkit.co/active_storage/sfx/2015/2015-preview.mp3' },
+  { label: 'Jewels 💎', url: 'https://assets.mixkit.co/active_storage/sfx/1947/1947-preview.mp3' },
+  { label: 'Jackpot 🎰', url: 'https://assets.mixkit.co/active_storage/sfx/2017/2017-preview.mp3' },
+  { label: 'Bling ✨', url: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3' },
+  // Tambahan Suara Cekring & ATM:
+  { label: 'Payout 💸', url: 'https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3' },
+];
+
+// Komponen picker suara — reusable untuk default sound & per tier
+const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
+  const [mode, setMode] = useState(
+    // Jika value ada dan bukan dari preset → custom mode
+    value && !SOUND_PRESETS.find(p => p.url === value) ? 'custom' : 'preset'
+  );
+  const audioRef = useRef(null);
+
+  const playPreview = (url) => {
+    if (!url) return;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = url;
+      audioRef.current.play().catch(() => {});
+    }
+  };
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Suara per Nominal</p>
-        <p className="text-[10px] text-slate-300 font-medium">Kosong = pakai suara default</p>
+      {label && (
+        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">
+          {label}
+        </label>
+      )}
+
+      {/* Mode toggle */}
+      <div className="flex gap-2">
+        {[
+          { id: 'preset', label: '🎵 Pilih Preset' },
+          { id: 'custom', label: '🔗 URL Custom' },
+        ].map(m => (
+          <button
+            key={m.id}
+            onClick={() => setMode(m.id)}
+            className={`cursor-pointer active:scale-[0.97] px-4 py-2 rounded-xl font-black text-xs transition-all ${
+              mode === m.id
+                ? 'bg-indigo-600 text-white'
+                : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+            }`}
+          >
+            {m.label}
+          </button>
+        ))}
       </div>
+
+      {/* Preset grid */}
+      {mode === 'preset' && (
+        <div className="grid grid-cols-3 gap-2">
+          {/* Opsi "Tanpa Suara" */}
+          <button
+            onClick={() => onChange('')}
+            className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 font-black text-xs transition-all ${
+              !value
+                ? 'border-slate-600 bg-slate-800 text-white shadow-md'
+                : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-300'
+            }`}
+          >
+            <span className="text-lg">🔇</span>
+            <span>Tanpa Suara</span>
+          </button>
+
+          {SOUND_PRESETS.map(preset => (
+            <button
+              key={preset.url}
+              onClick={() => {
+                onChange(preset.url);
+                playPreview(preset.url);
+              }}
+              className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 font-black text-xs transition-all ${
+                value === preset.url
+                  ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-100'
+                  : 'border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-300'
+              }`}
+            >
+              <span className="text-lg">{preset.label.split(' ')[1]}</span>
+              <span>{preset.label.split(' ')[0]}</span>
+              {/* Play button */}
+              <span
+                onClick={e => { e.stopPropagation(); playPreview(preset.url); }}
+                className="text-[9px] font-medium text-slate-400 hover:text-indigo-600 transition-colors"
+              >
+                ▶ preview
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Custom URL */}
+      {mode === 'custom' && (
+        <div className="space-y-2">
+          <input
+            value={value || ''}
+            onChange={e => onChange(e.target.value)}
+            placeholder="https://... .mp3 / .ogg / .wav"
+            className="w-full p-3 bg-slate-100 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
+          />
+          <p className="text-[10px] text-slate-400 font-medium ml-1 italic">
+            *Paste URL file audio dari Cloudinary, Google Drive (direct link), atau hosting lainnya
+          </p>
+        </div>
+      )}
+
+      {/* Preview player — tampil jika ada value */}
+      {value && (
+        <div className="flex items-center gap-3 bg-slate-50 rounded-2xl p-3 border border-slate-100">
+          <button
+            onClick={() => playPreview(value)}
+            className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center text-white text-xs hover:bg-indigo-700 transition-all flex-shrink-0"
+          >
+            ▶
+          </button>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] font-black text-slate-500">
+              {SOUND_PRESETS.find(p => p.url === value)?.label || 'Custom Sound'}
+            </p>
+            <p className="text-[9px] text-slate-300 font-mono truncate">{value}</p>
+          </div>
+          <button
+            onClick={() => onChange('')}
+            className="cursor-pointer text-slate-300 hover:text-red-400 transition-colors text-sm flex-shrink-0"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Hidden audio element untuk preview */}
+      <audio ref={audioRef} />
+    </div>
+  );
+};
+
+const SoundTiersEditor = ({ tiers = [], onChange }) => {
+  const add    = () => onChange([...tiers, { minAmount: 50000, maxAmount: null, soundUrl: '', label: '' }]);
+  const remove = (i) => onChange(tiers.filter((_, idx) => idx !== i));
+  const upd    = (i, key, val) => onChange(tiers.map((t, idx) =>
+    idx === i ? { ...t, [key]: key === 'minAmount' || key === 'maxAmount'
+      ? (val === '' ? null : Number(val))
+      : val
+    } : t
+  ));
+
+  return (
+    <div className="space-y-3">
       {tiers.map((t, i) => (
-        <div key={i} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
+        <div key={i} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="font-black text-slate-600 text-sm">
+              {t.label || `Tier Suara ${i + 1}`}
+            </span>
+            <button onClick={() => remove(i)} className="cursor-pointer text-red-400 hover:text-red-600 p-1">
+              <Trash2 size={15} />
+            </button>
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1">
               <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Min (Rp)</label>
@@ -414,28 +576,22 @@ const SoundTiersEditor = ({ tiers = [], onChange }) => {
                 className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-indigo-400" />
             </div>
           </div>
+
           <div className="flex flex-col gap-1">
-            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Label</label>
+            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Label (opsional)</label>
             <input value={t.label} placeholder="contoh: Sultan Alert Sound"
               onChange={e => upd(i, 'label', e.target.value)}
               className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-indigo-400" />
           </div>
-          <div className="flex gap-2 items-end">
-            <div className="flex-1 flex flex-col gap-1">
-              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">URL File Suara (.mp3 / .ogg)</label>
-              <input value={t.soundUrl} placeholder="https://..."
-                onChange={e => upd(i, 'soundUrl', e.target.value)}
-                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-indigo-400" />
-            </div>
-            <button onClick={() => remove(i)} className="cursor-pointer active:scale-[0.97] text-red-400 hover:text-red-600 p-2.5">
-              <Trash2 size={15} />
-            </button>
-          </div>
-          {t.soundUrl && (
-            <audio controls src={t.soundUrl} className="w-full h-8 mt-1" />
-          )}
+
+          {/* ← Ganti input URL manual dengan SoundPicker */}
+          <SoundPicker
+            value={t.soundUrl}
+            onChange={v => upd(i, 'soundUrl', v)}
+          />
         </div>
       ))}
+
       <button onClick={add}
         className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Suara per Nominal
@@ -443,6 +599,7 @@ const SoundTiersEditor = ({ tiers = [], onChange }) => {
     </div>
   );
 };
+
 
 // Install dulu: npm install qrcode.react
 // Import di atas: import { QRCodeSVG } from 'qrcode.react';
@@ -1731,11 +1888,11 @@ const DashboardStreamer = () => {
           {/* ── SETTINGS ── */}
           {activeTab === 'settings' && (
             <motion.div key="settings" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-              className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+              className="grid grid-cols-1 xl:grid-cols-12 gap-5">
               <section className="xl:col-span-7 space-y-6">
 
                 {/* Card 1: Konfigurasi Alert */}
-                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100">
                   <SectionHeader icon={<Settings size={20} />} title="Konfigurasi Alert" color="bg-indigo-500" />
                   
                    <div className="mt-8 space-y-6">
@@ -1882,38 +2039,33 @@ const DashboardStreamer = () => {
                 </div>
 
                 {/* Card 2: Durasi Bertingkat */}
-                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100">
                   <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
                   <p className="text-xs text-slate-400 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p>
                   <DurationTiersEditor tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
                 </div>
 
                 {/* Card 3: Media Alert */}
-                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100 space-y-7">
                   <SectionHeader icon={<ImageIcon size={20} />} title="Izinkan Donor Kirim Media" color="bg-purple-500" />
-                  <div className="mt-4 mb-6 rounded-2xl bg-purple-50 border border-purple-100 px-5 py-4 space-y-2">
-                    <p className="text-xs font-black text-purple-700">Bagaimana cara kerjanya?</p>
-                    <ul className="text-[11px] text-purple-600 font-medium space-y-1.5 leading-relaxed">
-                      <li className="flex items-start gap-2"><span className="mt-0.5 flex-shrink-0">1.</span><span>Kamu tentukan <strong>nominal minimum</strong> dan <strong>tipe media</strong> yang diizinkan (gambar / video / keduanya).</span></li>
-                      <li className="flex items-start gap-2"><span className="mt-0.5 flex-shrink-0">2.</span><span>Saat donor memasukkan nominal yang memenuhi syarat, <strong>input link media muncul otomatis</strong> di halaman donasi mereka.</span></li>
-                      <li className="flex items-start gap-2"><span className="mt-0.5 flex-shrink-0">3.</span><span>Donor isi link gambar/video milik mereka sendiri — yang kemudian <strong>tampil di overlay OBS-mu</strong> saat donasi masuk.</span></li>
-                    </ul>
-                  </div>
                   <MediaTriggersEditor triggers={settings.mediaTriggers || []} onChange={v => upd('mediaTriggers', v)} />
                 </div>
 
-                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100">
                   <SectionHeader icon={<span className="text-lg">🔊</span>} title="Custom Suara per Nominal" color="bg-violet-500" />
-                  <p className="text-xs text-slate-400 font-medium mt-3 mb-6">
+                  <p className="text-xs text-slate-400 font-medium mt-7 ml-[2px] mb-6">
                     Atur file suara berbeda untuk tier nominal donasi tertentu. Sultan dapet sound kenceng? Bisa! 🎵
                   </p>
+
+                  {/* ✅ Ganti input manual dengan SoundPicker */}
                   <div className="mb-6">
-                    <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Suara Default (semua donasi)</label>
-                    <input value={settings.soundUrl || ''} placeholder="https://... .mp3"
-                      onChange={e => upd('soundUrl', e.target.value)}
-                      className="w-full p-4 bg-slate-100 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500 transition-all" />
-                    {settings.soundUrl && <audio controls src={settings.soundUrl} className="w-full h-8 mt-3" />}
+                    <SoundPicker
+                      label="Suara Default (semua donasi)"
+                      value={settings.soundUrl || ''}
+                      onChange={v => upd('soundUrl', v)}
+                    />
                   </div>
+
                   <SoundTiersEditor tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
                 </div>
 
@@ -1924,7 +2076,7 @@ const DashboardStreamer = () => {
                 <MilestonesEditor />
 
                 {/* OBS URL + Simpan */}
-                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100">
                   <div className="bg-slate-200 p-6 rounded-xl border-2 border-dashed border-slate-200 mb-8">
                     <label className="block text-[10px] font-black bg-yellow-300 w-max text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
                     <div className="flex gap-3">
@@ -1940,9 +2092,9 @@ const DashboardStreamer = () => {
                 </div>
 
                 {/* Widget URLs untuk OBS */}
-                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-4">
-                  <div className="flex items-center gap-2 mb-5">
-                    <span className="text-sm font-black text-slate-600">Widget URLs untuk OBS</span>
+                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100 space-y-4">
+                  <div className="flex justify-between items-center gap-2 mb-5">
+                    <span className="text-xl font-black text-slate-900">Widget URLs untuk OBS</span>
                     <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-[9px] font-black uppercase tracking-widest">Browser Source</span>
                   </div>
 
@@ -1985,7 +2137,7 @@ const DashboardStreamer = () => {
                         </div>
                         <button
                           onClick={() => copyToClipboard(widgetUrl)}
-                          className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-600 text-slate-400 rounded-xl transition-all flex-shrink-0">
+                          className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-200 hover:bg-indigo-100 hover:text-indigo-600 text-slate-500 rounded-xl transition-all flex-shrink-0">
                           <Copy size={15} />
                         </button>
                       </div>
