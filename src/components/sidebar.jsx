@@ -99,9 +99,9 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
-              D
+              S
             </div>
-            <h1 className="text-xl font-black tracking-tight text-slate-800">DUKUNG.IN</h1>
+            <h1 className="text-xl font-black tracking-tight text-slate-800">SAWER.IN</h1>
           </div>
           <button onClick={() => setIsSidebarOpen(false)} className="cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500">
             <X size={30} />

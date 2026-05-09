@@ -56,6 +56,17 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
   const hasPreview = mediaUrl && !previewError;
   const isVid = isVideoUrl(mediaUrl);
 
+  // Tentukan tipe input yang diizinkan berdasarkan trigger.mediaType
+  const allowImage = trigger.mediaType === 'image' || trigger.mediaType === 'both';
+  const allowVideo = trigger.mediaType === 'video' || trigger.mediaType === 'both';
+
+  const placeholderText =
+    trigger.mediaType === 'image'
+      ? 'https://i.imgur.com/contoh-gambar.jpg'
+      : trigger.mediaType === 'video'
+      ? 'https://example.com/video.mp4'
+      : 'https://i.imgur.com/sultan-alert.gif';
+
   return (
     <motion.div
       initial={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -70,14 +81,22 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-xl bg-indigo-600 flex items-center justify-center text-white flex-shrink-0">
-              {isVid ? <Video size={13} /> : <ImageIcon size={13} />}
+              {allowVideo && allowImage ? (
+                <span className="flex items-center gap-0.5">
+                  <ImageIcon size={9} /><Video size={9} />
+                </span>
+              ) : allowVideo ? (
+                <Video size={13} />
+              ) : (
+                <ImageIcon size={13} />
+              )}
             </div>
             <div>
               <p className="text-xs font-black text-indigo-700 leading-none">
                 🎉 {trigger.label || 'Media Alert'} Unlocked!
               </p>
               <p className="text-[10px] text-indigo-400 font-medium mt-0.5">
-                Tersedia mulai Rp {trigger.minAmount.toLocaleString('id-ID')}
+                Tersedia mulai Rp {Number(trigger.minAmount).toLocaleString('id-ID')}
               </p>
             </div>
           </div>
@@ -91,20 +110,44 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
           )}
         </div>
 
+        {/* Keterangan tipe media yang diizinkan */}
+        <div className="flex items-center gap-2">
+          {allowImage && (
+            <span className="flex items-center gap-1 px-2 py-1 bg-white border border-indigo-100 rounded-lg text-[10px] font-bold text-indigo-600">
+              <ImageIcon size={10} /> Gambar (jpg, gif, png, webp)
+            </span>
+          )}
+          {allowVideo && (
+            <span className="flex items-center gap-1 px-2 py-1 bg-white border border-indigo-100 rounded-lg text-[10px] font-bold text-purple-600">
+              <Video size={10} /> Video (mp4, webm, mov)
+            </span>
+          )}
+        </div>
+
         {/* Input URL */}
         <div className="space-y-1.5">
           <label className="block text-[10px] font-black text-indigo-600 uppercase tracking-widest ml-1">
-            Link Gambar / GIF / Video
+            {allowImage && allowVideo
+              ? 'Link Gambar / GIF / Video'
+              : allowVideo
+              ? 'Link Video'
+              : 'Link Gambar / GIF'}
           </label>
           <input
             type="url"
             value={mediaUrl}
             onChange={(e) => setMediaUrl(e.target.value)}
             className="w-full p-4 rounded-xl bg-white border-2 border-indigo-100 focus:border-indigo-400 outline-none font-mono text-xs text-slate-700 font-bold transition-all placeholder:font-sans placeholder:text-slate-400 placeholder:font-normal"
-            placeholder="https://i.imgur.com/sultan-alert.gif"
+            placeholder={placeholderText}
           />
           <p className="text-[10px] text-slate-400 font-medium ml-1">
-            * Opsional — gambar (.jpg .gif .png) atau video (.mp4) yang tampil di layar streamer saat donasimu masuk
+            * Opsional —{' '}
+            {allowImage && allowVideo
+              ? 'gambar (.jpg .gif .png .webp) atau video (.mp4 .webm .mov)'
+              : allowVideo
+              ? 'video (.mp4 .webm .mov)'
+              : 'gambar (.jpg .gif .png .webp)'}{' '}
+            yang tampil di layar streamer saat donasimu masuk
           </p>
         </div>
 
@@ -117,7 +160,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.25 }}
               className="rounded-xl overflow-hidden border border-indigo-100 bg-slate-900 relative"
-              style={{ maxHeight: 160 }}
+              style={{ maxHeight: 180 }}
             >
               {isVid ? (
                 <video
@@ -128,7 +171,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
                   loop
                   playsInline
                   className="w-full object-cover"
-                  style={{ maxHeight: 160 }}
+                  style={{ maxHeight: 180 }}
                   onError={() => setPreviewError(true)}
                 />
               ) : (
@@ -136,7 +179,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
                   src={mediaUrl}
                   alt="Media preview"
                   className="w-full object-cover"
-                  style={{ maxHeight: 160 }}
+                  style={{ maxHeight: 180 }}
                   onError={() => setPreviewError(true)}
                 />
               )}
@@ -147,13 +190,14 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
               </div>
             </motion.div>
           )}
+
           {previewError && mediaUrl && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-xs text-red-500 font-bold flex items-center gap-2"
             >
-              <X size={14} /> URL tidak valid atau media tidak dapat dimuat
+              <X size={14} /> URL tidak valid atau media tidak dapat dimuat. Pastikan URL langsung ke file media.
             </motion.div>
           )}
         </AnimatePresence>
@@ -202,7 +246,11 @@ const SupporterPage = () => {
   }, [username]);
 
   // ── Derived — eligible media trigger ──────────────────────
-  const mediaTriggers = streamer?.overlaySetting?.mediaTriggers || [];
+  // Ambil mediaTriggers dari overlaySetting (sesuai struktur getPublicProfile)
+  const mediaTriggers = streamer?.overlaySetting?.mediaTriggers
+    || streamer?.OverlaySetting?.mediaTriggers
+    || [];
+
   const eligibleTrigger = getEligibleTrigger(mediaTriggers, form.amount);
 
   // Reset mediaUrl kalau trigger hilang (nominal turun)
@@ -215,13 +263,34 @@ const SupporterPage = () => {
     if (!form.amount || form.amount < 1000) return alert('Minimal donasi Rp 1.000');
     if (!streamer?._id) return alert('Data streamer belum siap.');
 
-    const minDonate = streamer?.overlaySetting?.minDonate || 1000;
-    const maxDonate = streamer?.overlaySetting?.maxDonate || 10000000;
-    if (form.amount < minDonate) return alert(`Minimal donasi untuk streamer ini adalah Rp ${minDonate.toLocaleString('id-ID')}`);
-    if (form.amount > maxDonate) return alert(`Maksimal donasi untuk streamer ini adalah Rp ${maxDonate.toLocaleString('id-ID')}`);
+    const minDonate = streamer?.overlaySetting?.minDonate
+      || streamer?.OverlaySetting?.minDonate
+      || 1000;
+    const maxDonate = streamer?.overlaySetting?.maxDonate
+      || streamer?.OverlaySetting?.maxDonate
+      || 10000000;
+
+    if (form.amount < minDonate)
+      return alert(`Minimal donasi untuk streamer ini adalah Rp ${minDonate.toLocaleString('id-ID')}`);
+    if (form.amount > maxDonate)
+      return alert(`Maksimal donasi untuk streamer ini adalah Rp ${maxDonate.toLocaleString('id-ID')}`);
 
     try {
       setLoading(true);
+
+      // Tentukan mediaType berdasarkan URL yang diinput donor
+      const hasMedia = eligibleTrigger && mediaUrl.trim();
+      const detectedMediaType = hasMedia
+        ? (isVideoUrl(mediaUrl.trim()) ? 'video' : 'image')
+        : null;
+
+      // Validasi: jika trigger hanya izinkan image tapi donor input video (atau sebaliknya)
+      if (hasMedia && eligibleTrigger.mediaType === 'image' && isVideoUrl(mediaUrl.trim())) {
+        return alert('Streamer ini hanya mengizinkan gambar (bukan video) untuk nominal ini.');
+      }
+      if (hasMedia && eligibleTrigger.mediaType === 'video' && !isVideoUrl(mediaUrl.trim())) {
+        return alert('Streamer ini hanya mengizinkan video (bukan gambar) untuk nominal ini.');
+      }
 
       const payload = {
         amount: Math.round(Number(form.amount)),
@@ -230,10 +299,8 @@ const SupporterPage = () => {
         userId: streamer._id,
         email: form.email.trim() || 'guest@mail.com',
         // Media dari donor — hanya kirim kalau ada trigger yang cocok dan URL diisi
-        mediaUrl: (eligibleTrigger && mediaUrl.trim()) ? mediaUrl.trim() : null,
-        mediaType: (eligibleTrigger && mediaUrl.trim())
-          ? (isVideoUrl(mediaUrl) ? 'video' : 'image')
-          : null,
+        mediaUrl: hasMedia ? mediaUrl.trim() : null,
+        mediaType: detectedMediaType,
       };
 
       const res = await axios.post(
@@ -286,11 +353,17 @@ const SupporterPage = () => {
     );
   }
 
-  const minDonate = streamer?.overlaySetting?.minDonate || 1000;
-  const maxDonate = streamer?.overlaySetting?.maxDonate || 10000000;
+  const overlaySetting = streamer?.overlaySetting || streamer?.OverlaySetting || {};
+  const minDonate = overlaySetting?.minDonate || 1000;
+  const maxDonate = overlaySetting?.maxDonate || 10000000;
 
   // Quick amount presets — ambil yang >= minDonate
-  const quickAmounts = [10000, 20000, 50000, 100000].filter(v => v >= minDonate && v <= maxDonate);
+  const quickAmounts = [10000, 20000, 50000, 100000].filter(
+    (v) => v >= minDonate && v <= maxDonate
+  );
+
+  // Semua trigger diurutkan ascending untuk progress indicator
+  const sortedTriggers = [...mediaTriggers].sort((a, b) => a.minAmount - b.minAmount);
 
   // ── Render ─────────────────────────────────────────────────
   return (
@@ -380,30 +453,53 @@ const SupporterPage = () => {
               />
             </div>
 
-            {/* Media trigger indicator — muncul saat ada trigger yang hampir tercapai atau sudah tercapai */}
-            {mediaTriggers.length > 0 && (
-              <div className="mt-2 ml-1 space-y-1">
-                {mediaTriggers
-                  .sort((a, b) => a.minAmount - b.minAmount)
-                  .map((t, i) => {
-                    const reached = form.amount >= t.minAmount;
-                    const isNext = !reached && (
-                      i === 0 ||
-                      (form.amount >= mediaTriggers.sort((a, b) => a.minAmount - b.minAmount)[i - 1]?.minAmount)
-                    );
-                    if (!reached && !isNext) return null;
-                    return (
-                      <div key={i} className={`flex items-center gap-2 text-[10px] font-bold transition-all ${reached ? 'text-indigo-600' : 'text-slate-400'}`}>
-                        <span>{reached ? '✅' : '🔒'}</span>
-                        <span>
-                          {reached ? 'Media' : `Donasi`}{' '}
-                          <span className="font-black">{t.label || (t.mediaType === 'video' ? 'Video Alert' : 'Gambar Alert')}</span>
-                          {!reached && ` — Rp ${t.minAmount.toLocaleString('id-ID')}`}
-                          {reached && ' unlocked!'}
-                        </span>
-                      </div>
-                    );
-                  })}
+            {/* Media trigger progress indicator */}
+            {sortedTriggers.length > 0 && (
+              <div className="mt-3 space-y-1.5">
+                {sortedTriggers.map((t, i) => {
+                  const reached = form.amount >= t.minAmount;
+                  // Tampilkan semua yang sudah tercapai + 1 berikutnya yang belum
+                  const isNextUnlocked =
+                    !reached &&
+                    (i === 0 || form.amount >= sortedTriggers[i - 1]?.minAmount);
+                  if (!reached && !isNextUnlocked) return null;
+
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className={`flex items-center gap-2 text-[10px] font-bold px-2 py-1.5 rounded-lg transition-all ${
+                        reached
+                          ? 'bg-indigo-50 text-indigo-600'
+                          : 'bg-slate-50 text-slate-400'
+                      }`}
+                    >
+                      <span className="text-xs">{reached ? '✅' : '🔒'}</span>
+                      <span>
+                        {reached ? (
+                          <>
+                            <span className="font-black">
+                              {t.label || (t.mediaType === 'video' ? 'Video Alert' : 'Gambar Alert')}
+                            </span>{' '}
+                            unlocked!
+                          </>
+                        ) : (
+                          <>
+                            Donasi{' '}
+                            <span className="font-black">
+                              Rp {Number(t.minAmount).toLocaleString('id-ID')}
+                            </span>{' '}
+                            untuk unlock{' '}
+                            <span className="font-black">
+                              {t.label || (t.mediaType === 'video' ? 'Video Alert' : 'Gambar Alert')}
+                            </span>
+                          </>
+                        )}
+                      </span>
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -421,7 +517,7 @@ const SupporterPage = () => {
             />
           </div>
 
-          {/* MEDIA INPUT — kondisional */}
+          {/* ── MEDIA INPUT — muncul otomatis jika nominal memenuhi syarat trigger ── */}
           <AnimatePresence>
             {eligibleTrigger && (
               <MediaInputSection
@@ -435,7 +531,9 @@ const SupporterPage = () => {
           {/* NAMA & EMAIL */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Nama</label>
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
+                Nama
+              </label>
               <input
                 type="text"
                 disabled={form.isAnonymous}
@@ -446,7 +544,9 @@ const SupporterPage = () => {
               />
             </div>
             <div>
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Email (opsional)</label>
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
+                Email (opsional)
+              </label>
               <input
                 type="email"
                 value={form.email}
@@ -459,8 +559,16 @@ const SupporterPage = () => {
 
           {/* ANONIM TOGGLE */}
           <label className="flex items-center gap-3 text-sm font-bold text-slate-600 cursor-pointer select-none group">
-            <div className={`w-10 h-6 rounded-full transition-all relative flex-shrink-0 ${form.isAnonymous ? 'bg-indigo-600' : 'bg-slate-200'}`}>
-              <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${form.isAnonymous ? 'left-5' : 'left-1'}`} />
+            <div
+              className={`w-10 h-6 rounded-full transition-all relative flex-shrink-0 ${
+                form.isAnonymous ? 'bg-indigo-600' : 'bg-slate-200'
+              }`}
+            >
+              <div
+                className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${
+                  form.isAnonymous ? 'left-5' : 'left-1'
+                }`}
+              />
               <input
                 type="checkbox"
                 checked={form.isAnonymous}

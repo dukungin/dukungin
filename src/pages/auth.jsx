@@ -87,7 +87,7 @@ const Auth = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="fixed z-[101] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-4"
+              className="fixed z-[101] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-6xl md:max-w-md p-4"
             >
               <div className="bg-white rounded-[3rem] p-10 shadow-2xl text-center">
                 <div className={`w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center transition-colors duration-500 ${
@@ -99,7 +99,7 @@ const Auth = () => {
                 <p className="text-slate-500 font-medium text-lg leading-relaxed mb-8">{notification.message}</p>
                 <button 
                   onClick={() => setNotification({ ...notification, show: false })}
-                  className={`w-full py-4 rounded-2xl font-black text-lg transition-all ${
+                  className={`cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 rounded-2xl font-black text-lg transition-all ${
                     notification.type === 'success' 
                     ? 'bg-green-600 text-white hover:bg-green-700 shadow-xl shadow-green-200' 
                     : 'bg-red-600 text-white hover:bg-red-700 shadow-xl shadow-red-200'
