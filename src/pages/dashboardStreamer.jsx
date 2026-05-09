@@ -537,8 +537,6 @@ const getTokenPayload = () => {
   if (!token) return null;
   try { return JSON.parse(atob(token.split('.')[1])); } catch { return null; }
 };
-const tokenPayload = getTokenPayload();
-const isSuperAdmin  = tokenPayload?.role === 'superAdmin';
 
 // ─── HistoryPage ──────────────────────────────────────────────────────────────
 
@@ -955,6 +953,11 @@ const DashboardStreamer = () => {
       }
     },
   });
+
+  const isSuperAdmin = useMemo(() => {
+    const payload = getTokenPayload();
+    return payload?.role === 'superAdmin';
+  }, [profileData]); // empty deps = compute sekali saat mount, tapi SETELAH component render
 
   const saveSettingsMutation = useMutation({
     mutationFn: saveSettings,
