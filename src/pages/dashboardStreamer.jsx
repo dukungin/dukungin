@@ -852,6 +852,8 @@ const DashboardStreamer = () => {
   const copyToClipboard = (text) => { navigator.clipboard.writeText(text); alert('URL Berhasil disalin!'); };
   const upd = (key, val) => setLocalSettings(s => ({ ...s, [key]: val }));
 
+  console.log('Saving settings:', JSON.stringify(settings.mediaTriggers));
+
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] font-sans text-slate-900">
 
