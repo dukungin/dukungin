@@ -111,7 +111,7 @@ const WithdrawPage = () => {
   });
 
   return (
-    <div className="w-full mx-auto space-y-6">
+    <div className="w-full mx-auto space-y-6 pb-6">
       <div className="bg-indigo-600 rounded-3xl p-6 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 p-12 opacity-10"><Wallet size={120} /></div>
         <div className="relative z-10">
@@ -855,7 +855,7 @@ const CommunityPage = ({ currentUserId }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-6">
       {/* Header */}
       <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl p-8 text-white relative overflow-hidden">
         <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/10 rounded-full" />
@@ -1015,7 +1015,7 @@ const DashboardStreamer = () => {
   console.log('Saving settings:', JSON.stringify(settings.mediaTriggers));
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] font-sans text-slate-900">
+    <div className="flex min-h-screen bg-[#F8FAFC] font-sans pb-6 text-slate-900">
 
       {/* Save Toast */}
       <AnimatePresence>
@@ -1200,7 +1200,7 @@ const DashboardStreamer = () => {
 
           {/* ── PROFILE ── */}
           {activeTab === 'profile' && (
-            <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6">
+            <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6 pb-6">
               <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 relative overflow-hidden">
                 {/* <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-20 -mt-20 z-0" /> */}
                 <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
