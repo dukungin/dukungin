@@ -21,7 +21,7 @@ import {
   Video,
   Wallet,
 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import Sidebar from '../components/sidebar';
 
