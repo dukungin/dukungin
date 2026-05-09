@@ -762,6 +762,18 @@ const DashboardStreamer = () => {
   const [localSettings, setLocalSettings] = useState(null);
   const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '' });
   const [donationToasts, setDonationToasts] = useState([]);
+  const [profileForm, setProfileForm] = useState({ username: '', email: '', bio: '' });
+
+  // Sync ke profileData saat data pertama kali load
+  useEffect(() => {
+    if (profileData) {
+      setProfileForm({
+        username: profileData?.user?.username || profileData?.User?.username || '',
+        email: profileData?.user?.email || profileData?.User?.email || '',
+        bio: '',
+      });
+    }
+  }, [profileData]);
 
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ['profile'],
@@ -1028,14 +1040,35 @@ const DashboardStreamer = () => {
                       </div>
                       <p className="text-[10px] text-slate-400 font-bold mt-2 ml-1 italic">*Bagikan link ini di bio Instagram, TikTok, atau deskripsi YouTube kamu.</p>
                     </div>
-                    <InputField label="Display Name" defaultValue={user.username} placeholder="Nama di halaman donasi" />
-                    <InputField label="Email Address" type="email" defaultValue={user.email} />
+                    <InputField
+                      label="Display Name"
+                      value={profileForm.username}
+                      placeholder="Nama di halaman donasi"
+                      onChange={v => setProfileForm(f => ({ ...f, username: v }))}
+                    />
+                    <InputField
+                      label="Email Address"
+                      type="email"
+                      value={profileForm.email}
+                      onChange={v => setProfileForm(f => ({ ...f, email: v }))}
+                    />
                     <div className="md:col-span-2">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Bio Singkat</label>
-                      <textarea className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 h-32 transition-all shadow-sm" placeholder="Ceritakan tentang kontenmu..." />
+                      <textarea
+                        className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 h-32 transition-all shadow-sm"
+                        placeholder="Ceritakan tentang kontenmu..."
+                        value={profileForm.bio}
+                        onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))}
+                      />
                     </div>
                     <div className="md:col-span-2">
-                      <button onClick={() => updateProfileMutation.mutate({ username: user.username, email: user.email })} disabled={updateProfileMutation.isPending}
+                      <button
+                        onClick={() => updateProfileMutation.mutate({
+                          username: profileForm.username,
+                          email: profileForm.email,
+                          bio: profileForm.bio,
+                        })}
+                        disabled={updateProfileMutation.isPending}
                         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black transition-all flex items-center justify-center gap-2 disabled:opacity-70">
                         <Save size={18} />{updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Profil'}
                       </button>
