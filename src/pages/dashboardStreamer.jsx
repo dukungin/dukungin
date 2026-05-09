@@ -493,7 +493,7 @@ const YouTubeLivePreview = ({ settings, username }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] bg-black flex flex-col"
+          className="fixed w-[100%] right-0 inset-0 z-[999999999] bg-black flex flex-col"
         >
           {/* Top Bar */}
           <div className="flex items-center justify-between px-6 py-4 bg-black/80 backdrop-blur-sm border-b border-white/10 flex-shrink-0">
@@ -505,13 +505,13 @@ const YouTubeLivePreview = ({ settings, username }) => {
             <div className="flex items-center gap-3">
               <button
                 onClick={triggerDemo}
-                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-xs transition-all active:scale-[0.97]">
+                className="cursor-pointer active:scale-[0.97] hover:brightness-90 flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-xs transition-all active:scale-[0.97]">
                 <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
                 Simulasi Donasi
               </button>
               <button
                 onClick={() => setIsFullscreen(false)}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-black text-xs transition-all active:scale-[0.97] border border-white/10">
+                className="cursor-pointer active:scale-[0.97] hover:brightness-90 flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-black text-xs transition-all border border-white/10">
                 ✕ Tutup
               </button>
             </div>
@@ -630,12 +630,12 @@ const YouTubeLivePreview = ({ settings, username }) => {
         <span>Durasi demo: <span className="text-indigo-600">{currentDonor ? dur : '-'}s</span></span>
       </div>
       <button onClick={triggerDemo}
-        className="w-full py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-black text-sm border-2 border-indigo-100 transition-all active:scale-[0.97] flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-black text-sm border-2 border-indigo-100 transition-all active:scale-[0.97] flex items-center justify-center gap-2">
         <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" /> Simulasi Donasi Masuk
       </button>
       <button
         onClick={() => setIsFullscreen(true)}
-        className="w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm transition-all active:scale-[0.97] flex items-center justify-center gap-2 border border-slate-700">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm transition-all active:scale-[0.97] flex items-center justify-center gap-2 border border-slate-700">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
         </svg>
@@ -1180,8 +1180,8 @@ const DashboardStreamer = () => {
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-      <main className="flex-1 px-6 md:px-7 py-12 lg:py-4 max-w-7xl mx-auto w-full relative">
-        <header className="flex flex-col mt-4 lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 relative">
+      <main className="flex-1 px-6 md:px-7 py-12 lg:py-4 max-w-7xl z-[4] mx-auto w-full relative">
+        <header className="flex flex-col mt-4 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-12 relative">
           <div className="z-10">
             <h2 className="text-4xl md:text-3xl font-black text-slate-800 tracking-tight leading-none">
               {activeTab === 'settings' ? 'Dashboard'
@@ -1298,7 +1298,7 @@ const DashboardStreamer = () => {
                     </div>
                   </div>
                   <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-                    className="w-full bg-slate-900 text-white py-6 rounded-3xl font-black text-lg hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
+                    className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-3 rounded-2xl font-black text-lg hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
                     <Save size={20} />
                     {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                   </button>

@@ -62,7 +62,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white rounded-[2.5rem] p-10 shadow-2xl text-center overflow-hidden"
+              className="relative w-full max-w-md bg-white rounded-[2.5rem] p-10 z-[34444] shadow-2xl text-center overflow-hidden"
             >
               <div className="w-20 h-20 mx-auto mb-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center">
                 <AlertCircle size={40} />
@@ -94,7 +94,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
       {/* SIDEBAR ASIDE */}
       <aside className={`
-        fixed lg:sticky top-0 left-0 h-screen w-full md:w-72 bg-white border-r border-slate-100 p-8 flex flex-col z-[60] transition-transform duration-300
+        fixed lg:sticky top-0 left-0 h-screen w-full md:w-72 bg-white border-r border-slate-100 p-8 z-[1] flex flex-col transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* LOGO AREA */}
@@ -122,8 +122,8 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab(item.id);
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
-                activeTab === item.id 
+              className={`cursor-pointer w-full flex items-center gap-4 px-4 p-3 rounded-2xl font-black transition-all ${
+                activeTab === item.id
                   ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
                   : 'text-slate-400 hover:bg-slate-200'
               }`}
@@ -133,11 +133,12 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
             </button>
           ))}
 
+          <div className='w-full h-[1px] my-5 bg-slate-300'></div>
           {isSuperAdmin && (
             <>
-              <div className="pt-6 pb-2 px-1">
+              {/* <div className="pt-6 pb-2 px-1">
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Super Admin</p>
-              </div>
+              </div> */}
               <button
                 onClick={() => {
                   setActiveTab('admin');
@@ -145,8 +146,8 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 }}
                 className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
                   activeTab === 'admin'
-                    ? 'bg-red-600 text-white shadow-xl shadow-red-100'
-                    : 'text-red-400 hover:bg-red-50'
+                    ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
+                    : 'text-slate-400 hover:bg-slate-200'
                 }`}
               >
                 <ShieldAlert size={20} />
@@ -161,7 +162,10 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
           onClick={() => setShowLogoutConfirm(true)} // Pemicu modal
           className="flex items-center gap-4 p-4 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black mt-auto transition-all"
         >
-          <LogOut size={20} /> Logout
+          <LogOut size={18} /> 
+          <p className='text-sm ml-[3px]'>
+            Keluar
+          </p>
         </button>
       </aside>
     </>
