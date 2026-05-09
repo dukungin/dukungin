@@ -97,7 +97,11 @@ const OverlayAlert = () => {
       };
 
       setAlert(donationWithTime);
-      if (audioRef.current) audioRef.current.play().catch(() => {});
+      const soundToPlay = data.soundUrl || config.soundUrl;
+      if (soundToPlay && audioRef.current) {
+        audioRef.current.src = soundToPlay;
+        audioRef.current.play().catch(() => {});
+      }
       const duration = (configRef.current?.baseDuration || 5) * 1000;
       setTimeout(() => setAlert(null), duration);
     });

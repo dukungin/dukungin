@@ -53,6 +53,7 @@ const DEFAULT_SETTINGS = {
   customIcon: '',             // ← NEW (kosong = default 💜)
   showTimestamp: true,        // ← NEW
   theme: 'modern',
+  soundTiers: [],
   primaryColor: '#6366f1',
   textColor: '#ffffff',
   animation: 'bounce',
@@ -120,6 +121,328 @@ const formatDate = (dateStr) => {
     day: '2-digit', month: 'short', year: 'numeric',
     hour: '2-digit', minute: '2-digit',
   });
+};
+
+// Banned Words
+const fetchBannedWords   = async () => (await axios.get(`${BASE_URL}/api/banned-words`, { headers: authHeader() })).data;
+const saveBannedWords    = async (d) => (await axios.put(`${BASE_URL}/api/banned-words`, d, { headers: authHeader() })).data;
+
+// Milestones
+const fetchMilestones    = async () => (await axios.get(`${BASE_URL}/api/milestones`, { headers: authHeader() })).data;
+const saveMilestones     = async (d) => (await axios.put(`${BASE_URL}/api/milestones`, { milestones: d }, { headers: authHeader() })).data;
+
+// Leaderboard (pakai endpoint stats yang sudah ada)
+const fetchLeaderboard   = async (username) =>
+  (await axios.get(`${BASE_URL}/api/follows/discover?limit=100`, { headers: authHeader() })).data;
+
+
+const BannedWordsEditor = () => {
+  const queryClient = useQueryClient();
+  const [input, setInput] = useState('');
+
+  const { data, isLoading } = useQuery({ queryKey: ['bannedWords'], queryFn: fetchBannedWords });
+  const words = data?.words || [];
+
+  const mutation = useMutation({
+    mutationFn: saveBannedWords,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['bannedWords'] }),
+  });
+
+  const add = () => {
+    const w = input.trim().toLowerCase();
+    if (!w || words.includes(w)) return;
+    mutation.mutate({ words: [...words, w] });
+    setInput('');
+  };
+
+  const remove = (word) => mutation.mutate({ words: words.filter(w => w !== word) });
+
+  return (
+    <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-6">
+      <SectionHeader icon={<ShieldCheck size={20} />} title="Filter Kata Terlarang" color="bg-red-500" />
+      <p className="text-xs text-slate-400 font-medium">
+        Pesan donasi yang mengandung kata-kata ini akan ditolak otomatis.
+      </p>
+
+      <div className="flex gap-3">
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && add()}
+          placeholder="Tambah kata terlarang..."
+          className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-2xl px-5 py-3 font-bold text-sm outline-none focus:border-red-400 transition-all"
+        />
+        <button onClick={add}
+          className="cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-black text-sm transition-all flex items-center gap-2">
+          <Plus size={16} /> Tambah
+        </button>
+      </div>
+
+      {isLoading
+        ? <div className="text-slate-400 text-sm font-bold animate-pulse">Memuat...</div>
+        : words.length === 0
+          ? (
+            <div className="rounded-2xl border-2 border-dashed border-slate-200 py-8 text-center text-slate-400">
+              <p className="text-2xl mb-2">🚫</p>
+              <p className="font-black text-sm">Belum ada kata terlarang</p>
+            </div>
+          )
+          : (
+            <div className="flex flex-wrap gap-2">
+              {words.map(word => (
+                <span key={word}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-2xl text-sm font-black border border-red-100">
+                  {word}
+                  <button onClick={() => remove(word)} className="cursor-pointer hover:text-red-800 transition-colors">
+                    <Trash2 size={12} />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+    </div>
+  );
+};
+
+const MilestonesEditor = () => {
+  const queryClient = useQueryClient();
+  const { data: raw, isLoading } = useQuery({ queryKey: ['milestones'], queryFn: fetchMilestones });
+  const [local, setLocal] = useState(null);
+
+  useEffect(() => {
+    if (raw && !local) setLocal(Array.isArray(raw) ? raw : []);
+  }, [raw]);
+
+  const mutation = useMutation({
+    mutationFn: saveMilestones,
+    onSuccess: (saved) => { queryClient.invalidateQueries({ queryKey: ['milestones'] }); setLocal(saved); },
+  });
+
+  const list = local || [];
+  const add    = () => setLocal([...list, { title: '', targetAmount: 1000000, order: list.length }]);
+  const remove = (i) => setLocal(list.filter((_, idx) => idx !== i));
+  const upd    = (i, key, val) => setLocal(list.map((m, idx) => idx === i ? { ...m, [key]: val } : m));
+
+  return (
+    <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-6">
+      <SectionHeader icon={<TrendingUp size={20} />} title="Milestones" color="bg-green-500" />
+      <p className="text-xs text-slate-400 font-medium">
+        Tampilkan progress target donasi di halaman publik kamu. Donor bisa melihat seberapa dekat goal tercapai.
+      </p>
+
+      {isLoading
+        ? <div className="text-slate-400 text-sm font-bold animate-pulse">Memuat...</div>
+        : (
+          <div className="space-y-3">
+            {list.length === 0 && (
+              <div className="rounded-2xl border-2 border-dashed border-slate-200 py-8 text-center text-slate-400">
+                <p className="text-2xl mb-2">🎯</p>
+                <p className="font-black text-sm">Belum ada milestone</p>
+              </div>
+            )}
+            {list.map((m, i) => (
+              <div key={i} className="flex gap-3 items-end bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Judul Milestone</label>
+                    <input value={m.title} placeholder="contoh: Beli mic baru!"
+                      onChange={e => upd(i, 'title', e.target.value)}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-green-400" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Target (Rp)</label>
+                    <input type="number" value={m.targetAmount}
+                      onChange={e => upd(i, 'targetAmount', Number(e.target.value))}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-green-400" />
+                  </div>
+                </div>
+                <button onClick={() => remove(i)} className="cursor-pointer active:scale-[0.97] text-red-400 hover:text-red-600 p-2 flex-shrink-0">
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+            <button onClick={add}
+              className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-green-200 text-green-600 rounded-2xl font-black text-sm hover:border-green-400 hover:bg-green-50 transition-all flex items-center justify-center gap-2">
+              <Plus size={16} /> Tambah Milestone
+            </button>
+            {list.length > 0 && (
+              <button onClick={() => mutation.mutate(list)} disabled={mutation.isPending}
+                className="cursor-pointer active:scale-[0.97] w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                <Save size={16} /> {mutation.isPending ? 'Menyimpan...' : 'Simpan Milestones'}
+              </button>
+            )}
+          </div>
+        )}
+    </div>
+  );
+};
+
+const SoundTiersEditor = ({ tiers = [], onChange }) => {
+  const add    = () => onChange([...tiers, { minAmount: 50000, maxAmount: null, soundUrl: '', label: '' }]);
+  const remove = (i) => onChange(tiers.filter((_, idx) => idx !== i));
+  const upd    = (i, key, val) => onChange(tiers.map((t, idx) => idx === i ? { ...t, [key]: key === 'minAmount' || key === 'maxAmount' ? (val === '' ? null : Number(val)) : val } : t));
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Suara per Nominal</p>
+        <p className="text-[10px] text-slate-300 font-medium">Kosong = pakai suara default</p>
+      </div>
+      {tiers.map((t, i) => (
+        <div key={i} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Min (Rp)</label>
+              <input type="number" value={t.minAmount}
+                onChange={e => upd(i, 'minAmount', e.target.value)}
+                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-indigo-400" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Max (kosong=∞)</label>
+              <input type="number" value={t.maxAmount ?? ''} placeholder="∞"
+                onChange={e => upd(i, 'maxAmount', e.target.value)}
+                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-indigo-400" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Label</label>
+            <input value={t.label} placeholder="contoh: Sultan Alert Sound"
+              onChange={e => upd(i, 'label', e.target.value)}
+              className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-indigo-400" />
+          </div>
+          <div className="flex gap-2 items-end">
+            <div className="flex-1 flex flex-col gap-1">
+              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">URL File Suara (.mp3 / .ogg)</label>
+              <input value={t.soundUrl} placeholder="https://..."
+                onChange={e => upd(i, 'soundUrl', e.target.value)}
+                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-indigo-400" />
+            </div>
+            <button onClick={() => remove(i)} className="cursor-pointer active:scale-[0.97] text-red-400 hover:text-red-600 p-2.5">
+              <Trash2 size={15} />
+            </button>
+          </div>
+          {t.soundUrl && (
+            <audio controls src={t.soundUrl} className="w-full h-8 mt-1" />
+          )}
+        </div>
+      ))}
+      <button onClick={add}
+        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
+        <Plus size={16} /> Tambah Suara per Nominal
+      </button>
+    </div>
+  );
+};
+
+// Install dulu: npm install qrcode.react
+// Import di atas: import { QRCodeSVG } from 'qrcode.react';
+
+const QrCodeCard = ({ username }) => {
+  const donateUrl = `${window.location.origin}/${username}`;
+  const [copied, setCopied] = useState(false);
+
+  const copy = () => {
+    navigator.clipboard.writeText(donateUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadQr = () => {
+    const svg = document.getElementById('qr-svg');
+    if (!svg) return;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    canvas.width = 400; canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => { ctx.drawImage(img, 0, 0, 400, 400); canvas.toBlob(blob => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `qr-donasi-${username}.png`; a.click(); }); };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+  };
+
+  return (
+    <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+      <SectionHeader icon={<span className="text-lg">◼</span>} title="QR Code Donasi" color="bg-slate-800" />
+      <p className="text-xs text-slate-400 font-medium">
+        Tampilkan QR ini di stream / sosmed. Scan langsung ke halaman donasi kamu.
+      </p>
+
+      <div className="flex flex-col items-center gap-4">
+        <div className="p-4 bg-white rounded-3xl border-4 border-slate-900 shadow-xl inline-block">
+          {/* Pakai QRCodeSVG dari qrcode.react */}
+          {/* <QRCodeSVG id="qr-svg" value={donateUrl} size={200} bgColor="#fff" fgColor="#0f172a" level="H" /> */}
+          
+          {/* Fallback sementara tanpa library — QR via API */}
+          <img
+            id="qr-svg"
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(donateUrl)}&color=0f172a&bgcolor=ffffff&format=svg&margin=0`}
+            alt="QR Code"
+            width={200} height={200}
+          />
+        </div>
+        <div className="text-center">
+          <p className="font-black text-slate-700 text-sm">{donateUrl}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <button onClick={copy}
+          className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+          {copied ? <><CheckCircle2 size={16} /> Tersalin!</> : <><Copy size={16} /> Salin URL</>}
+        </button>
+        
+          href={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(donateUrl)}&color=0f172a&format=png`}
+          download={`qr-donasi-${username}.png`}
+          target="_blank"
+          rel="noreferrer"
+          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm bg-slate-900 text-white hover:bg-slate-800 transition-all">
+          ↓ Download QR
+        </a>
+      </div>
+    </div>
+  );
+};
+
+const LeaderboardCard = ({ stats }) => {
+  const topDonors = stats?.topDonors || [];
+  if (!topDonors.length) return null;
+
+  const medals = ['🥇', '🥈', '🥉'];
+  const colors = ['from-amber-400 to-yellow-300', 'from-slate-400 to-slate-300', 'from-orange-400 to-amber-300'];
+
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="px-8 py-5 border-b border-slate-100 flex items-center gap-3">
+        <div className="w-9 h-9 bg-amber-500 rounded-2xl flex items-center justify-center text-lg">🏆</div>
+        <div>
+          <p className="font-black text-slate-800">Leaderboard Donor</p>
+          <p className="text-[10px] text-slate-400 font-medium">Semua waktu</p>
+        </div>
+      </div>
+
+      <div className="p-6 space-y-3">
+        {topDonors.map((donor, i) => (
+          <motion.div
+            key={donor.name}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.08 }}
+            className={`flex items-center gap-4 p-4 rounded-2xl ${i < 3 ? 'bg-gradient-to-r ' + colors[i] + ' text-white' : 'bg-slate-50'}`}
+          >
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg flex-shrink-0 ${i < 3 ? 'bg-white/20' : 'bg-slate-200 text-slate-500'}`}>
+              {i < 3 ? medals[i] : `#${i + 1}`}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className={`font-black text-sm truncate ${i < 3 ? 'text-white' : 'text-slate-800'}`}>{donor.name}</p>
+              <p className={`text-[10px] font-medium ${i < 3 ? 'text-white/70' : 'text-slate-400'}`}>{donor.count}x donasi</p>
+            </div>
+            <p className={`font-black text-sm flex-shrink-0 ${i < 3 ? 'text-white' : 'text-indigo-600'}`}>
+              Rp {Number(donor.totalAmount).toLocaleString('id-ID')}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 // ─── WithdrawPage ─────────────────────────────────────────────────────────────
@@ -798,6 +1121,8 @@ const HistoryPage = () => {
         </div>
       )}
 
+      {stats && <LeaderboardCard stats={stats} />}
+
       {/* Table */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 md:px-10 py-5 border-b border-slate-100 gap-4">
@@ -1467,6 +1792,27 @@ const DashboardStreamer = () => {
                   <MediaTriggersEditor triggers={settings.mediaTriggers || []} onChange={v => upd('mediaTriggers', v)} />
                 </div>
 
+                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
+                  <SectionHeader icon={<span className="text-lg">🔊</span>} title="Custom Suara per Nominal" color="bg-violet-500" />
+                  <p className="text-xs text-slate-400 font-medium mt-3 mb-6">
+                    Atur file suara berbeda untuk tier nominal donasi tertentu. Sultan dapet sound kenceng? Bisa! 🎵
+                  </p>
+                  <div className="mb-6">
+                    <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Suara Default (semua donasi)</label>
+                    <input value={settings.soundUrl || ''} placeholder="https://... .mp3"
+                      onChange={e => upd('soundUrl', e.target.value)}
+                      className="w-full p-4 bg-slate-100 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500 transition-all" />
+                    {settings.soundUrl && <audio controls src={settings.soundUrl} className="w-full h-8 mt-3" />}
+                  </div>
+                  <SoundTiersEditor tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
+                </div>
+
+                {/* Card: Filter Kata Terlarang */}
+                <BannedWordsEditor />
+
+                {/* Card: Milestones */}
+                <MilestonesEditor />
+
                 {/* OBS URL + Simpan */}
                 <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
                   <div className="bg-slate-200 p-6 rounded-[2rem] border-2 border-dashed border-slate-200 mb-8">
@@ -1582,6 +1928,7 @@ const DashboardStreamer = () => {
                   </div>
                 </div> */}
               </div>
+              <QrCodeCard username={user.username} />
             </motion.div>
           )}
 
