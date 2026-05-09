@@ -946,13 +946,15 @@ const DashboardStreamer = () => {
     queryKey: ['profile'],
     queryFn: fetchProfile,
     refetchInterval: 30000,
-    onSuccess: (data) => {
-      if (!localSettings) {
-        const s = data.settings || data.overlaySetting || {};
-        setLocalSettings({ ...DEFAULT_SETTINGS, ...s });
-      }
-    },
   });
+
+  // Tambahkan useEffect ini tepat setelah useQuery (berdampingan dengan useEffect profileForm)
+  useEffect(() => {
+    if (profileData && !localSettings) {
+      const s = profileData.settings || profileData.overlaySetting || {};
+      setLocalSettings({ ...DEFAULT_SETTINGS, ...s });
+    }
+  }, [profileData]);
 
   const isSuperAdmin = useMemo(() => {
     const payload = getTokenPayload();
