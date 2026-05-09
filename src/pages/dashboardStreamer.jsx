@@ -971,13 +971,14 @@ const CommunityPage = ({ currentUserId }) => {
     <div className="space-y-6 pb-6">
       {/* Header */}
       <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl p-8 text-white relative overflow-hidden">
-        <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/10 rounded-full" />
         <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
         <div className="relative z-10">
           <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">Streamer Network</p>
           <h2 className="text-3xl font-black tracking-tight">Community.</h2>
           <p className="text-indigo-200 text-sm font-medium mt-1">Temukan & ikuti sesama streamer</p>
         </div>
+        <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
+        <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
       </div>
 
       {/* Sub Tabs */}
