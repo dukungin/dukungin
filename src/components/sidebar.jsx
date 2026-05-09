@@ -6,7 +6,8 @@ import {
   User, 
   Wallet, 
   X,
-  AlertCircle 
+  AlertCircle, 
+  Users
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
