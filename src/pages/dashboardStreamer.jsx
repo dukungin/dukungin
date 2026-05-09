@@ -590,7 +590,7 @@ const HistoryPage = () => {
             icon: '⚡',
           },
           {
-            label: 'Top Donor',
+            label: 'Top Dononatur',
             value: statsLoading ? '...' : (stats?.topDonors?.[0]?.name || '-'),
             sub: stats?.topDonors?.[0]
               ? `Rp ${Number(stats.topDonors[0].totalAmount).toLocaleString('id-ID')}`
@@ -613,7 +613,7 @@ const HistoryPage = () => {
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-9 h-9 bg-amber-500 rounded-2xl flex items-center justify-center text-white"><TrendingUp size={16} /></div>
-            <h3 className="font-black text-slate-800">Top Donor Kamu</h3>
+            <h3 className="font-black text-slate-800">Top Dononatur Kamu</h3>
           </div>
           <div className="space-y-3">
             {stats.topDonors.map((donor, i) => (
