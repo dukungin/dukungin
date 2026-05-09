@@ -133,6 +133,8 @@ const Auth = () => {
             <h2 className="text-4xl font-black text-white leading-tight">Mulai Terima <br/> Dukungan Real-time.</h2>
             <p className="text-indigo-100 mt-4 font-medium text-lg w-[90%]">Dashboard paling clean untuk para streamer Indonesia.</p>
           </div>
+
+          <img src="/jellyfish.png" alt="icon" className='absolute bottom-24 rotate-20 right-10 w-[50%] opacity-[12%]' />
           <div className="relative z-10 space-y-6">
             <FeatureItem label="Integrasi Midtrans Otomatis" />
             <FeatureItem label="Overlay OBS Customizable" />

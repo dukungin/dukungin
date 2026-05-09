@@ -98,8 +98,8 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         {/* LOGO AREA */}
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
-              S
+            <div className="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
+              <img src="/jellyfish.png" alt="icon" className='w-[60%]' />
             </div>
             <h1 className="text-xl font-black tracking-tight text-slate-800">SAWER.IN</h1>
           </div>
