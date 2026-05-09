@@ -112,14 +112,16 @@ const WithdrawPage = () => {
 
   return (
     <div className="w-full mx-auto space-y-6 pb-6">
-      <div className="bg-indigo-600 rounded-3xl p-6 text-white relative overflow-hidden">
+      <div className="bg-indigo-600 py-7 rounded-2xl p-6 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 p-12 opacity-10"><Wallet size={120} /></div>
         <div className="relative z-10">
           <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">Total Saldo Bisa Ditarik</p>
-          <h1 className="text-3xl font-black italic">Rp {parseFloat(balance).toLocaleString('id-ID')}</h1>
+          <h1 className="text-3xl font-black">Rp {parseFloat(balance).toLocaleString('id-ID')}</h1>
         </div>
+        <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
+        <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
       </div>
-      <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100">
+      <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-slate-100">
         <h2 className="text-2xl font-black text-slate-800 mb-8 flex items-center gap-3">
           <CreditCard className="text-indigo-600" /> Konfigurasi Pencairan
         </h2>
@@ -131,7 +133,7 @@ const WithdrawPage = () => {
           ].map(m => (
             <button key={m.id}
               onClick={() => { setMethod(m.id); setFormData({ ...formData, channelCode: m.id === 'BANK' ? 'BCA' : m.id }); }}
-              className={`cursor-pointer active:scale-[0.97] hover:bg-blue-50 flex flex-col items-center gap-3 p-6 rounded-3xl border-2 transition-all font-black text-sm ${method === m.id ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-lg shadow-indigo-50' : 'border-slate-50 text-slate-400 hover:border-slate-200'}`}>
+              className={`cursor-pointer active:scale-[0.97] hover:bg-blue-50 flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all font-black text-sm ${method === m.id ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-lg shadow-indigo-50' : 'border-slate-50 text-slate-400 hover:border-slate-200'}`}>
               {m.icon} {m.label}
             </button>
           ))}
@@ -141,7 +143,7 @@ const WithdrawPage = () => {
             {method === 'BANK' && (
               <div className="flex flex-col gap-3">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Pilih Bank</label>
-                <select className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all"
+                <select className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all"
                   onChange={(e) => setFormData({ ...formData, channelCode: e.target.value })}>
                   <option value="BCA">BCA (Bank Central Asia)</option>
                   <option value="BNI">BNI (Bank Negara Indonesia)</option>
@@ -155,22 +157,22 @@ const WithdrawPage = () => {
                 {method === 'BANK' ? 'Nomor Rekening' : 'Nomor Handphone'}
               </label>
               <input value={formData.accountNumber} placeholder={method === 'BANK' ? '000-000-000' : '0812xxxx'}
-                className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
+                className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
                 onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })} />
             </div>
           </div>
           <div className="flex flex-col gap-3">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nama Lengkap Pemilik Akun</label>
             <input value={formData.accountName} placeholder="Sesuaikan dengan Buku Tabungan / Nama di App"
-              className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
+              className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
               onChange={(e) => setFormData({ ...formData, accountName: e.target.value })} />
           </div>
           <div className="flex flex-col gap-3 pt-4">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nominal yang Ingin Ditarik (IDR)</label>
             <div className="relative">
               <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-white">Rp</span>
-              <input type="number" value={formData.amount} placeholder="Contoh: 100000"
-                className="w-full p-6 pl-14 bg-slate-900 text-white rounded-3xl font-black text-xl outline-none focus:ring-4 ring-indigo-100 transition-all"
+              <input type="number" value={formData.amount} placeholder="0,00"
+                className="w-full px-6 py-3 pl-14 bg-slate-900 text-white rounded-2xl font-medium text-xl outline-none focus:ring-4 ring-indigo-100 transition-all"
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
             </div>
             <p className="text-[10px] text-slate-400 font-bold ml-1 italic">*Biaya admin penarikan Rp 5.000 akan memotong saldo utama.</p>
@@ -182,7 +184,7 @@ const WithdrawPage = () => {
               withdrawMutation.mutate({ ...formData, paymentMethod: method });
             }}
             disabled={withdrawMutation.isPending}
-            className="w-full bg-indigo-600 text-white py-6 rounded-3xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 mt-4 disabled:opacity-70">
+            className="w-full bg-indigo-600 text-white py-3 rounded-2xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 mt-4 disabled:opacity-70">
             {withdrawMutation.isPending
               ? <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" /> Sedang Memproses...</>
               : <><ArrowRight size={20} /> Ajukan Pencairan Dana</>
@@ -207,7 +209,7 @@ const AdminWithdrawalPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white w-full rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="bg-white w-full rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <div className="flex items-center justify-between px-10 py-5 border-b border-slate-100">
           <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Semua Request Penarikan</p>
           <span className="px-4 py-2 bg-red-100 text-red-600 rounded-full text-[10px] font-black uppercase tracking-widest">Super Admin Only</span>
@@ -712,7 +714,7 @@ const HistoryPage = () => {
             icon: '🏆',
           },
         ].map((card) => (
-          <div key={card.label} className={`${card.color} rounded-3xl p-6 text-white relative overflow-hidden`}>
+          <div key={card.label} className={`${card.color} rounded-2xl p-6 text-white relative overflow-hidden`}>
             <div className="absolute top-3 right-4 text-2xl opacity-20">{card.icon}</div>
             <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">{card.label}</p>
             <p className="text-xl font-black leading-tight">{card.value}</p>
@@ -723,7 +725,7 @@ const HistoryPage = () => {
 
       {/* Top Donors */}
       {stats?.topDonors?.length > 0 && (
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-9 h-9 bg-amber-500 rounded-2xl flex items-center justify-center text-white"><TrendingUp size={16} /></div>
             <h3 className="font-black text-slate-800">Top Dononatur Kamu</h3>
@@ -748,7 +750,7 @@ const HistoryPage = () => {
       )}
 
       {/* Table */}
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 md:px-10 py-5 border-b border-slate-100 gap-4">
           <div>
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Riwayat Donasi</p>
@@ -934,7 +936,7 @@ const CommunityPage = ({ currentUserId }) => {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map(u => (
-          <div key={u._id} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col gap-4">
+          <div key={u._id} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col gap-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
                 {u.username.charAt(0).toUpperCase()}
@@ -970,7 +972,7 @@ const CommunityPage = ({ currentUserId }) => {
   return (
     <div className="space-y-6 pb-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl p-8 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl p-8 text-white relative overflow-hidden">
         <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
         <div className="relative z-10">
           <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">Streamer Network</p>
@@ -1012,7 +1014,7 @@ const CommunityPage = ({ currentUserId }) => {
           />
           <button
             onClick={() => setSearch(searchInput)}
-            className="px-6 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 transition-all active:scale-[0.97]">
+            className="cursor-pointer active:scale-[0.97] hover:brightness-90 px-6 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 transition-all">
             Cari
           </button>
         </div>
@@ -1153,7 +1155,7 @@ const DashboardStreamer = () => {
         <AnimatePresence>
           {donationToasts.map(toast => (
             <motion.div key={toast.id} initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 100, opacity: 0 }}
-              className="bg-white rounded-3xl p-5 shadow-2xl border border-slate-100 flex items-start gap-4">
+              className="bg-white rounded-2xl p-5 shadow-2xl border border-slate-100 flex items-start gap-4">
               <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0">💜</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
@@ -1215,7 +1217,7 @@ const DashboardStreamer = () => {
               <section className="xl:col-span-7 space-y-6">
 
                 {/* Card 1: Konfigurasi Alert */}
-                <div className="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
                   <SectionHeader icon={<Settings size={20} />} title="Konfigurasi Alert" color="bg-indigo-500" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                     <InputField label="Minimal Donasi" type="number" value={settings.minDonate} onChange={v => upd('minDonate', v)} />
@@ -1269,14 +1271,14 @@ const DashboardStreamer = () => {
                 </div>
 
                 {/* Card 2: Durasi Bertingkat */}
-                <div className="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
                   <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
                   <p className="text-xs text-slate-400 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p>
                   <DurationTiersEditor tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
                 </div>
 
                 {/* Card 3: Media Alert */}
-                <div className="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
                   <SectionHeader icon={<ImageIcon size={20} />} title="Izinkan Donor Kirim Media" color="bg-purple-500" />
                   <div className="mt-4 mb-6 rounded-2xl bg-purple-50 border border-purple-100 px-5 py-4 space-y-2">
                     <p className="text-xs font-black text-purple-700">Bagaimana cara kerjanya?</p>
@@ -1290,7 +1292,7 @@ const DashboardStreamer = () => {
                 </div>
 
                 {/* OBS URL + Simpan */}
-                <div className="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
                   <div className="bg-slate-200 p-6 rounded-[2rem] border-2 border-dashed border-slate-200 mb-8">
                     <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
                     <div className="flex gap-3">

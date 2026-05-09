@@ -151,7 +151,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 }`}
               >
                 <ShieldAlert size={20} />
-                <span className="text-sm">Kelola Penarikan</span>
+                <span className="text-sm">Req. withdrawals</span>
               </button>
             </>
           )}
