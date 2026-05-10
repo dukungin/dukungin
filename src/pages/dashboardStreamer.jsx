@@ -2066,11 +2066,11 @@ const DashboardStreamer = () => {
                     <InputField label="Warna Teks"       type="color" value={settings.textColor}    onChange={v => upd('textColor', v)} />
 
                     {/* ── Warna Border ── */}
-                    <div className="md:col-span-2 gap-3">
+                    <div className="flex flex-col gap-3">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                         Warna Border
                       </label>
-                      <div className="mt-2.5 md:col-span-2 flex items-center gap-3">
+                      <div className="md:col-span-2 flex items-center gap-3">
                         <input
                           type="color"
                           value={(() => {
@@ -2109,7 +2109,7 @@ const DashboardStreamer = () => {
                         <span>Transparan</span><span>Solid</span>
                       </div>
                     </div>
-
+                    
                     <div className="flex flex-col gap-3">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
                       <select value={settings.overlayPosition || 'bottom-right'} onChange={e => upd('overlayPosition', e.target.value)}
