@@ -2123,8 +2123,22 @@ const DashboardStreamer = () => {
                       desc: 'QR scan ke halaman donasi',
                       size: '280×320px',
                     },
+                    {
+                      label: 'Poll',
+                      emoji: '🗳️',
+                      path: 'poll',
+                      desc: 'Voting poll live',
+                      size: '420×300px',
+                    },
+                    {
+                      label: 'Subathon',
+                      emoji: '⏱',
+                      path: 'subathon',
+                      desc: 'Timer subathon',
+                      size: '360×180px',
+                    },
                   ].map(({ label, emoji, path, desc, size }) => {
-                    const widgetUrl = `${BASE_URL}/widget/${user.overlayToken}/${path}`;
+                    const widgetUrl = `${window.location.origin}/widget/${user.overlayToken}/${path}`;
                     return (
                       <div key={path} className="flex items-center gap-4 bg-white rounded-2xl p-4 border border-slate-300">
                         <div className="w-10 h-10 bg-slate-100 rounded-2xl flex items-center justify-center text-xl flex-shrink-0">

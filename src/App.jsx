@@ -10,6 +10,9 @@ import DonationSuccess from './pages/donationSuccess';
 import OverlayAlert from './pages/overlayAlert';
 import ResetPassword from './pages/resetPassword';
 import SupporterPage from './pages/supporterPage';
+import LeaderboardWidget from './components/leaderboard';
+import MilestonesWidget from './components/milestoneWidget';
+import QrCodeWidget from './components/qrCodeWidget';
 
 // Buat instance QueryClient sekali di luar komponen
 const queryClient = new QueryClient({
@@ -44,6 +47,9 @@ function App() {
           <Route path="/donation/pending" element={<DonationPending />} />
           <Route path="/widget/:token/subathon" element={<SubathonWidget />} />
           <Route path="/widget/:token/poll"     element={<PollWidget />} />
+          <Route path="/widget/:token/leaderboard"     element={<LeaderboardWidget />} />
+          <Route path="/widget/:token/milestones"     element={<MilestonesWidget />} />
+          <Route path="/widget/:token/qrcode"     element={<QrCodeWidget />} />
           <Route path="/overlay/:token" element={<OverlayAlert />} />
         </Routes>
       </Router>
