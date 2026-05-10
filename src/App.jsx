@@ -1,13 +1,15 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import PollWidget from './components/pollWidget';
+import SubathonWidget from './components/subathonWidget';
 import Auth from './pages/auth';
 import DashboardStreamer from './pages/dashboardStreamer';
-import OverlayAlert from './pages/overlayAlert';
-import SupporterPage from './pages/supporterPage';
-import ResetPassword from './pages/resetPassword';
-import DonationSuccess from './pages/donationSuccess';
 import DonationFailed from './pages/donationFailed';
 import DonationPending from './pages/donationPending';
+import DonationSuccess from './pages/donationSuccess';
+import OverlayAlert from './pages/overlayAlert';
+import ResetPassword from './pages/resetPassword';
+import SupporterPage from './pages/supporterPage';
 
 // Buat instance QueryClient sekali di luar komponen
 const queryClient = new QueryClient({
@@ -40,6 +42,8 @@ function App() {
           <Route path="/donation/success" element={<DonationSuccess />} />
           <Route path="/donation/failed" element={<DonationFailed />} />
           <Route path="/donation/pending" element={<DonationPending />} />
+          <Route path="/widget/:token/subathon" element={<SubathonWidget />} />
+          <Route path="/widget/:token/poll"     element={<PollWidget />} />
           <Route path="/overlay/:token" element={<OverlayAlert />} />
         </Routes>
       </Router>

@@ -1,7 +1,7 @@
 // StreamerExtras.jsx
 // Komponen: PollManager, SubathonManager, LeaderboardSettings
 // Integrasi ke DashboardStreamer.jsx — lihat petunjuk di bawah
- 
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -22,18 +22,18 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
- 
+
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const authHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
- 
+
 // ─── API Calls ────────────────────────────────────────────────────────────────
- 
+
 // Poll
 const fetchMyPolls  = async () => (await axios.get(`${BASE_URL}/api/polls`, { headers: authHeader() })).data;
 const createPoll    = async (d) => (await axios.post(`${BASE_URL}/api/polls`, d, { headers: authHeader() })).data;
 const closePoll     = async (id) => (await axios.post(`${BASE_URL}/api/polls/${id}/close`, {}, { headers: authHeader() })).data;
 const deletePoll    = async (id) => (await axios.delete(`${BASE_URL}/api/polls/${id}`, { headers: authHeader() })).data;
- 
+
 // Subathon
 const fetchSubathon   = async () => (await axios.get(`${BASE_URL}/api/subathon`, { headers: authHeader() })).data;
 const updateSubConfig = async (d) => (await axios.put(`${BASE_URL}/api/subathon/config`, d, { headers: authHeader() })).data;
@@ -41,20 +41,20 @@ const startSubathon   = async () => (await axios.post(`${BASE_URL}/api/subathon/
 const pauseSubathon   = async () => (await axios.post(`${BASE_URL}/api/subathon/pause`, {}, { headers: authHeader() })).data;
 const resetSubathon   = async () => (await axios.post(`${BASE_URL}/api/subathon/reset`, {}, { headers: authHeader() })).data;
 const addTimeSubathon = async (s) => (await axios.post(`${BASE_URL}/api/subathon/add-time`, { seconds: s }, { headers: authHeader() })).data;
- 
+
 // Leaderboard (overlay settings)
 const fetchProfile    = async () => (await axios.get(`${BASE_URL}/api/overlay/settings`, { headers: authHeader() })).data;
 const saveSettings    = async (s) => (await axios.put(`${BASE_URL}/api/overlay/settings`, s, { headers: authHeader() })).data;
- 
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
- 
+
 const SectionHeader = ({ icon, title, color }) => (
   <div className="flex items-center gap-4">
     <div className={`${color} p-3 rounded-2xl text-white shadow-lg`}>{icon}</div>
     <h3 className="text-xl font-black text-slate-800 tracking-tight">{title}</h3>
   </div>
 );
- 
+
 const formatSeconds = (s) => {
   const h = Math.floor(s / 3600);
   const m = Math.floor((s % 3600) / 60);
@@ -62,9 +62,9 @@ const formatSeconds = (s) => {
   if (h > 0) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
   return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 };
- 
+
 // ─── PollManager ─────────────────────────────────────────────────────────────
- 
+
 export const PollManager = ({ overlayToken }) => {
   const queryClient = useQueryClient();
   const [newQuestion, setNewQuestion] = useState('');
@@ -72,13 +72,13 @@ export const PollManager = ({ overlayToken }) => {
   const [showResults, setShowResults] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [livePolls, setLivePolls] = useState({});
- 
+
   const { data: polls = [], isLoading } = useQuery({
     queryKey: ['myPolls'],
     queryFn: fetchMyPolls,
     refetchInterval: 10000,
   });
- 
+
   // Real-time update poll via socket
   useEffect(() => {
     if (!overlayToken) return;
@@ -90,7 +90,7 @@ export const PollManager = ({ overlayToken }) => {
     });
     return () => socket.disconnect();
   }, [overlayToken]);
- 
+
   const createMutation = useMutation({
     mutationFn: createPoll,
     onSuccess: () => {
@@ -101,38 +101,39 @@ export const PollManager = ({ overlayToken }) => {
     },
     onError: (e) => alert(e.response?.data?.message || 'Gagal membuat poll'),
   });
- 
+
   const closeMutation = useMutation({
     mutationFn: closePoll,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['myPolls'] }),
   });
- 
+
   const deleteMutation = useMutation({
     mutationFn: deletePoll,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['myPolls'] }),
   });
- 
+
   const addOption = () => setNewOptions(o => [...o, '']);
   const removeOption = (i) => setNewOptions(o => o.filter((_, idx) => idx !== i));
   const updateOption = (i, val) => setNewOptions(o => o.map((x, idx) => idx === i ? val : x));
- 
+
   const handleCreate = () => {
     const validOptions = newOptions.filter(o => o.trim());
     if (!newQuestion.trim()) return alert('Pertanyaan wajib diisi!');
     if (validOptions.length < 2) return alert('Minimal 2 opsi!');
     createMutation.mutate({ question: newQuestion, options: validOptions, showResults });
   };
- 
+
   const activePoll = polls.find(p => p.status === 'active');
   const closedPolls = polls.filter(p => p.status === 'closed');
- 
+
   const getPollData = (poll) => livePolls[poll._id] || poll;
- 
+
   const getTotalVotes = (poll) => (getPollData(poll).options || []).reduce((s, o) => s + (o.votes || 0), 0);
   const getPercent = (votes, total) => total === 0 ? 0 : Math.round((votes / total) * 100);
- 
+
   const widgetUrl = overlayToken ? `${BASE_URL}/widget/${overlayToken}/poll` : '';
- 
+  const [pollCopied, setPollCopied] = useState(false);
+
   return (
     <div className="space-y-5">
       {/* Active Poll */}
@@ -157,7 +158,7 @@ export const PollManager = ({ overlayToken }) => {
               </button>
             </div>
           </div>
- 
+
           <div className="p-6 space-y-4">
             <h3 className="font-black text-slate-800 text-lg">{getPollData(activePoll).question}</h3>
             <div className="space-y-3">
@@ -192,14 +193,14 @@ export const PollManager = ({ overlayToken }) => {
           <p className="text-xs text-slate-400 font-medium mt-1">Buat poll baru agar donor bisa ikut voting</p>
         </div>
       )}
- 
+
       {/* Buat Poll Baru */}
       <button
         onClick={() => setShowCreate(!showCreate)}
         className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-600 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> {showCreate ? 'Batal' : 'Buat Poll Baru'}
       </button>
- 
+
       <AnimatePresence>
         {showCreate && (
           <motion.div
@@ -207,13 +208,13 @@ export const PollManager = ({ overlayToken }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="bg-slate-50 rounded-2xl p-6 border border-slate-100 space-y-5">
- 
+
             {activePoll && (
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs font-bold text-amber-700">
                 ⚠️ Membuat poll baru akan menutup poll yang sedang aktif secara otomatis.
               </div>
             )}
- 
+
             <div className="space-y-2">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pertanyaan</label>
               <input
@@ -223,7 +224,7 @@ export const PollManager = ({ overlayToken }) => {
                 className="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
               />
             </div>
- 
+
             <div className="space-y-3">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pilihan Jawaban</label>
               {newOptions.map((opt, i) => (
@@ -246,7 +247,7 @@ export const PollManager = ({ overlayToken }) => {
                 <Plus size={14} /> Tambah Opsi
               </button>
             </div>
- 
+
             {/* Toggle show results */}
             <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-100">
               <div>
@@ -259,7 +260,7 @@ export const PollManager = ({ overlayToken }) => {
                 <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${showResults ? 'translate-x-8' : 'translate-x-1'}`} />
               </button>
             </div>
- 
+
             <button
               onClick={handleCreate}
               disabled={createMutation.isPending}
@@ -269,7 +270,7 @@ export const PollManager = ({ overlayToken }) => {
           </motion.div>
         )}
       </AnimatePresence>
- 
+
       {/* OBS Widget URL */}
       {overlayToken && (
         <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
@@ -277,14 +278,18 @@ export const PollManager = ({ overlayToken }) => {
           <div className="flex gap-2">
             <input readOnly value={`${BASE_URL}/widget/${overlayToken}/poll`}
               className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate" />
-            <button onClick={() => { navigator.clipboard.writeText(`${BASE_URL}/widget/${overlayToken}/poll`); }}
-              className="cursor-pointer active:scale-[0.97] px-3 py-2 bg-indigo-600 text-white rounded-xl text-xs font-black hover:bg-indigo-700 transition-all">
-              Salin
+            <button onClick={() => {
+                navigator.clipboard.writeText(`${BASE_URL}/widget/${overlayToken}/poll`);
+                setPollCopied(true);
+                setTimeout(() => setPollCopied(false), 2000);
+              }}
+              className={`cursor-pointer active:scale-[0.97] px-3 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${pollCopied ? 'bg-green-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}`}>
+              {pollCopied ? <><CheckCircle2 size={12} /> Tersalin!</> : 'Salin'}
             </button>
           </div>
         </div>
       )}
- 
+
       {/* Riwayat Poll */}
       {closedPolls.length > 0 && (
         <div className="space-y-3">
@@ -318,9 +323,9 @@ export const PollManager = ({ overlayToken }) => {
     </div>
   );
 };
- 
+
 // ─── SubathonManager ──────────────────────────────────────────────────────────
- 
+
 export const SubathonManager = ({ overlayToken }) => {
   const queryClient = useQueryClient();
   const [localTimer, setLocalTimer] = useState(null);
@@ -328,13 +333,13 @@ export const SubathonManager = ({ overlayToken }) => {
   const [displaySeconds, setDisplaySeconds] = useState(0);
   const [saved, setSaved] = useState(false);
   const intervalRef = useRef(null);
- 
+
   const { data, isLoading } = useQuery({
     queryKey: ['subathon'],
     queryFn: fetchSubathon,
     refetchInterval: 30000,
   });
- 
+
   // Sinkron data dari server ke local state
   useEffect(() => {
     if (data) {
@@ -345,7 +350,7 @@ export const SubathonManager = ({ overlayToken }) => {
       setDisplaySeconds(data.currentSeconds || 0);
     }
   }, [data]);
- 
+
   // Real-time countdown di client (approx)
   useEffect(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -356,7 +361,7 @@ export const SubathonManager = ({ overlayToken }) => {
     }
     return () => clearInterval(intervalRef.current);
   }, [localTimer?.isRunning]);
- 
+
   // Real-time dari socket
   useEffect(() => {
     if (!overlayToken) return;
@@ -369,7 +374,7 @@ export const SubathonManager = ({ overlayToken }) => {
     });
     return () => socket.disconnect();
   }, [overlayToken]);
- 
+
   const configMutation = useMutation({
     mutationFn: updateSubConfig,
     onSuccess: (d) => {
@@ -379,28 +384,28 @@ export const SubathonManager = ({ overlayToken }) => {
     },
     onError: (e) => alert(e.response?.data?.message || 'Gagal simpan'),
   });
- 
+
   const startMutation = useMutation({
     mutationFn: startSubathon,
     onSuccess: (d) => { setLocalTimer(d); setDisplaySeconds(d.currentSeconds); },
   });
- 
+
   const pauseMutation = useMutation({
     mutationFn: pauseSubathon,
     onSuccess: (d) => { setLocalTimer(d); },
   });
- 
+
   const resetMutation = useMutation({
     mutationFn: resetSubathon,
     onSuccess: (d) => { setLocalTimer(d); setDisplaySeconds(d.currentSeconds); },
   });
- 
+
   const addTimeMutation = useMutation({
     mutationFn: addTimeSubathon,
     onSuccess: (d) => { setLocalTimer(d); setDisplaySeconds(d.currentSeconds); },
   });
- 
-  const upd = (key, val) => setLocalTimer(t => ({ ...t, [key]: val }));
+
+  const [subCopied, setSubCopied] = useState(false);
   const save = () => configMutation.mutate({
     mode: localTimer.mode,
     initialSeconds: localTimer.initialSeconds,
@@ -410,21 +415,21 @@ export const SubathonManager = ({ overlayToken }) => {
     maxSeconds: localTimer.maxSeconds,
     title: localTimer.title,
   });
- 
+
   if (isLoading || !localTimer) {
     return <div className="text-slate-400 text-sm font-bold animate-pulse py-4">Memuat timer...</div>;
   }
- 
+
   const isRunning = localTimer.isRunning;
   const progressPct = localTimer.initialSeconds > 0
     ? Math.min(100, (displaySeconds / localTimer.initialSeconds) * 100)
     : 0;
- 
+
   // Warna progress berdasarkan sisa waktu
   const progressColor = progressPct > 50 ? 'bg-green-500'
     : progressPct > 20 ? 'bg-amber-500'
     : 'bg-red-500';
- 
+
   return (
     <div className="space-y-5">
       {/* Timer Display */}
@@ -456,7 +461,7 @@ export const SubathonManager = ({ overlayToken }) => {
           )}
         </div>
       </div>
- 
+
       {/* Kontrol Utama */}
       <div className="grid grid-cols-3 gap-3">
         <button
@@ -485,7 +490,7 @@ export const SubathonManager = ({ overlayToken }) => {
           +{formatSeconds(manualAdd)}
         </button>
       </div>
- 
+
       {/* Slider tambah waktu manual */}
       <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 space-y-3">
         <div className="flex items-center justify-between">
@@ -501,11 +506,11 @@ export const SubathonManager = ({ overlayToken }) => {
           <span>30 detik</span><span>30 menit</span><span>1 jam</span>
         </div>
       </div>
- 
+
       {/* Konfigurasi */}
       <div className="bg-white rounded-2xl p-6 border border-slate-100 space-y-5">
         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Konfigurasi Timer</p>
- 
+
         {/* Title */}
         <div className="space-y-1.5">
           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Judul Timer</label>
@@ -515,7 +520,7 @@ export const SubathonManager = ({ overlayToken }) => {
             className="w-full p-3 bg-slate-100 border-2 border-slate-100 rounded-xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
           />
         </div>
- 
+
         {/* Mode */}
         <div className="space-y-2">
           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mode</label>
@@ -528,7 +533,7 @@ export const SubathonManager = ({ overlayToken }) => {
             ))}
           </div>
         </div>
- 
+
         {/* Durasi awal */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">
@@ -548,7 +553,7 @@ export const SubathonManager = ({ overlayToken }) => {
             {localTimer.maxSeconds && <p className="text-[10px] text-slate-400">{formatSeconds(localTimer.maxSeconds)}</p>}
           </div>
         </div>
- 
+
         {/* Auto-add dari donasi */}
         <div className="border-t border-slate-100 pt-5 space-y-4">
           <div className="flex items-center justify-between">
@@ -562,7 +567,7 @@ export const SubathonManager = ({ overlayToken }) => {
               <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${localTimer.autoAddEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
             </button>
           </div>
- 
+
           {localTimer.autoAddEnabled && (
             <div className="grid grid-cols-2 gap-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
               <div className="space-y-1.5">
@@ -586,7 +591,7 @@ export const SubathonManager = ({ overlayToken }) => {
             </div>
           )}
         </div>
- 
+
         <button onClick={save} disabled={configMutation.isPending}
           className={`cursor-pointer active:scale-[0.97] w-full py-3.5 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 ${
             saved ? 'bg-green-500 text-white' : 'bg-slate-900 hover:bg-indigo-600 text-white'
@@ -594,7 +599,7 @@ export const SubathonManager = ({ overlayToken }) => {
           {saved ? <><CheckCircle2 size={16} /> Tersimpan!</> : configMutation.isPending ? 'Menyimpan...' : <><Save size={16} /> Simpan Konfigurasi</>}
         </button>
       </div>
- 
+
       {/* OBS Widget URL */}
       {overlayToken && (
         <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
@@ -602,9 +607,13 @@ export const SubathonManager = ({ overlayToken }) => {
           <div className="flex gap-2">
             <input readOnly value={`${BASE_URL}/api/subathon/public/${overlayToken}`}
               className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate" />
-            <button onClick={() => navigator.clipboard.writeText(`${BASE_URL}/api/subathon/public/${overlayToken}`)}
-              className="cursor-pointer active:scale-[0.97] px-3 py-2 bg-indigo-600 text-white rounded-xl text-xs font-black hover:bg-indigo-700 transition-all">
-              Salin
+            <button onClick={() => {
+                navigator.clipboard.writeText(`${BASE_URL}/api/subathon/public/${overlayToken}`);
+                setSubCopied(true);
+                setTimeout(() => setSubCopied(false), 2000);
+              }}
+              className={`cursor-pointer active:scale-[0.97] px-3 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${subCopied ? 'bg-green-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}`}>
+              {subCopied ? <><CheckCircle2 size={12} /> Tersalin!</> : 'Salin'}
             </button>
           </div>
         </div>
@@ -612,16 +621,16 @@ export const SubathonManager = ({ overlayToken }) => {
     </div>
   );
 };
- 
+
 // ─── LeaderboardSettings ──────────────────────────────────────────────────────
- 
+
 export const LeaderboardSettings = () => {
   const queryClient = useQueryClient();
   const [local, setLocal] = useState(null);
   const [saved, setSaved] = useState(false);
- 
+
   const { data, isLoading } = useQuery({ queryKey: ['profile'], queryFn: fetchProfile });
- 
+
   useEffect(() => {
     if (data && !local) {
       const s = data.settings || data.overlaySetting || {};
@@ -632,7 +641,7 @@ export const LeaderboardSettings = () => {
       });
     }
   }, [data]);
- 
+
   const saveMutation = useMutation({
     mutationFn: saveSettings,
     onSuccess: () => {
@@ -642,11 +651,11 @@ export const LeaderboardSettings = () => {
     },
     onError: (e) => alert(e.response?.data?.message || 'Gagal simpan'),
   });
- 
+
   const upd = (k, v) => setLocal(s => ({ ...s, [k]: v }));
- 
+
   if (isLoading || !local) return <div className="text-slate-400 text-sm animate-pulse py-4">Memuat...</div>;
- 
+
   return (
     <div className="space-y-5">
       {/* Preview */}
@@ -675,10 +684,10 @@ export const LeaderboardSettings = () => {
           ))}
         </div>
       </div>
- 
+
       {/* Pengaturan */}
       <div className="bg-white rounded-2xl p-6 border border-slate-100 space-y-5">
- 
+
         {/* Periode */}
         <div className="space-y-2">
           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Periode Leaderboard</label>
@@ -699,7 +708,7 @@ export const LeaderboardSettings = () => {
             ))}
           </div>
         </div>
- 
+
         {/* Jumlah donatur */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -715,7 +724,7 @@ export const LeaderboardSettings = () => {
             <span>Top 3</span><span>Top 10</span><span>Top 20</span>
           </div>
         </div>
- 
+
         {/* Tampilkan nominal */}
         <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
           <div>
@@ -728,12 +737,12 @@ export const LeaderboardSettings = () => {
             <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${local.leaderboardShowAmount ? 'translate-x-8' : 'translate-x-1'}`} />
           </button>
         </div>
- 
+
         {/* Info tambahan */}
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-xs text-amber-700 font-medium">
           💡 Pengaturan ini memengaruhi widget leaderboard OBS dan tampilan di halaman donasi publik kamu.
         </div>
- 
+
         <button
           onClick={() => saveMutation.mutate(local)}
           disabled={saveMutation.isPending}
@@ -746,3 +755,53 @@ export const LeaderboardSettings = () => {
     </div>
   );
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+//
+// PETUNJUK INTEGRASI ke DashboardStreamer.jsx
+// ============================================
+//
+// 1. Import di DashboardStreamer.jsx:
+//    import { PollManager, SubathonManager, LeaderboardSettings } from './StreamerExtras';
+//
+// 2. Tambah tab baru di Sidebar (sidebar.jsx) — tambahkan item:
+//    { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' }
+//    { id: 'subathon', icon: <Timer size={20} />,   label: 'Subathon' }
+//    { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' }
+//
+// 3. Di dalam <AnimatePresence> di DashboardStreamer, tambahkan:
+//
+//    {activeTab === 'poll' && (
+//      <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+//        <div className="max-w-2xl space-y-5">
+//          <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+//            <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
+//            <PollManager overlayToken={user.overlayToken} />
+//          </div>
+//        </div>
+//      </motion.div>
+//    )}
+//
+//    {activeTab === 'subathon' && (
+//      <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+//        <div className="max-w-2xl space-y-5">
+//          <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+//            <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" />
+//            <SubathonManager overlayToken={user.overlayToken} />
+//          </div>
+//        </div>
+//      </motion.div>
+//    )}
+//
+//    {activeTab === 'leaderboard' && (
+//      <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+//        <div className="max-w-2xl space-y-5">
+//          <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+//            <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
+//            <LeaderboardSettings />
+//          </div>
+//        </div>
+//      </motion.div>
+//    )}
+//
+// ─────────────────────────────────────────────────────────────────────────────

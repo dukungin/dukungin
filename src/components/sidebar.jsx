@@ -40,8 +40,8 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
   const menuItems = [
     { id: 'settings', label: 'Overlay Editor', icon: <Layout size={20} /> },
     { id: 'community', label: 'Community', icon: <Users size={20} /> },
-    { id: 'history', label: 'Donation History', icon: <History size={20} /> },
     { id: 'profile', label: 'My Profile', icon: <User size={20} /> },
+    { id: 'history', label: 'Donation History', icon: <History size={20} /> },
     { id: 'wallet', label: 'Withdrawal', icon: <Wallet size={20} /> },
     { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' },
     { id: 'subathon', icon: <Timer size={20} />,   label: 'Subathon' },
@@ -100,7 +100,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
       {/* SIDEBAR ASIDE */}
       <aside className={`
-        fixed lg:sticky top-0 left-0 h-screen w-full md:w-68 bg-white border-r border-slate-100 py-8 px-6 z-[99999] md:z-[1] flex flex-col transition-transform duration-300
+        fixed lg:sticky top-0 left-0 h-screen overflow-y-auto w-full md:w-70 bg-white border-r border-slate-100 py-8 px-6 z-[99999] md:z-[1] flex flex-col transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* LOGO AREA */}

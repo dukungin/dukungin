@@ -608,7 +608,7 @@ const SoundTiersEditor = ({ tiers = [], onChange }) => {
 // Import di atas: import { QRCodeSVG } from 'qrcode.react';
 
 const QrCodeCard = ({ username }) => {
-  const donateUrl = `${window.location.origin}/${username}`;
+  const donateUrl = `${window.location.origin}/donate/${username}`;
   const [copied, setCopied] = useState(false);
 
   const copy = () => {
@@ -636,7 +636,7 @@ const QrCodeCard = ({ username }) => {
         Tampilkan QR ini di stream / sosmed. Scan langsung ke halaman donasi kamu.
       </p>
 
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-start gap-4">
         <div className="p-4 bg-white rounded-3xl border-4 border-slate-900 shadow-xl inline-block">
           {/* Pakai QRCodeSVG dari qrcode.react */}
           {/* <QRCodeSVG id="qr-svg" value={donateUrl} size={200} bgColor="#fff" fgColor="#0f172a" level="H" /> */}
@@ -656,7 +656,7 @@ const QrCodeCard = ({ username }) => {
 
       <div className="grid grid-cols-2 gap-3">
         <button onClick={copy}
-          className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+          className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-300 text-slate-700 hover:bg-slate-200'}`}>
           {copied ? <><CheckCircle2 size={16} /> Tersalin!</> : <><Copy size={16} /> Salin URL</>}
         </button>
         <a
@@ -664,7 +664,7 @@ const QrCodeCard = ({ username }) => {
           download={`qr-donasi-${username}.png`}
           target="_blank"
           rel="noreferrer"
-          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-3 rounded-2xl font-black text-sm bg-slate-900 text-white hover:bg-slate-800 transition-all">
+          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm bg-slate-900 text-white hover:bg-slate-800 transition-all">
           ↓ Download QR
         </a>
       </div>
@@ -736,7 +736,7 @@ const WithdrawPage = () => {
   });
 
   return (
-    <div className="w-full mx-auto space-y-6 pb-6">
+    <motion.div className="w-full mx-auto space-y-6 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
       <div className="bg-indigo-600 py-7 rounded-2xl p-6 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 p-12 opacity-10"><Wallet size={120} /></div>
         <div className="relative z-10">
@@ -817,7 +817,7 @@ const WithdrawPage = () => {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -2165,21 +2165,21 @@ const DashboardStreamer = () => {
           {/* ── PROFILE ── */}
           {activeTab === 'profile' && (
             <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6 pb-6">
-              <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 relative overflow-hidden">
+              <div className="bg-indigo-600 rounded-2xl px-6 py-6 text-white relative overflow-hidden">
                 {/* <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-20 -mt-20 z-0" /> */}
-                <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-                  <div className="w-32 h-32 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-[2.5rem] flex items-center justify-center text-5xl font-black text-white shadow-xl">
+                <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+                  <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center text-5xl font-black text-slate-900 shadow-xl">
                     {user.username.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 text-center md:text-left space-y-2">
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                      <h2 className="text-4xl font-black text-slate-800 tracking-tighter">@{user.username}</h2>
+                      <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2>
                       <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
                     </div>
                     <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
                     <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
-                    <p className="text-slate-400 font-medium">{user.email}</p>
-                    <div className="pt-2"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Account Status</p><p className="font-bold text-indigo-600">Active</p></div>
+                    <p className="text-slate-200 font-medium">{user.email}</p>
+                    {/* <div className="pt-2"><p className="text-[10px] font-black text-slate-200 uppercase tracking-widest">Account Status</p><p className="font-bold text-indigo-600">Active</p></div> */}
                   </div>
                 </div>
               </div>
@@ -2224,7 +2224,7 @@ const DashboardStreamer = () => {
                           bio: profileForm.bio,
                         })}
                         disabled={updateProfileMutation.isPending}
-                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black transition-all flex items-center justify-center gap-2 disabled:opacity-70">
                         <Save size={18} />{updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Profil'}
                       </button>
                     </div>
@@ -2266,7 +2266,7 @@ const DashboardStreamer = () => {
 
           {activeTab === 'poll' && (
             <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="max-w-2xl space-y-5">
+              <div className="w-full space-y-5">
                 <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
                   <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
                   <PollManager overlayToken={user.overlayToken} />
@@ -2277,7 +2277,7 @@ const DashboardStreamer = () => {
 
           {activeTab === 'subathon' && (
             <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="max-w-2xl space-y-5">
+              <div className="w-full space-y-5">
                 <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
                   <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" />
                   <SubathonManager overlayToken={user.overlayToken} />
@@ -2288,7 +2288,7 @@ const DashboardStreamer = () => {
 
           {activeTab === 'leaderboard' && (
             <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="max-w-2xl space-y-5">
+              <div className="w-full space-y-5">
                 <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
                   <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
                   <LeaderboardSettings />
