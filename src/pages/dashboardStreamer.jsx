@@ -1806,6 +1806,27 @@ const DashboardStreamer = () => {
       }, 7000);
     });
 
+    socket.on('withdrawal-update', (data) => {
+      const isSuccess = data.status === 'COMPLETED';
+      
+      const id = Date.now();
+      // Reuse state donationToasts atau buat state baru
+      setDonationToasts(prev => [...prev, {
+        id,
+        isWithdrawal: true,       // flag biar UI-nya beda
+        status: data.status,
+        amount: data.amount,
+        message: data.message,
+      }]);
+
+      // Refresh saldo
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+
+      setTimeout(() => {
+        setDonationToasts(prev => prev.filter(t => t.id !== id));
+      }, 8000);
+    });
+
     socket.on("disconnect", (reason) => {
       console.log("%c❌ Dashboard Socket Disconnected:", reason, "color: red");
     });
@@ -1842,18 +1863,33 @@ const DashboardStreamer = () => {
           {donationToasts.map(toast => (
             <motion.div key={toast.id} initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 100, opacity: 0 }}
               className="bg-white rounded-2xl p-5 shadow-2xl border border-slate-100 flex items-start gap-4">
-              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0">
-                {renderIconPreview(settings.customIcon, 24)}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Donasi Masuk!</span>
-                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+               {toast.isWithdrawal ? (
+                  // Toast WD
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0 ${
+                    toast.status === 'COMPLETED' ? 'bg-green-500' : 'bg-red-500'
+                  }`}>
+                    {toast.status === 'COMPLETED' ? '✓' : '✕'}
+                  </div>
+                ) : (
+                  // Toast donasi (yang sudah ada)
+                  <div className="w-12 h-12 bg-indigo-600 rounded-2xl ...">
+                    {renderIconPreview(settings.customIcon, 24)}
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${
+                      toast.isWithdrawal
+                        ? toast.status === 'COMPLETED' ? 'text-green-600' : 'text-red-500'
+                        : 'text-indigo-600'
+                    }`}>
+                      {toast.isWithdrawal
+                        ? toast.status === 'COMPLETED' ? 'Penarikan Berhasil!' : 'Penarikan Gagal'
+                        : 'Donasi Masuk!'}
+                    </span>
+                  </div>
+                  <p className="text-slate-700 text-sm font-medium">{toast.message}</p>
                 </div>
-                <p className="font-black text-slate-800 text-sm truncate">{toast.donorName}</p>
-                <p className="text-indigo-600 font-black text-lg">Rp {Number(toast.amount).toLocaleString('id-ID')}</p>
-                {toast.message && <p className="text-slate-500 text-xs font-medium italic mt-1 line-clamp-2">"{toast.message}"</p>}
-              </div>
               <button onClick={() => setDonationToasts(prev => prev.filter(t => t.id !== toast.id))} className="text-slate-300 hover:text-slate-500 transition-colors flex-shrink-0 text-lg leading-none">×</button>
             </motion.div>
           ))}
