@@ -399,7 +399,7 @@ const SOUND_PRESETS = [
   { label: 'Chime ✨', url: 'https://assets.mixkit.co/active_storage/sfx/2867/2867-preview.mp3' },
   { label: 'Alert 🚨', url: 'https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3' },
   { 
-    label: 'Kukiring 📢', // Menggunakan Ayam karena bunyinya ikonik "Kukuring"
+    label: 'Kururing 📢', // Menggunakan Ayam karena bunyinya ikonik "Kukuring"
     url: `${APP_URL}/kukuring.mpeg` 
   },
   { 
