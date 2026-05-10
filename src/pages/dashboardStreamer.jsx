@@ -57,6 +57,7 @@ const DEFAULT_SETTINGS = {
   showTimestamp: true,        // ← NEW
   theme: 'modern',
   soundTiers: [],
+  borderColor: '#ffffff26',
   primaryColor: '#6366f1',
   textColor: '#ffffff',
   animation: 'bounce',
@@ -1134,7 +1135,18 @@ const YouTubeLivePreview = ({ settings, username }) => {
       </div>
     );
     return (
-      <div style={{ backgroundColor: theme === 'minimal' ? 'transparent' : bg, color: fg, maxWidth: `${maxW}px`, width: '100%', borderRadius: theme === 'modern' ? 14 : theme === 'classic' ? 4 : 0, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.45)' }}>
+      <div style={{
+        backgroundColor: theme === 'minimal' ? 'transparent' : bg,
+        color: fg,
+        maxWidth: `${maxW}px`,
+        width: '100%',
+        borderRadius: theme === 'modern' ? 14 : theme === 'classic' ? 4 : 0,
+        overflow: 'hidden',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.45)',
+        border: theme === 'minimal'
+          ? `2px solid ${bg}`
+          : `2px solid ${settings.borderColor || 'rgba(255,255,255,0.15)'}`,  // ← tambah
+      }}>
         {inner}
       </div>
     );
@@ -2052,6 +2064,51 @@ const DashboardStreamer = () => {
                     </div>
                     <InputField label="Warna Background" type="color" value={settings.primaryColor} onChange={v => upd('primaryColor', v)} />
                     <InputField label="Warna Teks"       type="color" value={settings.textColor}    onChange={v => upd('textColor', v)} />
+
+                    {/* ── Warna Border ── */}
+                    <div className="flex flex-col gap-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                        Warna Border
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="color"
+                          value={(() => {
+                            // Strip alpha dari hex 8-digit jadi 6-digit untuk color input
+                            const c = settings.borderColor || '#ffffff';
+                            return c.length === 9 ? c.slice(0, 7) : c;
+                          })()}
+                          onChange={e => upd('borderColor', e.target.value)}
+                          className="w-full bg-slate-200 border-2 border-slate-50 rounded-2xl p-5 focus:border-indigo-500 focus:bg-white outline-none transition-all font-bold text-sm shadow-sm cursor-pointer"
+                        />
+                      </div>
+                      {/* Opacity slider untuk border */}
+                      <div className="space-y-1.5">
+                        <div className="flex justify-between">
+                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                            Opacity Border
+                          </label>
+                          <span className="text-[10px] font-black text-indigo-600">
+                            {Math.round((parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16) / 255) * 100)}%
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min={0}
+                          max={255}
+                          value={parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16)}
+                          onChange={e => {
+                            const hex = settings.borderColor?.slice(0, 7) || '#ffffff';
+                            const alpha = parseInt(e.target.value).toString(16).padStart(2, '0');
+                            upd('borderColor', `${hex}${alpha}`);
+                          }}
+                          className="w-full accent-indigo-600"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                          <span>Transparan</span><span>Solid</span>
+                        </div>
+                      </div>
+                    </div>
                     <div className="flex flex-col gap-3">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Animasi Masuk</label>
                       <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
