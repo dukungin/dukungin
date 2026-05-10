@@ -59,7 +59,7 @@ const QrCodeWidget = () => {
           lineHeight: 0
         }}>
           <img
-            src={qrApiUrl.replace('color=ffffff', 'color=000000')} // QR Hitam di box Putih
+            src={qrApiUrl.replace('color=ffffff', 'color=ffffff')} // QR Hitam di box Putih
             alt="QR Code"
             style={{ width: '150px', height: '150px', display: 'block' }}
           />
