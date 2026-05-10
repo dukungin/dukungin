@@ -390,12 +390,22 @@ const MilestonesEditor = () => {
   );
 };
 
+const APP_URL = window.location.origin;
+
 const SOUND_PRESETS = [
   { label: 'Ding 🔔', url: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' },
   { label: 'Pop 💬', url: 'https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3' },
   { label: 'Cash 💰', url: 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3' },
   { label: 'Chime ✨', url: 'https://assets.mixkit.co/active_storage/sfx/2867/2867-preview.mp3' },
   { label: 'Alert 🚨', url: 'https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3' },
+  { 
+    label: 'Kukiring 📢', // Menggunakan Ayam karena bunyinya ikonik "Kukuring"
+    url: `${APP_URL}/kukuring.mpeg` 
+  },
+  { 
+    label: 'Kaching 💸', // Menggunakan Uang Terbang/Kantung Uang untuk suara transaksi
+    url: `${APP_URL}/kaching.mpeg` 
+  },
   { label: 'Tada 🎉', url: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3' },
   // Tambahan Suara Perhiasan & Uang:
   { label: 'Gold 🪙', url: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3' },
