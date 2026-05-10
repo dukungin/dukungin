@@ -2066,11 +2066,11 @@ const DashboardStreamer = () => {
                     <InputField label="Warna Teks"       type="color" value={settings.textColor}    onChange={v => upd('textColor', v)} />
 
                     {/* ── Warna Border ── */}
-                    <div className="flex flex-col gap-3">
+                    <div className="md:col-span-2 gap-3">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                         Warna Border
                       </label>
-                      <div className="flex items-center gap-3">
+                      <div className="mt-2.5 md:col-span-2 flex items-center gap-3">
                         <input
                           type="color"
                           value={(() => {
@@ -2083,42 +2083,33 @@ const DashboardStreamer = () => {
                         />
                       </div>
                       {/* Opacity slider untuk border */}
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
-                            Opacity Border
-                          </label>
-                          <span className="text-[10px] font-black text-indigo-600">
-                            {Math.round((parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16) / 255) * 100)}%
-                          </span>
-                        </div>
-                        <input
-                          type="range"
-                          min={0}
-                          max={255}
-                          value={parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16)}
-                          onChange={e => {
-                            const hex = settings.borderColor?.slice(0, 7) || '#ffffff';
-                            const alpha = parseInt(e.target.value).toString(16).padStart(2, '0');
-                            upd('borderColor', `${hex}${alpha}`);
-                          }}
-                          className="w-full accent-indigo-600"
-                        />
-                        <div className="flex justify-between text-[10px] text-slate-400 font-bold">
-                          <span>Transparan</span><span>Solid</span>
-                        </div>
+                    </div>
+                    <div className="md:col-span-2 space-y-1.5">
+                      <div className="flex justify-between">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                          Opacity Border
+                        </label>
+                        <span className="text-[10px] font-black text-indigo-600">
+                          {Math.round((parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16) / 255) * 100)}%
+                        </span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={255}
+                        value={parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16)}
+                        onChange={e => {
+                          const hex = settings.borderColor?.slice(0, 7) || '#ffffff';
+                          const alpha = parseInt(e.target.value).toString(16).padStart(2, '0');
+                          upd('borderColor', `${hex}${alpha}`);
+                        }}
+                        className="w-full accent-indigo-600"
+                      />
+                      <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                        <span>Transparan</span><span>Solid</span>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-3">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Animasi Masuk</label>
-                      <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
-                        className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all">
-                        <option value="bounce">Bounce</option>
-                        <option value="slide-left">Slide Kiri</option>
-                        <option value="slide-right">Slide Kanan</option>
-                        <option value="fade">Fade</option>
-                      </select>
-                    </div>
+
                     <div className="flex flex-col gap-3">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
                       <select value={settings.overlayPosition || 'bottom-right'} onChange={e => upd('overlayPosition', e.target.value)}
@@ -2129,6 +2120,16 @@ const DashboardStreamer = () => {
                         <option value="bottom-right">Kanan Bawah</option>
                         <option value="top-center">Tengah Atas</option>
                         <option value="bottom-center">Tengah Bawah</option>
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Animasi Masuk</label>
+                      <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
+                        className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all">
+                        <option value="bounce">Bounce</option>
+                        <option value="slide-left">Slide Kiri</option>
+                        <option value="slide-right">Slide Kanan</option>
+                        <option value="fade">Fade</option>
                       </select>
                     </div>
                     <div className="md:col-span-2">
