@@ -18,15 +18,24 @@ const LeaderboardWidget = () => {
   const [settings, setSettings] = useState({ leaderboardShowAmount: true, leaderboardLimit: 10 });
   const [animKey, setAnimKey] = useState(0);
 
-  const fetchData = async () => {
+    const fetchData = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/widget/${token}/leaderboard`);
-      setDonors(res.data?.donors || res.data || []);
-      if (res.data?.settings) setSettings(res.data.settings);
+        const res = await axios.get(`${BASE_URL}/widget/${token}/leaderboard`, {
+        headers: { 'Accept': 'application/json' } // Paksa minta JSON
+        });
+        
+        // Sesuaikan dengan struktur res.json di atas
+        const donorsData = res.data.donors || [];
+        setDonors(donorsData);
+        
+        if (res.data.settings) {
+        setSettings(res.data.settings);
+        }
     } catch (err) {
-      console.error('Failed to fetch leaderboard');
+        console.error('Failed to fetch leaderboard:', err);
+        setDonors([]); // Reset ke array kosong jika error agar tidak crash
     }
-  };
+    };
 
   useEffect(() => {
     if (!token) return;
