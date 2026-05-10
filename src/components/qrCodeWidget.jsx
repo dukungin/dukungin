@@ -18,9 +18,10 @@ const QrCodeWidget = () => {
         // Karena di backend qrcode() mengirimkan HTML, 
         // pastikan backend kamu support JSON seperti perbaikan sebelumnya
         const uname = res.data?.username || '';
+        console.log(res.data.username)
         setUsername(uname);
         // Sesuaikan dengan domain frontend aslimu
-        setDonateUrl(`https://dukungin.com/${uname}`); 
+        setDonateUrl(`https://sawer-in.vercel.ap/donate/${uname}`); 
       })
       .catch(() => console.error('Failed to fetch qrcode data'));
   }, [token]);
