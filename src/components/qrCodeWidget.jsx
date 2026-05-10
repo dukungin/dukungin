@@ -15,71 +15,98 @@ const QrCodeWidget = () => {
       headers: { 'Accept': 'application/json' }
     })
       .then(res => {
-        // Karena di backend qrcode() mengirimkan HTML, 
-        // pastikan backend kamu support JSON seperti perbaikan sebelumnya
         const uname = res.data?.username || '';
-        console.log(res.data.username)
         setUsername(uname);
-        // Sesuaikan dengan domain frontend aslimu
-        setDonateUrl(`https://sawer-in.vercel.ap/donate/${uname}`); 
+        // Pastikan URL tujuan benar (ada typo sedikit di .ap -> .app tadi)
+        setDonateUrl(`https://sawer-in.vercel.app/donate/${uname}`); 
       })
       .catch(() => console.error('Failed to fetch qrcode data'));
   }, [token]);
 
   if (!donateUrl) return null;
 
-  // Gunakan margin=0 dan format=svg agar bersih
-  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(donateUrl)}&color=ffffff&bgcolor=0f0f19&format=svg&margin=0`;
+  // Gunakan margin=0 agar logo benar-benar presisi di tengah
+  // Tips: QR Code Hitam di atas Putih lebih mudah discan kamera
+  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(donateUrl)}&color=000000&bgcolor=ffffff&format=svg&margin=0`;
 
   return (
     <div style={{
-      display: 'inline-flex', // Lebar otomatis mengikuti konten
+      display: 'inline-flex',
       flexDirection: 'column',
       alignItems: 'center',
       padding: '12px',
-      background: 'transparent', // Full Transparan
+      background: 'transparent',
       fontFamily: "'Inter', sans-serif",
     }}>
-      {/* Container Kotak QR dengan background semi-transparan */}
       <div style={{
-        background: 'rgba(15, 15, 25, 0.85)',
-        padding: '16px',
-        borderRadius: '24px',
+        background: 'rgba(15, 15, 25, 0.9)',
+        padding: '20px',
+        borderRadius: '28px',
         border: '1.5px solid rgba(255,255,255,0.1)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.4)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '10px'
+        gap: '12px'
       }}>
+        
+        {/* Container QR + Logo */}
         <div style={{
-          background: '#ffffff', // Background putih agar QR mudah discan
-          padding: '10px',
-          borderRadius: '12px',
-          lineHeight: 0
+          position: 'relative', // Penting untuk overlay logo
+          background: '#ffffff',
+          padding: '12px',
+          borderRadius: '16px',
+          lineHeight: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}>
+          {/* Gambar QR Code */}
           <img
-            src={qrApiUrl.replace('color=ffffff', 'color=ffffff')} // QR Hitam di box Putih
+            src={qrApiUrl}
             alt="QR Code"
-            style={{ width: '150px', height: '150px', display: 'block' }}
+            style={{ width: '160px', height: '160px', display: 'block' }}
           />
+
+          {/* Logo di Tengah */}
+          <div style={{
+            position: 'absolute',
+            width: '40px', // Ukuran logo (jangan terlalu besar agar QR tetap terbaca)
+            height: '40px',
+            background: 'white', // Memberi sedikit border putih di sekitar logo
+            borderRadius: '10px',
+            padding: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          }}>
+            <img 
+              src="/jellyfish.png" 
+              alt="Logo" 
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+            />
+          </div>
         </div>
 
         <div style={{ textAlign: 'center' }}>
           <p style={{
-            fontSize: '13px',
-            fontWeight: '800',
+            fontSize: '14px',
+            fontWeight: '900',
             color: '#fff',
-            margin: 0
+            margin: 0,
+            letterSpacing: '0.02em'
           }}>
             @{username}
           </p>
           <p style={{
             fontSize: '9px',
-            color: 'rgba(255,255,255,0.5)',
-            margin: '2px 0 0'
+            color: 'rgba(255,255,255,0.4)',
+            margin: '2px 0 0',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em'
           }}>
-            dukungin.com/{username}
+            Scan to Support
           </p>
         </div>
       </div>
