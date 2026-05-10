@@ -1700,7 +1700,7 @@ const InputField = ({ label, ...props }) => (
   <div className="w-full">
     <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">{label}</label>
     <input
-      className="w-full bg-slate-200 border-2 border-slate-50 rounded-2xl p-5 focus:border-indigo-500 focus:bg-white outline-none transition-all font-bold text-sm shadow-sm"
+      className="w-full bg-slate-200 border-2 border-slate-50 rounded-xl p-5 focus:border-indigo-500 focus:bg-white outline-none transition-all font-bold text-sm shadow-sm"
       {...props}
       onChange={e => props.onChange?.(e.target.value)}
     />
@@ -2062,53 +2062,6 @@ const DashboardStreamer = () => {
                         ))}
                       </div>
                     </div>
-                    <InputField label="Warna Background" type="color" value={settings.primaryColor} onChange={v => upd('primaryColor', v)} />
-                    <InputField label="Warna Teks"       type="color" value={settings.textColor}    onChange={v => upd('textColor', v)} />
-
-                    {/* ── Warna Border ── */}
-                    <div className="flex flex-col gap-3">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
-                        Warna Border
-                      </label>
-                      <div className="md:col-span-2 flex items-center gap-3">
-                        <input
-                          type="color"
-                          value={(() => {
-                            // Strip alpha dari hex 8-digit jadi 6-digit untuk color input
-                            const c = settings.borderColor || '#ffffff';
-                            return c.length === 9 ? c.slice(0, 7) : c;
-                          })()}
-                          onChange={e => upd('borderColor', e.target.value)}
-                          className="w-full bg-slate-200 border-2 border-slate-50 rounded-2xl p-5 focus:border-indigo-500 focus:bg-white outline-none transition-all font-bold text-sm shadow-sm cursor-pointer"
-                        />
-                      </div>
-                      {/* Opacity slider untuk border */}
-                    </div>
-                    <div className="md:col-span-2 space-y-1.5">
-                      <div className="flex justify-between">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
-                          Opacity Border
-                        </label>
-                        <span className="text-[10px] font-black text-indigo-600">
-                          {Math.round((parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16) / 255) * 100)}%
-                        </span>
-                      </div>
-                      <input
-                        type="range"
-                        min={0}
-                        max={255}
-                        value={parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16)}
-                        onChange={e => {
-                          const hex = settings.borderColor?.slice(0, 7) || '#ffffff';
-                          const alpha = parseInt(e.target.value).toString(16).padStart(2, '0');
-                          upd('borderColor', `${hex}${alpha}`);
-                        }}
-                        className="w-full accent-indigo-600"
-                      />
-                      <div className="flex justify-between text-[10px] text-slate-400 font-bold">
-                        <span>Transparan</span><span>Solid</span>
-                      </div>
-                    </div>
                     
                     <div className="flex flex-col gap-3">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
@@ -2142,6 +2095,46 @@ const DashboardStreamer = () => {
                         <span>180px (compact)</span><span>390px (standar)</span><span>600px (lebar)</span>
                       </div>
                     </div>
+                  </div>
+                  
+                  <div className="md:col-span-2 space-y-1.5 mt-6">
+                    <div className="flex justify-between">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                        Opacity Border
+                      </label>
+                      <span className="text-[10px] font-black text-indigo-600">
+                        {Math.round((parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16) / 255) * 100)}%
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={255}
+                      value={parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16)}
+                      onChange={e => {
+                        const hex = settings.borderColor?.slice(0, 7) || '#ffffff';
+                        const alpha = parseInt(e.target.value).toString(16).padStart(2, '0');
+                        upd('borderColor', `${hex}${alpha}`);
+                      }}
+                      className="w-full accent-indigo-600"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                      <span>Transparan</span><span>Solid</span>
+                    </div>
+                  </div>
+
+                  <div className='md:grid-cols-3 w-full grid mt-7'>
+                      <InputField label="Warna Background" type="color" value={settings.primaryColor} onChange={v => upd('primaryColor', v)} />
+                      <InputField label="Warna Teks"       type="color" value={settings.textColor}    onChange={v => upd('textColor', v)} />
+                      <InputField
+                        label="Warna Border"
+                        type="color"
+                        value={settings.borderColor?.slice(0, 7) || '#ffffff'}
+                        onChange={v => {
+                          const alpha = settings.borderColor?.slice(7, 9) || '26';
+                          upd('borderColor', `${v}${alpha}`);
+                        }}
+                      />
                   </div>
                 </div>
 
