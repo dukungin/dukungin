@@ -20,7 +20,7 @@ const PollWidget = () => {
   // Fetch poll aktif
   const fetchPoll = () => {
     if (!token) return;
-    axios.get(`${BASE_URL}/widget/${token}/poll`)
+    axios.get(`${BASE_URL}/api/polls/widget/${token}`)
       .then(res => {
         if (res.data && res.data._id) {
           setPoll(prev => {
