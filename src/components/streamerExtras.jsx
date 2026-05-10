@@ -605,10 +605,10 @@ export const SubathonManager = ({ overlayToken }) => {
         <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Widget URL untuk OBS (360×200px)</p>
           <div className="flex gap-2">
-            <input readOnly value={`${window.location.origin}/api/subathon/public/${overlayToken}`}
+            <input readOnly value={`${window.location.origin}/widget/${overlayToken}/subathon`}
               className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate" />
             <button onClick={() => {
-                navigator.clipboard.writeText(`${window.location.origin}/api/subathon/public/${overlayToken}`);
+                navigator.clipboard.writeText(`${window.location.origin}/widget/${overlayToken}/subathon`);
                 setSubCopied(true);
                 setTimeout(() => setSubCopied(false), 2000);
               }}
