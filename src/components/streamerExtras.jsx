@@ -131,7 +131,7 @@ export const PollManager = ({ overlayToken }) => {
   const getTotalVotes = (poll) => (getPollData(poll).options || []).reduce((s, o) => s + (o.votes || 0), 0);
   const getPercent = (votes, total) => total === 0 ? 0 : Math.round((votes / total) * 100);
 
-  const widgetUrl = overlayToken ? `${BASE_URL}/widget/${overlayToken}/poll` : '';
+  const widgetUrl = overlayToken ? `${window.location.origin}/widget/${overlayToken}/poll` : '';
   const [pollCopied, setPollCopied] = useState(false);
 
   return (
@@ -276,10 +276,10 @@ export const PollManager = ({ overlayToken }) => {
         <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Widget URL untuk OBS (420×300px)</p>
           <div className="flex gap-2">
-            <input readOnly value={`${BASE_URL}/widget/${overlayToken}/poll`}
+            <input readOnly value={`${window.location.origin}/widget/${overlayToken}/poll`}
               className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate" />
             <button onClick={() => {
-                navigator.clipboard.writeText(`${BASE_URL}/widget/${overlayToken}/poll`);
+                navigator.clipboard.writeText(`${window.location.origin}/widget/${overlayToken}/poll`);
                 setPollCopied(true);
                 setTimeout(() => setPollCopied(false), 2000);
               }}
@@ -605,10 +605,10 @@ export const SubathonManager = ({ overlayToken }) => {
         <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Widget URL untuk OBS (360×200px)</p>
           <div className="flex gap-2">
-            <input readOnly value={`${BASE_URL}/api/subathon/public/${overlayToken}`}
+            <input readOnly value={`${window.location.origin}/api/subathon/public/${overlayToken}`}
               className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate" />
             <button onClick={() => {
-                navigator.clipboard.writeText(`${BASE_URL}/api/subathon/public/${overlayToken}`);
+                navigator.clipboard.writeText(`${window.location.origin}/api/subathon/public/${overlayToken}`);
                 setSubCopied(true);
                 setTimeout(() => setSubCopied(false), 2000);
               }}
