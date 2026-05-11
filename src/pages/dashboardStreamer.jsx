@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  Check,
   CheckCircle2,
   Copy,
   ImageIcon,
@@ -16,7 +17,8 @@ import {
   Trophy,
   User,
   Video,
-  Vote
+  Vote,
+  X
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
@@ -651,8 +653,12 @@ const AdminWithdrawalPage = () => {
     { val: '',          label: '📋 Semua'    },
   ];
 
+  const formatRupiah = (num) => {
+    return new Intl.NumberFormat('id-ID').format(Math.round(num || 0));
+  };
+
   return (
-    <div className="space-y-5">
+    <div className="w-full space-y-5 pb-6">  
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
@@ -711,7 +717,7 @@ const AdminWithdrawalPage = () => {
                 <table className="w-full text-left min-w-[900px]">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest">
-                      {['Streamer', 'Jumlah', 'Metode / Bank', 'No. Rekening', 'Nama', 'Status', 'Waktu', 'Aksi'].map(h => (
+                      {['Streamer', 'Jumlah', 'Metode / Bank', 'No. Rekening', 'Status', 'Waktu', 'Aksi'].map(h => (
                         <th key={h} className="px-6 py-5">{h}</th>
                       ))}
                     </tr>
@@ -721,29 +727,34 @@ const AdminWithdrawalPage = () => {
                       <tr key={wd._id} className="hover:bg-slate-50 transition-all">
                         <td className="px-6 py-5">
                           <p className="font-black text-slate-700 text-sm">@{wd.userId?.username || '-'}</p>
-                          <p className="text-[10px] text-slate-400 font-medium">{wd.userId?.email}</p>
+                          {/* <p className="text-[10px] text-slate-400 font-medium">{wd.userId?.email}</p> */}
                         </td>
                         <td className="px-6 py-5">
-                          <p className="text-indigo-600 font-black text-sm">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
-                          <p className="text-[10px] text-slate-400 font-medium">+Rp 5.000 fee</p>
+                          <p className="text-emerald-600 font-black text-sm">
+                            Rp {formatRupiah(Number(wd.amount) * 0.975)}
+                          </p>
+                          {/* <p className="text-[10px] text-slate-400 font-medium">
+                            Rp {Number(wd.amount).toLocaleString('id-ID')} 
+                            <span className="text-red-400">-2.5%</span>
+                          </p> */}
                         </td>
                         <td className="px-6 py-5">
                           <p className="font-bold text-slate-600 text-sm">{wd.paymentMethod || 'BANK'}</p>
-                          <p className="text-[10px] text-slate-400 font-bold">{wd.channelCode}</p>
+                          {/* <p className="text-[10px] text-slate-400 font-bold">{wd.channelCode}</p> */}
                         </td>
                         <td className="px-6 py-5">
                           <p className="font-mono font-bold text-slate-700 text-sm">{wd.accountNumber}</p>
                         </td>
-                        <td className="px-6 py-5">
+                        {/* <td className="px-6 py-5">
                           <p className="font-bold text-slate-600 text-sm">{wd.accountName}</p>
-                        </td>
+                        </td> */}
                         <td className="px-6 py-5">
                           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black ${
                             wd.status === 'COMPLETED' ? 'bg-green-100 text-green-600'
                             : wd.status === 'FAILED' ? 'bg-red-100 text-red-500'
                             : 'bg-amber-100 text-amber-600'
                           }`}>
-                            {wd.status === 'COMPLETED' ? '✅' : wd.status === 'FAILED' ? '❌' : '⏳'} {wd.status}
+                            {wd.status}
                           </span>
                           {wd.status === 'FAILED' && wd.note && (
                             <p className="text-[10px] text-red-400 font-medium mt-1 max-w-[120px]">{wd.note}</p>
@@ -754,24 +765,24 @@ const AdminWithdrawalPage = () => {
                         </td>
                         <td className="px-6 py-5">
                           {wd.status === 'PENDING' && (
-                            <div className="flex flex-col gap-2 min-w-[160px]">
+                            <div className="flex gap-2 w-max">
                               <button onClick={() => handleApprove(wd._id)} disabled={updateMutation.isPending}
-                                className="cursor-pointer active:scale-[0.97] px-4 py-2 bg-green-600 text-white rounded-xl text-[11px] font-black hover:bg-green-700 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5">
-                                ✅ Approve & Sudah Transfer
+                                className="cursor-pointer active:scale-[0.97] px-2.5 py-2 bg-green-200 text-green-600 rounded-lg text-[11px] font-black hover:bg-green-300 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5">
+                                <Check size={18} />
                               </button>
                               {rejectTargetId === wd._id
                                 ? (
                                   <div className="space-y-2">
                                     <input value={rejectNote} onChange={e => setRejectNote(e.target.value)}
                                       placeholder="Alasan penolakan (opsional)"
-                                      className="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-[11px] font-bold outline-none focus:border-red-400 transition-all" />
+                                      className="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-[11px] font-bold outline-none focus:border-red-400 transition-all"  size={18}/>
                                     <div className="flex gap-1.5">
                                       <button onClick={() => handleReject(wd._id)} disabled={updateMutation.isPending}
-                                        className="cursor-pointer flex-1 px-3 py-2 bg-red-600 text-white rounded-xl text-[11px] font-black hover:bg-red-700 transition-all disabled:opacity-50">
+                                        className="cursor-pointer flex-1 px-3 py-2 bg-red-600 text-white rounded-lg text-[11px] font-black hover:bg-red-700 transition-all disabled:opacity-50">
                                         Konfirmasi Tolak
                                       </button>
                                       <button onClick={() => { setRejectTargetId(null); setRejectNote(''); }}
-                                        className="cursor-pointer px-3 py-2 bg-slate-100 text-slate-500 rounded-xl text-[11px] font-black hover:bg-slate-200 transition-all">
+                                        className="cursor-pointer px-3 py-2 bg-slate-100 text-slate-500 rounded-lg text-[11px] font-black hover:bg-slate-200 transition-all">
                                         Batal
                                       </button>
                                     </div>
@@ -779,8 +790,8 @@ const AdminWithdrawalPage = () => {
                                 )
                                 : (
                                   <button onClick={() => setRejectTargetId(wd._id)} disabled={updateMutation.isPending}
-                                    className="cursor-pointer active:scale-[0.97] px-4 py-2 bg-red-50 text-red-500 border border-red-200 rounded-xl text-[11px] font-black hover:bg-red-100 transition-all disabled:opacity-50">
-                                    ❌ Tolak
+                                    className="cursor-pointer active:scale-[0.97] px-2.5 py-2 bg-red-50 text-red-500 border border-red-200 rounded-lg text-[11px] font-black hover:bg-red-100 transition-all disabled:opacity-50">
+                                    <X size={18} />
                                   </button>
                                 )
                               }
@@ -2139,7 +2150,12 @@ const DashboardStreamer = () => {
             {activeTab === 'wallet' && <WithdrawPage />}
 
             {activeTab === 'admin' && isSuperAdmin && (
-              <motion.div key="admin" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <motion.div 
+                key="admin" 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full"   // ← tambahkan ini
+              >
                 <AdminWithdrawalPage />
               </motion.div>
             )}

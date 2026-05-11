@@ -49,10 +49,10 @@ export const AdminWithdrawalPage = () => {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="w-full mx-auto space-y-5 pb-6">
 
       {/* Header */}
-      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
+      <div className="w-full mx-auto space-y-5 pb-6 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Super Admin</p>

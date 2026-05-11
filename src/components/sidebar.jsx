@@ -99,11 +99,14 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
       {/* SIDEBAR */}
       <aside className={`
-        fixed lg:sticky top-0 left-0 h-screen overflow-y-auto w-full md:w-70 bg-white border-r border-slate-100 py-4 px-6 z-[99999] md:z-[1] flex flex-col transition-transform duration-300
+        fixed lg:sticky top-0 left-0 h-screen overflow-y-auto 
+        w-full lg:w-72 bg-white border-r border-slate-100 
+        py-4 px-6 z-[99999] lg:z-[1] flex flex-col 
+        transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* LOGO AREA */}
-        <div className="flex items-center justify-between mb-8 md:mb-13">
+        <div className="flex items-center justify-between mb-8 md:mb-11">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
               <img src="/jellyfish.png" alt="icon" className='w-[60%]' />
