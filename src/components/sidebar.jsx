@@ -147,7 +147,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab('admin');
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
+              className={`cursor-pointer mb-2 w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
                 activeTab === 'admin'
                   ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
                   : 'text-slate-400 hover:bg-slate-200'
