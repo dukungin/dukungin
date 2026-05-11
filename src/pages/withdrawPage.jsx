@@ -60,6 +60,12 @@ export const WithdrawPage = () => {
   const withdrawals = historyData?.withdrawals || [];
   const pagination  = historyData?.pagination  || {};
 
+  // Stats Ringkas
+  const statsPending = withdrawals.filter(w => w.status === 'PENDING').length;
+  const statsCompleted = withdrawals.filter(w => w.status === 'COMPLETED')
+    .reduce((sum, w) => sum + Number(w.amount || 0), 0);
+  const statsFailed = withdrawals.filter(w => w.status === 'FAILED').length;
+
   const withdrawMutation = useMutation({
     mutationFn: postWithdraw,
     onSuccess: () => {
@@ -140,13 +146,31 @@ export const WithdrawPage = () => {
       {withdrawals.length > 0 && (
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Menunggu',          value: statsPending,                                    unit: 'request', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-100' },
-            { label: 'Berhasil Dicairkan', value: `Rp ${statsCompleted.toLocaleString('id-ID')}`, unit: '',        color: 'text-green-600', bg: 'bg-green-50 border-green-100' },
-            { label: 'Ditolak',           value: statsFailed,                                     unit: 'request', color: 'text-red-500',   bg: 'bg-red-50 border-red-100'     },
+            { 
+              label: 'Menunggu', 
+              value: statsPending, 
+              unit: 'request', 
+              color: 'text-amber-600', 
+              bg: 'bg-amber-100 border-amber-100' 
+            },
+            { 
+              label: 'Berhasil', 
+              value: `Rp ${statsCompleted.toLocaleString('id-ID')}`, 
+              unit: '', 
+              color: 'text-green-600', 
+              bg: 'bg-green-100 border-green-100' 
+            },
+            { 
+              label: 'Ditolak', 
+              value: statsFailed, 
+              unit: 'request', 
+              color: 'text-red-500',   
+              bg: 'bg-red-100 border-red-100'     
+            },
           ].map(s => (
             <div key={s.label} className={`${s.bg} border rounded-xl p-4 text-center`}>
               <p className={`font-black text-sm ${s.color}`}>{s.value} <span className="text-xs font-bold">{s.unit}</span></p>
-              <p className="text-[10px] text-slate-400 font-bold mt-0.5">{s.label}</p>
+              <p className="text-[10px] text-slate-500 font-bold mt-0.5">{s.label}</p>
             </div>
           ))}
         </div>
@@ -399,7 +423,7 @@ export const WithdrawPage = () => {
                           <tr key={wd._id} className="hover:bg-slate-50/70 transition-all">
                             <td className="px-6 py-5">
                               <p className="font-black text-slate-800">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
-                              <p className="text-[10px] text-slate-400 font-medium">+Rp {FEE_ADMIN.toLocaleString('id-ID')} fee</p>
+                              <p className="text-[10px] text-slate-400 font-medium">Fee 2.5%</p>
                             </td>
                             <td className="px-6 py-5">
                               <p className="font-bold text-slate-600 text-sm">{wd.paymentMethod || 'BANK'}</p>
@@ -418,7 +442,6 @@ export const WithdrawPage = () => {
                                 </span>
                                 {wd.status === 'PENDING' && (
                                   <span className="flex items-center gap-1 text-[9px] text-amber-500 font-bold">
-                                    <div className="w-1 h-1 bg-amber-400 rounded-full animate-pulse" /> Menunggu admin
                                   </span>
                                 )}
                                 {wd.status === 'FAILED' && wd.note && (
