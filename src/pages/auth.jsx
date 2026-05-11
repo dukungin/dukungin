@@ -142,7 +142,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans flex flex-col lg:flex-row">
+    <div className="min-h-screen overflow-hidden bg-slate-50 font-sans flex flex-col lg:flex-row">
 
       <NotifModal notification={notification} onClose={closeNotif} />
 
@@ -196,7 +196,7 @@ const Auth = () => {
       </div>
 
       {/* ── RIGHT / BOTTOM: Form ── */}
-      <div className="flex items-center justify-center px-4 pb-0 pt-5 h-max md:py-10 lg:px-0">
+      <div className="md:flex-1 flex items-center justify-center px-4 pb-0 pt-5 md:h-[100vh] h-max md:py-10 lg:px-0">
         <div className="w-full max-w-lg h-max">
 
           <AnimatePresence mode="wait">
@@ -261,14 +261,14 @@ const Auth = () => {
                   ))}
                 </div>
 
-                <h2 className="text-2xl font-black text-slate-800 mb-1">
+                {/* <h2 className="text-2xl font-black text-slate-800 mb-1">
                   {isLogin ? 'Selamat Datang' : 'Buat Akun Baru'}
                 </h2>
                 <p className="text-slate-500 text-sm font-medium mb-7 leading-relaxed">
                   {isLogin
                     ? 'Masuk untuk mengelola overlay kamu.'
                     : 'Daftar sekarang dan mulai kustomisasi alert.'}
-                </p>
+                </p> */}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {!isLogin && (

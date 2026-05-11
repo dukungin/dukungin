@@ -2,10 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  ArrowRight,
   CheckCircle2,
   Copy,
-  CreditCard,
   ImageIcon,
   Menu,
   Plus,
@@ -13,21 +11,20 @@ import {
   Save,
   Settings,
   ShieldCheck,
-  Smartphone,
   Timer,
   Trash2,
   TrendingUp,
   Trophy,
   User,
   Video,
-  Vote,
-  Wallet,
+  Vote
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import Sidebar from '../components/sidebar';
-import { PollManager, SubathonManager, LeaderboardSettings } from '../components/streamerExtras';
+import { LeaderboardSettings, PollManager, SubathonManager } from '../components/streamerExtras';
 import { TopNavbar } from '../components/topNavbar';
+import { WithdrawPage } from './withdrawPage';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const authHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
@@ -729,166 +726,323 @@ const LeaderboardCard = ({ stats }) => {
 
 // ─── WithdrawPage ─────────────────────────────────────────────────────────────
 
-const WithdrawPage = () => {
-  const queryClient = useQueryClient();
-  const [method, setMethod] = useState('BANK');
-  const [formData, setFormData] = useState({ amount: '', channelCode: 'BCA', accountNumber: '', accountName: '' });
+// const WithdrawPage = () => {
+//   const queryClient = useQueryClient();
+//   const [method, setMethod] = useState('BANK');
+//   const [formData, setFormData] = useState({ amount: '', channelCode: 'BCA', accountNumber: '', accountName: '' });
 
-  const { data: profileData } = useQuery({ queryKey: ['profile'], queryFn: fetchProfile, refetchInterval: 30000 });
-  const balance = profileData?.User?.walletBalance || profileData?.walletBalance || 0;
+//   const { data: profileData } = useQuery({ queryKey: ['profile'], queryFn: fetchProfile, refetchInterval: 30000 });
+//   const balance = profileData?.User?.walletBalance || profileData?.walletBalance || 0;
 
-  const withdrawMutation = useMutation({
-    mutationFn: postWithdraw,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
-      alert('Permintaan penarikan berhasil dikirim!');
-      setFormData({ amount: '', channelCode: method === 'BANK' ? 'BCA' : method, accountNumber: '', accountName: '' });
-    },
-    onError: (err) => alert(err.response?.data?.message || 'Terjadi kesalahan'),
-  });
+//   const withdrawMutation = useMutation({
+//     mutationFn: postWithdraw,
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: ['profile'] });
+//       alert('Permintaan penarikan berhasil dikirim!');
+//       setFormData({ amount: '', channelCode: method === 'BANK' ? 'BCA' : method, accountNumber: '', accountName: '' });
+//     },
+//     onError: (err) => alert(err.response?.data?.message || 'Terjadi kesalahan'),
+//   });
 
-  return (
-    <motion.div className="w-full mx-auto space-y-6 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-      <div className="bg-indigo-600 py-7 rounded-xl p-6 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-12 opacity-10"><Wallet size={120} /></div>
-        <div className="relative z-10">
-          <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">Total Saldo Bisa Ditarik</p>
-          <h1 className="text-3xl font-black">Rp {parseFloat(balance).toLocaleString('id-ID')}</h1>
-        </div>
-        <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
-        <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
-      </div>
-      <div className="bg-white rounded-xl p-4 md:p-8 md:p-12 shadow-sm border border-slate-100">
-        <h2 className="text-2xl font-black text-slate-800 mb-8 flex items-center gap-3">
-          <CreditCard className="text-indigo-600" /> Konfigurasi Pencairan
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-          {[
-            { id: 'BANK',  label: 'Transfer Bank',  icon: <CreditCard size={18} /> },
-            { id: 'DANA',  label: 'E-Wallet DANA',  icon: <Smartphone size={18} /> },
-            { id: 'GOPAY', label: 'E-Wallet GOPAY', icon: <Smartphone size={18} /> },
-          ].map(m => (
-            <button key={m.id}
-              onClick={() => { setMethod(m.id); setFormData({ ...formData, channelCode: m.id === 'BANK' ? 'BCA' : m.id }); }}
-              className={`cursor-pointer active:scale-[0.97] hover:bg-blue-50 flex flex-col items-center gap-3 p-6 rounded-xl border-2 transition-all font-black text-sm ${method === m.id ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-lg shadow-indigo-50' : 'border-slate-50 text-slate-400 hover:border-slate-200'}`}>
-              {m.icon} {m.label}
-            </button>
-          ))}
-        </div>
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {method === 'BANK' && (
-              <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Pilih Bank</label>
-                <select className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all"
-                  onChange={(e) => setFormData({ ...formData, channelCode: e.target.value })}>
-                  <option value="BCA">BCA (Bank Central Asia)</option>
-                  <option value="BNI">BNI (Bank Negara Indonesia)</option>
-                  <option value="MANDIRI">Mandiri</option>
-                  <option value="BRI">BRI (Bank Rakyat Indonesia)</option>
-                </select>
-              </div>
-            )}
-            <div className="flex flex-col gap-3">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
-                {method === 'BANK' ? 'Nomor Rekening' : 'Nomor Handphone'}
-              </label>
-              <input value={formData.accountNumber} placeholder={method === 'BANK' ? '000-000-000' : '0812xxxx'}
-                className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
-                onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })} />
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nama Lengkap Pemilik Akun</label>
-            <input value={formData.accountName} placeholder="Sesuaikan dengan Buku Tabungan / Nama di App"
-              className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
-              onChange={(e) => setFormData({ ...formData, accountName: e.target.value })} />
-          </div>
-          <div className="flex flex-col gap-3 pt-4">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nominal yang Ingin Ditarik (IDR)</label>
-            <div className="relative">
-              <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-white">Rp</span>
-              <input type="number" value={formData.amount} placeholder="0,00"
-                className="w-full px-6 py-3 pl-14 bg-slate-900 text-white rounded-xl font-medium text-xl outline-none focus:ring-4 ring-indigo-100 transition-all"
-                onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
-            </div>
-            <p className="text-[10px] text-slate-400 font-bold ml-1 italic">*Biaya admin penarikan Rp 5.000 akan memotong saldo utama.</p>
-          </div>
-          <button
-            onClick={() => {
-              if (parseFloat(formData.amount) > parseFloat(balance)) return alert('Saldo tidak mencukupi!');
-              if (parseFloat(formData.amount) < 10000) return alert('Minimal penarikan adalah Rp 10.000');
-              withdrawMutation.mutate({ ...formData, paymentMethod: method });
-            }}
-            disabled={withdrawMutation.isPending}
-            className="w-full bg-indigo-600 text-white py-3 rounded-xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 mt-4 disabled:opacity-70">
-            {withdrawMutation.isPending
-              ? <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" /> Sedang Memproses...</>
-              : <><ArrowRight size={20} /> Ajukan Pencairan Dana</>
-            }
-          </button>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
+//   return (
+//     <motion.div className="w-full mx-auto space-y-6 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+//       <div className="bg-indigo-600 py-7 rounded-xl p-6 text-white relative overflow-hidden">
+//         <div className="absolute top-0 right-0 p-12 opacity-10"><Wallet size={120} /></div>
+//         <div className="relative z-10">
+//           <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">Total Saldo Bisa Ditarik</p>
+//           <h1 className="text-3xl font-black">Rp {parseFloat(balance).toLocaleString('id-ID')}</h1>
+//         </div>
+//         <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
+//         <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
+//       </div>
+//       <div className="bg-white rounded-xl p-4 md:p-8 md:p-12 shadow-sm border border-slate-100">
+//         <h2 className="text-2xl font-black text-slate-800 mb-8 flex items-center gap-3">
+//           <CreditCard className="text-indigo-600" /> Konfigurasi Pencairan
+//         </h2>
+//         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+//           {[
+//             { id: 'BANK',  label: 'Transfer Bank',  icon: <CreditCard size={18} /> },
+//             { id: 'DANA',  label: 'E-Wallet DANA',  icon: <Smartphone size={18} /> },
+//             { id: 'GOPAY', label: 'E-Wallet GOPAY', icon: <Smartphone size={18} /> },
+//           ].map(m => (
+//             <button key={m.id}
+//               onClick={() => { setMethod(m.id); setFormData({ ...formData, channelCode: m.id === 'BANK' ? 'BCA' : m.id }); }}
+//               className={`cursor-pointer active:scale-[0.97] hover:bg-blue-50 flex flex-col items-center gap-3 p-6 rounded-xl border-2 transition-all font-black text-sm ${method === m.id ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-lg shadow-indigo-50' : 'border-slate-50 text-slate-400 hover:border-slate-200'}`}>
+//               {m.icon} {m.label}
+//             </button>
+//           ))}
+//         </div>
+//         <div className="space-y-6">
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//             {method === 'BANK' && (
+//               <div className="flex flex-col gap-3">
+//                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Pilih Bank</label>
+//                 <select className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all"
+//                   onChange={(e) => setFormData({ ...formData, channelCode: e.target.value })}>
+//                   <option value="BCA">BCA (Bank Central Asia)</option>
+//                   <option value="BNI">BNI (Bank Negara Indonesia)</option>
+//                   <option value="MANDIRI">Mandiri</option>
+//                   <option value="BRI">BRI (Bank Rakyat Indonesia)</option>
+//                 </select>
+//               </div>
+//             )}
+//             <div className="flex flex-col gap-3">
+//               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+//                 {method === 'BANK' ? 'Nomor Rekening' : 'Nomor Handphone'}
+//               </label>
+//               <input value={formData.accountNumber} placeholder={method === 'BANK' ? '000-000-000' : '0812xxxx'}
+//                 className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
+//                 onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })} />
+//             </div>
+//           </div>
+//           <div className="flex flex-col gap-3">
+//             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nama Lengkap Pemilik Akun</label>
+//             <input value={formData.accountName} placeholder="Sesuaikan dengan Buku Tabungan / Nama di App"
+//               className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
+//               onChange={(e) => setFormData({ ...formData, accountName: e.target.value })} />
+//           </div>
+//           <div className="flex flex-col gap-3 pt-4">
+//             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nominal yang Ingin Ditarik (IDR)</label>
+//             <div className="relative">
+//               <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-white">Rp</span>
+//               <input type="number" value={formData.amount} placeholder="0,00"
+//                 className="w-full px-6 py-3 pl-14 bg-slate-900 text-white rounded-xl font-medium text-xl outline-none focus:ring-4 ring-indigo-100 transition-all"
+//                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
+//             </div>
+//             <p className="text-[10px] text-slate-400 font-bold ml-1 italic">*Biaya admin penarikan Rp 5.000 akan memotong saldo utama.</p>
+//           </div>
+//           <button
+//             onClick={() => {
+//               if (parseFloat(formData.amount) > parseFloat(balance)) return alert('Saldo tidak mencukupi!');
+//               if (parseFloat(formData.amount) < 10000) return alert('Minimal penarikan adalah Rp 10.000');
+//               withdrawMutation.mutate({ ...formData, paymentMethod: method });
+//             }}
+//             disabled={withdrawMutation.isPending}
+//             className="w-full bg-indigo-600 text-white py-3 rounded-xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 mt-4 disabled:opacity-70">
+//             {withdrawMutation.isPending
+//               ? <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" /> Sedang Memproses...</>
+//               : <><ArrowRight size={20} /> Ajukan Pencairan Dana</>
+//             }
+//           </button>
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// };
 
 // ─── AdminWithdrawalPage ──────────────────────────────────────────────────────
 
+// ─── AdminWithdrawalPage ──────────────────────────────────────────────────────
+// Paste ini sebagai pengganti komponen AdminWithdrawalPage di DashboardStreamer.jsx
+
 const AdminWithdrawalPage = () => {
   const queryClient = useQueryClient();
-  const { data: withdrawals = [], isLoading } = useQuery({ queryKey: ['adminWithdrawals'], queryFn: fetchAdminWDs, refetchInterval: 30000 });
+  const [statusFilter, setStatusFilter] = useState('PENDING');
+  const [rejectNote, setRejectNote] = useState('');
+  const [rejectTargetId, setRejectTargetId] = useState(null);
+
+  const fetchAdminWDs = async () =>
+    (await axios.get(`${BASE_URL}/api/midtrans/admin/withdrawals?status=${statusFilter}`, { headers: authHeader() })).data;
+
+  const { data, isLoading, refetch, isFetching } = useQuery({
+    queryKey: ['adminWithdrawals', statusFilter],
+    queryFn: fetchAdminWDs,
+    refetchInterval: 30000,
+  });
+
+  const withdrawals = data?.withdrawals || [];
+  const pagination  = data?.pagination  || {};
+
   const updateMutation = useMutation({
-    mutationFn: updateWDStatus,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adminWithdrawals'] }),
+    mutationFn: ({ id, status, note }) =>
+      axios.put(`${BASE_URL}/api/midtrans/admin/withdrawals/${id}`, { status, note }, { headers: authHeader() }).then(r => r.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminWithdrawals'] });
+      setRejectNote('');
+      setRejectTargetId(null);
+    },
     onError: (err) => alert(err.response?.data?.message || 'Gagal update status'),
   });
 
+  const handleApprove = (id) => {
+    if (!window.confirm('Konfirmasi: Kamu sudah transfer manual ke streamer?')) return;
+    updateMutation.mutate({ id, status: 'COMPLETED' });
+  };
+
+  const handleReject = (id) => {
+    updateMutation.mutate({ id, status: 'FAILED', note: rejectNote || 'Ditolak oleh admin' });
+  };
+
+  const STATUS_FILTERS = [
+    { val: 'PENDING',   label: '⏳ Pending'   },
+    { val: 'COMPLETED', label: '✅ Selesai'   },
+    { val: 'FAILED',    label: '❌ Ditolak'   },
+    { val: '',          label: '📋 Semua'     },
+  ];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+
+      {/* Header */}
+      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Super Admin</p>
+            <h2 className="text-2xl font-black">Manajemen Penarikan Dana</h2>
+            <p className="text-slate-400 text-sm font-medium mt-1">
+              Approve = kamu sudah transfer manual. Reject = saldo dikembalikan ke streamer.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-slate-400 text-xs font-bold">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" /> Auto 30s
+            <button onClick={() => refetch()} disabled={isFetching} className="ml-1 hover:text-white transition-colors disabled:opacity-50">
+              <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Filter tabs */}
+      <div className="flex gap-2 flex-wrap">
+        {STATUS_FILTERS.map(f => (
+          <button key={f.val} onClick={() => setStatusFilter(f.val)}
+            className={`px-4 py-2 rounded-xl font-black text-sm transition-all ${
+              statusFilter === f.val
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
+                : 'bg-white text-slate-400 border border-slate-100 hover:border-indigo-200 hover:text-indigo-600'
+            }`}>
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Table */}
       <div className="bg-white w-full rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="flex items-center justify-between px-10 py-5 border-b border-slate-100">
-          <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Semua Request Penarikan</p>
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+          <div>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest">
+              {statusFilter ? `Request ${statusFilter}` : 'Semua Request'}
+            </p>
+            <p className="text-[10px] text-slate-400 font-medium mt-0.5">{pagination.total || 0} total</p>
+          </div>
           <span className="px-4 py-2 bg-red-100 text-red-600 rounded-full text-[10px] font-black uppercase tracking-widest">Super Admin Only</span>
         </div>
+
         {isLoading
-          ? <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />Memuat data...</div>
-          : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left min-w-[900px]">
-                <thead>
-                  <tr className="bg-slate-200/50 border-b border-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest">
-                    {['Streamer','Jumlah','Metode','Nama','Status','Aksi'].map(h => <th key={h} className="px-8 py-6">{h}</th>)}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {withdrawals.length === 0
-                    ? <tr><td colSpan={6} className="text-center py-16 text-slate-400 font-bold">Tidak ada request penarikan</td></tr>
-                    : withdrawals.map(wd => (
+          ? (
+            <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
+              <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
+              Memuat data...
+            </div>
+          )
+          : withdrawals.length === 0
+            ? (
+              <div className="py-16 text-center text-slate-400">
+                <p className="text-4xl mb-3">📭</p>
+                <p className="font-black text-slate-500">Tidak ada request {statusFilter.toLowerCase()}</p>
+              </div>
+            )
+            : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left min-w-[900px]">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest">
+                      {['Streamer', 'Jumlah', 'Metode / Bank', 'No. Rekening', 'Nama', 'Status', 'Waktu', 'Aksi'].map(h => (
+                        <th key={h} className="px-6 py-5">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-50">
+                    {withdrawals.map(wd => (
                       <tr key={wd._id} className="hover:bg-slate-50 transition-all">
-                        <td className="px-8 py-5 font-black text-slate-700">@{wd.userId?.username || '-'}<p className="text-[10px] text-slate-400 font-medium">{wd.userId?.email}</p></td>
-                        <td className="px-8 py-5 text-indigo-600 font-black">Rp {Number(wd.amount).toLocaleString('id-ID')}</td>
-                        <td className="px-8 py-5 font-bold text-slate-600">{wd.paymentMethod}</td>
-                        <td className="px-8 py-5 font-bold text-slate-600">{wd.accountName}</td>
-                        <td className="px-8 py-5 text-center">
-                          <span className={`px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest ${wd.status === 'COMPLETED' ? 'bg-green-100 text-green-600' : wd.status === 'FAILED' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>
-                            {wd.status}
-                          </span>
+                        <td className="px-6 py-5">
+                          <p className="font-black text-slate-700 text-sm">@{wd.userId?.username || '-'}</p>
+                          <p className="text-[10px] text-slate-400 font-medium">{wd.userId?.email}</p>
                         </td>
-                        <td className="px-8 py-5 text-center">
+                        <td className="px-6 py-5">
+                          <p className="text-indigo-600 font-black text-sm">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
+                          <p className="text-[10px] text-slate-400 font-medium">+Rp 5.000 fee</p>
+                        </td>
+                        <td className="px-6 py-5">
+                          <p className="font-bold text-slate-600 text-sm">{wd.paymentMethod || 'BANK'}</p>
+                          <p className="text-[10px] text-slate-400 font-bold">{wd.channelCode}</p>
+                        </td>
+                        <td className="px-6 py-5">
+                          <p className="font-mono font-bold text-slate-700 text-sm">{wd.accountNumber}</p>
+                        </td>
+                        <td className="px-6 py-5">
+                          <p className="font-bold text-slate-600 text-sm">{wd.accountName}</p>
+                        </td>
+                        <td className="px-6 py-5">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black ${
+                            wd.status === 'COMPLETED' ? 'bg-green-100 text-green-600'
+                            : wd.status === 'FAILED' ? 'bg-red-100 text-red-500'
+                            : 'bg-amber-100 text-amber-600'
+                          }`}>
+                            {wd.status === 'COMPLETED' ? '✅' : wd.status === 'FAILED' ? '❌' : '⏳'} {wd.status}
+                          </span>
+                          {wd.status === 'FAILED' && wd.note && (
+                            <p className="text-[10px] text-red-400 font-medium mt-1 max-w-[120px]">{wd.note}</p>
+                          )}
+                        </td>
+                        <td className="px-6 py-5">
+                          <p className="text-[11px] text-slate-400 font-medium whitespace-nowrap">{formatDate(wd.createdAt)}</p>
+                        </td>
+                        <td className="px-6 py-5">
                           {wd.status === 'PENDING' && (
-                            <div className="flex gap-2 justify-center">
-                              <button onClick={() => updateMutation.mutate({ id: wd._id, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="cursor-pointer active:scale-[0.97] hover:brightness-95 px-4 py-2 bg-green-600 text-white rounded-xl text-[10px] font-black hover:bg-green-700 transition-all disabled:opacity-50">Approve</button>
-                              <button onClick={() => updateMutation.mutate({ id: wd._id, status: 'FAILED' })} disabled={updateMutation.isPending} className="cursor-pointer active:scale-[0.97] hover:brightness-95 px-4 py-2 bg-red-600 text-white rounded-xl text-[10px] font-black hover:bg-red-700 transition-all disabled:opacity-50">Tolak</button>
+                            <div className="flex flex-col gap-2 min-w-[160px]">
+                              {/* Tombol Approve */}
+                              <button
+                                onClick={() => handleApprove(wd._id)}
+                                disabled={updateMutation.isPending}
+                                className="cursor-pointer active:scale-[0.97] px-4 py-2 bg-green-600 text-white rounded-xl text-[11px] font-black hover:bg-green-700 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5">
+                                ✅ Approve & Sudah Transfer
+                              </button>
+
+                              {/* Reject dengan alasan */}
+                              {rejectTargetId === wd._id
+                                ? (
+                                  <div className="space-y-2">
+                                    <input
+                                      value={rejectNote}
+                                      onChange={e => setRejectNote(e.target.value)}
+                                      placeholder="Alasan penolakan (opsional)"
+                                      className="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-[11px] font-bold outline-none focus:border-red-400 transition-all"
+                                    />
+                                    <div className="flex gap-1.5">
+                                      <button
+                                        onClick={() => handleReject(wd._id)}
+                                        disabled={updateMutation.isPending}
+                                        className="cursor-pointer flex-1 px-3 py-2 bg-red-600 text-white rounded-xl text-[11px] font-black hover:bg-red-700 transition-all disabled:opacity-50">
+                                        Konfirmasi Tolak
+                                      </button>
+                                      <button
+                                        onClick={() => { setRejectTargetId(null); setRejectNote(''); }}
+                                        className="cursor-pointer px-3 py-2 bg-slate-100 text-slate-500 rounded-xl text-[11px] font-black hover:bg-slate-200 transition-all">
+                                        Batal
+                                      </button>
+                                    </div>
+                                  </div>
+                                )
+                                : (
+                                  <button
+                                    onClick={() => setRejectTargetId(wd._id)}
+                                    disabled={updateMutation.isPending}
+                                    className="cursor-pointer active:scale-[0.97] px-4 py-2 bg-red-50 text-red-500 border border-red-200 rounded-xl text-[11px] font-black hover:bg-red-100 transition-all disabled:opacity-50">
+                                    ❌ Tolak
+                                  </button>
+                                )
+                              }
                             </div>
                           )}
                         </td>
                       </tr>
                     ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </tbody>
+                </table>
+              </div>
+            )
+        }
       </div>
     </div>
   );
