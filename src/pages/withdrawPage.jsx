@@ -146,7 +146,7 @@ export const WithdrawPage = () => {
         </div>
 
         <div className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className={`grid $grid-cols-1 ${method === 'BANK' ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-5`}>
             {method === 'BANK' && (
               <div className="flex flex-col gap-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pilih Bank</label>
