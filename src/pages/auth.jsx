@@ -245,7 +245,7 @@ const Auth = () => {
                 transition={{ duration: 0.25 }}
               >
                 {/* Tab switcher */}
-                <div className="flex bg-slate-100 rounded-2xl p-1 mb-8">
+                <div className="flex border border-slate-200 bg-slate-100 rounded-2xl p-1 mb-8">
                   {['Login', 'Daftar'].map((label, i) => (
                     <button
                       key={label}
@@ -262,7 +262,7 @@ const Auth = () => {
                 </div>
 
                 <h2 className="text-2xl font-black text-slate-800 mb-1">
-                  {isLogin ? 'Selamat Datang!' : 'Buat Akun Baru'}
+                  {isLogin ? 'Selamat Datang' : 'Buat Akun Baru'}
                 </h2>
                 <p className="text-slate-500 text-sm font-medium mb-7 leading-relaxed">
                   {isLogin
