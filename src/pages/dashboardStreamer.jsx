@@ -1465,7 +1465,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
 
   return (
     <div className="space-y-6 pb-6">
-      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl p-4 md:p-8 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl p-4 md:p-6 text-white relative overflow-hidden">
         <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
         <div className="relative z-10">
           <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">Streamer Network</p>
