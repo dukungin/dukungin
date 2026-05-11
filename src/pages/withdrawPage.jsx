@@ -1,5 +1,6 @@
 // ─── WithdrawPage ─────────────────────────────────────────────────────────────
-// Paste ini sebagai pengganti komponen WithdrawPage di DashboardStreamer.jsx
+// Komponen lengkap: form penarikan + riwayat withdrawal streamer
+// Validasi: saldo min 20k, tarik min 10k, tarik maks 10juta, fee 5k
 
 import { CheckCircle2, Clock, XCircle, ArrowRight, CreditCard, Smartphone, Wallet, RefreshCw } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -10,9 +11,9 @@ import { useState } from 'react';
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const authHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
 
-const fetchProfile     = async () => (await axios.get(`${BASE_URL}/api/overlay/settings`, { headers: authHeader() })).data;
-const postWithdraw     = async (d) => (await axios.post(`${BASE_URL}/api/midtrans/withdraw`, d, { headers: authHeader() })).data;
-const fetchWDHistory   = async ({ page = 1 } = {}) =>
+const fetchProfile   = async () => (await axios.get(`${BASE_URL}/api/overlay/settings`, { headers: authHeader() })).data;
+const postWithdraw   = async (d) => (await axios.post(`${BASE_URL}/api/midtrans/withdraw`, d, { headers: authHeader() })).data;
+const fetchWDHistory = async ({ page = 1 } = {}) =>
   (await axios.get(`${BASE_URL}/api/midtrans/withdraw/history?page=${page}&limit=10`, { headers: authHeader() })).data;
 
 const formatDate = (dateStr) => {
@@ -26,34 +27,37 @@ const formatDate = (dateStr) => {
 const STATUS_CONFIG = {
   PENDING: {
     label: 'Menunggu',
-    icon: <Clock size={14} />,
+    icon: <Clock size={13} />,
     className: 'bg-amber-50 text-amber-600 border border-amber-200',
-    dot: 'bg-amber-400',
   },
   COMPLETED: {
     label: 'Berhasil',
-    icon: <CheckCircle2 size={14} />,
+    icon: <CheckCircle2 size={13} />,
     className: 'bg-green-50 text-green-600 border border-green-200',
-    dot: 'bg-green-500',
   },
   FAILED: {
     label: 'Ditolak',
-    icon: <XCircle size={14} />,
+    icon: <XCircle size={13} />,
     className: 'bg-red-50 text-red-500 border border-red-200',
-    dot: 'bg-red-400',
   },
 };
 
+// Aturan validasi terpusat
+const MIN_TARIK    = 10000;
+const MAX_TARIK    = 10000000;
+const MIN_SALDO    = 20000;
+const FEE_ADMIN    = 5000;
+
 export const WithdrawPage = () => {
   const queryClient = useQueryClient();
-  const [method, setMethod] = useState('BANK');
+  const [method, setMethod]     = useState('BANK');
   const [formData, setFormData] = useState({ amount: '', channelCode: 'BCA', accountNumber: '', accountName: '' });
   const [historyPage, setHistoryPage] = useState(1);
 
   const { data: profileData } = useQuery({ queryKey: ['profile'], queryFn: fetchProfile, refetchInterval: 30000 });
-  const balance = profileData?.User?.walletBalance || profileData?.walletBalance || 0;
+  const balance = parseFloat(profileData?.User?.walletBalance || profileData?.walletBalance || 0);
 
-  const { data: historyData, isLoading: historyLoading, refetch: refetchHistory } = useQuery({
+  const { data: historyData, isLoading: historyLoading, refetch: refetchHistory, isFetching: historyFetching } = useQuery({
     queryKey: ['withdrawHistory', historyPage],
     queryFn: () => fetchWDHistory({ page: historyPage }),
     keepPreviousData: true,
@@ -61,7 +65,12 @@ export const WithdrawPage = () => {
   });
 
   const withdrawals = historyData?.withdrawals || [];
-  const pagination  = historyData?.pagination || {};
+  const pagination  = historyData?.pagination  || {};
+
+  // Stats dari semua data halaman ini (bukan semua waktu)
+  const statsPending   = withdrawals.filter(w => w.status === 'PENDING').length;
+  const statsCompleted = withdrawals.filter(w => w.status === 'COMPLETED').reduce((s, w) => s + w.amount, 0);
+  const statsFailed    = withdrawals.filter(w => w.status === 'FAILED').length;
 
   const withdrawMutation = useMutation({
     mutationFn: postWithdraw,
@@ -73,48 +82,68 @@ export const WithdrawPage = () => {
     onError: (err) => alert(err.response?.data?.message || 'Terjadi kesalahan'),
   });
 
-  // Hitung stats ringkas
-  const totalPending   = withdrawals.filter(w => w.status === 'PENDING').length;
-  const totalCompleted = withdrawals.filter(w => w.status === 'COMPLETED').reduce((s, w) => s + w.amount, 0);
-  const totalFailed    = withdrawals.filter(w => w.status === 'FAILED').length;
+  const handleSubmit = () => {
+    const amt = parseFloat(formData.amount);
+
+    if (!formData.amount || isNaN(amt) || amt <= 0)
+      return alert('Masukkan nominal yang valid');
+    if (balance < MIN_SALDO)
+      return alert(`Saldo minimum untuk melakukan penarikan adalah Rp ${MIN_SALDO.toLocaleString('id-ID')}`);
+    if (amt < MIN_TARIK)
+      return alert(`Minimal penarikan adalah Rp ${MIN_TARIK.toLocaleString('id-ID')}`);
+    if (amt > MAX_TARIK)
+      return alert(`Maksimal penarikan adalah Rp ${MAX_TARIK.toLocaleString('id-ID')} per transaksi`);
+    if (amt + FEE_ADMIN > balance)
+      return alert(`Saldo tidak mencukupi. Dibutuhkan Rp ${(amt + FEE_ADMIN).toLocaleString('id-ID')} (termasuk biaya admin Rp ${FEE_ADMIN.toLocaleString('id-ID')})`);
+    if (!formData.accountNumber || !formData.accountName)
+      return alert('Lengkapi data rekening terlebih dahulu');
+
+    withdrawMutation.mutate({ ...formData, paymentMethod: method });
+  };
+
+  const amt = parseFloat(formData.amount) || 0;
+  const totalDeduct = amt + FEE_ADMIN;
+  const sisaSaldo = balance - totalDeduct;
+  const canSubmit = balance >= MIN_SALDO;
 
   return (
-    <motion.div className="w-full mx-auto space-y-6 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+    <motion.div className="w-full mx-auto space-y-5 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
 
       {/* ── Balance Card ── */}
       <div className="bg-indigo-600 py-7 rounded-xl p-6 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 p-12 opacity-10"><Wallet size={120} /></div>
-        <div className="relative z-10">
+        <div className="relative z-[2]">
           <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">Total Saldo Bisa Ditarik</p>
-          <h1 className="text-3xl font-black">Rp {parseFloat(balance).toLocaleString('id-ID')}</h1>
+          <h1 className="text-3xl font-black">Rp {balance.toLocaleString('id-ID')}</h1>
           <p className="text-indigo-200 text-xs font-medium mt-2">
             Penarikan diproses manual oleh admin dalam 1×24 jam hari kerja
           </p>
         </div>
-        <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
-        <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
+        <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-90" />
+        <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-90" />
       </div>
 
-      {parseFloat(balance) < 20000 && (
+      {/* ── Banner saldo tidak cukup ── */}
+      {balance < MIN_SALDO && (
         <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4">
-            <span className="text-amber-500 text-lg flex-shrink-0">⚠️</span>
-            <div>
+          <span className="text-amber-500 text-lg flex-shrink-0">⚠️</span>
+          <div>
             <p className="font-black text-amber-700 text-sm">Saldo belum mencukupi untuk penarikan</p>
             <p className="text-[11px] text-amber-600 font-medium mt-0.5">
-                Kamu perlu minimal saldo <strong>Rp 20.000</strong> untuk mengajukan penarikan.
-                Saldo kamu saat ini: <strong>Rp {parseFloat(balance).toLocaleString('id-ID')}</strong>
+              Kamu perlu minimal saldo <strong>Rp {MIN_SALDO.toLocaleString('id-ID')}</strong> untuk mengajukan penarikan.
+              Saldo kamu saat ini: <strong>Rp {balance.toLocaleString('id-ID')}</strong>
             </p>
-            </div>
+          </div>
         </div>
-        )}
+      )}
 
-      {/* ── Ringkasan Stats ── */}
+      {/* ── Stats ringkas ── */}
       {withdrawals.length > 0 && (
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Menunggu', value: totalPending, unit: 'request', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-100' },
-            { label: 'Berhasil Dicairkan', value: `Rp ${totalCompleted.toLocaleString('id-ID')}`, unit: '', color: 'text-green-600', bg: 'bg-green-50 border-green-100' },
-            { label: 'Ditolak', value: totalFailed, unit: 'request', color: 'text-red-500', bg: 'bg-red-50 border-red-100' },
+            { label: 'Menunggu',          value: statsPending,                                    unit: 'request', color: 'text-amber-600', bg: 'bg-amber-50 border-amber-100' },
+            { label: 'Berhasil Dicairkan', value: `Rp ${statsCompleted.toLocaleString('id-ID')}`, unit: '',        color: 'text-green-600', bg: 'bg-green-50 border-green-100' },
+            { label: 'Ditolak',           value: statsFailed,                                     unit: 'request', color: 'text-red-500',   bg: 'bg-red-50 border-red-100'     },
           ].map(s => (
             <div key={s.label} className={`${s.bg} border rounded-xl p-4 text-center`}>
               <p className={`font-black text-sm ${s.color}`}>{s.value} <span className="text-xs font-bold">{s.unit}</span></p>
@@ -130,8 +159,22 @@ export const WithdrawPage = () => {
           <CreditCard className="text-indigo-600" size={20} /> Ajukan Penarikan Dana
         </h2>
 
+        {/* Aturan singkat */}
+        <div className="grid grid-cols-3 gap-2 mb-6">
+          {[
+            { label: 'Min. Saldo',   value: `Rp ${MIN_SALDO.toLocaleString('id-ID')}`  },
+            { label: 'Min. Tarik',   value: `Rp ${MIN_TARIK.toLocaleString('id-ID')}`  },
+            { label: 'Maks. Tarik',  value: `Rp ${(MAX_TARIK/1000000).toFixed(0)}jt`   },
+          ].map(r => (
+            <div key={r.label} className="bg-slate-50 border border-slate-100 rounded-xl p-3 text-center">
+              <p className="font-black text-indigo-600 text-sm">{r.value}</p>
+              <p className="text-[10px] text-slate-400 font-bold mt-0.5">{r.label}</p>
+            </div>
+          ))}
+        </div>
+
         {/* Method selector */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-7">
+        <div className="grid grid-cols-3 gap-3 mb-6">
           {[
             { id: 'BANK',  label: 'Transfer Bank',  icon: <CreditCard size={18} /> },
             { id: 'DANA',  label: 'E-Wallet DANA',  icon: <Smartphone size={18} /> },
@@ -139,21 +182,22 @@ export const WithdrawPage = () => {
           ].map(m => (
             <button key={m.id}
               onClick={() => { setMethod(m.id); setFormData({ ...formData, channelCode: m.id === 'BANK' ? 'BCA' : m.id }); }}
-              className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-2 p-5 rounded-xl border-2 transition-all font-black text-sm ${method === m.id ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-lg shadow-indigo-50' : 'border-slate-100 text-slate-400 hover:border-slate-200'}`}>
+              className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all font-black text-sm ${method === m.id ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-lg shadow-indigo-50' : 'border-slate-100 text-slate-400 hover:border-slate-200'}`}>
               {m.icon} {m.label}
             </button>
           ))}
         </div>
 
         <div className="space-y-5">
-          <div className={`grid $grid-cols-1 ${method === 'BANK' ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-5`}>
+          {/* Bank & nomor rekening */}
+          <div className={`grid grid-cols-1 ${method === 'BANK' ? 'md:grid-cols-2' : ''} gap-5`}>
             {method === 'BANK' && (
               <div className="flex flex-col gap-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pilih Bank</label>
                 <select
                   className="w-full px-5 py-3 bg-slate-100 border-2 border-slate-100 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all"
                   value={formData.channelCode}
-                  onChange={(e) => setFormData({ ...formData, channelCode: e.target.value })}>
+                  onChange={e => setFormData({ ...formData, channelCode: e.target.value })}>
                   <option value="BCA">BCA (Bank Central Asia)</option>
                   <option value="BNI">BNI (Bank Negara Indonesia)</option>
                   <option value="MANDIRI">Mandiri</option>
@@ -170,67 +214,76 @@ export const WithdrawPage = () => {
                 value={formData.accountNumber}
                 placeholder={method === 'BANK' ? '0000000000000' : '08xx-xxxx-xxxx'}
                 className="w-full px-5 py-3 bg-slate-100 border-2 border-slate-100 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all"
-                onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })} />
+                onChange={e => setFormData({ ...formData, accountNumber: e.target.value })} />
             </div>
           </div>
 
+          {/* Nama pemilik */}
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Lengkap Pemilik Akun</label>
             <input
               value={formData.accountName}
               placeholder="Sesuaikan dengan Buku Tabungan / Nama di App"
               className="w-full px-5 py-3 bg-slate-100 border-2 border-slate-100 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all"
-              onChange={(e) => setFormData({ ...formData, accountName: e.target.value })} />
+              onChange={e => setFormData({ ...formData, accountName: e.target.value })} />
           </div>
 
+          {/* Nominal */}
           <div className="flex flex-col gap-2">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nominal yang Ingin Ditarik (IDR)</label>
             <div className="relative">
               <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-white text-sm">Rp</span>
               <input
                 type="number"
+                min={MIN_TARIK}
+                max={MAX_TARIK}
                 value={formData.amount}
                 placeholder="0"
                 className="w-full px-6 py-4 pl-14 bg-slate-900 text-white rounded-xl font-bold text-xl outline-none focus:ring-4 ring-indigo-100 transition-all"
-                onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
+                onChange={e => setFormData({ ...formData, amount: e.target.value })} />
             </div>
+
+            {/* Kalkulasi realtime */}
+            {amt > 0 && (
+              <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-slate-500 font-medium">Nominal tarik</span>
+                  <span className="font-black text-slate-700">Rp {amt.toLocaleString('id-ID')}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500 font-medium">Biaya admin</span>
+                  <span className="font-bold text-red-400">- Rp {FEE_ADMIN.toLocaleString('id-ID')}</span>
+                </div>
+                <div className="border-t border-slate-200 pt-2 flex justify-between">
+                  <span className="text-slate-500 font-medium">Total dipotong dari saldo</span>
+                  <span className="font-black text-slate-900">Rp {totalDeduct.toLocaleString('id-ID')}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400 font-medium text-xs">Sisa saldo setelah tarik</span>
+                  <span className={`font-bold text-xs ${sisaSaldo < 0 ? 'text-red-500' : 'text-slate-500'}`}>
+                    Rp {sisaSaldo.toLocaleString('id-ID')}
+                  </span>
+                </div>
+              </div>
+            )}
+
             <p className="text-[10px] text-slate-400 font-bold italic">
-                *Biaya admin Rp 5.000 akan dipotong dari saldo. Total dipotong: Rp {formData.amount ? (parseFloat(formData.amount) + 5000).toLocaleString('id-ID') : '5.000'}
-            </p>
-            <p className="text-[10px] text-slate-400 font-bold italic">
-                *Min. tarik Rp 10.000 · Maks. Rp 10.000.000 · Fee admin Rp 5.000.
-                Total dipotong: Rp {formData.amount ? (parseFloat(formData.amount) + 5000).toLocaleString('id-ID') : '5.000'}
+              *Min. tarik Rp {MIN_TARIK.toLocaleString('id-ID')} · Maks. Rp {MAX_TARIK.toLocaleString('id-ID')} · Min. saldo Rp {MIN_SALDO.toLocaleString('id-ID')} · Fee Rp {FEE_ADMIN.toLocaleString('id-ID')}
             </p>
           </div>
 
+          {/* Tombol submit */}
           <button
-            onClick={() => {
-                const amt = parseFloat(formData.amount);
-                const bal = parseFloat(balance);
-
-                if (!formData.amount || isNaN(amt) || amt <= 0)
-                    return alert('Masukkan nominal yang valid');
-                if (bal < 20000)
-                    return alert('Saldo minimum untuk melakukan penarikan adalah Rp 20.000');
-                if (amt < 10000)
-                    return alert('Minimal penarikan adalah Rp 10.000');
-                if (amt > 10000000)
-                    return alert('Maksimal penarikan adalah Rp 10.000.000 per transaksi');
-                if (amt + 5000 > bal)
-                    return alert(`Saldo tidak mencukupi. Dibutuhkan Rp ${(amt + 5000).toLocaleString('id-ID')} (termasuk biaya admin Rp 5.000)`);
-                if (!formData.accountNumber || !formData.accountName)
-                    return alert('Lengkapi data rekening terlebih dahulu');
-
-                withdrawMutation.mutate({ ...formData, paymentMethod: method });
-            }}
-            disabled={withdrawMutation.isPending}
-            className="w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-base hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 disabled:opacity-70">
+            onClick={handleSubmit}
+            disabled={withdrawMutation.isPending || !canSubmit}
+            className="w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-base hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed">
             {withdrawMutation.isPending
               ? <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" /> Memproses...</>
               : <><ArrowRight size={18} /> Ajukan Penarikan Dana</>
             }
           </button>
 
+          {/* Sukses notice */}
           {withdrawMutation.isSuccess && (
             <div className="flex items-center gap-3 bg-green-50 border border-green-200 rounded-xl px-5 py-4">
               <CheckCircle2 size={18} className="text-green-500 flex-shrink-0" />
@@ -248,14 +301,12 @@ export const WithdrawPage = () => {
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
           <div>
             <p className="font-black text-slate-800">Riwayat Penarikan</p>
-            <p className="text-[10px] text-slate-400 font-medium mt-0.5">
-              {pagination.total || 0} total request
-            </p>
+            <p className="text-[10px] text-slate-400 font-medium mt-0.5">{pagination.total || 0} total request</p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[10px] text-slate-400 font-bold">Auto refresh 30s</span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-slate-400 font-bold">Auto 30s</span>
             <button onClick={() => refetchHistory()} className="p-2 hover:bg-slate-100 rounded-xl transition-all text-slate-400 hover:text-indigo-600">
-              <RefreshCw size={14} className={historyLoading ? 'animate-spin' : ''} />
+              <RefreshCw size={14} className={historyFetching ? 'animate-spin' : ''} />
             </button>
           </div>
         </div>
@@ -263,8 +314,7 @@ export const WithdrawPage = () => {
         {historyLoading
           ? (
             <div className="flex items-center justify-center py-16 text-slate-400 font-bold gap-3">
-              <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
-              Memuat riwayat...
+              <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" /> Memuat riwayat...
             </div>
           )
           : withdrawals.length === 0
@@ -279,36 +329,38 @@ export const WithdrawPage = () => {
               <>
                 {/* Mobile cards */}
                 <div className="md:hidden divide-y divide-slate-50">
-                  {withdrawals.map((wd) => {
+                  {withdrawals.map(wd => {
                     const cfg = STATUS_CONFIG[wd.status] || STATUS_CONFIG.PENDING;
                     return (
                       <div key={wd._id} className="p-5 space-y-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="font-black text-slate-800 text-sm">
-                              Rp {Number(wd.amount).toLocaleString('id-ID')}
-                            </p>
-                            <p className="text-[10px] text-slate-400 font-medium mt-0.5">
-                              {wd.channelCode} • {wd.accountNumber}
-                            </p>
+                            <p className="font-black text-slate-800 text-sm">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
+                            <p className="text-[10px] text-slate-400 font-medium mt-0.5">{wd.channelCode} • {wd.accountNumber}</p>
                           </div>
                           <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black ${cfg.className}`}>
                             {cfg.icon} {cfg.label}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <p className="text-[10px] text-slate-400 font-medium">{wd.accountName}</p>
-                          <p className="text-[10px] text-slate-400 font-medium">{formatDate(wd.createdAt)}</p>
+                        <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+                          <span>{wd.accountName}</span>
+                          <span>{formatDate(wd.createdAt)}</span>
                         </div>
                         {wd.status === 'FAILED' && wd.note && (
                           <div className="bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
-                            <p className="text-[11px] text-red-600 font-bold">Alasan: {wd.note}</p>
+                            <p className="text-[11px] text-red-600 font-bold">Alasan penolakan: {wd.note}</p>
                           </div>
                         )}
                         {wd.status === 'PENDING' && (
                           <div className="flex items-center gap-2 bg-amber-50 border border-amber-100 rounded-xl px-4 py-2.5">
                             <div className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse flex-shrink-0" />
                             <p className="text-[11px] text-amber-600 font-bold">Menunggu diproses admin</p>
+                          </div>
+                        )}
+                        {wd.status === 'COMPLETED' && (
+                          <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-xl px-4 py-2.5">
+                            <CheckCircle2 size={13} className="text-green-500 flex-shrink-0" />
+                            <p className="text-[11px] text-green-600 font-bold">Dana telah ditransfer oleh admin</p>
                           </div>
                         )}
                       </div>
@@ -323,46 +375,48 @@ export const WithdrawPage = () => {
                       <tr className="bg-slate-50 border-b border-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest">
                         <th className="px-6 py-4">Nominal</th>
                         <th className="px-6 py-4">Metode</th>
-                        <th className="px-6 py-4">Rekening / No. HP</th>
+                        <th className="px-6 py-4">No. Rekening</th>
                         <th className="px-6 py-4">Nama</th>
                         <th className="px-6 py-4 text-center">Status</th>
                         <th className="px-6 py-4">Waktu Pengajuan</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-50">
-                      {withdrawals.map((wd) => {
+                      {withdrawals.map(wd => {
                         const cfg = STATUS_CONFIG[wd.status] || STATUS_CONFIG.PENDING;
                         return (
                           <tr key={wd._id} className="hover:bg-slate-50/70 transition-all">
                             <td className="px-6 py-5">
                               <p className="font-black text-slate-800">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
-                              <p className="text-[10px] text-slate-400 font-medium">+Rp 5.000 fee</p>
+                              <p className="text-[10px] text-slate-400 font-medium">+Rp {FEE_ADMIN.toLocaleString('id-ID')} fee</p>
                             </td>
                             <td className="px-6 py-5">
                               <p className="font-bold text-slate-600 text-sm">{wd.paymentMethod || 'BANK'}</p>
                               <p className="text-[10px] text-slate-400 font-medium">{wd.channelCode}</p>
                             </td>
                             <td className="px-6 py-5">
-                              <p className="font-bold text-slate-600 text-sm font-mono">{wd.accountNumber}</p>
+                              <p className="font-mono font-bold text-slate-600 text-sm">{wd.accountNumber}</p>
                             </td>
                             <td className="px-6 py-5">
                               <p className="font-bold text-slate-600 text-sm">{wd.accountName}</p>
                             </td>
-                            <td className="px-6 py-5 text-center">
-                              <div className="inline-flex flex-col items-center gap-1.5">
+                            <td className="px-6 py-5">
+                              <div className="flex flex-col items-center gap-1.5">
                                 <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black ${cfg.className}`}>
                                   {cfg.icon} {cfg.label}
                                 </span>
                                 {wd.status === 'PENDING' && (
                                   <span className="flex items-center gap-1 text-[9px] text-amber-500 font-bold">
-                                    <div className="w-1 h-1 bg-amber-400 rounded-full animate-pulse" />
-                                    Menunggu admin
+                                    <div className="w-1 h-1 bg-amber-400 rounded-full animate-pulse" /> Menunggu admin
                                   </span>
                                 )}
                                 {wd.status === 'FAILED' && wd.note && (
-                                  <span className="text-[9px] text-red-400 font-medium max-w-[120px] text-center leading-tight">
+                                  <span className="text-[9px] text-red-400 font-medium max-w-[140px] text-center leading-tight">
                                     {wd.note}
                                   </span>
+                                )}
+                                {wd.status === 'COMPLETED' && (
+                                  <span className="text-[9px] text-green-500 font-bold">Dana sudah dikirim</span>
                                 )}
                               </div>
                             </td>
