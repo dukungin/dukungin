@@ -174,7 +174,7 @@ export const WithdrawPage = () => {
         </div>
 
         {/* Method selector */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
           {[
             { id: 'BANK',  label: 'Transfer Bank',  icon: <CreditCard size={18} /> },
             { id: 'DANA',  label: 'E-Wallet DANA',  icon: <Smartphone size={18} /> },

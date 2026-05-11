@@ -2814,7 +2814,7 @@ const BannedWordsEditor = () => {
                 setLocalAction(opt.id);
                 saveMutation.mutate({ words, action: opt.id, replacement: localReplacement });
               }}
-              className={`cursor-pointer active:scale-[0.97] text-left p-4 rounded-xl border-2 transition-all space-y-1.5 ${
+              className={`cursor-pointer active:scale-[0.99] text-left p-4 rounded-xl border-2 transition-all space-y-1.5 ${
                 localAction === opt.id ? opt.active + ' shadow-md' : 'border-slate-100 bg-slate-50 hover:border-slate-300'
               }`}
             >
@@ -2843,16 +2843,16 @@ const BannedWordsEditor = () => {
       <div className="border-t border-slate-100" />
       <div className="space-y-4">
         <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Daftar kata terlarang</label>
-        <div className="flex gap-3">
+        <div className="md:flex gap-3 md:space-y-0 space-y-2">
           <input
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && add()}
             placeholder="Ketik kata lalu tekan Enter..."
-            className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-xl px-5 py-3 font-bold text-sm outline-none focus:border-red-400 transition-all"
+            className="w-full flex-1 bg-slate-100 border-2 border-slate-100 rounded-xl px-5 py-3 font-bold text-sm outline-none focus:border-red-400 transition-all"
           />
           <button onClick={add}
-            className="cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-black text-sm transition-all flex items-center gap-2">
+            className="md:w-max w-full cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-black text-sm transition-all flex items-center gap-2">
             <Plus size={16} /> Tambah
           </button>
         </div>
@@ -2870,7 +2870,7 @@ const BannedWordsEditor = () => {
               <div className="flex flex-wrap gap-2">
                 {words.map(word => (
                   <span key={word}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-sm font-black border border-red-100">
+                    className="md:w-max w-[48.9%] flex justify-center md:justify-start items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-sm font-black border border-red-100">
                     {word}
                     <button onClick={() => remove(word)} className="cursor-pointer hover:text-red-800 transition-colors">
                       <Trash2 size={12} />
@@ -4445,7 +4445,7 @@ const DashboardStreamer = () => {
                       </div>
                     </div>
 
-                    <div className='md:grid-cols-3 w-full grid mt-7'>
+                    <div className='md:grid-cols-3 space-y-7 w-full grid mt-7'>
                       <InputField label="Warna Background" type="color" value={settings.primaryColor} onChange={v => upd('primaryColor', v)} />
                       <InputField label="Warna Teks" type="color" value={settings.textColor} onChange={v => upd('textColor', v)} />
                       <InputField label="Warna Border" type="color"
@@ -4468,10 +4468,10 @@ const DashboardStreamer = () => {
 
                   <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
                     <SectionHeader icon={<span className="text-lg">🔊</span>} title="Custom Suara per Nominal" color="bg-violet-500" />
-                    <p className="text-xs text-slate-400 font-medium mt-7 ml-[2px] mb-6">
+                    <p className="md:flex hidden text-xs text-slate-400 font-medium mt-7 ml-[2px] mb-6">
                       Atur file suara berbeda untuk tier nominal donasi tertentu. Sultan dapet sound kenceng? Bisa! 🎵
                     </p>
-                    <div className="mb-6">
+                    <div className="mb-6 md:mt-0 mt-5">
                       <SoundPicker label="Suara Default (semua donasi)" value={settings.soundUrl || ''} onChange={v => upd('soundUrl', v)} />
                     </div>
                     <SoundTiersEditor tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
