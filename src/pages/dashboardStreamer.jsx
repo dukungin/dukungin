@@ -1980,7 +1980,7 @@ const DashboardStreamer = () => {
                           <div>
                             <p className="font-black text-slate-700 text-sm">Aktifkan Overlay OBS</p>
                             <p className="text-[11px] text-slate-400 font-medium mt-0.5">
-                              Jika dimatikan, alert tidak akan muncul di OBS sama sekali
+                              Alert tidak akan muncul di OBS sama sekali
                             </p>
                           </div>
                           <button
@@ -1999,7 +1999,7 @@ const DashboardStreamer = () => {
                           <div>
                             <p className="font-black text-slate-700 text-sm">Tampilkan Jam Donasi</p>
                             <p className="text-[11px] text-slate-400 font-medium mt-0.5">
-                              Tampilkan waktu (HH:MM:SS) kapan donasi diterima di overlay
+                              Waktu kapan donasi diterima overlay
                             </p>
                           </div>
                           <button
