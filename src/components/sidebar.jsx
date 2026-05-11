@@ -104,7 +104,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* LOGO AREA */}
-        <div className="flex items-center justify-between mb-13">
+        <div className="flex items-center justify-between mb-8 md:mb-13">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
               <img src="/jellyfish.png" alt="icon" className='w-[60%]' />
@@ -116,11 +116,11 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
           </button>
         </div>
 
-        <div className="pt-0 pb-2 px-1 mb-4">
+        <div className="md:flex hidden pt-0 pb-2 px-1 mb-4">
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">All Streamer</p>
         </div>
         {/* NAVIGATION */}
-        <nav className="flex-1 space-y-4">
+        <nav className="md:flex-1 space-y-4">
           {menuItems.map((item) => (
             <button
               key={item.id}
@@ -166,7 +166,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         {/* LOGOUT BUTTON */}
         <button 
           onClick={() => setShowLogoutConfirm(true)} // Pemicu modal
-          className="md:hidden flex items-center gap-4 p-4 bg-red-100 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black mt-auto transition-all"
+          className="md:hidden flex items-center gap-4 p-4 bg-red-100 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black transition-all"
         >
           <LogOut size={18} /> 
           <p className='text-sm ml-[3px]'>

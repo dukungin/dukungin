@@ -28,9 +28,9 @@ const NotifModal = ({ notification, onClose }) => (
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.85, y: 24 }}
           transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-          className="fixed z-[101] left-4 right-4 bottom-8 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-96"
+          className="fixed z-[101] flex w-screen h-screen justify-center items-center bottom-8 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-96"
         >
-          <div className="bg-white rounded-3xl p-8 shadow-2xl text-center">
+          <div className="bg-white mx-auto w-[92vw] md:min-w-[26vw] rounded-3xl p-8 shadow-2xl text-center">
             <div className={`w-16 h-16 mx-auto mb-5 rounded-2xl flex items-center justify-center ${
               notification.type === 'success' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-500'
             }`}>
@@ -40,13 +40,13 @@ const NotifModal = ({ notification, onClose }) => (
             <p className="text-slate-500 text-sm font-medium leading-relaxed mb-6">{notification.message}</p>
             <button
               onClick={onClose}
-              className={`w-full py-3.5 rounded-2xl font-black text-sm transition-all active:scale-[0.97] ${
+              className={`cursor-pointer active:scale-[0.97] hover:brightness-95 w-full py-3.5 rounded-2xl font-black text-sm transition-all ${
                 notification.type === 'success'
                   ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                   : 'bg-red-500 text-white hover:bg-red-600'
               }`}
             >
-              {notification.type === 'success' ? 'Lanjutkan ✓' : 'Coba Lagi'}
+              {notification.type === 'success' ? 'Lanjutkan' : 'Coba Lagi'}
             </button>
           </div>
         </motion.div>

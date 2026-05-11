@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, LogOut, Wallet } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const TopNavbar = ({ user, onLogout, onProfile }) => {
   const [showLogout, setShowLogout] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     localStorage.removeItem('token');
