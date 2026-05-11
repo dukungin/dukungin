@@ -5,6 +5,7 @@ import { CheckCircle2, Clock, XCircle, ArrowRight, CreditCard, Smartphone, Walle
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const authHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
@@ -94,6 +95,19 @@ export const WithdrawPage = () => {
         <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
       </div>
 
+      {parseFloat(balance) < 20000 && (
+        <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4">
+            <span className="text-amber-500 text-lg flex-shrink-0">⚠️</span>
+            <div>
+            <p className="font-black text-amber-700 text-sm">Saldo belum mencukupi untuk penarikan</p>
+            <p className="text-[11px] text-amber-600 font-medium mt-0.5">
+                Kamu perlu minimal saldo <strong>Rp 20.000</strong> untuk mengajukan penarikan.
+                Saldo kamu saat ini: <strong>Rp {parseFloat(balance).toLocaleString('id-ID')}</strong>
+            </p>
+            </div>
+        </div>
+        )}
+
       {/* ── Ringkasan Stats ── */}
       {withdrawals.length > 0 && (
         <div className="grid grid-cols-3 gap-3">
@@ -181,17 +195,33 @@ export const WithdrawPage = () => {
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
             </div>
             <p className="text-[10px] text-slate-400 font-bold italic">
-              *Biaya admin Rp 5.000 akan dipotong dari saldo. Total dipotong: Rp {formData.amount ? (parseFloat(formData.amount) + 5000).toLocaleString('id-ID') : '5.000'}
+                *Biaya admin Rp 5.000 akan dipotong dari saldo. Total dipotong: Rp {formData.amount ? (parseFloat(formData.amount) + 5000).toLocaleString('id-ID') : '5.000'}
+            </p>
+            <p className="text-[10px] text-slate-400 font-bold italic">
+                *Min. tarik Rp 10.000 · Maks. Rp 10.000.000 · Fee admin Rp 5.000.
+                Total dipotong: Rp {formData.amount ? (parseFloat(formData.amount) + 5000).toLocaleString('id-ID') : '5.000'}
             </p>
           </div>
 
           <button
             onClick={() => {
-              if (!formData.amount || parseFloat(formData.amount) <= 0) return alert('Masukkan nominal yang valid');
-              if (parseFloat(formData.amount) < 10000) return alert('Minimal penarikan adalah Rp 10.000');
-              if (parseFloat(formData.amount) + 5000 > parseFloat(balance)) return alert('Saldo tidak mencukupi (termasuk biaya admin Rp 5.000)');
-              if (!formData.accountNumber || !formData.accountName) return alert('Lengkapi data rekening terlebih dahulu');
-              withdrawMutation.mutate({ ...formData, paymentMethod: method });
+                const amt = parseFloat(formData.amount);
+                const bal = parseFloat(balance);
+
+                if (!formData.amount || isNaN(amt) || amt <= 0)
+                    return alert('Masukkan nominal yang valid');
+                if (bal < 20000)
+                    return alert('Saldo minimum untuk melakukan penarikan adalah Rp 20.000');
+                if (amt < 10000)
+                    return alert('Minimal penarikan adalah Rp 10.000');
+                if (amt > 10000000)
+                    return alert('Maksimal penarikan adalah Rp 10.000.000 per transaksi');
+                if (amt + 5000 > bal)
+                    return alert(`Saldo tidak mencukupi. Dibutuhkan Rp ${(amt + 5000).toLocaleString('id-ID')} (termasuk biaya admin Rp 5.000)`);
+                if (!formData.accountNumber || !formData.accountName)
+                    return alert('Lengkapi data rekening terlebih dahulu');
+
+                withdrawMutation.mutate({ ...formData, paymentMethod: method });
             }}
             disabled={withdrawMutation.isPending}
             className="w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-base hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 disabled:opacity-70">

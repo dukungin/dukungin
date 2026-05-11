@@ -261,14 +261,14 @@ const Auth = () => {
                   ))}
                 </div>
 
-                {/* <h2 className="text-2xl font-black text-slate-800 mb-1">
+                <h2 className="text-2xl md:flex flex-col hidden font-black text-slate-800 mb-1">
                   {isLogin ? 'Selamat Datang' : 'Buat Akun Baru'}
                 </h2>
                 <p className="text-slate-500 text-sm font-medium mb-7 leading-relaxed">
                   {isLogin
                     ? 'Masuk untuk mengelola overlay kamu.'
                     : 'Daftar sekarang dan mulai kustomisasi alert.'}
-                </p> */}
+                </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {!isLogin && (
