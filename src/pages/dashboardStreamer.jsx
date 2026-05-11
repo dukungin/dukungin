@@ -693,7 +693,7 @@ const LeaderboardCard = ({ stats }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-      <div className="px-8 py-5 border-b border-slate-100 flex items-center gap-3">
+      <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
         <div className="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center text-lg">🏆</div>
         <div>
           <p className="font-black text-slate-800">Leaderboard Donor</p>
@@ -762,7 +762,7 @@ const WithdrawPage = () => {
         <h2 className="text-2xl font-black text-slate-800 mb-8 flex items-center gap-3">
           <CreditCard className="text-indigo-600" /> Konfigurasi Pencairan
         </h2>
-        <div className="grid grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
           {[
             { id: 'BANK',  label: 'Transfer Bank',  icon: <CreditCard size={18} /> },
             { id: 'DANA',  label: 'E-Wallet DANA',  icon: <Smartphone size={18} /> },
@@ -905,7 +905,7 @@ const DurationTiersEditor = ({ tiers, onChange }) => {
     <div className="space-y-3">
       {tiers.map((tier, i) => (
         <div key={i} className="flex items-center gap-3 bg-slate-50 rounded-xl p-4 border border-slate-100">
-          <div className="flex-1 grid grid-cols-3 gap-3">
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="flex flex-col gap-1">
               <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Min (Rp)</label>
               <input type="number" value={tier.minAmount} onChange={e => updateTier(i, 'minAmount', e.target.value)}
@@ -1001,7 +1001,7 @@ const MediaTriggersEditor = ({ triggers, onChange }) => {
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Tipe Media yang Diizinkan Donor</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
               {mediaTypeOptions.map(opt => (
                 <button key={opt.value} onClick={() => update(i, 'mediaType', opt.value)}
                   className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border-2 font-black text-xs transition-all ${t.mediaType === opt.value ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm shadow-indigo-100' : 'border-slate-100 text-slate-400 hover:border-slate-300 hover:bg-white'}`}>
@@ -1932,10 +1932,10 @@ const DashboardStreamer = () => {
 
         <TopNavbar user={user} onLogout={() => setShowLogoutConfirm(true)} onProfile={() => setActiveTab('profile')} />
         
-        <div className='px-3 md:px-7 py-4 lg:py-4 w-full'>
+        <div className='relative mt-[-14px] px-3 md:px-7 py-0 lg:py-4 w-full'>
 
-          <header className="flex flex-col mt-4 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-8 relative">
-            <div className="z-10">
+          <header className="flex flex-col md:mt-4 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-8 relative">
+            <div className="z-10 md:flex flex-col hidden">
               <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-none">
                 {activeTab === 'settings'     ? 'Dashboard'
                   : activeTab === 'history'   ? 'Riwayat'
@@ -2020,7 +2020,7 @@ const DashboardStreamer = () => {
                           </label>
                     
                           {/* Quick preset picker */}
-                          <div className="grid grid-cols-6 gap-2">
+                          <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
                             {ICON_PRESETS.map(({ emoji, label }) => (
                               <button
                                 key={emoji}
@@ -2071,7 +2071,7 @@ const DashboardStreamer = () => {
                       <InputField label="Maksimal Donasi" type="number" value={settings.maxDonate} onChange={v => upd('maxDonate', v)} />
                       <div className="md:col-span-2">
                         <label className="block text-[10px] font-black text-slate-400 mb-4 uppercase tracking-widest">Tema Visual</label>
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                           {['modern', 'classic', 'minimal'].map(t => (
                             <button key={t} onClick={() => upd('theme', t)}
                               className={`cursor-pointer active:scale-[0.97] py-4 rounded-xl border-2 transition-all font-black text-sm capitalize ${settings.theme === t ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-md shadow-indigo-50' : 'bg-slate-100 border-slate-300 text-slate-400 hover:border-slate-200'}`}>

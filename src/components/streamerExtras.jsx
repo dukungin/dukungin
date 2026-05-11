@@ -535,7 +535,7 @@ export const SubathonManager = ({ overlayToken }) => {
         </div>
 
         {/* Durasi awal */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid nd:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Waktu Awal (detik)</label>
             <input type="number" value={localTimer.initialSeconds}
@@ -569,24 +569,24 @@ export const SubathonManager = ({ overlayToken }) => {
           </div>
 
           {localTimer.autoAddEnabled && (
-            <div className="grid grid-cols-2 gap-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
-              <div className="space-y-1.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
+              <div className="w-full space-y-1.5">
                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">+Detik per Tier</label>
                 <input type="number" value={localTimer.addSecondsPerAmount}
                   onChange={e => upd('addSecondsPerAmount', Number(e.target.value))}
                   className="w-full p-3 bg-white border-2 border-indigo-100 rounded-xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="w-full space-y-1.5">
                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Per Rp (1 tier)</label>
                 <input type="number" value={localTimer.addPerAmount}
                   onChange={e => upd('addPerAmount', Number(e.target.value))}
                   className="w-full p-3 bg-white border-2 border-indigo-100 rounded-xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
                 />
               </div>
-              <div className="col-span-2 text-[11px] text-indigo-600 font-bold bg-white rounded-xl px-3 py-2.5 border border-indigo-100">
+              <div className="md:col-span-2 text-[11px] text-indigo-600 font-bold bg-white rounded-xl px-3 py-2.5 border border-indigo-100">
                 📌 Donasi Rp {(localTimer.addPerAmount || 10000).toLocaleString('id-ID')} → +{localTimer.addSecondsPerAmount || 60} detik<br/>
-                Donasi Rp {((localTimer.addPerAmount || 10000) * 5).toLocaleString('id-ID')} → +{(localTimer.addSecondsPerAmount || 60) * 5} detik
+                📌 Donasi Rp {((localTimer.addPerAmount || 10000) * 5).toLocaleString('id-ID')} → +{(localTimer.addSecondsPerAmount || 60) * 5} detik
               </div>
             </div>
           )}
@@ -691,7 +691,7 @@ export const LeaderboardSettings = () => {
         {/* Periode */}
         <div className="space-y-2">
           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Periode Leaderboard</label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid md:grid-cols-2 gap-3">
             {[
               { id: 'alltime', label: '⏳ Semua Waktu', desc: 'Total donasi sejak awal' },
               { id: 'today',   label: '📅 Hari Ini',    desc: 'Donasi hari ini saja' },
@@ -729,7 +729,7 @@ export const LeaderboardSettings = () => {
         <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
           <div>
             <p className="font-black text-slate-700 text-sm">Tampilkan Nominal Donasi</p>
-            <p className="text-[11px] text-slate-400 font-medium mt-0.5">Sembunyikan jika tidak ingin nominal terlihat publik</p>
+            <p className="text-[11px] md:flex hidden text-slate-400 font-medium mt-0.5">Sembunyikan jika tidak ingin nominal terlihat publik</p>
           </div>
           <button
             onClick={() => upd('leaderboardShowAmount', !local.leaderboardShowAmount)}

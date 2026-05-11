@@ -111,7 +111,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
             </div>
             <h1 className="text-lg font-black tracking-tight text-slate-800">SAWER.IN</h1>
           </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500">
+          <button onClick={() => setIsSidebarOpen(false)} className="relative left-3.5 w-max cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500">
             <X size={30} />
           </button>
         </div>
