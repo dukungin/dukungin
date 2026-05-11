@@ -169,7 +169,7 @@ const Auth = () => {
             <div className="w-6 h-6 bg-white rounded-lg flex items-center justify-center">
               <span className="text-indigo-600 font-black text-xs italic">S</span>
             </div>
-            <span className="text-white font-black text-sm tracking-tight">Sawer-In From Indonesia 🚀</span>
+            <span className="text-white font-black text-sm tracking-tight">TAPTIPTUP From Indonesia 🚀</span>
           </div>
           <img src="/jellyfish.png" alt=""
             className="relative w-[14%] lg:w-[15%] mb-6 pointer-events-none select-none" />

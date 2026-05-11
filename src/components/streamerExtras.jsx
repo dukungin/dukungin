@@ -1,6 +1,3 @@
-// StreamerExtras.jsx
-// Komponen: PollManager, SubathonManager, LeaderboardSettings
-// Integrasi ke DashboardStreamer.jsx — lihat petunjuk di bawah
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
@@ -356,11 +353,18 @@ export const SubathonManager = ({ overlayToken }) => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (localTimer?.isRunning) {
       intervalRef.current = setInterval(() => {
-        setDisplaySeconds(s => Math.max(0, s - 1));
+        setDisplaySeconds(s => {
+          if (localTimer.mode === 'countup') {
+            // Stop jika sudah capai maxSeconds
+            if (localTimer.maxSeconds && s >= localTimer.maxSeconds) return s;
+            return s + 1;
+          }
+          return Math.max(0, s - 1);
+        });
       }, 1000);
     }
     return () => clearInterval(intervalRef.current);
-  }, [localTimer?.isRunning]);
+  }, [localTimer?.isRunning, localTimer?.mode, localTimer?.maxSeconds]);
 
   // Real-time dari socket
   useEffect(() => {
@@ -406,6 +410,8 @@ export const SubathonManager = ({ overlayToken }) => {
   });
 
   const [subCopied, setSubCopied] = useState(false);
+  const upd = (k, v) => setLocalTimer(t => ({ ...t, [k]: v }));
+
   const save = () => configMutation.mutate({
     mode: localTimer.mode,
     initialSeconds: localTimer.initialSeconds,
@@ -592,6 +598,25 @@ export const SubathonManager = ({ overlayToken }) => {
           )}
         </div>
 
+        {/* OBS Widget URL */}
+        {overlayToken && (
+          <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Widget URL untuk OBS (360×200px)</p>
+            <div className="flex gap-2">
+              <input readOnly value={`${window.location.origin}/widget/${overlayToken}/subathon`}
+                className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate" />
+              <button onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/widget/${overlayToken}/subathon`);
+                  setSubCopied(true);
+                  setTimeout(() => setSubCopied(false), 2000);
+                }}
+                className={`cursor-pointer active:scale-[0.97] px-3 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${subCopied ? 'bg-green-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}`}>
+                {subCopied ? <><CheckCircle2 size={12} /> Tersalin!</> : 'Salin'}
+              </button>
+            </div>
+          </div>
+        )}
+
         <button onClick={save} disabled={configMutation.isPending}
           className={`cursor-pointer active:scale-[0.97] w-full py-3.5 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 ${
             saved ? 'bg-green-500 text-white' : 'bg-slate-900 hover:bg-indigo-600 text-white'
@@ -600,34 +625,17 @@ export const SubathonManager = ({ overlayToken }) => {
         </button>
       </div>
 
-      {/* OBS Widget URL */}
-      {overlayToken && (
-        <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Widget URL untuk OBS (360×200px)</p>
-          <div className="flex gap-2">
-            <input readOnly value={`${window.location.origin}/widget/${overlayToken}/subathon`}
-              className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate" />
-            <button onClick={() => {
-                navigator.clipboard.writeText(`${window.location.origin}/widget/${overlayToken}/subathon`);
-                setSubCopied(true);
-                setTimeout(() => setSubCopied(false), 2000);
-              }}
-              className={`cursor-pointer active:scale-[0.97] px-3 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${subCopied ? 'bg-green-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}`}>
-              {subCopied ? <><CheckCircle2 size={12} /> Tersalin!</> : 'Salin'}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
 // ─── LeaderboardSettings ──────────────────────────────────────────────────────
 
-export const LeaderboardSettings = () => {
+export const LeaderboardSettings = ({overlayToken}) => {
   const queryClient = useQueryClient();
   const [local, setLocal] = useState(null);
   const [saved, setSaved] = useState(false);
+  const [lbCopied, setLbCopied] = useState(false);
 
   const { data, isLoading } = useQuery({ queryKey: ['profile'], queryFn: fetchProfile });
 
@@ -659,10 +667,10 @@ export const LeaderboardSettings = () => {
   return (
     <div className="space-y-5">
       {/* Preview */}
-      <div className="bg-slate-900 rounded-2xl p-6 text-white">
+      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-white">
         <div className="flex items-center gap-3 mb-5">
           <Trophy size={20} className="text-amber-400" />
-          <span className="font-black text-sm">Preview Leaderboard</span>
+          <span className="font-black text-slate-900 text-sm">Preview Leaderboard</span>
           <span className="ml-auto text-[10px] text-slate-400 font-medium">
             {local.leaderboardPeriod === 'today' ? 'Hari ini' : 'Semua waktu'}
           </span>
@@ -675,11 +683,11 @@ export const LeaderboardSettings = () => {
           ].slice(0, Math.min(local.leaderboardLimit, 3)).map((d, i) => (
             <div key={i} className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-2.5">
               <span className="text-lg w-8 text-center">{['🥇','🥈','🥉'][i]}</span>
-              <span className="flex-1 text-sm font-bold text-white/90 truncate">{d.name}</span>
+              <span className="flex-1 text-sm font-bold text-slate-900 truncate">{d.name}</span>
               {local.leaderboardShowAmount && (
-                <span className="font-black text-amber-400 text-sm">Rp {d.amount.toLocaleString('id-ID')}</span>
+                <span className="font-black text-slate-900 text-sm">Rp {d.amount.toLocaleString('id-ID')}</span>
               )}
-              <span className="text-white/40 text-xs font-medium">{d.count}x</span>
+              <span className="text-slate-900 text-xs font-medium">{d.count}x</span>
             </div>
           ))}
         </div>
@@ -743,6 +751,30 @@ export const LeaderboardSettings = () => {
           💡 Pengaturan ini memengaruhi widget leaderboard OBS dan tampilan di halaman donasi publik kamu.
         </div>
 
+        {overlayToken && (
+          <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Widget URL untuk OBS (420×300px)</p>
+            <div className="flex gap-2">
+              <input
+                readOnly
+                value={`${window.location.origin}/widget/${overlayToken}/leaderboard`}
+                className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate"
+              />
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/widget/${overlayToken}/leaderboard`);
+                  setLbCopied(true);
+                  setTimeout(() => setLbCopied(false), 2000);
+                }}
+                className={`cursor-pointer active:scale-[0.97] px-3 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+                  lbCopied ? 'bg-green-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                }`}>
+                {lbCopied ? <><CheckCircle2 size={12} /> Tersalin!</> : 'Salin'}
+              </button>
+            </div>
+          </div>
+        )}
+        
         <button
           onClick={() => saveMutation.mutate(local)}
           disabled={saveMutation.isPending}
@@ -752,56 +784,144 @@ export const LeaderboardSettings = () => {
           {saved ? <><CheckCircle2 size={16} /> Tersimpan!</> : saveMutation.isPending ? 'Menyimpan...' : <><Save size={16} /> Simpan Pengaturan Leaderboard</>}
         </button>
       </div>
+
     </div>
   );
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-//
-// PETUNJUK INTEGRASI ke DashboardStreamer.jsx
-// ============================================
-//
-// 1. Import di DashboardStreamer.jsx:
-//    import { PollManager, SubathonManager, LeaderboardSettings } from './StreamerExtras';
-//
-// 2. Tambah tab baru di Sidebar (sidebar.jsx) — tambahkan item:
-//    { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' }
-//    { id: 'subathon', icon: <Timer size={20} />,   label: 'Subathon' }
-//    { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' }
-//
-// 3. Di dalam <AnimatePresence> di DashboardStreamer, tambahkan:
-//
-//    {activeTab === 'poll' && (
-//      <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-//        <div className="max-w-2xl space-y-5">
-//          <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
-//            <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
-//            <PollManager overlayToken={user.overlayToken} />
-//          </div>
-//        </div>
-//      </motion.div>
-//    )}
-//
-//    {activeTab === 'subathon' && (
-//      <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-//        <div className="max-w-2xl space-y-5">
-//          <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
-//            <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" />
-//            <SubathonManager overlayToken={user.overlayToken} />
-//          </div>
-//        </div>
-//      </motion.div>
-//    )}
-//
-//    {activeTab === 'leaderboard' && (
-//      <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-//        <div className="max-w-2xl space-y-5">
-//          <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
-//            <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
-//            <LeaderboardSettings />
-//          </div>
-//        </div>
-//      </motion.div>
-//    )}
-//
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── MilestonesManager ────────────────────────────────────────────────────────
+
+const fetchMilestones = async () => (await axios.get(`${BASE_URL}/api/milestones`, { headers: authHeader() })).data;
+const saveMilestones  = async (d) => (await axios.put(`${BASE_URL}/api/milestones`, { milestones: d }, { headers: authHeader() })).data;
+
+export const MilestonesManager = ({ overlayToken }) => {
+  const queryClient = useQueryClient();
+  const { data: raw, isLoading } = useQuery({ queryKey: ['milestones'], queryFn: fetchMilestones });
+  const [local, setLocal] = useState(null);
+  const [mlCopied, setMlCopied] = useState(false);
+
+  useEffect(() => {
+    if (raw && !local) setLocal(Array.isArray(raw) ? raw : []);
+  }, [raw]);
+
+  const mutation = useMutation({
+    mutationFn: saveMilestones,
+    onSuccess: (saved) => {
+      queryClient.invalidateQueries({ queryKey: ['milestones'] });
+      setLocal(saved);
+    },
+    onError: (e) => alert(e.response?.data?.message || 'Gagal simpan'),
+  });
+
+  const list = local || [];
+  const add    = () => setLocal([...list, { title: '', targetAmount: 1000000, order: list.length }]);
+  const remove = (i) => setLocal(list.filter((_, idx) => idx !== i));
+  const upd    = (i, key, val) => setLocal(list.map((m, idx) => idx === i ? { ...m, [key]: val } : m));
+
+  if (isLoading) return <div className="text-slate-400 text-sm font-bold animate-pulse py-4">Memuat...</div>;
+
+  return (
+    <div className="space-y-5">
+
+      {/* List Milestones */}
+      <div className="space-y-3">
+        {list.length === 0 && (
+          <div className="rounded-2xl border-2 border-dashed border-slate-200 py-10 text-center">
+            <p className="text-3xl mb-2">🎯</p>
+            <p className="font-black text-slate-500 text-sm">Belum ada milestone</p>
+            <p className="text-xs text-slate-400 font-medium mt-1">Tambah target donasi untuk ditampilkan ke donor</p>
+          </div>
+        )}
+
+        {list.map((m, i) => (
+          <div key={i} className="bg-white rounded-2xl p-5 border border-slate-100 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Milestone {i + 1}</span>
+              <button
+                onClick={() => remove(i)}
+                className="cursor-pointer p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
+                <Trash2 size={14} />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Judul</label>
+                <input
+                  value={m.title}
+                  onChange={e => upd(i, 'title', e.target.value)}
+                  placeholder="contoh: Beli mic baru!"
+                  className="w-full p-3 bg-slate-100 border-2 border-slate-100 rounded-xl font-bold text-sm outline-none focus:border-green-400 transition-all"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Target (Rp)</label>
+                <input
+                  type="number"
+                  value={m.targetAmount}
+                  onChange={e => upd(i, 'targetAmount', Number(e.target.value))}
+                  className="w-full p-3 bg-slate-100 border-2 border-slate-100 rounded-xl font-bold text-sm outline-none focus:border-green-400 transition-all"
+                />
+                <p className="text-[10px] text-slate-400 font-medium">
+                  Rp {Number(m.targetAmount || 0).toLocaleString('id-ID')}
+                </p>
+              </div>
+            </div>
+
+            {/* Progress bar preview */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-[10px] font-black text-slate-400">
+                <span>Progress (preview)</span>
+                <span>0 / Rp {Number(m.targetAmount || 0).toLocaleString('id-ID')}</span>
+              </div>
+              <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-green-400 rounded-full" style={{ width: '0%' }} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Tombol Tambah */}
+      <button
+        onClick={add}
+        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-green-200 text-green-600 rounded-2xl font-black text-sm hover:border-green-400 hover:bg-green-50 transition-all flex items-center justify-center gap-2">
+        <Plus size={16} /> Tambah Milestone
+      </button>
+
+      {/* Simpan */}
+      {list.length > 0 && (
+        <button
+          onClick={() => mutation.mutate(list)}
+          disabled={mutation.isPending}
+          className="cursor-pointer active:scale-[0.97] w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+          <Save size={16} /> {mutation.isPending ? 'Menyimpan...' : 'Simpan Milestone'}
+        </button>
+      )}
+
+      {/* OBS Widget URL */}
+      {overlayToken && (
+        <div className="bg-slate-100 p-4 rounded-2xl border border-slate-200">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Widget URL untuk OBS (420×200px)</p>
+          <div className="flex gap-2">
+            <input
+              readOnly
+              value={`${window.location.origin}/widget/${overlayToken}/milestones`}
+              className="flex-1 bg-transparent font-mono text-xs text-indigo-600 font-bold outline-none truncate"
+            />
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`${window.location.origin}/widget/${overlayToken}/milestones`);
+                setMlCopied(true);
+                setTimeout(() => setMlCopied(false), 2000);
+              }}
+              className={`cursor-pointer active:scale-[0.97] px-3 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+                mlCopied ? 'bg-green-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+              }`}>
+              {mlCopied ? <><CheckCircle2 size={12} /> Tersalin!</> : 'Salin'}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

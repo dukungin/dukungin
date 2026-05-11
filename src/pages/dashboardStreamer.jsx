@@ -24,10 +24,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import api from '../lib/axiosInstance';
 import Sidebar from '../components/sidebar';
-import { LeaderboardSettings, PollManager, SubathonManager } from '../components/streamerExtras';
+import { LeaderboardSettings, MilestonesManager, PollManager, SubathonManager } from '../components/streamerExtras';
 import { TopNavbar } from '../components/topNavbar';
 import { WithdrawPage } from './withdrawPage';
 import { showSessionExpiredModal } from '../lib/sessionModal';
+import { ContactPage } from './support';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -613,6 +614,9 @@ const AdminWithdrawalPage = () => {
   const [statusFilter, setStatusFilter] = useState('PENDING');
   const [rejectNote, setRejectNote] = useState('');
   const [rejectTargetId, setRejectTargetId] = useState(null);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const fetchAdminWDs = async () =>
     (await api.get(`/api/midtrans/admin/withdrawals?status=${statusFilter}`)).data;
@@ -637,14 +641,28 @@ const AdminWithdrawalPage = () => {
     onError: (err) => alert(err.response?.data?.message || 'Gagal update status'),
   });
 
-  const handleApprove = (id) => {
-    if (!window.confirm('Konfirmasi: Kamu sudah transfer manual ke streamer?')) return;
-    updateMutation.mutate({ id, status: 'COMPLETED' });
-  };
+  const handleApproveClick = (id) => {
+      setSelectedId(id);
+      setShowApproveModal(true);
+    };
 
-  const handleReject = (id) => {
-    updateMutation.mutate({ id, status: 'FAILED', note: rejectNote || 'Ditolak oleh admin' });
-  };
+    const handleRejectClick = (id) => {
+      setSelectedId(id);
+      setRejectNote('');
+      setShowRejectModal(true);
+    };
+
+    const confirmApprove = () => {
+      if (selectedId) updateMutation.mutate({ id: selectedId, status: 'COMPLETED' });
+    };
+
+    const confirmReject = () => {
+      if (selectedId) updateMutation.mutate({ 
+        id: selectedId, 
+        status: 'FAILED', 
+        note: rejectNote || 'Ditolak oleh admin' 
+      });
+    };
 
   const STATUS_FILTERS = [
     { val: 'PENDING',   label: '⏳ Pending'  },
@@ -679,7 +697,7 @@ const AdminWithdrawalPage = () => {
       <div className="flex gap-2 flex-wrap">
         {STATUS_FILTERS.map(f => (
           <button key={f.val} onClick={() => setStatusFilter(f.val)}
-            className={`px-4 py-2 rounded-xl font-black text-sm transition-all ${
+            className={`cursor-pointer active:scale-[0.98] hover:brightness-95 px-4 py-2 rounded-xl font-black text-sm transition-all ${
               statusFilter === f.val
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
                 : 'bg-white text-slate-400 border border-slate-100 hover:border-indigo-200 hover:text-indigo-600'
@@ -733,21 +751,13 @@ const AdminWithdrawalPage = () => {
                           <p className="text-emerald-600 font-black text-sm">
                             Rp {formatRupiah(Number(wd.amount) * 0.975)}
                           </p>
-                          {/* <p className="text-[10px] text-slate-400 font-medium">
-                            Rp {Number(wd.amount).toLocaleString('id-ID')} 
-                            <span className="text-red-400">-2.5%</span>
-                          </p> */}
                         </td>
                         <td className="px-6 py-5">
                           <p className="font-bold text-slate-600 text-sm">{wd.paymentMethod || 'BANK'}</p>
-                          {/* <p className="text-[10px] text-slate-400 font-bold">{wd.channelCode}</p> */}
                         </td>
                         <td className="px-6 py-5">
                           <p className="font-mono font-bold text-slate-700 text-sm">{wd.accountNumber}</p>
                         </td>
-                        {/* <td className="px-6 py-5">
-                          <p className="font-bold text-slate-600 text-sm">{wd.accountName}</p>
-                        </td> */}
                         <td className="px-6 py-5">
                           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black ${
                             wd.status === 'COMPLETED' ? 'bg-green-100 text-green-600'
@@ -765,36 +775,19 @@ const AdminWithdrawalPage = () => {
                         </td>
                         <td className="px-6 py-5">
                           {wd.status === 'PENDING' && (
-                            <div className="flex gap-2 w-max">
-                              <button onClick={() => handleApprove(wd._id)} disabled={updateMutation.isPending}
-                                className="cursor-pointer active:scale-[0.97] px-2.5 py-2 bg-green-200 text-green-600 rounded-lg text-[11px] font-black hover:bg-green-300 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5">
-                                <Check size={18} />
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleApproveClick(wd._id)}
+                                className="cursor-pointer px-2.5 py-2 bg-green-200 text-green-600 rounded-lg text-sm font-black hover:bg-green-300 transition-all flex items-center gap-2"
+                              >
+                                <Check size={18} /> 
                               </button>
-                              {rejectTargetId === wd._id
-                                ? (
-                                  <div className="space-y-2">
-                                    <input value={rejectNote} onChange={e => setRejectNote(e.target.value)}
-                                      placeholder="Alasan penolakan (opsional)"
-                                      className="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-[11px] font-bold outline-none focus:border-red-400 transition-all"  size={18}/>
-                                    <div className="flex gap-1.5">
-                                      <button onClick={() => handleReject(wd._id)} disabled={updateMutation.isPending}
-                                        className="cursor-pointer flex-1 px-3 py-2 bg-red-600 text-white rounded-lg text-[11px] font-black hover:bg-red-700 transition-all disabled:opacity-50">
-                                        Konfirmasi Tolak
-                                      </button>
-                                      <button onClick={() => { setRejectTargetId(null); setRejectNote(''); }}
-                                        className="cursor-pointer px-3 py-2 bg-slate-100 text-slate-500 rounded-lg text-[11px] font-black hover:bg-slate-200 transition-all">
-                                        Batal
-                                      </button>
-                                    </div>
-                                  </div>
-                                )
-                                : (
-                                  <button onClick={() => setRejectTargetId(wd._id)} disabled={updateMutation.isPending}
-                                    className="cursor-pointer active:scale-[0.97] px-2.5 py-2 bg-red-50 text-red-500 border border-red-200 rounded-lg text-[11px] font-black hover:bg-red-100 transition-all disabled:opacity-50">
-                                    <X size={18} />
-                                  </button>
-                                )
-                              }
+                              <button
+                                onClick={() => handleRejectClick(wd._id)}
+                                className="cursor-pointer px-2.5 py-2 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm font-black hover:bg-red-100 transition-all"
+                              >
+                                <X size={18} />
+                              </button>
                             </div>
                           )}
                         </td>
@@ -802,6 +795,78 @@ const AdminWithdrawalPage = () => {
                     ))}
                   </tbody>
                 </table>
+
+                <AnimatePresence>
+                  {showApproveModal && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4"
+                      onClick={() => setShowApproveModal(false)}
+                    >
+                      <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        className="bg-white rounded-3xl max-w-md w-full p-8 text-center"
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <div className="w-20 h-20 mx-auto mb-6 bg-green-100 rounded-2xl flex items-center justify-center text-5xl">✅</div>
+                        <h3 className="text-2xl font-black text-slate-800 mb-2">Konfirmasi Approve</h3>
+                        <p className="text-slate-600 mb-8">Apakah Anda yakin sudah mentransfer dana ke streamer ini?</p>
+                        <div className="flex gap-3">
+                          <button onClick={() => setShowApproveModal(false)} className="cursor-pointer active:scale-[0.98] hover:brightness-95 flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-black rounded-2xl transition-all">
+                            Batal
+                          </button>
+                          <button onClick={confirmApprove} disabled={updateMutation.isPending} className="cursor-pointer active:scale-[0.98] hover:brightness-95 flex-1 py-4 bg-green-600 hover:bg-green-700 text-white font-black rounded-2xl transition-all disabled:opacity-70">
+                            {updateMutation.isPending ? 'Memproses...' : 'Ya, Sudah Transfer'}
+                          </button>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Modal Reject */}
+                <AnimatePresence>
+                  {showRejectModal && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4"
+                      onClick={() => setShowRejectModal(false)}
+                    >
+                      <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        className="bg-white rounded-3xl max-w-md w-full p-8"
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <h3 className="text-2xl font-black text-slate-800 mb-2 text-center">Tolak Penarikan</h3>
+                        <p className="text-slate-600 text-center mb-6">Berikan alasan penolakan (opsional)</p>
+
+                        <textarea
+                          value={rejectNote}
+                          onChange={(e) => setRejectNote(e.target.value)}
+                          placeholder="Contoh: Rekening tidak valid, saldo tidak cukup..."
+                          className="w-full h-32 p-4 border border-slate-200 rounded-2xl focus:border-red-400 outline-none resize-y font-medium"
+                        />
+
+                        <div className="flex gap-3 mt-6">
+                          <button onClick={() => setShowRejectModal(false)} className="cursor-pointer active:scale-[0.98] hover:brightness-95 flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-black rounded-2xl transition-all">
+                            Batal
+                          </button>
+                          <button onClick={confirmReject} disabled={updateMutation.isPending} className="cursor-pointer active:scale-[0.98] hover:brightness-95 flex-1 py-4 bg-red-600 hover:bg-red-700 text-white font-black rounded-2xl transition-all disabled:opacity-70">
+                            {updateMutation.isPending ? 'Memproses...' : 'Konfirmasi Tolak'}
+                          </button>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )
         }
@@ -1096,7 +1161,7 @@ const YouTubeLivePreview = ({ settings, username }) => {
             <div className="absolute top-0 left-0 right-0 flex items-center gap-3 px-6 py-4" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,.7) 0%,transparent 100%)' }}>
               <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-white text-[9px] font-black">YT</div>
               <span className="bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded tracking-wide">● LIVE</span>
-              <span className="text-white text-xs font-medium opacity-70 flex-1 truncate">Ngoding Bareng @{username} | Sawer.in Demo</span>
+              <span className="text-white text-xs font-medium opacity-70 flex-1 truncate">Ngoding Bareng @{username} | TapTipTup Demo</span>
               <span className="text-white text-[10px] opacity-40">12.4K menonton</span>
             </div>
             <div className="absolute bottom-0 left-0 right-0 px-6 pb-4 pt-8" style={{ background: 'linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 100%)' }}>
@@ -1813,7 +1878,7 @@ const DashboardStreamer = () => {
           <div className="w-10 h-10 p-2 bg-red-200 rounded-lg flex items-center justify-center text-white font-black italic">
             <img src='/jellyfish.png' alt='icon' />
           </div>
-          <span className="font-black text-lg tracking-tight">SAWER.IN</span>
+          <span className="font-black text-lg tracking-tight">TapTipTup</span>
         </div>
         <button onClick={() => setIsSidebarOpen(true)} className="cursor-pointer active:scale-[0.97] p-2 bg-slate-200 rounded-xl text-slate-600"><Menu size={24} /></button>
       </div>
@@ -1824,7 +1889,7 @@ const DashboardStreamer = () => {
         <TopNavbar user={user} onLogout={() => {
           localStorage.removeItem('token');
           window.location.href = '/login';
-        }} onProfile={() => setActiveTab('profile')} />
+        }} onProfile={() => setActiveTab('profile')} activeTab={activeTab} setActiveTab={setActiveTab} />
 
         <div className='relative mt-[-14px] px-3 md:px-7 py-0 lg:py-4 w-full'>
           <header className="flex flex-col md:mt-4 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-8 relative">
@@ -1837,10 +1902,11 @@ const DashboardStreamer = () => {
                   : activeTab === 'profile'   ? 'Profil'
                   : activeTab === 'poll'      ? 'Poll & Voting'
                   : activeTab === 'subathon'  ? 'Subathon'
+                  : activeTab === 'milestones'  ? 'Milestones'
                   : activeTab === 'leaderboard' ? 'Leaderboard'
+                  : activeTab === 'contact' ? 'Contact'
                   : 'Admin'
                 }
-                <span className="text-indigo-600">.</span>
               </h2>
               <p className="text-slate-400 font-medium mt-1">Selamat datang kembali, <span className="text-slate-800 font-bold">@{user.username}</span></p>
             </div>
@@ -2180,6 +2246,8 @@ const DashboardStreamer = () => {
               </motion.div>
             )}
 
+            {activeTab === 'milestones' && <MilestonesManager overlayToken={user?.overlayToken} />}
+
             {activeTab === 'subathon' && (
               <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <div className="w-full space-y-5">
@@ -2196,11 +2264,13 @@ const DashboardStreamer = () => {
                 <div className="w-full space-y-5">
                   <div className="bg-white rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 space-y-6">
                     <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
-                    <LeaderboardSettings />
+                    <LeaderboardSettings overlayToken={user?.overlayToken} />
                   </div>
                 </div>
               </motion.div>
             )}
+
+            {activeTab === 'contact' && <ContactPage />}
 
           </AnimatePresence>
         </div>
