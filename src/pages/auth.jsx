@@ -179,7 +179,7 @@ const Auth = () => {
           {/* Headline */}
           <h1 className="text-3xl lg:text-4xl font-black text-white leading-[1.15] tracking-tight">
             Mulai Terima<br />
-            <span className="text-indigo-200">Dukungan</span>
+            <span className="text-indigo-200 mr-1.5">Dukungan</span>
             Real-time.
           </h1>
           <p className="text-indigo-200 mt-3 font-medium text-sm lg:text-base leading-relaxed max-w-[90%]">
@@ -196,8 +196,8 @@ const Auth = () => {
       </div>
 
       {/* ── RIGHT / BOTTOM: Form ── */}
-      <div className="flex-1 flex items-center justify-center px-4 py-4 md:py-10 lg:px-0">
-        <div className="w-full max-w-lg">
+      <div className="flex items-center justify-center px-4 pb-0 pt-5 h-max md:py-10 lg:px-0">
+        <div className="w-full max-w-lg h-max">
 
           <AnimatePresence mode="wait">
 
