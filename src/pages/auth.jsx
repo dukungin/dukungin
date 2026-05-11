@@ -148,7 +148,7 @@ const Auth = () => {
 
       {/* ── LEFT / TOP: Brand Hero ── */}
       <div className="relative lg:w-[45%] lg:min-h-screen bg-indigo-600 flex flex-col justify-center overflow-hidden
-                      px-7 pt-8 pb-8 lg:px-12 lg:pt-16 lg:pb-12">
+                      px-4 pt-8 pb-8 lg:px-12 lg:pt-16 lg:pb-12">
         <BgBlobs />
 
         {/* Grid texture */}
@@ -196,7 +196,7 @@ const Auth = () => {
       </div>
 
       {/* ── RIGHT / BOTTOM: Form ── */}
-      <div className="flex-1 flex items-center justify-center px-6 py-10 lg:px-0">
+      <div className="flex-1 flex items-center justify-center px-4 py-4 md:py-10 lg:px-0">
         <div className="w-full max-w-lg">
 
           <AnimatePresence mode="wait">

@@ -68,7 +68,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white rounded-[2.5rem] p-10 z-[9999] md:z-[3] shadow-2xl text-center overflow-hidden"
+              className="relative w-full max-w-md bg-white rounded-xl p-10 z-[9999] md:z-[3] shadow-2xl text-center overflow-hidden"
             >
               <div className="w-20 h-20 mx-auto mb-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center">
                 <AlertCircle size={40} />
@@ -164,15 +164,15 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         </nav>
 
         {/* LOGOUT BUTTON */}
-        {/* <button 
+        <button 
           onClick={() => setShowLogoutConfirm(true)} // Pemicu modal
-          className="flex items-center gap-4 p-4 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black mt-auto transition-all"
+          className="md:hidden flex items-center gap-4 p-4 bg-red-100 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black mt-auto transition-all"
         >
           <LogOut size={18} /> 
           <p className='text-sm ml-[3px]'>
             Keluar
           </p>
-        </button> */}
+        </button>
       </aside>
     </>
   );
