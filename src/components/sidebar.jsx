@@ -38,11 +38,10 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
   };
 
   const menuItems = [
-    { id: 'settings', label: 'Overlay Editor', icon: <Layout size={20} /> },
-    { id: 'community', label: 'Community', icon: <Users size={20} /> },
-    // { id: 'profile', label: 'My Profile', icon: <User size={20} /> },
-    { id: 'history', label: 'Donation History', icon: <History size={20} /> },
-    { id: 'wallet', label: 'Withdrawal', icon: <Wallet size={20} /> },
+    { id: 'settings', label: 'Editor Overlay', icon: <Layout size={20} /> },
+    { id: 'community', label: 'Komunitas', icon: <Users size={20} /> },
+    { id: 'history', label: 'Riwayat Donasi', icon: <History size={20} /> },
+    { id: 'wallet', label: 'Penarikan Dana', icon: <Wallet size={20} /> },
     { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' },
     { id: 'subathon', icon: <Timer size={20} />,   label: 'Subathon' },
     { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' }
@@ -50,7 +49,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
   return (
     <>
-      {/* MODAL LOGOUT MODERN */}
+      {/* MODAL LOGOUT */}
       <AnimatePresence>
         {showLogoutConfirm && (
           <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-6">
@@ -84,7 +83,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                   onClick={handleLogout}
                   className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-200 hover:bg-red-700 active:scale-[0.98] transition-all"
                 >
-                  Ya, Logout
+                  Ya, Keluar
                 </button>
                 <button 
                   onClick={() => setShowLogoutConfirm(false)}
@@ -98,7 +97,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         )}
       </AnimatePresence>
 
-      {/* SIDEBAR ASIDE */}
+      {/* SIDEBAR */}
       <aside className={`
         fixed lg:sticky top-0 left-0 h-screen overflow-y-auto w-full md:w-70 bg-white border-r border-slate-100 py-4 px-6 z-[99999] md:z-[1] flex flex-col transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -117,8 +116,9 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         </div>
 
         <div className="md:flex hidden pt-0 pb-2 px-1 mb-4">
-          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">All Streamer</p>
+          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Menu Utama</p>
         </div>
+
         {/* NAVIGATION */}
         <nav className="md:flex-1 space-y-4">
           {menuItems.map((item) => (
@@ -140,32 +140,28 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
           ))}
 
           <div className='w-full h-[1px] my-5 bg-slate-300'></div>
+
           {isSuperAdmin && (
-            <>
-              {/* <div className="pt-6 pb-2 px-1">
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Super Admin</p>
-              </div> */}
-              <button
-                onClick={() => {
-                  setActiveTab('admin');
-                  setIsSidebarOpen(false);
-                }}
-                className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
-                  activeTab === 'admin'
-                    ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
-                    : 'text-slate-400 hover:bg-slate-200'
-                }`}
-              >
-                <ShieldAlert size={20} />
-                <span className="text-sm">Req. withdrawals</span>
-              </button>
-            </>
+            <button
+              onClick={() => {
+                setActiveTab('admin');
+                setIsSidebarOpen(false);
+              }}
+              className={`cursor-pointer w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
+                activeTab === 'admin'
+                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
+                  : 'text-slate-400 hover:bg-slate-200'
+              }`}
+            >
+              <ShieldAlert size={20} />
+              <span className="text-sm">Permintaan Penarikan</span>
+            </button>
           )}
         </nav>
 
         {/* LOGOUT BUTTON */}
         <button 
-          onClick={() => setShowLogoutConfirm(true)} // Pemicu modal
+          onClick={() => setShowLogoutConfirm(true)}
           className="md:hidden flex items-center gap-4 p-4 bg-red-100 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black transition-all"
         >
           <LogOut size={18} /> 
