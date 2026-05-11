@@ -27,6 +27,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import Sidebar from '../components/sidebar';
 import { PollManager, SubathonManager, LeaderboardSettings } from '../components/streamerExtras';
+import { TopNavbar } from '../components/topNavbar';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const authHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
@@ -214,7 +215,7 @@ const BannedWordsEditor = () => {
   ];
 
   return (
-    <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100 space-y-7">
+    <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 space-y-7">
       <SectionHeader icon={<ShieldCheck size={20} />} title="Filter Kata Terlarang" color="bg-red-500" />
 
       {/* Action selector */}
@@ -232,7 +233,7 @@ const BannedWordsEditor = () => {
                   replacement: localReplacement,
                 });
               }}
-              className={`cursor-pointer active:scale-[0.97] text-left p-4 rounded-2xl border-2 transition-all space-y-1.5 ${
+              className={`cursor-pointer active:scale-[0.97] text-left p-4 rounded-xl border-2 transition-all space-y-1.5 ${
                 localAction === opt.id
                   ? opt.active + ' shadow-md'
                   : 'border-slate-100 bg-slate-50 hover:border-slate-300'
@@ -263,7 +264,7 @@ const BannedWordsEditor = () => {
             onChange={e => setLocalReplacement(e.target.value)}
             onBlur={() => save({ replacement: localReplacement })} // ← save saat blur
             placeholder="contoh: [dihapus], ❤️, [sensor]"
-            className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-2xl px-5 py-3 font-bold text-sm outline-none focus:border-indigo-400 transition-all"
+            className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-xl px-5 py-3 font-bold text-sm outline-none focus:border-indigo-400 transition-all"
           />
         </div>
       )}
@@ -282,10 +283,10 @@ const BannedWordsEditor = () => {
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && add()}
             placeholder="Ketik kata lalu tekan Enter..."
-            className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-2xl px-5 py-3 font-bold text-sm outline-none focus:border-red-400 transition-all"
+            className="flex-1 bg-slate-100 border-2 border-slate-100 rounded-xl px-5 py-3 font-bold text-sm outline-none focus:border-red-400 transition-all"
           />
           <button onClick={add}
-            className="cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-black text-sm transition-all flex items-center gap-2">
+            className="cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-black text-sm transition-all flex items-center gap-2">
             <Plus size={16} /> Tambah
           </button>
         </div>
@@ -294,7 +295,7 @@ const BannedWordsEditor = () => {
           ? <div className="text-slate-400 text-sm font-bold animate-pulse">Memuat...</div>
           : words.length === 0
             ? (
-              <div className="rounded-2xl border-2 border-dashed border-slate-200 py-8 text-center text-slate-400">
+              <div className="rounded-xl border-2 border-dashed border-slate-200 py-8 text-center text-slate-400">
                 <p className="text-2xl mb-2">🚫</p>
                 <p className="font-black text-sm">Belum ada kata terlarang</p>
                 <p className="text-[11px] font-medium mt-1">Semua pesan dari donor akan diterima</p>
@@ -304,7 +305,7 @@ const BannedWordsEditor = () => {
               <div className="flex flex-wrap gap-2">
                 {words.map(word => (
                   <span key={word}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-2xl text-sm font-black border border-red-100">
+                    className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-sm font-black border border-red-100">
                     {word}
                     <button onClick={() => remove(word)} className="cursor-pointer hover:text-red-800 transition-colors">
                       <Trash2 size={12} />
@@ -338,7 +339,7 @@ const MilestonesEditor = () => {
   const upd    = (i, key, val) => setLocal(list.map((m, idx) => idx === i ? { ...m, [key]: val } : m));
 
   return (
-    <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100 space-y-6">
+    <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 space-y-6">
       <SectionHeader icon={<TrendingUp size={20} />} title="Milestones" color="bg-green-500" />
       <p className="text-xs text-slate-400 font-medium">
         Tampilkan progress target donasi di halaman publik kamu. Donor bisa melihat seberapa dekat goal tercapai.
@@ -349,13 +350,13 @@ const MilestonesEditor = () => {
         : (
           <div className="space-y-3">
             {list.length === 0 && (
-              <div className="rounded-2xl border-2 border-dashed border-slate-200 py-8 text-center text-slate-400">
+              <div className="rounded-xl border-2 border-dashed border-slate-200 py-8 text-center text-slate-400">
                 <p className="text-2xl mb-2">🎯</p>
                 <p className="font-black text-sm">Belum ada milestone</p>
               </div>
             )}
             {list.map((m, i) => (
-              <div key={i} className="flex gap-3 items-end bg-slate-50 rounded-2xl p-4 border border-slate-100">
+              <div key={i} className="flex gap-3 items-end bg-slate-50 rounded-xl p-4 border border-slate-100">
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1">
                     <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Judul Milestone</label>
@@ -376,12 +377,12 @@ const MilestonesEditor = () => {
               </div>
             ))}
             <button onClick={add}
-              className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-green-200 text-green-600 rounded-2xl font-black text-sm hover:border-green-400 hover:bg-green-50 transition-all flex items-center justify-center gap-2">
+              className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-green-200 text-green-600 rounded-xl font-black text-sm hover:border-green-400 hover:bg-green-50 transition-all flex items-center justify-center gap-2">
               <Plus size={16} /> Tambah Milestone
             </button>
             {list.length > 0 && (
               <button onClick={() => mutation.mutate(list)} disabled={mutation.isPending}
-                className="cursor-pointer active:scale-[0.97] w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                className="cursor-pointer active:scale-[0.97] w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
                 <Save size={16} /> {mutation.isPending ? 'Menyimpan...' : 'Simpan Milestones'}
               </button>
             )}
@@ -471,7 +472,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
           {/* Opsi "Tanpa Suara" */}
           <button
             onClick={() => onChange('')}
-            className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 font-black text-xs transition-all ${
+            className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-black text-xs transition-all ${
               !value
                 ? 'border-slate-600 bg-slate-800 text-white shadow-md'
                 : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-300'
@@ -488,7 +489,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
                 onChange(preset.url);
                 playPreview(preset.url);
               }}
-              className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 font-black text-xs transition-all ${
+              className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-black text-xs transition-all ${
                 value === preset.url
                   ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-100'
                   : 'border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-300'
@@ -515,7 +516,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
             value={value || ''}
             onChange={e => onChange(e.target.value)}
             placeholder="https://... .mp3 / .ogg / .wav"
-            className="w-full p-3 bg-slate-100 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
+            className="w-full p-3 bg-slate-100 border-2 border-slate-100 rounded-xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
           />
           <p className="text-[10px] text-slate-400 font-medium ml-1 italic">
             *Paste URL file audio dari Cloudinary, Google Drive (direct link), atau hosting lainnya
@@ -525,7 +526,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
 
       {/* Preview player — tampil jika ada value */}
       {value && (
-        <div className="flex items-center gap-3 bg-slate-50 rounded-2xl p-3 border border-slate-100">
+        <div className="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-100">
           <button
             onClick={() => playPreview(value)}
             className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center text-white text-xs hover:bg-indigo-700 transition-all flex-shrink-0"
@@ -566,7 +567,7 @@ const SoundTiersEditor = ({ tiers = [], onChange }) => {
   return (
     <div className="space-y-3">
       {tiers.map((t, i) => (
-        <div key={i} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-4">
+        <div key={i} className="bg-slate-50 rounded-xl p-4 border border-slate-100 space-y-4">
           <div className="flex items-center justify-between">
             <span className="font-black text-slate-600 text-sm">
               {t.label || `Tier Suara ${i + 1}`}
@@ -607,7 +608,7 @@ const SoundTiersEditor = ({ tiers = [], onChange }) => {
       ))}
 
       <button onClick={add}
-        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Suara per Nominal
       </button>
     </div>
@@ -641,7 +642,7 @@ const QrCodeCard = ({ username }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+    <div className="bg-white rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 space-y-6">
       <SectionHeader icon={<span className="text-lg">◼</span>} title="QR Code Donasi" color="bg-slate-800" />
       <p className="text-xs text-slate-400 font-medium">
         Tampilkan QR ini di stream / sosmed. Scan langsung ke halaman donasi kamu.
@@ -667,7 +668,7 @@ const QrCodeCard = ({ username }) => {
 
       <div className="grid grid-cols-2 gap-3">
         <button onClick={copy}
-          className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-300 text-slate-700 hover:bg-slate-200'}`}>
+          className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-xl font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-300 text-slate-700 hover:bg-slate-200'}`}>
           {copied ? <><CheckCircle2 size={16} /> Tersalin!</> : <><Copy size={16} /> Salin URL</>}
         </button>
         <a
@@ -675,7 +676,7 @@ const QrCodeCard = ({ username }) => {
           download={`qr-donasi-${username}.png`}
           target="_blank"
           rel="noreferrer"
-          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-2xl font-black text-sm bg-slate-900 text-white hover:bg-slate-800 transition-all">
+          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-xl font-black text-sm bg-slate-900 text-white hover:bg-slate-800 transition-all">
           ↓ Download QR
         </a>
       </div>
@@ -691,9 +692,9 @@ const LeaderboardCard = ({ stats }) => {
   const colors = ['from-amber-400 to-yellow-300', 'from-slate-400 to-slate-300', 'from-orange-400 to-amber-300'];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
       <div className="px-8 py-5 border-b border-slate-100 flex items-center gap-3">
-        <div className="w-9 h-9 bg-amber-500 rounded-2xl flex items-center justify-center text-lg">🏆</div>
+        <div className="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center text-lg">🏆</div>
         <div>
           <p className="font-black text-slate-800">Leaderboard Donor</p>
           <p className="text-[10px] text-slate-400 font-medium">Semua waktu</p>
@@ -707,7 +708,7 @@ const LeaderboardCard = ({ stats }) => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.08 }}
-            className={`flex items-center gap-4 p-4 rounded-2xl ${i < 3 ? 'bg-gradient-to-r ' + colors[i] + ' text-white' : 'bg-slate-50'}`}
+            className={`flex items-center gap-4 p-4 rounded-xl ${i < 3 ? 'bg-gradient-to-r ' + colors[i] + ' text-white' : 'bg-slate-50'}`}
           >
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg flex-shrink-0 ${i < 3 ? 'bg-white/20' : 'bg-slate-200 text-slate-500'}`}>
               {i < 3 ? medals[i] : `#${i + 1}`}
@@ -748,7 +749,7 @@ const WithdrawPage = () => {
 
   return (
     <motion.div className="w-full mx-auto space-y-6 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-      <div className="bg-indigo-600 py-7 rounded-2xl p-6 text-white relative overflow-hidden">
+      <div className="bg-indigo-600 py-7 rounded-xl p-6 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 p-12 opacity-10"><Wallet size={120} /></div>
         <div className="relative z-10">
           <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">Total Saldo Bisa Ditarik</p>
@@ -757,7 +758,7 @@ const WithdrawPage = () => {
         <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
         <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
       </div>
-      <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-slate-100">
+      <div className="bg-white rounded-xl p-4 md:p-8 md:p-12 shadow-sm border border-slate-100">
         <h2 className="text-2xl font-black text-slate-800 mb-8 flex items-center gap-3">
           <CreditCard className="text-indigo-600" /> Konfigurasi Pencairan
         </h2>
@@ -769,7 +770,7 @@ const WithdrawPage = () => {
           ].map(m => (
             <button key={m.id}
               onClick={() => { setMethod(m.id); setFormData({ ...formData, channelCode: m.id === 'BANK' ? 'BCA' : m.id }); }}
-              className={`cursor-pointer active:scale-[0.97] hover:bg-blue-50 flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all font-black text-sm ${method === m.id ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-lg shadow-indigo-50' : 'border-slate-50 text-slate-400 hover:border-slate-200'}`}>
+              className={`cursor-pointer active:scale-[0.97] hover:bg-blue-50 flex flex-col items-center gap-3 p-6 rounded-xl border-2 transition-all font-black text-sm ${method === m.id ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-lg shadow-indigo-50' : 'border-slate-50 text-slate-400 hover:border-slate-200'}`}>
               {m.icon} {m.label}
             </button>
           ))}
@@ -779,7 +780,7 @@ const WithdrawPage = () => {
             {method === 'BANK' && (
               <div className="flex flex-col gap-3">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Pilih Bank</label>
-                <select className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all"
+                <select className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all"
                   onChange={(e) => setFormData({ ...formData, channelCode: e.target.value })}>
                   <option value="BCA">BCA (Bank Central Asia)</option>
                   <option value="BNI">BNI (Bank Negara Indonesia)</option>
@@ -793,14 +794,14 @@ const WithdrawPage = () => {
                 {method === 'BANK' ? 'Nomor Rekening' : 'Nomor Handphone'}
               </label>
               <input value={formData.accountNumber} placeholder={method === 'BANK' ? '000-000-000' : '0812xxxx'}
-                className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
+                className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
                 onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })} />
             </div>
           </div>
           <div className="flex flex-col gap-3">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nama Lengkap Pemilik Akun</label>
             <input value={formData.accountName} placeholder="Sesuaikan dengan Buku Tabungan / Nama di App"
-              className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
+              className="w-full px-5 py-3 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all shadow-sm"
               onChange={(e) => setFormData({ ...formData, accountName: e.target.value })} />
           </div>
           <div className="flex flex-col gap-3 pt-4">
@@ -808,7 +809,7 @@ const WithdrawPage = () => {
             <div className="relative">
               <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-white">Rp</span>
               <input type="number" value={formData.amount} placeholder="0,00"
-                className="w-full px-6 py-3 pl-14 bg-slate-900 text-white rounded-2xl font-medium text-xl outline-none focus:ring-4 ring-indigo-100 transition-all"
+                className="w-full px-6 py-3 pl-14 bg-slate-900 text-white rounded-xl font-medium text-xl outline-none focus:ring-4 ring-indigo-100 transition-all"
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })} />
             </div>
             <p className="text-[10px] text-slate-400 font-bold ml-1 italic">*Biaya admin penarikan Rp 5.000 akan memotong saldo utama.</p>
@@ -820,7 +821,7 @@ const WithdrawPage = () => {
               withdrawMutation.mutate({ ...formData, paymentMethod: method });
             }}
             disabled={withdrawMutation.isPending}
-            className="w-full bg-indigo-600 text-white py-3 rounded-2xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 mt-4 disabled:opacity-70">
+            className="w-full bg-indigo-600 text-white py-3 rounded-xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 mt-4 disabled:opacity-70">
             {withdrawMutation.isPending
               ? <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" /> Sedang Memproses...</>
               : <><ArrowRight size={20} /> Ajukan Pencairan Dana</>
@@ -845,7 +846,7 @@ const AdminWithdrawalPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white w-full rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="bg-white w-full rounded-xl shadow-sm border border-slate-100 overflow-hidden">
         <div className="flex items-center justify-between px-10 py-5 border-b border-slate-100">
           <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Semua Request Penarikan</p>
           <span className="px-4 py-2 bg-red-100 text-red-600 rounded-full text-[10px] font-black uppercase tracking-widest">Super Admin Only</span>
@@ -903,7 +904,7 @@ const DurationTiersEditor = ({ tiers, onChange }) => {
   return (
     <div className="space-y-3">
       {tiers.map((tier, i) => (
-        <div key={i} className="flex items-center gap-3 bg-slate-50 rounded-2xl p-4 border border-slate-100">
+        <div key={i} className="flex items-center gap-3 bg-slate-50 rounded-xl p-4 border border-slate-100">
           <div className="flex-1 grid grid-cols-3 gap-3">
             <div className="flex flex-col gap-1">
               <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Min (Rp)</label>
@@ -927,7 +928,7 @@ const DurationTiersEditor = ({ tiers, onChange }) => {
         </div>
       ))}
       <button onClick={addTier}
-        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Ketentuan Durasi
       </button>
     </div>
@@ -955,8 +956,8 @@ const MediaTriggersEditor = ({ triggers, onChange }) => {
   return (
     <div className="space-y-4">
       {triggers.length === 0 && (
-        <div className="rounded-2xl bg-slate-50 border border-dashed border-slate-200 px-5 py-6 text-center">
-          <div className="w-10 h-10 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
+        <div className="rounded-xl bg-slate-50 border border-dashed border-slate-200 px-5 py-6 text-center">
+          <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
             <ImageIcon size={18} className="text-slate-400" />
           </div>
           <p className="text-sm font-black text-slate-500">Belum ada ketentuan media</p>
@@ -966,7 +967,7 @@ const MediaTriggersEditor = ({ triggers, onChange }) => {
         </div>
       )}
       {triggers.map((t, i) => (
-        <div key={i} className="bg-slate-50 rounded-2xl p-5 border border-slate-100 space-y-5">
+        <div key={i} className="bg-slate-50 rounded-xl p-5 border border-slate-100 space-y-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {t.mediaType === 'video' ? <Video size={15} className="text-purple-500" />
@@ -1024,7 +1025,7 @@ const MediaTriggersEditor = ({ triggers, onChange }) => {
         </div>
       ))}
       <button onClick={add}
-        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Ketentuan Media Alert
       </button>
     </div>
@@ -1236,15 +1237,15 @@ const YouTubeLivePreview = ({ settings, username }) => {
 
             {/* Info badge */}
             <div className="absolute top-16 right-6 flex flex-col gap-2">
-              <div className="bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl px-4 py-3 text-right">
+              <div className="bg-black/60 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 text-right">
                 <p className="text-white/40 text-[9px] font-black uppercase tracking-widest mb-1">Posisi Alert</p>
                 <p className="text-white font-black text-xs">{settings.overlayPosition || 'bottom-right'}</p>
               </div>
-              <div className="bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl px-4 py-3 text-right">
+              <div className="bg-black/60 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 text-right">
                 <p className="text-white/40 text-[9px] font-black uppercase tracking-widest mb-1">Lebar</p>
                 <p className="text-white font-black text-xs">{settings.maxWidth || 280}px</p>
               </div>
-              <div className="bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl px-4 py-3 text-right">
+              <div className="bg-black/60 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 text-right">
                 <p className="text-white/40 text-[9px] font-black uppercase tracking-widest mb-1">Tema</p>
                 <p className="text-white font-black text-xs capitalize">{settings.theme || 'modern'}</p>
               </div>
@@ -1260,7 +1261,7 @@ const YouTubeLivePreview = ({ settings, username }) => {
 
       <FullscreenPreview />
 
-      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-2xl shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
+      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-xl shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
         <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(155deg,#1a1a2e 0%,#0d0d1a 60%,#12121f 100%)' }}>
           <span style={{ fontSize: 80, fontWeight: 800, color: 'rgba(255,255,255,0.04)', letterSpacing: -3, userSelect: 'none' }}>LIVE</span>
         </div>
@@ -1296,12 +1297,12 @@ const YouTubeLivePreview = ({ settings, username }) => {
         <span>Durasi demo: <span className="text-indigo-600">{currentDonor ? dur : '-'}s</span></span>
       </div>
       <button onClick={triggerDemo}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-black text-sm border-2 border-indigo-100 transition-all active:scale-[0.97] flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-black text-sm border-2 border-indigo-100 transition-all active:scale-[0.97] flex items-center justify-center gap-2">
         <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" /> Simulasi Donasi Masuk
       </button>
       <button
         onClick={() => setIsFullscreen(true)}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm transition-all active:scale-[0.97] flex items-center justify-center gap-2 border border-slate-700">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm transition-all active:scale-[0.97] flex items-center justify-center gap-2 border border-slate-700">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
         </svg>
@@ -1378,7 +1379,7 @@ const HistoryPage = () => {
             icon: '🏆',
           },
         ].map((card) => (
-          <div key={card.label} className={`${card.color} rounded-2xl p-6 text-white relative overflow-hidden`}>
+          <div key={card.label} className={`${card.color} rounded-xl p-6 text-white relative overflow-hidden`}>
             <div className="absolute top-3 right-4 text-2xl opacity-20">{card.icon}</div>
             <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">{card.label}</p>
             <p className="text-xl font-black leading-tight">{card.value}</p>
@@ -1389,14 +1390,14 @@ const HistoryPage = () => {
 
       {/* Top Donors */}
       {stats?.topDonors?.length > 0 && (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 bg-amber-500 rounded-2xl flex items-center justify-center text-white"><TrendingUp size={16} /></div>
+            <div className="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center text-white"><TrendingUp size={16} /></div>
             <h3 className="font-black text-slate-800">Top Dononatur Kamu</h3>
           </div>
           <div className="space-y-3">
             {stats.topDonors.map((donor, i) => (
-              <div key={i} className="flex items-center gap-4 p-3 rounded-2xl bg-slate-50">
+              <div key={i} className="flex items-center gap-4 p-3 rounded-xl bg-slate-50">
                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-white font-black text-sm flex-shrink-0 ${i === 0 ? 'bg-amber-400' : i === 1 ? 'bg-slate-400' : i === 2 ? 'bg-orange-400' : 'bg-slate-300'}`}>
                   {i + 1}
                 </div>
@@ -1416,7 +1417,7 @@ const HistoryPage = () => {
       {stats && <LeaderboardCard stats={stats} />}
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 md:px-10 py-5 border-b border-slate-100 gap-4">
           <div>
             <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Riwayat Donasi</p>
@@ -1602,9 +1603,9 @@ const CommunityPage = ({ currentUserId }) => {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map(u => (
-          <div key={u._id} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col gap-4">
+          <div key={u._id} className="bg-white rounded-xl p-6 border border-slate-100 shadow-sm flex flex-col gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
                 {u.username.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
@@ -1621,7 +1622,7 @@ const CommunityPage = ({ currentUserId }) => {
               <button
                 onClick={() => toggleMutation.mutate(u._id)}
                 disabled={toggleMutation.isPending}
-                className={`w-full py-2.5 rounded-2xl font-black text-xs transition-all active:scale-[0.97] disabled:opacity-60 ${
+                className={`cursor-pointer active:scale-[0.97] hover:brightness-95 w-full py-3 rounded-xl font-black text-xs transition-all active:scale-[0.97] disabled:opacity-60 ${
                   u.isFollowing
                     ? 'bg-slate-100 text-slate-500 hover:bg-red-50 hover:text-red-500'
                     : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-100'
@@ -1638,7 +1639,7 @@ const CommunityPage = ({ currentUserId }) => {
   return (
     <div className="space-y-6 pb-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl p-8 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl p-4 md:p-8 text-white relative overflow-hidden">
         <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
         <div className="relative z-10">
           <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">Streamer Network</p>
@@ -1653,7 +1654,7 @@ const CommunityPage = ({ currentUserId }) => {
       <div className="flex gap-2 flex-wrap">
         {subTabs.map(t => (
           <button key={t.id} onClick={() => setSubTab(t.id)}
-            className={`cursor-pointer active:scale-[0.97] hover:brightness-90 px-5 py-2.5 rounded-2xl font-black text-sm transition-all ${
+            className={`cursor-pointer active:scale-[0.97] hover:brightness-90 px-5 py-2.5 rounded-xl font-black text-sm transition-all ${
               subTab === t.id
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
                 : 'bg-white text-slate-400 border border-slate-100 hover:border-indigo-200 hover:text-indigo-600'
@@ -1676,11 +1677,11 @@ const CommunityPage = ({ currentUserId }) => {
             onChange={e => setSearchInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && setSearch(searchInput)}
             placeholder="Cari username streamer..."
-            className="flex-1 bg-white border-2 border-slate-100 rounded-2xl px-5 py-3.5 font-bold text-sm outline-none focus:border-indigo-400 transition-all"
+            className="flex-1 bg-white border-2 border-slate-100 rounded-xl px-5 py-3.5 font-bold text-sm outline-none focus:border-indigo-400 transition-all"
           />
           <button
             onClick={() => setSearch(searchInput)}
-            className="cursor-pointer active:scale-[0.97] hover:brightness-90 px-6 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 transition-all">
+            className="cursor-pointer active:scale-[0.97] hover:brightness-90 px-6 py-3.5 bg-indigo-600 text-white rounded-xl font-black text-sm hover:bg-indigo-700 transition-all">
             Cari
           </button>
         </div>
@@ -1709,7 +1710,7 @@ const InputField = ({ label, ...props }) => (
 
 const SectionHeader = ({ icon, title, color }) => (
   <div className="flex items-center gap-4">
-    <div className={`${color} p-3 rounded-2xl text-white shadow-lg`}>{icon}</div>
+    <div className={`${color} p-3 rounded-xl text-white shadow-lg`}>{icon}</div>
     <h3 className="text-xl font-black text-slate-800 tracking-tight">{title}</h3>
   </div>
 );
@@ -1725,6 +1726,12 @@ const DashboardStreamer = () => {
   const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '' });
   const [donationToasts, setDonationToasts] = useState([]);
   const [profileForm, setProfileForm] = useState({ username: '', email: '', bio: '' });
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  };
 
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ['profile'],
@@ -1874,17 +1881,17 @@ const DashboardStreamer = () => {
         <AnimatePresence>
           {donationToasts.map(toast => (
             <motion.div key={toast.id} initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 100, opacity: 0 }}
-              className="bg-white rounded-2xl p-5 shadow-2xl border border-slate-100 flex items-start gap-4">
+              className="bg-white rounded-xl p-5 shadow-2xl border border-slate-100 flex items-start gap-4">
                {toast.isWithdrawal ? (
                   // Toast WD
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0 ${
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white text-xl flex-shrink-0 ${
                     toast.status === 'COMPLETED' ? 'bg-green-500' : 'bg-red-500'
                   }`}>
                     {toast.status === 'COMPLETED' ? '✓' : '✕'}
                   </div>
                 ) : (
                   // Toast donasi (yang sudah ada)
-                  <div className="w-12 h-12 bg-indigo-600 rounded-2xl ...">
+                  <div className="w-12 h-12 bg-indigo-600 rounded-xl ...">
                     {renderIconPreview(settings.customIcon, 24)}
                   </div>
                 )}
@@ -1909,506 +1916,519 @@ const DashboardStreamer = () => {
       </div>
 
       {/* Mobile Navbar */}
-      <div className="lg:hidden fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 z-50 px-6 py-4 flex justify-between items-center">
+      <div className="lg:hidden fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 z-50 px-3 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black italic">D</div>
-          <span className="font-black text-sm tracking-tight">DUKUNG.IN</span>
+          <div className="w-10 h-10 p-2 bg-red-200 rounded-lg flex items-center justify-center text-white font-black italic">
+            <img src='/jellyfish.png' alt='icon' />
+          </div>
+          <span className="font-black text-lg tracking-tight">SAWER.IN</span>
         </div>
         <button onClick={() => setIsSidebarOpen(true)} className="cursor-pointer active:scale-[0.97] p-2 bg-slate-200 rounded-xl text-slate-600"><Menu size={24} /></button>
       </div>
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-      <main className="flex-1 px-6 md:px-7 py-20 lg:py-4 w-8xl z-[4] mx-auto w-full relative">
-        <header className="flex flex-col mt-4 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-12 relative">
-          <div className="z-10">
-            <h2 className="text-4xl md:text-3xl font-black text-slate-800 tracking-tight leading-none">
-              {activeTab === 'settings' ? 'Dashboard'
-                : activeTab === 'history' ? 'Riwayat'
-                : activeTab === 'wallet' ? 'Wallet'
-                : activeTab === 'community' ? 'Community'
-                : activeTab === 'profile' ? 'Profil'
-                : 'Admin'}
-              <span className="text-indigo-600">.</span>
-            </h2>
-            <p className="text-slate-400 font-medium mt-1">Selamat datang kembali, <span className="text-slate-800 font-bold">@{user.username}</span></p>
-          </div>
-          {profileLoading && (
-            <div className="flex items-center gap-2 text-xs text-slate-400 font-bold"><RefreshCw size={14} className="animate-spin" /> Memperbarui data...</div>
-          )}
-        </header>
+      <main className="flex-1 md:w-8xl z-[4] mx-auto w-full relative">
 
-        <AnimatePresence mode="wait">
+        <TopNavbar user={user} onLogout={() => setShowLogoutConfirm(true)} onProfile={() => setActiveTab('profile')} />
+        
+        <div className='px-3 md:px-7 py-4 lg:py-4 w-full'>
 
-          {activeTab === 'community' && (
-            <motion.div key="community" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <CommunityPage currentUserId={profileData?.user?._id || profileData?.User?._id} />
-            </motion.div>
-          )}
+          <header className="flex flex-col mt-4 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-8 relative">
+            <div className="z-10">
+              <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-none">
+                {activeTab === 'settings'     ? 'Dashboard'
+                  : activeTab === 'history'   ? 'Riwayat'
+                  : activeTab === 'wallet'    ? 'Wallet'
+                  : activeTab === 'community' ? 'Community'
+                  : activeTab === 'profile'   ? 'Profil'
+                  : activeTab === 'poll'      ? 'Poll & Voting'
+                  : activeTab === 'subathon'  ? 'Subathon'
+                  : activeTab === 'leaderboard' ? 'Leaderboard'
+                  : 'Admin'
+                }
+                <span className="text-indigo-600">.</span>
+              </h2>
+              <p className="text-slate-400 font-medium mt-1">Selamat datang kembali, <span className="text-slate-800 font-bold">@{user.username}</span></p>
+            </div>
+            {profileLoading && (
+              <div className="flex items-center gap-2 text-xs text-slate-400 font-bold"><RefreshCw size={14} className="animate-spin" /> Memperbarui data...</div>
+            )}
+          </header>
 
-          {/* ── SETTINGS ── */}
-          {activeTab === 'settings' && (
-            <motion.div key="settings" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-              className="grid grid-cols-1 xl:grid-cols-12 gap-5">
-              <section className="xl:col-span-7 space-y-6">
+          <AnimatePresence mode="wait">
 
-                {/* Card 1: Konfigurasi Alert */}
-                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100">
-                  <SectionHeader icon={<Settings size={20} />} title="Konfigurasi Alert" color="bg-indigo-500" />
-                  
-                   <div className="mt-8 space-y-6">
-                      {/* ── Toggle Overlay On/Off ── */}
-                      <div className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                        <div>
-                          <p className="font-black text-slate-700 text-sm">Aktifkan Overlay OBS</p>
-                          <p className="text-[11px] text-slate-400 font-medium mt-0.5">
-                            Jika dimatikan, alert tidak akan muncul di OBS sama sekali
+            {activeTab === 'community' && (
+              <motion.div key="community" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <CommunityPage currentUserId={profileData?.user?._id || profileData?.User?._id} />
+              </motion.div>
+            )}
+
+            {/* ── SETTINGS ── */}
+            {activeTab === 'settings' && (
+              <motion.div key="settings" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+                <section className="xl:col-span-7 space-y-6">
+
+                  {/* Card 1: Konfigurasi Alert */}
+                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
+                    <SectionHeader icon={<Settings size={20} />} title="Konfigurasi Alert" color="bg-indigo-500" />
+                    
+                    <div className="mt-8 space-y-6">
+                        {/* ── Toggle Overlay On/Off ── */}
+                        <div className="flex items-center justify-between p-5 bg-slate-50 rounded-xl border border-slate-100">
+                          <div>
+                            <p className="font-black text-slate-700 text-sm">Aktifkan Overlay OBS</p>
+                            <p className="text-[11px] text-slate-400 font-medium mt-0.5">
+                              Jika dimatikan, alert tidak akan muncul di OBS sama sekali
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => upd('overlayEnabled', !settings.overlayEnabled)}
+                            className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
+                              settings.overlayEnabled ? 'bg-indigo-600' : 'bg-slate-300'
+                            }`}>
+                            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
+                              settings.overlayEnabled ? 'translate-x-8' : 'translate-x-1'
+                            }`} />
+                          </button>
+                        </div>
+                    
+                        {/* ── Toggle Show Timestamp ── */}
+                        <div className="flex items-center justify-between p-5 bg-slate-50 rounded-xl border border-slate-100">
+                          <div>
+                            <p className="font-black text-slate-700 text-sm">Tampilkan Jam Donasi</p>
+                            <p className="text-[11px] text-slate-400 font-medium mt-0.5">
+                              Tampilkan waktu (HH:MM:SS) kapan donasi diterima di overlay
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => upd('showTimestamp', !settings.showTimestamp)}
+                            className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
+                              settings.showTimestamp ? 'bg-indigo-600' : 'bg-slate-300'
+                            }`}>
+                            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
+                              settings.showTimestamp ? 'translate-x-8' : 'translate-x-1'
+                            }`} />
+                          </button>
+                        </div>
+                    
+                        {/* ── Custom Icon ── */}
+                        <div className="space-y-3">
+                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
+                            Icon Alert
+                          </label>
+                    
+                          {/* Quick preset picker */}
+                          <div className="grid grid-cols-6 gap-2">
+                            {ICON_PRESETS.map(({ emoji, label }) => (
+                              <button
+                                key={emoji}
+                                onClick={() => upd('customIcon', emoji === '💜' ? '' : emoji)}
+                                title={label}
+                                className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 text-lg transition-all cursor-pointer active:scale-[0.95] ${
+                                  (settings.customIcon || '💜') === emoji || (!settings.customIcon && emoji === '💜')
+                                    ? 'border-indigo-600 bg-indigo-50 shadow-md shadow-indigo-100'
+                                    : 'border-slate-100 hover:border-slate-300 bg-slate-50'
+                                }`}>
+                                <span>{emoji}</span>
+                                <span className="text-[8px] font-black text-slate-400 leading-none">{label}</span>
+                              </button>
+                            ))}
+                          </div>
+                    
+                          {/* Custom URL input */}
+                          <div className="flex gap-3 items-center">
+                            <div className="relative flex-1">
+                              <input
+                                value={settings.customIcon || ''}
+                                onChange={e => upd('customIcon', e.target.value)}
+                                placeholder="Atau ketik emoji / URL gambar icon..."
+                                className="w-full p-4 pr-14 bg-slate-100 border-2 border-slate-100 rounded-xl font-bold text-sm outline-none focus:border-indigo-500 transition-all"
+                              />
+                              {/* Preview */}
+                              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xl">
+                                {renderIconPreview(settings.customIcon, 22)}
+                              </div>
+                            </div>
+                            {settings.customIcon && (
+                              <button
+                                onClick={() => upd('customIcon', '')}
+                                className="px-4 py-3 bg-red-50 text-red-500 rounded-xl font-black text-xs border border-red-100 hover:bg-red-100 transition-all cursor-pointer active:scale-[0.97]">
+                                Reset
+                              </button>
+                            )}
+                          </div>
+                          <p className="text-[10px] text-slate-400 font-medium ml-1 italic">
+                            *Pilih emoji di atas, ketik emoji manual, atau paste URL gambar (jpg/png/gif)
                           </p>
                         </div>
-                        <button
-                          onClick={() => upd('overlayEnabled', !settings.overlayEnabled)}
-                          className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
-                            settings.overlayEnabled ? 'bg-indigo-600' : 'bg-slate-300'
-                          }`}>
-                          <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
-                            settings.overlayEnabled ? 'translate-x-8' : 'translate-x-1'
-                          }`} />
-                        </button>
+                    
                       </div>
-                  
-                      {/* ── Toggle Show Timestamp ── */}
-                      <div className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                        <div>
-                          <p className="font-black text-slate-700 text-sm">Tampilkan Jam Donasi</p>
-                          <p className="text-[11px] text-slate-400 font-medium mt-0.5">
-                            Tampilkan waktu (HH:MM:SS) kapan donasi diterima di overlay
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => upd('showTimestamp', !settings.showTimestamp)}
-                          className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
-                            settings.showTimestamp ? 'bg-indigo-600' : 'bg-slate-300'
-                          }`}>
-                          <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
-                            settings.showTimestamp ? 'translate-x-8' : 'translate-x-1'
-                          }`} />
-                        </button>
-                      </div>
-                  
-                      {/* ── Custom Icon ── */}
-                      <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
-                          Icon Alert
-                        </label>
-                  
-                        {/* Quick preset picker */}
-                        <div className="grid grid-cols-6 gap-2">
-                          {ICON_PRESETS.map(({ emoji, label }) => (
-                            <button
-                              key={emoji}
-                              onClick={() => upd('customIcon', emoji === '💜' ? '' : emoji)}
-                              title={label}
-                              className={`flex flex-col items-center gap-1 p-3 rounded-2xl border-2 text-lg transition-all cursor-pointer active:scale-[0.95] ${
-                                (settings.customIcon || '💜') === emoji || (!settings.customIcon && emoji === '💜')
-                                  ? 'border-indigo-600 bg-indigo-50 shadow-md shadow-indigo-100'
-                                  : 'border-slate-100 hover:border-slate-300 bg-slate-50'
-                              }`}>
-                              <span>{emoji}</span>
-                              <span className="text-[8px] font-black text-slate-400 leading-none">{label}</span>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                      <InputField label="Minimal Donasi" type="number" value={settings.minDonate} onChange={v => upd('minDonate', v)} />
+                      <InputField label="Maksimal Donasi" type="number" value={settings.maxDonate} onChange={v => upd('maxDonate', v)} />
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] font-black text-slate-400 mb-4 uppercase tracking-widest">Tema Visual</label>
+                        <div className="grid grid-cols-3 gap-3">
+                          {['modern', 'classic', 'minimal'].map(t => (
+                            <button key={t} onClick={() => upd('theme', t)}
+                              className={`cursor-pointer active:scale-[0.97] py-4 rounded-xl border-2 transition-all font-black text-sm capitalize ${settings.theme === t ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-md shadow-indigo-50' : 'bg-slate-100 border-slate-300 text-slate-400 hover:border-slate-200'}`}>
+                              {t}
                             </button>
                           ))}
                         </div>
-                  
-                        {/* Custom URL input */}
-                        <div className="flex gap-3 items-center">
-                          <div className="relative flex-1">
-                            <input
-                              value={settings.customIcon || ''}
-                              onChange={e => upd('customIcon', e.target.value)}
-                              placeholder="Atau ketik emoji / URL gambar icon..."
-                              className="w-full p-4 pr-14 bg-slate-100 border-2 border-slate-100 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500 transition-all"
-                            />
-                            {/* Preview */}
-                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-xl">
-                              {renderIconPreview(settings.customIcon, 22)}
-                            </div>
-                          </div>
-                          {settings.customIcon && (
-                            <button
-                              onClick={() => upd('customIcon', '')}
-                              className="px-4 py-3 bg-red-50 text-red-500 rounded-2xl font-black text-xs border border-red-100 hover:bg-red-100 transition-all cursor-pointer active:scale-[0.97]">
-                              Reset
-                            </button>
-                          )}
-                        </div>
-                        <p className="text-[10px] text-slate-400 font-medium ml-1 italic">
-                          *Pilih emoji di atas, ketik emoji manual, atau paste URL gambar (jpg/png/gif)
-                        </p>
                       </div>
-                  
-                    </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                    <InputField label="Minimal Donasi" type="number" value={settings.minDonate} onChange={v => upd('minDonate', v)} />
-                    <InputField label="Maksimal Donasi" type="number" value={settings.maxDonate} onChange={v => upd('maxDonate', v)} />
-                    <div className="md:col-span-2">
-                      <label className="block text-[10px] font-black text-slate-400 mb-4 uppercase tracking-widest">Tema Visual</label>
-                      <div className="grid grid-cols-3 gap-3">
-                        {['modern', 'classic', 'minimal'].map(t => (
-                          <button key={t} onClick={() => upd('theme', t)}
-                            className={`cursor-pointer active:scale-[0.97] py-4 rounded-2xl border-2 transition-all font-black text-sm capitalize ${settings.theme === t ? 'border-indigo-600 bg-indigo-50 text-indigo-600 shadow-md shadow-indigo-50' : 'bg-slate-100 border-slate-300 text-slate-400 hover:border-slate-200'}`}>
-                            {t}
-                          </button>
-                        ))}
+                      
+                      <div className="flex flex-col gap-3">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
+                        <select value={settings.overlayPosition || 'bottom-right'} onChange={e => upd('overlayPosition', e.target.value)}
+                          className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all">
+                          <option value="top-left">Kiri Atas</option>
+                          <option value="top-right">Kanan Atas</option>
+                          <option value="bottom-left">Kiri Bawah</option>
+                          <option value="bottom-right">Kanan Bawah</option>
+                          <option value="top-center">Tengah Atas</option>
+                          <option value="bottom-center">Tengah Bawah</option>
+                        </select>
+                      </div>
+                      <div className="flex flex-col gap-3">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Animasi Masuk</label>
+                        <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
+                          className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all">
+                          <option value="bounce">Bounce</option>
+                          <option value="slide-left">Slide Kiri</option>
+                          <option value="slide-right">Slide Kanan</option>
+                          <option value="fade">Fade</option>
+                        </select>
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">
+                          Lebar Maks Overlay OBS <span className="text-indigo-500 normal-case font-bold ml-1">({settings.maxWidth || 280}px)</span>
+                        </label>
+                        <input type="range" min={180} max={600} step={10} value={settings.maxWidth || 280}
+                          onChange={e => upd('maxWidth', Number(e.target.value))} className="w-full accent-indigo-600" />
+                        <div className="flex justify-between text-[10px] text-slate-400 font-bold mt-1 px-0.5">
+                          <span>180px (compact)</span><span>390px (standar)</span><span>600px (lebar)</span>
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="flex flex-col gap-3">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
-                      <select value={settings.overlayPosition || 'bottom-right'} onChange={e => upd('overlayPosition', e.target.value)}
-                        className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all">
-                        <option value="top-left">Kiri Atas</option>
-                        <option value="top-right">Kanan Atas</option>
-                        <option value="bottom-left">Kiri Bawah</option>
-                        <option value="bottom-right">Kanan Bawah</option>
-                        <option value="top-center">Tengah Atas</option>
-                        <option value="bottom-center">Tengah Bawah</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-3">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Animasi Masuk</label>
-                      <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
-                        className="w-full p-5 bg-slate-200 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all">
-                        <option value="bounce">Bounce</option>
-                        <option value="slide-left">Slide Kiri</option>
-                        <option value="slide-right">Slide Kanan</option>
-                        <option value="fade">Fade</option>
-                      </select>
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">
-                        Lebar Maks Overlay OBS <span className="text-indigo-500 normal-case font-bold ml-1">({settings.maxWidth || 280}px)</span>
-                      </label>
-                      <input type="range" min={180} max={600} step={10} value={settings.maxWidth || 280}
-                        onChange={e => upd('maxWidth', Number(e.target.value))} className="w-full accent-indigo-600" />
-                      <div className="flex justify-between text-[10px] text-slate-400 font-bold mt-1 px-0.5">
-                        <span>180px (compact)</span><span>390px (standar)</span><span>600px (lebar)</span>
+                    <div className="md:col-span-2 space-y-1.5 mt-6">
+                      <div className="flex justify-between">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                          Opacity Border
+                        </label>
+                        <span className="text-[10px] font-black text-indigo-600">
+                          {Math.round((parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16) / 255) * 100)}%
+                        </span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={255}
+                        value={parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16)}
+                        onChange={e => {
+                          const hex = settings.borderColor?.slice(0, 7) || '#ffffff';
+                          const alpha = parseInt(e.target.value).toString(16).padStart(2, '0');
+                          upd('borderColor', `${hex}${alpha}`);
+                        }}
+                        className="w-full accent-indigo-600"
+                      />
+                      <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                        <span>Transparan</span><span>Solid</span>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="md:col-span-2 space-y-1.5 mt-6">
-                    <div className="flex justify-between">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
-                        Opacity Border
-                      </label>
-                      <span className="text-[10px] font-black text-indigo-600">
-                        {Math.round((parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16) / 255) * 100)}%
-                      </span>
-                    </div>
-                    <input
-                      type="range"
-                      min={0}
-                      max={255}
-                      value={parseInt(settings.borderColor?.slice(7, 9) || 'ff', 16)}
-                      onChange={e => {
-                        const hex = settings.borderColor?.slice(0, 7) || '#ffffff';
-                        const alpha = parseInt(e.target.value).toString(16).padStart(2, '0');
-                        upd('borderColor', `${hex}${alpha}`);
-                      }}
-                      className="w-full accent-indigo-600"
-                    />
-                    <div className="flex justify-between text-[10px] text-slate-400 font-bold">
-                      <span>Transparan</span><span>Solid</span>
+
+                    <div className='md:grid-cols-3 w-full grid mt-7'>
+                        <InputField label="Warna Background" type="color" value={settings.primaryColor} onChange={v => upd('primaryColor', v)} />
+                        <InputField label="Warna Teks"       type="color" value={settings.textColor}    onChange={v => upd('textColor', v)} />
+                        <InputField
+                          label="Warna Border"
+                          type="color"
+                          value={settings.borderColor?.slice(0, 7) || '#ffffff'}
+                          onChange={v => {
+                            const alpha = settings.borderColor?.slice(7, 9) || '26';
+                            upd('borderColor', `${v}${alpha}`);
+                          }}
+                        />
                     </div>
                   </div>
 
-                  <div className='md:grid-cols-3 w-full grid mt-7'>
-                      <InputField label="Warna Background" type="color" value={settings.primaryColor} onChange={v => upd('primaryColor', v)} />
-                      <InputField label="Warna Teks"       type="color" value={settings.textColor}    onChange={v => upd('textColor', v)} />
-                      <InputField
-                        label="Warna Border"
-                        type="color"
-                        value={settings.borderColor?.slice(0, 7) || '#ffffff'}
-                        onChange={v => {
-                          const alpha = settings.borderColor?.slice(7, 9) || '26';
-                          upd('borderColor', `${v}${alpha}`);
-                        }}
+                  {/* Card 2: Durasi Bertingkat */}
+                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
+                    <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
+                    <p className="text-xs text-slate-400 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p>
+                    <DurationTiersEditor tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
+                  </div>
+
+                  {/* Card 3: Media Alert */}
+                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 space-y-7">
+                    <SectionHeader icon={<ImageIcon size={20} />} title="Izinkan Donor Kirim Media" color="bg-purple-500" />
+                    <MediaTriggersEditor triggers={settings.mediaTriggers || []} onChange={v => upd('mediaTriggers', v)} />
+                  </div>
+
+                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
+                    <SectionHeader icon={<span className="text-lg">🔊</span>} title="Custom Suara per Nominal" color="bg-violet-500" />
+                    <p className="text-xs text-slate-400 font-medium mt-7 ml-[2px] mb-6">
+                      Atur file suara berbeda untuk tier nominal donasi tertentu. Sultan dapet sound kenceng? Bisa! 🎵
+                    </p>
+
+                    {/* ✅ Ganti input manual dengan SoundPicker */}
+                    <div className="mb-6">
+                      <SoundPicker
+                        label="Suara Default (semua donasi)"
+                        value={settings.soundUrl || ''}
+                        onChange={v => upd('soundUrl', v)}
                       />
-                  </div>
-                </div>
+                    </div>
 
-                {/* Card 2: Durasi Bertingkat */}
-                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100">
-                  <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
-                  <p className="text-xs text-slate-400 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p>
-                  <DurationTiersEditor tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
-                </div>
-
-                {/* Card 3: Media Alert */}
-                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100 space-y-7">
-                  <SectionHeader icon={<ImageIcon size={20} />} title="Izinkan Donor Kirim Media" color="bg-purple-500" />
-                  <MediaTriggersEditor triggers={settings.mediaTriggers || []} onChange={v => upd('mediaTriggers', v)} />
-                </div>
-
-                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100">
-                  <SectionHeader icon={<span className="text-lg">🔊</span>} title="Custom Suara per Nominal" color="bg-violet-500" />
-                  <p className="text-xs text-slate-400 font-medium mt-7 ml-[2px] mb-6">
-                    Atur file suara berbeda untuk tier nominal donasi tertentu. Sultan dapet sound kenceng? Bisa! 🎵
-                  </p>
-
-                  {/* ✅ Ganti input manual dengan SoundPicker */}
-                  <div className="mb-6">
-                    <SoundPicker
-                      label="Suara Default (semua donasi)"
-                      value={settings.soundUrl || ''}
-                      onChange={v => upd('soundUrl', v)}
-                    />
+                    <SoundTiersEditor tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
                   </div>
 
-                  <SoundTiersEditor tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
-                </div>
+                  {/* Card: Filter Kata Terlarang */}
+                  <BannedWordsEditor />
 
-                {/* Card: Filter Kata Terlarang */}
-                <BannedWordsEditor />
+                  {/* Card: Milestones */}
+                  <MilestonesEditor />
 
-                {/* Card: Milestones */}
-                <MilestonesEditor />
+                  {/* OBS URL + Simpan */}
+                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
+                    <div className="bg-slate-200 p-6 rounded-xl border-2 border-dashed border-slate-200 mb-8">
+                      <label className="block text-[10px] font-black bg-yellow-300 w-max text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
+                      <div className="flex gap-3">
+                        <input readOnly value={user.overlayUrl} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 font-bold outline-none overflow-hidden text-ellipsis" />
+                        <button onClick={() => copyToClipboard(user.overlayUrl)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
+                      </div>
+                    </div>
+                    <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-3 rounded-xl font-black text-lg hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
+                      <Save size={20} />
+                      {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
+                    </button>
+                  </div>
 
-                {/* OBS URL + Simpan */}
-                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100">
-                  <div className="bg-slate-200 p-6 rounded-xl border-2 border-dashed border-slate-200 mb-8">
-                    <label className="block text-[10px] font-black bg-yellow-300 w-max text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
-                    <div className="flex gap-3">
-                      <input readOnly value={user.overlayUrl} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 font-bold outline-none overflow-hidden text-ellipsis" />
-                      <button onClick={() => copyToClipboard(user.overlayUrl)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
+                  {/* Widget URLs untuk OBS */}
+                  <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 space-y-4">
+                    <div className="flex justify-between items-center gap-2 mb-5">
+                      <span className="text-xl font-black text-slate-900">Widget URLs untuk OBS</span>
+                      <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-[9px] font-black uppercase tracking-widest">Browser Source</span>
+                    </div>
+
+                    {[
+                      {
+                        label: 'Milestones',
+                        emoji: '🎯',
+                        path: 'milestones',
+                        desc: 'Progress bar target donasi',
+                        size: '400×280px',
+                      },
+                      {
+                        label: 'Leaderboard',
+                        emoji: '🏆',
+                        path: 'leaderboard',
+                        desc: 'Top 10 donor terbesar',
+                        size: '360×420px',
+                      },
+                      {
+                        label: 'QR Code',
+                        emoji: '◼',
+                        path: 'qrcode',
+                        desc: 'QR scan ke halaman donasi',
+                        size: '280×320px',
+                      },
+                      {
+                        label: 'Poll',
+                        emoji: '🗳️',
+                        path: 'poll',
+                        desc: 'Voting poll live',
+                        size: '420×300px',
+                      },
+                      {
+                        label: 'Subathon',
+                        emoji: '⏱',
+                        path: 'subathon',
+                        desc: 'Timer subathon',
+                        size: '360×180px',
+                      },
+                    ].map(({ label, emoji, path, desc, size }) => {
+                      const widgetUrl = `${window.location.origin}/widget/${user.overlayToken}/${path}`;
+                      return (
+                        <div key={path} className="flex items-center gap-4 bg-white rounded-xl p-4 border border-slate-300">
+                          <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-xl flex-shrink-0">
+                            {emoji}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-0.5">
+                              <span className="font-black text-slate-700 text-sm">{label}</span>
+                              <span className="text-[9px] text-slate-400 font-bold">{size}</span>
+                            </div>
+                            <p className="text-[10px] text-slate-400 font-medium truncate">{desc}</p>
+                            <p className="text-[10px] font-mono text-indigo-500 truncate mt-0.5">{widgetUrl}</p>
+                          </div>
+                          <button
+                            onClick={() => copyToClipboard(widgetUrl)}
+                            className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-200 hover:bg-indigo-100 hover:text-indigo-600 text-slate-500 rounded-xl transition-all flex-shrink-0">
+                            <Copy size={15} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                <section className="xl:col-span-5 z-[3]">
+                  <YouTubeLivePreview settings={settings} username={user.username} />
+                </section>
+              </motion.div>
+            )}
+
+            {/* ── HISTORY — sekarang pakai HistoryPage ── */}
+            {activeTab === 'history' && (
+              <motion.div key="history" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <HistoryPage />
+              </motion.div>
+            )}
+
+            {/* ── PROFILE ── */}
+            {activeTab === 'profile' && (
+              <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6 pb-6">
+                <div className="bg-indigo-600 rounded-xl px-6 py-6 text-white relative overflow-hidden">
+                  {/* <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-20 -mt-20 z-0" /> */}
+                  <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+                    <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center text-5xl font-black text-slate-900 shadow-xl">
+                      {user.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex-1 text-center md:text-left space-y-2">
+                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                        <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2>
+                        <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
+                      </div>
+                      <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
+                      <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
+                      <p className="text-slate-200 font-medium">{user.email}</p>
+                      {/* <div className="pt-2"><p className="text-[10px] font-black text-slate-200 uppercase tracking-widest">Account Status</p><p className="font-bold text-indigo-600">Active</p></div> */}
                     </div>
                   </div>
-                  <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-                    className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-3 rounded-2xl font-black text-lg hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
-                    <Save size={20} />
-                    {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
-                  </button>
                 </div>
-
-                {/* Widget URLs untuk OBS */}
-                <div className="bg-white rounded-2xl p-8 md:p-6 shadow-sm border border-slate-100 space-y-4">
-                  <div className="flex justify-between items-center gap-2 mb-5">
-                    <span className="text-xl font-black text-slate-900">Widget URLs untuk OBS</span>
-                    <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-[9px] font-black uppercase tracking-widest">Browser Source</span>
-                  </div>
-
-                  {[
-                    {
-                      label: 'Milestones',
-                      emoji: '🎯',
-                      path: 'milestones',
-                      desc: 'Progress bar target donasi',
-                      size: '400×280px',
-                    },
-                    {
-                      label: 'Leaderboard',
-                      emoji: '🏆',
-                      path: 'leaderboard',
-                      desc: 'Top 10 donor terbesar',
-                      size: '360×420px',
-                    },
-                    {
-                      label: 'QR Code',
-                      emoji: '◼',
-                      path: 'qrcode',
-                      desc: 'QR scan ke halaman donasi',
-                      size: '280×320px',
-                    },
-                    {
-                      label: 'Poll',
-                      emoji: '🗳️',
-                      path: 'poll',
-                      desc: 'Voting poll live',
-                      size: '420×300px',
-                    },
-                    {
-                      label: 'Subathon',
-                      emoji: '⏱',
-                      path: 'subathon',
-                      desc: 'Timer subathon',
-                      size: '360×180px',
-                    },
-                  ].map(({ label, emoji, path, desc, size }) => {
-                    const widgetUrl = `${window.location.origin}/widget/${user.overlayToken}/${path}`;
-                    return (
-                      <div key={path} className="flex items-center gap-4 bg-white rounded-2xl p-4 border border-slate-300">
-                        <div className="w-10 h-10 bg-slate-100 rounded-2xl flex items-center justify-center text-xl flex-shrink-0">
-                          {emoji}
+                <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+                  <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100">
+                    <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-indigo-500" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest ml-1">Link Halaman Donasi Kamu</label>
+                        <div className="flex gap-2">
+                          <input readOnly value={`${window.location.origin}/${user.username}`} className="flex-1 bg-indigo-50 border-2 border-indigo-100 rounded-xl p-5 font-mono text-sm text-indigo-600 font-bold outline-none" />
+                          <button onClick={() => copyToClipboard(`${window.location.origin}/${user.username}`)} className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-6 rounded-xl transition-all shadow-lg shadow-indigo-100 flex items-center justify-center active:scale-95"><Copy size={20} /></button>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-0.5">
-                            <span className="font-black text-slate-700 text-sm">{label}</span>
-                            <span className="text-[9px] text-slate-400 font-bold">{size}</span>
-                          </div>
-                          <p className="text-[10px] text-slate-400 font-medium truncate">{desc}</p>
-                          <p className="text-[10px] font-mono text-indigo-500 truncate mt-0.5">{widgetUrl}</p>
-                        </div>
+                        <p className="text-[10px] text-slate-400 font-bold mt-2 ml-1 italic">*Bagikan link ini di bio Instagram, TikTok, atau deskripsi YouTube kamu.</p>
+                      </div>
+                      <InputField
+                        label="Display Name"
+                        value={profileForm.username}
+                        placeholder="Nama di halaman donasi"
+                        onChange={v => setProfileForm(f => ({ ...f, username: v }))}
+                      />
+                      <InputField
+                        label="Email Address"
+                        type="email"
+                        value={profileForm.email}
+                        onChange={v => setProfileForm(f => ({ ...f, email: v }))}
+                      />
+                      <div className="md:col-span-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Bio Singkat</label>
+                        <textarea
+                          className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-xl font-bold outline-none focus:border-indigo-500 h-32 transition-all shadow-sm"
+                          placeholder="Ceritakan tentang kontenmu..."
+                          value={profileForm.bio}
+                          onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))}
+                        />
+                      </div>
+                      <div className="md:col-span-2">
                         <button
-                          onClick={() => copyToClipboard(widgetUrl)}
-                          className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-200 hover:bg-indigo-100 hover:text-indigo-600 text-slate-500 rounded-xl transition-all flex-shrink-0">
-                          <Copy size={15} />
+                          onClick={() => updateProfileMutation.mutate({
+                            username: profileForm.username,
+                            email: profileForm.email,
+                            bio: profileForm.bio,
+                          })}
+                          disabled={updateProfileMutation.isPending}
+                          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                          <Save size={18} />{updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Profil'}
                         </button>
                       </div>
-                    );
-                  })}
-                </div>
-              </section>
-
-              <section className="xl:col-span-5">
-                <YouTubeLivePreview settings={settings} username={user.username} />
-              </section>
-            </motion.div>
-          )}
-
-          {/* ── HISTORY — sekarang pakai HistoryPage ── */}
-          {activeTab === 'history' && (
-            <motion.div key="history" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <HistoryPage />
-            </motion.div>
-          )}
-
-          {/* ── PROFILE ── */}
-          {activeTab === 'profile' && (
-            <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6 pb-6">
-              <div className="bg-indigo-600 rounded-2xl px-6 py-6 text-white relative overflow-hidden">
-                {/* <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-20 -mt-20 z-0" /> */}
-                <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                  <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center text-5xl font-black text-slate-900 shadow-xl">
-                    {user.username.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="flex-1 text-center md:text-left space-y-2">
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                      <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2>
-                      <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
                     </div>
-                    <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]' />
-                    <img src="/jellyfish.png" alt="icon" className='absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]' />
-                    <p className="text-slate-200 font-medium">{user.email}</p>
-                    {/* <div className="pt-2"><p className="text-[10px] font-black text-slate-200 uppercase tracking-widest">Account Status</p><p className="font-bold text-indigo-600">Active</p></div> */}
                   </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
-                <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100">
-                  <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-indigo-500" />
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                    <div className="md:col-span-2">
-                      <label className="block text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest ml-1">Link Halaman Donasi Kamu</label>
-                      <div className="flex gap-2">
-                        <input readOnly value={`${window.location.origin}/${user.username}`} className="flex-1 bg-indigo-50 border-2 border-indigo-100 rounded-2xl p-5 font-mono text-sm text-indigo-600 font-bold outline-none" />
-                        <button onClick={() => copyToClipboard(`${window.location.origin}/${user.username}`)} className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-6 rounded-2xl transition-all shadow-lg shadow-indigo-100 flex items-center justify-center active:scale-95"><Copy size={20} /></button>
+                  {/* <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100">
+                    <SectionHeader icon={<ShieldCheck size={18} />} title="Keamanan" color="bg-red-500" />
+                    <div className="space-y-6 mt-10">
+                      <div className="space-y-4">
+                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Ganti Password</p>
+                        <input type="password" value={passwordForm.oldPassword} placeholder="Password Lama" className="w-full p-4 bg-blue-600/10 border border-black/10 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all text-sm" onChange={e => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })} />
+                        <input type="password" value={passwordForm.newPassword} placeholder="Password Baru" className="w-full p-4 bg-blue-600/10 border border-black/10 rounded-xl font-bold outline-none focus:border-indigo-500 transition-all text-sm" onChange={e => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} />
                       </div>
-                      <p className="text-[10px] text-slate-400 font-bold mt-2 ml-1 italic">*Bagikan link ini di bio Instagram, TikTok, atau deskripsi YouTube kamu.</p>
+                      <div className="pt-6 border-t border-slate-100">
+                        <button onClick={() => changePasswordMutation.mutate(passwordForm)} disabled={changePasswordMutation.isPending}
+                          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                          <Save size={18} />{changePasswordMutation.isPending ? 'Memproses...' : 'Update Password'}
+                        </button>
+                      </div>
                     </div>
-                    <InputField
-                      label="Display Name"
-                      value={profileForm.username}
-                      placeholder="Nama di halaman donasi"
-                      onChange={v => setProfileForm(f => ({ ...f, username: v }))}
-                    />
-                    <InputField
-                      label="Email Address"
-                      type="email"
-                      value={profileForm.email}
-                      onChange={v => setProfileForm(f => ({ ...f, email: v }))}
-                    />
-                    <div className="md:col-span-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Bio Singkat</label>
-                      <textarea
-                        className="w-full p-5 bg-slate-50 border-2 border-slate-50 rounded-2xl font-bold outline-none focus:border-indigo-500 h-32 transition-all shadow-sm"
-                        placeholder="Ceritakan tentang kontenmu..."
-                        value={profileForm.bio}
-                        onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))}
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <button
-                        onClick={() => updateProfileMutation.mutate({
-                          username: profileForm.username,
-                          email: profileForm.email,
-                          bio: profileForm.bio,
-                        })}
-                        disabled={updateProfileMutation.isPending}
-                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black transition-all flex items-center justify-center gap-2 disabled:opacity-70">
-                        <Save size={18} />{updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Profil'}
-                      </button>
-                    </div>
+                  </div> */}
+                </div>
+                <QrCodeCard username={user.username} />
+              </motion.div>
+            )}
+
+            {activeTab === 'wallet' && <WithdrawPage />}
+
+            {activeTab === 'admin' && isSuperAdmin && (
+              <motion.div key="admin" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><AdminWithdrawalPage /></motion.div>
+            )}
+
+            {activeTab === 'admin' && !isSuperAdmin && (
+              <motion.div key="forbidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-32 text-slate-400">
+                <p className="text-6xl mb-4">🔒</p>
+                <p className="font-black text-xl">Akses Ditolak</p>
+                <p className="font-medium text-sm mt-2">Halaman ini hanya untuk Super Admin</p>
+              </motion.div>
+            )}
+
+            {activeTab === 'poll' && (
+              <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <div className="w-full space-y-5">
+                  <div className="bg-white rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 space-y-6">
+                    <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
+                    <PollManager overlayToken={user.overlayToken} />
                   </div>
                 </div>
-                {/* <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100">
-                  <SectionHeader icon={<ShieldCheck size={18} />} title="Keamanan" color="bg-red-500" />
-                  <div className="space-y-6 mt-10">
-                    <div className="space-y-4">
-                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Ganti Password</p>
-                      <input type="password" value={passwordForm.oldPassword} placeholder="Password Lama" className="w-full p-4 bg-blue-600/10 border border-black/10 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all text-sm" onChange={e => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })} />
-                      <input type="password" value={passwordForm.newPassword} placeholder="Password Baru" className="w-full p-4 bg-blue-600/10 border border-black/10 rounded-2xl font-bold outline-none focus:border-indigo-500 transition-all text-sm" onChange={e => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} />
-                    </div>
-                    <div className="pt-6 border-t border-slate-100">
-                      <button onClick={() => changePasswordMutation.mutate(passwordForm)} disabled={changePasswordMutation.isPending}
-                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black transition-all flex items-center justify-center gap-2 disabled:opacity-70">
-                        <Save size={18} />{changePasswordMutation.isPending ? 'Memproses...' : 'Update Password'}
-                      </button>
-                    </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'subathon' && (
+              <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <div className="w-full space-y-5">
+                  <div className="bg-white rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 space-y-6">
+                    <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" />
+                    <SubathonManager overlayToken={user.overlayToken} />
                   </div>
-                </div> */}
-              </div>
-              <QrCodeCard username={user.username} />
-            </motion.div>
-          )}
-
-          {activeTab === 'wallet' && <WithdrawPage />}
-
-          {activeTab === 'admin' && isSuperAdmin && (
-            <motion.div key="admin" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><AdminWithdrawalPage /></motion.div>
-          )}
-          {activeTab === 'admin' && !isSuperAdmin && (
-            <motion.div key="forbidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-32 text-slate-400">
-              <p className="text-6xl mb-4">🔒</p>
-              <p className="font-black text-xl">Akses Ditolak</p>
-              <p className="font-medium text-sm mt-2">Halaman ini hanya untuk Super Admin</p>
-            </motion.div>
-          )}
-
-          {activeTab === 'poll' && (
-            <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="w-full space-y-5">
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
-                  <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
-                  <PollManager overlayToken={user.overlayToken} />
                 </div>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
 
-          {activeTab === 'subathon' && (
-            <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="w-full space-y-5">
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
-                  <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" />
-                  <SubathonManager overlayToken={user.overlayToken} />
+            {activeTab === 'leaderboard' && (
+              <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <div className="w-full space-y-5">
+                  <div className="bg-white rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 space-y-6">
+                    <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
+                    <LeaderboardSettings />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-          {activeTab === 'leaderboard' && (
-            <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="w-full space-y-5">
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
-                  <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
-                  <LeaderboardSettings />
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-        </AnimatePresence>
       </main>
 
       {isSidebarOpen && <div onClick={() => setIsSidebarOpen(false)} className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-50 lg:hidden" />}

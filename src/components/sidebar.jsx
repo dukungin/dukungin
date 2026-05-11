@@ -40,7 +40,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
   const menuItems = [
     { id: 'settings', label: 'Overlay Editor', icon: <Layout size={20} /> },
     { id: 'community', label: 'Community', icon: <Users size={20} /> },
-    { id: 'profile', label: 'My Profile', icon: <User size={20} /> },
+    // { id: 'profile', label: 'My Profile', icon: <User size={20} /> },
     { id: 'history', label: 'Donation History', icon: <History size={20} /> },
     { id: 'wallet', label: 'Withdrawal', icon: <Wallet size={20} /> },
     { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' },
@@ -100,16 +100,16 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
       {/* SIDEBAR ASIDE */}
       <aside className={`
-        fixed lg:sticky top-0 left-0 h-screen overflow-y-auto w-full md:w-70 bg-white border-r border-slate-100 py-8 px-6 z-[99999] md:z-[1] flex flex-col transition-transform duration-300
+        fixed lg:sticky top-0 left-0 h-screen overflow-y-auto w-full md:w-70 bg-white border-r border-slate-100 py-4 px-6 z-[99999] md:z-[1] flex flex-col transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* LOGO AREA */}
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center justify-between mb-13">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
               <img src="/jellyfish.png" alt="icon" className='w-[60%]' />
             </div>
-            <h1 className="text-xl font-black tracking-tight text-slate-800">SAWER.IN</h1>
+            <h1 className="text-lg font-black tracking-tight text-slate-800">SAWER.IN</h1>
           </div>
           <button onClick={() => setIsSidebarOpen(false)} className="cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500">
             <X size={30} />
@@ -164,7 +164,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         </nav>
 
         {/* LOGOUT BUTTON */}
-        <button 
+        {/* <button 
           onClick={() => setShowLogoutConfirm(true)} // Pemicu modal
           className="flex items-center gap-4 p-4 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black mt-auto transition-all"
         >
@@ -172,7 +172,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
           <p className='text-sm ml-[3px]'>
             Keluar
           </p>
-        </button>
+        </button> */}
       </aside>
     </>
   );

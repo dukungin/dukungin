@@ -442,7 +442,7 @@ export const SubathonManager = ({ overlayToken }) => {
           <p className="text-white/60 text-xs font-black uppercase tracking-widest mb-3">
             {localTimer.title || 'Subathon Timer'}
           </p>
-          <div className={`text-6xl font-black text-white tracking-tight font-mono transition-all ${!isRunning ? 'opacity-60' : ''}`}>
+          <div className={`text-4xl nd:text-6xl font-black text-white tracking-tight font-mono transition-all ${!isRunning ? 'opacity-60' : ''}`}>
             {formatSeconds(displaySeconds)}
           </div>
           <p className="text-white/50 text-xs font-medium mt-3">
@@ -463,11 +463,11 @@ export const SubathonManager = ({ overlayToken }) => {
       </div>
 
       {/* Kontrol Utama */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <button
           onClick={() => isRunning ? pauseMutation.mutate() : startMutation.mutate()}
           disabled={startMutation.isPending || pauseMutation.isPending}
-          className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-2 py-4 rounded-2xl font-black text-sm transition-all disabled:opacity-60 ${
+          className={`cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-4 rounded-2xl font-black text-sm transition-all disabled:opacity-60 ${
             isRunning
               ? 'bg-amber-500 hover:bg-amber-600 text-white'
               : 'bg-green-500 hover:bg-green-600 text-white'
@@ -478,14 +478,14 @@ export const SubathonManager = ({ overlayToken }) => {
         <button
           onClick={() => { if (window.confirm('Reset timer ke waktu awal?')) resetMutation.mutate(); }}
           disabled={resetMutation.isPending}
-          className="cursor-pointer active:scale-[0.97] flex flex-col items-center gap-2 py-4 rounded-2xl font-black text-sm bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all disabled:opacity-60">
+          className="cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-4 rounded-2xl font-black text-sm bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all disabled:opacity-60">
           <RotateCcw size={20} />
           Reset
         </button>
         <button
           onClick={() => addTimeMutation.mutate(manualAdd)}
           disabled={addTimeMutation.isPending}
-          className="cursor-pointer active:scale-[0.97] flex flex-col items-center gap-2 py-4 rounded-2xl font-black text-sm bg-indigo-600 hover:bg-indigo-700 text-white transition-all disabled:opacity-60">
+          className="cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-4 rounded-2xl font-black text-sm bg-indigo-600 hover:bg-indigo-700 text-white transition-all disabled:opacity-60">
           <Plus size={20} />
           +{formatSeconds(manualAdd)}
         </button>
