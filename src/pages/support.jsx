@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import {
+    AtSign,
     Clock,
     Code2,
     ExternalLink,
-    Github,
+    GitBranch,
     Globe,
-    HeadphonesIcon,
-    Instagram,
-    Linkedin,
+    Headphones,
+    Link2,
+    Link,
     Mail,
     MapPin,
     MessageCircle,
@@ -15,8 +16,9 @@ import {
     Send,
     Shield,
     Sparkles,
-    Twitter,
 } from 'lucide-react';
+
+// ── Note: replaced Github→GitBranch, Instagram→AtSign, HeadphonesIcon→Headphones
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -33,9 +35,8 @@ const DEVELOPER = {
   whatsapp: '+62 812-3456-7890',
   phone: '+62 812-3456-7890',
   github: 'github.com/ahmadrizky',
-  linkedin: 'linkedin.com/in/ahmadrizky',
+  Link: 'Link.com/in/ahmadrizky',
   instagram: '@ahmadrizky.dev',
-  twitter: '@ahmadrizkydev',
   website: 'ahmadrizky.dev',
   location: 'Jakarta, Indonesia',
   timezone: 'WIB (UTC+7)',
@@ -49,7 +50,6 @@ const PLATFORM = {
   emailBiz: 'business@sawerapp.id',
   whatsapp: '+62 878-9012-3456',
   instagram: '@sawer.id',
-  twitter: '@sawerid',
   website: 'sawerapp.id',
   location: 'Jakarta Selatan, Indonesia',
   address: 'Jl. Sudirman No. 123, Lantai 8, Jakarta Selatan 12190',
@@ -78,56 +78,45 @@ const ContactCard = ({ icon, label, value, href, mono = false }) => (
   </a>
 );
 
-const SectionTitle = ({ label, title, desc }) => (
-  <div className="mb-8">
-    <span className="inline-flex items-center gap-1.5 text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-3">
-      <span className="w-4 h-[2px] bg-indigo-400 rounded-full" />
-      {label}
-    </span>
-    <h2 className="text-2xl font-black text-slate-800 tracking-tight mb-2">{title}</h2>
-    {desc && <p className="text-sm text-slate-500 font-medium leading-relaxed">{desc}</p>}
-  </div>
-);
-
 export const ContactPage = () => {
   return (
     <div className="min-h-screen bg-[#f9fafb]">
 
       {/* Hero */}
       <motion.div
-        // {...fadeUp(0)}
         className="relative overflow-hidden rounded-3xl mx-0 mb-8 px-8 py-12"
         style={{
           background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
         }}
       >
-        {/* Decorative circles */}
         <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full border border-white/5" />
         <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full border border-white/5" />
         <div className="absolute top-8 right-40 w-3 h-3 rounded-full bg-indigo-400/30" />
-        <div className="absolute bottom-12 right-24 w-1.5 h-1.5 rounded-full bg-purple-400/40" />
+        {/* <div className="absolute bottom-12 right-24 w-1.5 h-1.5 rounded-full bg-purple-400/40" /> */}
 
-        <div className="relative z-10 max-w-2xl">
+        <div className="relative z-10 max-w-full">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
-              <HeadphonesIcon size={16} className="text-white/80" />
+              <Headphones size={16} className="text-white/80" />
             </div>
             <span className="text-white/50 text-xs font-black uppercase tracking-widest">Bantuan & Kontak</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-3">
-            Ada yang bisa<br />kami bantu?
+            Ada yang bisa ManMinMun bantu 🥸 ?
           </h1>
           <p className="text-white/50 text-sm font-medium leading-relaxed">
             Tim kami siap membantu kamu. Hubungi developer atau admin platform melalui kanal yang tersedia di bawah.
           </p>
+
+          <img src="/jellyfish.png" alt="icon" className='w-[16%] opacity-90 absolute top-[10%] right-[-60px] -rotate-40' />
         </div>
 
-        {/* Stats row */}
-        <div className="relative z-10 grid grid-cols-3 gap-4 mt-10 pt-8 border-t border-white/10">
+        <div className="relative z-10 grid grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">
           {[
-            { val: '< 1 Jam',  label: 'Avg. Response' },
+            { val: '1x24 Jam',  label: 'Avg. Response' },
             { val: '98%',      label: 'Resolved Tickets' },
             { val: '24/7',     label: 'System Monitor' },
+            { val: '2026',     label: 'New Generation' },
           ].map((s, i) => (
             <div key={i}>
               <p className="text-xl font-black text-white">{s.val}</p>
@@ -142,7 +131,6 @@ export const ContactPage = () => {
         {/* ── Developer Section ── */}
         <motion.div {...fadeUp(0.05)} className="bg-white rounded-3xl border border-slate-100 overflow-hidden">
 
-          {/* Header card */}
           <div className="px-8 pt-8 pb-6 border-b border-slate-50">
             <div className="flex items-start gap-5">
               <div
@@ -169,30 +157,32 @@ export const ContactPage = () => {
             <div>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Kontak Langsung</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<Mail size={16} />} label="Email" value={DEVELOPER.email} href={`mailto:${DEVELOPER.email}`} />
+                <ContactCard icon={<Mail size={16} />}        label="Email"     value={DEVELOPER.email}    href={`mailto:${DEVELOPER.email}`} />
                 <ContactCard icon={<MessageCircle size={16} />} label="WhatsApp" value={DEVELOPER.whatsapp} href={`https://wa.me/${DEVELOPER.whatsapp.replace(/\D/g, '')}`} />
-                <ContactCard icon={<Phone size={16} />} label="Telepon" value={DEVELOPER.phone} href={`tel:${DEVELOPER.phone.replace(/\D/g, '')}`} />
-                <ContactCard icon={<Globe size={16} />} label="Website" value={DEVELOPER.website} href={`https://${DEVELOPER.website}`} />
+                <ContactCard icon={<Phone size={16} />}       label="Telepon"   value={DEVELOPER.phone}    href={`tel:${DEVELOPER.phone.replace(/\D/g, '')}`} />
+                <ContactCard icon={<Globe size={16} />}       label="Website"   value={DEVELOPER.website}  href={`https://${DEVELOPER.website}`} />
               </div>
             </div>
 
             <div>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Media Sosial</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<Github size={16} />} label="GitHub" value={DEVELOPER.github} href={`https://${DEVELOPER.github}`} mono />
-                <ContactCard icon={<Linkedin size={16} />} label="LinkedIn" value={DEVELOPER.linkedin} href={`https://${DEVELOPER.linkedin}`} />
-                <ContactCard icon={<Instagram size={16} />} label="Instagram" value={DEVELOPER.instagram} href={`https://instagram.com/${DEVELOPER.instagram.replace('@', '')}`} />
-                <ContactCard icon={<Twitter size={16} />} label="Twitter / X" value={DEVELOPER.twitter} href={`https://twitter.com/${DEVELOPER.twitter.replace('@', '')}`} />
+                {/* Github → GitBranch */}
+                <ContactCard icon={<GitBranch size={16} />}  label="GitHub"       value={DEVELOPER.github}    href={`https://${DEVELOPER.github}`} mono />
+                {/* Link → Link2 */}
+                <ContactCard icon={<Link2 size={16} />}      label="Link"     value={DEVELOPER.Link}  href={`https://${DEVELOPER.Link}`} />
+                {/* Instagram → AtSign */}
+                <ContactCard icon={<AtSign size={16} />}     label="Instagram"    value={DEVELOPER.instagram} href={`https://instagram.com/${DEVELOPER.instagram.replace('@', '')}`} />
               </div>
             </div>
 
             <div>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Informasi Lain</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<MapPin size={16} />} label="Lokasi" value={DEVELOPER.location} />
-                <ContactCard icon={<Clock size={16} />} label="Timezone" value={DEVELOPER.timezone} />
-                <ContactCard icon={<Clock size={16} />} label="Jam Tersedia" value={DEVELOPER.availableHours} />
-                <ContactCard icon={<Code2 size={16} />} label="Spesialisasi" value="Fullstack · React · Node.js" />
+                <ContactCard icon={<MapPin size={16} />} label="Lokasi"        value={DEVELOPER.location} />
+                <ContactCard icon={<Clock size={16} />}  label="Timezone"      value={DEVELOPER.timezone} />
+                <ContactCard icon={<Clock size={16} />}  label="Jam Tersedia"  value={DEVELOPER.availableHours} />
+                <ContactCard icon={<Code2 size={16} />}  label="Spesialisasi"  value="Fullstack · React · Node.js" />
               </div>
             </div>
 
@@ -202,7 +192,6 @@ export const ContactPage = () => {
         {/* ── Platform Section ── */}
         <motion.div {...fadeUp(0.1)} className="bg-white rounded-3xl border border-slate-100 overflow-hidden">
 
-          {/* Header */}
           <div className="px-8 pt-8 pb-6 border-b border-slate-50">
             <div className="flex items-start gap-5">
               <div
@@ -232,28 +221,27 @@ export const ContactPage = () => {
             <div>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Kontak Support</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<Mail size={16} />} label="Email Support" value={PLATFORM.email} href={`mailto:${PLATFORM.email}`} />
-                <ContactCard icon={<Mail size={16} />} label="Email Bisnis" value={PLATFORM.emailBiz} href={`mailto:${PLATFORM.emailBiz}`} />
+                <ContactCard icon={<Mail size={16} />}          label="Email Support"  value={PLATFORM.email}    href={`mailto:${PLATFORM.email}`} />
+                <ContactCard icon={<Mail size={16} />}          label="Email Bisnis"   value={PLATFORM.emailBiz} href={`mailto:${PLATFORM.emailBiz}`} />
                 <ContactCard icon={<MessageCircle size={16} />} label="WhatsApp Admin" value={PLATFORM.whatsapp} href={`https://wa.me/${PLATFORM.whatsapp.replace(/\D/g, '')}`} />
-                <ContactCard icon={<Globe size={16} />} label="Website" value={PLATFORM.website} href={`https://${PLATFORM.website}`} />
+                <ContactCard icon={<Globe size={16} />}         label="Website"        value={PLATFORM.website}  href={`https://${PLATFORM.website}`} />
               </div>
             </div>
 
             <div>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Media Sosial Platform</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<Instagram size={16} />} label="Instagram" value={PLATFORM.instagram} href={`https://instagram.com/${PLATFORM.instagram.replace('@', '')}`} />
-                <ContactCard icon={<Twitter size={16} />} label="Twitter / X" value={PLATFORM.twitter} href={`https://twitter.com/${PLATFORM.twitter.replace('@', '')}`} />
+                <ContactCard icon={<AtSign size={16} />} label="Instagram"   value={PLATFORM.instagram} href={`https://instagram.com/${PLATFORM.instagram.replace('@', '')}`} />
               </div>
             </div>
 
             <div>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Informasi Operasional</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<Clock size={16} />} label="Jam Operasional" value={PLATFORM.operationalHours} />
-                <ContactCard icon={<Send size={16} />} label="Waktu Respons" value={PLATFORM.responseTime} />
-                <ContactCard icon={<MapPin size={16} />} label="Alamat" value={PLATFORM.address} />
-                <ContactCard icon={<Shield size={16} />} label="Berdiri Sejak" value={PLATFORM.established} />
+                <ContactCard icon={<Clock size={16} />}  label="Jam Operasional" value={PLATFORM.operationalHours} />
+                <ContactCard icon={<Send size={16} />}   label="Waktu Respons"   value={PLATFORM.responseTime} />
+                <ContactCard icon={<MapPin size={16} />} label="Alamat"          value={PLATFORM.address} />
+                <ContactCard icon={<Shield size={16} />} label="Berdiri Sejak"   value={PLATFORM.established} />
               </div>
             </div>
 
@@ -265,11 +253,11 @@ export const ContactPage = () => {
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-5">Pertanyaan Umum</p>
           <div className="space-y-3">
             {[
-              { q: 'Berapa lama proses penarikan dana?',           a: 'Proses penarikan manual dilakukan admin dalam 1×24 jam di hari kerja.' },
-              { q: 'Apakah ada biaya untuk membuat akun?',         a: 'Tidak. TapTipTup gratis untuk semua streamer. Kami hanya mengambil fee kecil per transaksi.' },
-              { q: 'Bagaimana cara pasang widget di OBS?',         a: 'Salin Widget URL dari menu Editor Overlay lalu tambahkan sebagai Browser Source di OBS.' },
-              { q: 'Kenapa donasi saya belum masuk?',              a: 'Pastikan status pembayaran sudah Settlement di Midtrans. Jika sudah 1 jam belum masuk, hubungi support.' },
-              { q: 'Apakah bisa ganti metode pembayaran?',         a: 'Semua metode pembayaran Midtrans tersedia: QRIS, transfer bank, e-wallet, kartu kredit.' },
+              { q: 'Berapa lama proses penarikan dana?',     a: 'Proses penarikan manual dilakukan admin dalam 1×24 jam di hari kerja.' },
+              { q: 'Apakah ada biaya untuk membuat akun?',   a: 'Tidak. TapTipTup gratis untuk semua streamer. Kami hanya mengambil fee kecil per transaksi.' },
+              { q: 'Bagaimana cara pasang widget di OBS?',   a: 'Salin Widget URL dari menu Editor Overlay lalu tambahkan sebagai Browser Source di OBS.' },
+              { q: 'Kenapa donasi saya belum masuk?',        a: 'Pastikan status pembayaran sudah Settlement di Midtrans. Jika sudah 1 jam belum masuk, hubungi support.' },
+              { q: 'Apakah bisa ganti metode pembayaran?',   a: 'Semua metode pembayaran Midtrans tersedia: QRIS, transfer bank, e-wallet, kartu kredit.' },
             ].map((item, i) => (
               <div key={i} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
                 <p className="text-sm font-black text-slate-700">{item.q}</p>

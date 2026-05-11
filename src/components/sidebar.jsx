@@ -44,7 +44,8 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' },
     { id: 'subathon', icon: <Timer size={20} />,   label: 'Subathon' },
     { id: 'milestones', icon: <TrendingUp size={20} />, label: 'Milestones' },
-    { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' }
+    { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' },
+    { id: 'ghostAlert', icon: <Zap size={20} />, label: 'Admin Notif' }
   ];
 
   return (

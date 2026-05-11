@@ -29,6 +29,7 @@ import { TopNavbar } from '../components/topNavbar';
 import { WithdrawPage } from './withdrawPage';
 import { showSessionExpiredModal } from '../lib/sessionModal';
 import { ContactPage } from './support';
+import GhostAlertPage from './ghotAlert';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -144,7 +145,7 @@ const formatDate = (dateStr) => {
 
 // ─── BannedWordsEditor ────────────────────────────────────────────────────────
 
-const BannedWordsEditor = () => {
+const BannedWordsEditor = ({saveSettingsMutation}) => {
   const queryClient = useQueryClient();
   const [input, setInput] = useState('');
   const [localAction, setLocalAction] = useState('block');
@@ -287,6 +288,11 @@ const BannedWordsEditor = () => {
                 ))}
               </div>
             )}
+             <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+              className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-4 rounded-xl font-black text-sm hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
+              <Save size={20} />
+              {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}
+            </button>
       </div>
     </div>
   );
@@ -479,7 +485,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
   );
 };
 
-const SoundTiersEditor = ({ tiers = [], onChange }) => {
+const SoundTiersEditor = ({ tiers = [], onChange, saveSettingsMutation }) => {
   const add    = () => onChange([...tiers, { minAmount: 50000, maxAmount: null, soundUrl: '', label: '' }]);
   const remove = (i) => onChange(tiers.filter((_, idx) => idx !== i));
   const upd    = (i, key, val) => onChange(tiers.map((t, idx) =>
@@ -519,6 +525,11 @@ const SoundTiersEditor = ({ tiers = [], onChange }) => {
         className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Suara per Nominal
       </button>
+       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-4 rounded-xl font-black text-sm hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
+          <Save size={20} />
+          {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Audio Terbaru'}
+        </button>
     </div>
   );
 };
@@ -877,7 +888,7 @@ const AdminWithdrawalPage = () => {
 
 // ─── DurationTiersEditor ──────────────────────────────────────────────────────
 
-const DurationTiersEditor = ({ tiers, onChange }) => {
+const DurationTiersEditor = ({ tiers, onChange, saveSettingsMutation }) => {
   const addTier    = () => onChange([...tiers, { minAmount: 0, maxAmount: null, duration: 10 }]);
   const removeTier = (i) => onChange(tiers.filter((_, idx) => idx !== i));
   const updateTier = (i, key, val) => onChange(tiers.map((t, idx) => idx === i ? { ...t, [key]: val === '' ? null : Number(val) } : t));
@@ -912,13 +923,18 @@ const DurationTiersEditor = ({ tiers, onChange }) => {
         className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Ketentuan Durasi
       </button>
+       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-4 rounded-xl font-black text-sm hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
+          <Save size={20} />
+          {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Durasi Terbaru'}
+        </button>
     </div>
   );
 };
 
 // ─── MediaTriggersEditor ──────────────────────────────────────────────────────
 
-const MediaTriggersEditor = ({ triggers, onChange }) => {
+const MediaTriggersEditor = ({ triggers, onChange, saveSettingsMutation }) => {
   const add    = () => onChange([...triggers, { minAmount: 50000, mediaType: 'both', label: '' }]);
   const remove = (i) => onChange(triggers.filter((_, idx) => idx !== i));
   const update = (i, key, val) => onChange(triggers.map((t, idx) => idx === i ? { ...t, [key]: val } : t));
@@ -1008,6 +1024,11 @@ const MediaTriggersEditor = ({ triggers, onChange }) => {
       <button onClick={add}
         className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Ketentuan Media Alert
+      </button>
+       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-4 rounded-xl font-black text-sm hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
+        <Save size={20} />
+        {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Izin Media'}
       </button>
     </div>
   );
@@ -2067,17 +2088,23 @@ const DashboardStreamer = () => {
                         onChange={v => { const alpha = settings.borderColor?.slice(7, 9) || '26'; upd('borderColor', `${v}${alpha}`); }}
                       />
                     </div>
+
+                    <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-4 rounded-xl font-black text-sm hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
+                      <Save size={20} />
+                      {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}
+                    </button>
                   </div>
 
                   <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
                     <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
                     <p className="text-xs text-slate-400 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p>
-                    <DurationTiersEditor tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
+                    <DurationTiersEditor saveSettingsMutation={saveSettingsMutation} tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
                   </div>
 
                   <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 space-y-7">
                     <SectionHeader icon={<ImageIcon size={20} />} title="Izinkan Donor Kirim Media" color="bg-purple-500" />
-                    <MediaTriggersEditor triggers={settings.mediaTriggers || []} onChange={v => upd('mediaTriggers', v)} />
+                    <MediaTriggersEditor saveSettingsMutation={saveSettingsMutation} triggers={settings.mediaTriggers || []} onChange={v => upd('mediaTriggers', v)} />
                   </div>
 
                   <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
@@ -2088,10 +2115,10 @@ const DashboardStreamer = () => {
                     <div className="mb-6 md:mt-0 mt-5">
                       <SoundPicker label="Suara Default (semua donasi)" value={settings.soundUrl || ''} onChange={v => upd('soundUrl', v)} />
                     </div>
-                    <SoundTiersEditor tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
+                    <SoundTiersEditor saveSettingsMutation={saveSettingsMutation} tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
                   </div>
 
-                  <BannedWordsEditor />
+                  <BannedWordsEditor saveSettingsMutation={saveSettingsMutation} />
                   <MilestonesEditor />
 
                   <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
@@ -2103,7 +2130,7 @@ const DashboardStreamer = () => {
                       </div>
                     </div>
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-3 rounded-xl font-black text-lg hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
+                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 text-white py-4 rounded-xl font-black text-sm hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 disabled:opacity-70 flex items-center justify-center gap-2">
                       <Save size={20} />
                       {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                     </button>
@@ -2214,6 +2241,7 @@ const DashboardStreamer = () => {
             )}
 
             {activeTab === 'wallet' && <WithdrawPage />}
+            {activeTab === 'ghostAlert' && isSuperAdmin && <GhostAlertPage />}
 
             {activeTab === 'admin' && isSuperAdmin && (
               <motion.div 

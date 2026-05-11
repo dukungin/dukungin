@@ -12,6 +12,7 @@ const TAB_LABELS = {
   leaderboard: 'Leaderboard',
   milestones:  'Milestones',
   community:   'Komunitas',
+  contact: 'Bantuan & Kontak',
   admin:       'Permintaan Penarikan',
 };
 
@@ -66,19 +67,19 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab }
           {/* Komunitas */}
           <button
             onClick={() => setActiveTab('community')}
-            className="cursor-pointer h-[38px] active:scale-[0.97] relative flex items-center gap-2 px-3.5 py-3 rounded-xl font-medium text-md overflow-hidden"
+            className="cursor-pointer hover:brightness-90 h-[38px] active:scale-[0.97] relative flex items-center gap-2 px-3.5 py-3 rounded-xl font-medium text-md overflow-hidden"
             style={{
               background: 'linear-gradient(90deg, #0f0c29, #302b63, #24243e, #0f0c29)',
               backgroundSize: '300% 100%',
-              animation: 'rainbowSlide 6s ease-in-out infinite',
+              animation: 'rainbowSlide 3s ease-in-out infinite',
               boxShadow: '0 0 12px 1px rgba(48,43,99,0.4)',
             }}>
             <span
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: 'linear-gradient(118deg, transparent 35%, rgba(255,255,255,0.09) 50%, transparent 65%)',
+                background: 'linear-gradient(118deg, transparent 95%, rgba(255,255,255,0.1) 90%, transparent 85%)',
                 backgroundSize: '250% 100%',
-                animation: 'shimmerSlide 5s ease-in-out infinite',
+                animation: 'shimmerSlide 3s ease-in-out infinite',
               }}
             />
             <Users size={16} className="relative z-10 text-white/90" />
