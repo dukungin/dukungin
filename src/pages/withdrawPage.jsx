@@ -159,7 +159,7 @@ export const WithdrawPage = () => {
         </h2>
 
         {/* Aturan singkat */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
           {[
             { label: 'Min. Tarik',   value: `Rp ${MIN_TARIK.toLocaleString('id-ID')}`  },
             { label: 'Maks. Tarik',  value: `Rp ${(MAX_TARIK/1000000).toFixed(0)}jt`   },
@@ -172,7 +172,7 @@ export const WithdrawPage = () => {
         </div>
 
         {/* Method selector */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
           {[
             { id: 'BANK',  label: 'Transfer Bank',  icon: <CreditCard size={18} /> },
             { id: 'DANA',  label: 'E-Wallet DANA',  icon: <Smartphone size={18} /> },
