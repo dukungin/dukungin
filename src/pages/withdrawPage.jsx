@@ -1,7 +1,3 @@
-// ─── WithdrawPage ─────────────────────────────────────────────────────────────
-// Komponen lengkap: form penarikan + riwayat withdrawal streamer
-// Validasi: saldo min 20k, tarik min 10k, tarik maks 10juta, fee 5k
-
 import { CheckCircle2, Clock, XCircle, ArrowRight, CreditCard, Smartphone, Wallet, RefreshCw } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
@@ -24,34 +20,31 @@ const formatDate = (dateStr) => {
   });
 };
 
-const STATUS_CONFIG = {
-  PENDING: {
-    label: 'Menunggu',
-    icon: <Clock size={13} />,
-    className: 'bg-amber-50 text-amber-600 border border-amber-200',
-  },
-  COMPLETED: {
-    label: 'Berhasil',
-    icon: <CheckCircle2 size={13} />,
-    className: 'bg-green-50 text-green-600 border border-green-200',
-  },
-  FAILED: {
-    label: 'Ditolak',
-    icon: <XCircle size={13} />,
-    className: 'bg-red-50 text-red-500 border border-red-200',
-  },
+const formatRupiah = (num) => {
+  return new Intl.NumberFormat('id-ID').format(Math.round(num));
 };
 
-// Aturan validasi terpusat
+const STATUS_CONFIG = {
+  PENDING:   { label: 'Menunggu', icon: <Clock size={13} />, className: 'bg-amber-50 text-amber-600 border border-amber-200' },
+  COMPLETED: { label: 'Berhasil', icon: <CheckCircle2 size={13} />, className: 'bg-green-50 text-green-600 border border-green-200' },
+  FAILED:    { label: 'Ditolak',  icon: <XCircle size={13} />, className: 'bg-red-50 text-red-500 border border-red-200' },
+};
+
 const MIN_TARIK    = 10000;
 const MAX_TARIK    = 10000000;
 const MIN_SALDO    = 20000;
-const FEE_ADMIN    = 5000;
+const FEE_PERCENT  = 0.025; // 2.5%
 
 export const WithdrawPage = () => {
   const queryClient = useQueryClient();
   const [method, setMethod]     = useState('BANK');
-  const [formData, setFormData] = useState({ amount: '', channelCode: 'BCA', accountNumber: '', accountName: '' });
+  const [formData, setFormData] = useState({ 
+    amount: '', 
+    formattedAmount: '', 
+    channelCode: 'BCA', 
+    accountNumber: '', 
+    accountName: '' 
+    });
   const [historyPage, setHistoryPage] = useState(1);
 
   const { data: profileData } = useQuery({ queryKey: ['profile'], queryFn: fetchProfile, refetchInterval: 30000 });
@@ -67,44 +60,50 @@ export const WithdrawPage = () => {
   const withdrawals = historyData?.withdrawals || [];
   const pagination  = historyData?.pagination  || {};
 
-  // Stats dari semua data halaman ini (bukan semua waktu)
-  const statsPending   = withdrawals.filter(w => w.status === 'PENDING').length;
-  const statsCompleted = withdrawals.filter(w => w.status === 'COMPLETED').reduce((s, w) => s + w.amount, 0);
-  const statsFailed    = withdrawals.filter(w => w.status === 'FAILED').length;
-
   const withdrawMutation = useMutation({
     mutationFn: postWithdraw,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
       queryClient.invalidateQueries({ queryKey: ['withdrawHistory'] });
-      setFormData({ amount: '', channelCode: method === 'BANK' ? 'BCA' : method, accountNumber: '', accountName: '' });
+      setFormData({ 
+        amount: '', 
+        formattedAmount: '', 
+        channelCode: method === 'BANK' ? 'BCA' : method, 
+        accountNumber: '', 
+        accountName: '' 
+      });
     },
     onError: (err) => alert(err.response?.data?.message || 'Terjadi kesalahan'),
   });
 
-  const handleSubmit = () => {
-    const amt = parseFloat(formData.amount);
+  const amt = parseFloat(formData.amount) || 0;
+  const fee = Math.round(amt * FEE_PERCENT);
+  const totalDeduct = amt;                    // saldo yang dipotong
+  const netAmount = amt - fee;                // yang diterima user
 
+  const handleSubmit = () => {
     if (!formData.amount || isNaN(amt) || amt <= 0)
       return alert('Masukkan nominal yang valid');
+
     if (balance < MIN_SALDO)
-      return alert(`Saldo minimum untuk melakukan penarikan adalah Rp ${MIN_SALDO.toLocaleString('id-ID')}`);
+      return alert(`Saldo minimum untuk penarikan adalah Rp ${formatRupiah(MIN_SALDO)}`);
+
     if (amt < MIN_TARIK)
-      return alert(`Minimal penarikan adalah Rp ${MIN_TARIK.toLocaleString('id-ID')}`);
+      return alert(`Minimal penarikan adalah Rp ${formatRupiah(MIN_TARIK)}`);
+
     if (amt > MAX_TARIK)
-      return alert(`Maksimal penarikan adalah Rp ${MAX_TARIK.toLocaleString('id-ID')} per transaksi`);
-    if (amt + FEE_ADMIN > balance)
-      return alert(`Saldo tidak mencukupi. Dibutuhkan Rp ${(amt + FEE_ADMIN).toLocaleString('id-ID')} (termasuk biaya admin Rp ${FEE_ADMIN.toLocaleString('id-ID')})`);
+      return alert(`Maksimal penarikan adalah Rp ${formatRupiah(MAX_TARIK)} per transaksi`);
+
+    if (totalDeduct > balance)
+      return alert(`Saldo tidak mencukupi. Total yang dibutuhkan Rp ${formatRupiah(totalDeduct)} (termasuk fee 2.5%)`);
+
     if (!formData.accountNumber || !formData.accountName)
-      return alert('Lengkapi data rekening terlebih dahulu');
+      return alert('Lengkapi data rekening / e-wallet');
 
     withdrawMutation.mutate({ ...formData, paymentMethod: method });
   };
 
-  const amt = parseFloat(formData.amount) || 0;
-  const totalDeduct = amt + FEE_ADMIN;
-  const sisaSaldo = balance - totalDeduct;
-  const canSubmit = balance >= MIN_SALDO;
+  const canSubmit = balance >= MIN_SALDO && amt >= MIN_TARIK;
 
   return (
     <motion.div className="w-full mx-auto space-y-5 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
@@ -160,9 +159,8 @@ export const WithdrawPage = () => {
         </h2>
 
         {/* Aturan singkat */}
-        <div className="grid grid-cols-3 gap-2 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
           {[
-            { label: 'Min. Saldo',   value: `Rp ${MIN_SALDO.toLocaleString('id-ID')}`  },
             { label: 'Min. Tarik',   value: `Rp ${MIN_TARIK.toLocaleString('id-ID')}`  },
             { label: 'Maks. Tarik',  value: `Rp ${(MAX_TARIK/1000000).toFixed(0)}jt`   },
           ].map(r => (
@@ -174,7 +172,7 @@ export const WithdrawPage = () => {
         </div>
 
         {/* Method selector */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-3 gap-3 mb-6">
           {[
             { id: 'BANK',  label: 'Transfer Bank',  icon: <CreditCard size={18} /> },
             { id: 'DANA',  label: 'E-Wallet DANA',  icon: <Smartphone size={18} /> },
@@ -230,57 +228,70 @@ export const WithdrawPage = () => {
 
           {/* Nominal */}
           <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nominal yang Ingin Ditarik (IDR)</label>
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Nominal Penarikan (Rp)
+            </label>
+            
             <div className="relative">
-              <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-white text-sm">Rp</span>
-              <input
-                type="number"
-                min={MIN_TARIK}
-                max={MAX_TARIK}
-                value={formData.amount}
+                <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-slate-400">Rp</span>
+                
+                <input
+                type="text"
+                value={formData.formattedAmount || ''}
                 placeholder="0"
                 className="w-full px-6 py-4 pl-14 bg-slate-900 text-white rounded-xl font-bold text-xl outline-none focus:ring-4 ring-indigo-100 transition-all"
-                onChange={e => setFormData({ ...formData, amount: e.target.value })} />
+                onChange={(e) => {
+                    let value = e.target.value.replace(/[^0-9]/g, '');
+                    
+                    if (value === '') {
+                    setFormData(prev => ({ ...prev, amount: '', formattedAmount: '' }));
+                    return;
+                    }
+
+                    const numericValue = parseInt(value, 10);
+
+                    setFormData(prev => ({
+                    ...prev,
+                    amount: numericValue.toString(),
+                    formattedAmount: numericValue.toLocaleString('id-ID')
+                    }));
+                }}
+                />
             </div>
 
-            {/* Kalkulasi realtime */}
+            {/* Realtime Calculation - Sudah disesuaikan */}
             {amt > 0 && (
-              <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 space-y-2 text-sm">
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-500 font-medium">Nominal tarik</span>
-                  <span className="font-black text-slate-700">Rp {amt.toLocaleString('id-ID')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500 font-medium">Biaya admin</span>
-                  <span className="font-bold text-red-400">- Rp {FEE_ADMIN.toLocaleString('id-ID')}</span>
-                </div>
-                <div className="border-t border-slate-200 pt-2 flex justify-between">
-                  <span className="text-slate-500 font-medium">Total dipotong dari saldo</span>
-                  <span className="font-black text-slate-900">Rp {totalDeduct.toLocaleString('id-ID')}</span>
+                    <span className="text-slate-500">Nominal yang diajukan</span>
+                    <span className="font-black">Rp {formatRupiah(amt)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400 font-medium text-xs">Sisa saldo setelah tarik</span>
-                  <span className={`font-bold text-xs ${sisaSaldo < 0 ? 'text-red-500' : 'text-slate-500'}`}>
-                    Rp {sisaSaldo.toLocaleString('id-ID')}
-                  </span>
+                    <span className="text-slate-500">Biaya admin (2.5%)</span>
+                    <span className="font-bold text-red-400">- Rp {formatRupiah(fee)}</span>
                 </div>
-              </div>
+                <div className="border-t border-slate-200 pt-2 flex justify-between text-emerald-500">
+                    <span>Yang kamu terima</span>
+                    <span>Rp {formatRupiah(amt - fee)}</span>
+                </div>
+                <div className="flex justify-between text-xs pt-1">
+                    <span className="text-slate-400">Saldo yang dipotong</span>
+                    <span className="text-slate-600">Rp {formatRupiah(amt)}</span>
+                </div>
+                </div>
             )}
+            </div>
 
-            <p className="text-[10px] text-slate-400 font-bold italic">
-              *Min. tarik Rp {MIN_TARIK.toLocaleString('id-ID')} · Maks. Rp {MAX_TARIK.toLocaleString('id-ID')} · Min. saldo Rp {MIN_SALDO.toLocaleString('id-ID')} · Fee Rp {FEE_ADMIN.toLocaleString('id-ID')}
-            </p>
-          </div>
-
-          {/* Tombol submit */}
+          {/* Tombol Submit */}
           <button
             onClick={handleSubmit}
             disabled={withdrawMutation.isPending || !canSubmit}
-            className="w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-base hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed">
-            {withdrawMutation.isPending
-              ? <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" /> Memproses...</>
-              : <><ArrowRight size={18} /> Ajukan Penarikan Dana</>
-            }
+            className="cursor-pointer active:scale-[0.98] hover:brightness-90 w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-base hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed">
+            {withdrawMutation.isPending ? (
+              <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" /> Memproses...</>
+            ) : (
+              <><ArrowRight size={18} /> Ajukan Penarikan Dana</>
+            )}
           </button>
 
           {/* Sukses notice */}
