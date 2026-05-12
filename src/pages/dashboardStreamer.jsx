@@ -442,20 +442,37 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
               </div>
 
               {/* Social Media Grid */}
-              <div>
-                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Media Sosial</h4>
+              { (streamer?.instagram || streamer?.facebook || streamer?.youtube || streamer?.twitter) && (
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-700">
+                <p className="text-xs font-black text-slate-400 dark:text-slate-500 mb-3">SOCIAL MEDIA</p>
                 <div className="flex flex-wrap gap-2">
-                  <a href="#" className="flex-1 min-w-[40px] flex items-center justify-center py-3 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white rounded-xl hover:scale-105 transition-all">
-                    <Globe size={18} />
-                  </a>
-                  <a href="#" className="flex-1 min-w-[40px] flex items-center justify-center py-3 bg-black text-white rounded-xl hover:scale-105 transition-all">
-                    <Globe size={18} />
-                  </a>
-                  <a href="#" className="flex-1 min-w-[40px] flex items-center justify-center py-3 bg-[#1877F2] text-white rounded-xl hover:scale-105 transition-all">
-                    <Globe size={18} />
-                  </a>
+                  {streamer.instagram && (
+                    <a href={`https://instagram.com/${streamer.instagram.replace('@','')}`} target="_blank" rel="noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-pink-50 dark:bg-pink-950/30 text-pink-600 rounded-xl text-sm font-medium hover:bg-pink-100">
+                      📷 Instagram
+                    </a>
+                  )}
+                  {streamer.facebook && (
+                    <a href={streamer.facebook.startsWith('http') ? streamer.facebook : `https://facebook.com/${streamer.facebook}`} target="_blank" rel="noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 rounded-xl text-sm font-medium hover:bg-blue-100">
+                      👍 Facebook
+                    </a>
+                  )}
+                  {streamer.youtube && (
+                    <a href={streamer.youtube} target="_blank" rel="noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-950/30 text-red-600 rounded-xl text-sm font-medium hover:bg-red-100">
+                      ▶ YouTube
+                    </a>
+                  )}
+                  {streamer.twitter && (
+                    <a href={`https://twitter.com/${streamer.twitter.replace('@','')}`} target="_blank" rel="noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-sky-950/30 text-sky-600 rounded-xl text-sm font-medium hover:bg-sky-100">
+                      𝕏 Twitter
+                    </a>
+                  )}
                 </div>
               </div>
+            )}
 
               {/* Donation & Copy Link */}
               <div className="pt-2 space-y-3">
