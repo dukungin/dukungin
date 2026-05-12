@@ -220,7 +220,7 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
 // ─── FITUR BARU 4: InstantTestAlert ───────────────────────────────────────────
 // Kirim donasi test langsung ke overlay tanpa payment
 
-const InstantTestAlert = ({ overlayToken, settings }) => {
+const InstantTestAlert = ({ overlayToken, settings, user }) => {
   const [isSending, setIsSending] = useState(false);
   const [lastSent, setLastSent] = useState(null);
   const [customAmount, setCustomAmount] = useState(50000);
@@ -246,6 +246,7 @@ const InstantTestAlert = ({ overlayToken, settings }) => {
       setLastSent(new Date());
       // Optional: tampilkan toast sukses
     } catch (err) {
+      console.log('err', err)
       alert(err.response?.data?.message || 'Gagal mengirim test alert');
     } finally {
       setIsSending(false);
@@ -314,9 +315,9 @@ const InstantTestAlert = ({ overlayToken, settings }) => {
         </motion.div>
       )}
 
-      <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center">
-        ⚠️ Pastikan OBS overlay kamu sudah dibuka di browser source sebelum test
-      </p>
+      {/* <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-left">
+        Pastikan OBS overlay kamu sudah dibuka di browser source sebelum test
+      </p> */}
     </div>
   );
 };
@@ -1759,7 +1760,7 @@ export const DashboardStreamer = () => {
                 <section className="xl:col-span-7 space-y-6">
 
                   {/* ── FITUR BARU 4: Instant Test Alert (di atas segalanya) ── */}
-                  <InstantTestAlert overlayToken={user.overlayToken} settings={settings} />
+                  <InstantTestAlert overlayToken={user.overlayToken} user={user} settings={settings} />
 
                   {/* ── Konfigurasi Alert ── */}
                   <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
