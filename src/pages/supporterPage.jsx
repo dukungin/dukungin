@@ -358,9 +358,10 @@ const SupporterPage = () => {
   const overlaySetting = streamer?.overlaySetting || streamer?.OverlaySetting || {};
   const minDonate = overlaySetting?.minDonate || 1000;
   const maxDonate = overlaySetting?.maxDonate || 10000000;
-  const quickAmounts = [10000, 20000, 50000, 100000].filter(
-    (v) => v >= minDonate && v <= maxDonate
-  );
+  const quickAmounts = (streamer?.overlaySetting?.quickAmounts || 
+                     streamer?.OverlaySetting?.quickAmounts || 
+                     [10000, 25000, 50000, 100000])
+                     .filter(v => v >= minDonate && v <= maxDonate);
 
   const sortedTriggers = [...mediaTriggers].sort((a, b) => a.minAmount - b.minAmount);
 
@@ -392,20 +393,20 @@ const SupporterPage = () => {
           {quickAmounts.length > 0 && (
             <div>
               <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">
-                Pilih Nominal
+                Pilih Nominal Cepat
               </label>
-              <div className="grid grid-cols-4 gap-2.5">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {quickAmounts.map((val) => (
                   <button
                     key={val}
                     onClick={() => setForm({ ...form, amount: val })}
-                    className={`cursor-pointer active:scale-[0.97] hover:brightness-90 py-3 rounded-2xl font-black text-sm transition-all border-2 ${
+                    className={`py-4 rounded-2xl font-black text-sm transition-all border-2 active:scale-95 ${
                       form.amount === val
-                        ? 'bg-indigo-600 border-indigo-600 text-white'
-                        : 'bg-slate-50 border-slate-100 hover:border-indigo-200 hover:text-indigo-600'
+                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg'
+                        : 'bg-white border-slate-200 hover:border-indigo-300 hover:text-indigo-600'
                     }`}
                   >
-                    {formatRp(val)}
+                    Rp {val.toLocaleString('id-ID')}
                   </button>
                 ))}
               </div>

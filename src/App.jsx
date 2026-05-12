@@ -3,7 +3,7 @@ import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-d
 import PollWidget from './components/pollWidget';
 import SubathonWidget from './components/subathonWidget';
 import Auth from './pages/auth';
-import DashboardStreamer from './pages/dashboardStreamer';
+// import DashboardStreamer from './pages/dashboardStreamer';
 import DonationFailed from './pages/donationFailed';
 import DonationPending from './pages/donationPending';
 import DonationSuccess from './pages/donationSuccess';
@@ -15,6 +15,7 @@ import MilestonesWidget from './components/milestoneWidget';
 import QrCodeWidget from './components/qrCodeWidget';
 import LandingPage from './pages/landingPage'; // ← import landing page
 import PrivacyPolicy from './pages/privacyPolice';
+import { DashboardStreamer } from './pages/dashboardStreamer';
 
 const queryClient = new QueryClient({
   defaultOptions: {
