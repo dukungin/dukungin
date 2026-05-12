@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 /* ─────────────────────────────────────────
    DATA
 ───────────────────────────────────────── */
-const NAV_LINKS = ["Fitur", "Cara Kerja", "Harga"];
 
 const FEATURES = [
   { num: "01", ico: "🎨", name: "Overlay OBS Kustom", desc: "Alert donasi tampil langsung di stream. Tema modern, classic, atau minimal dengan animasi dan warna sesukamu." },
@@ -297,40 +296,25 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
 
         <span className="md:flex hidden" style={{ color: C.line2 }}>|</span>
 
-        {/* Theme Toggle */}
-        <ThemeToggle isDark={isDark} onToggle={onToggleTheme} C={C} />
+        <div className="flex items-center gap-5 md:gap-0">
+          {/* Theme Toggle */}
+          <ThemeToggle isDark={isDark} onToggle={onToggleTheme} C={C} />
 
-        <div style={{ display: "flex", gap: 14 }} className="hide-mobile">
-          <Link to="/login" style={{
-            fontFamily: "'Space Grotesk',sans-serif", fontSize: 12, fontWeight: 600,
-            letterSpacing: "0.05em", textTransform: "uppercase",
-            padding: "8px 16px", background: C.lime, color: isDark ? 'black' : C.bg,
-            border: `1px solid ${C.lime}`, textDecoration: "none", transition: "opacity 0.15s, background 0.4s",
-          }}
-            onMouseOver={e => e.currentTarget.style.opacity = "0.85"}
-            onMouseOut={e => e.currentTarget.style.opacity = "1"}
-          >
-            Mulai Sekarang
-          </Link>
+          <div style={{ display: "flex", gap: 14 }} className="hide-mobile">
+            <Link to="/login" style={{
+              fontFamily: "'Space Grotesk',sans-serif", fontSize: 12, fontWeight: 600,
+              letterSpacing: "0.05em", textTransform: "uppercase",
+              padding: "8px 16px", background: C.lime, color: isDark ? 'black' : C.bg,
+              border: `1px solid ${C.lime}`, textDecoration: "none", transition: "opacity 0.15s, background 0.4s",
+            }}
+              onMouseOver={e => e.currentTarget.style.opacity = "0.85"}
+              onMouseOut={e => e.currentTarget.style.opacity = "1"}
+            >
+              Mulai Sekarang
+            </Link>
+          </div>
         </div>
       </div>
-
-      {/* Hamburger */}
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        style={{ display: "none", background: "none", border: "none", color: C.muted, cursor: "pointer", flexDirection: "column", gap: 5 }}
-        className="show-mobile"
-        aria-label="Menu"
-      >
-        {[0, 1, 2].map(i => (
-          <span key={i} style={{
-            display: "block", width: 22, height: 1.5, background: "currentColor",
-            transition: "all 0.2s",
-            transform: menuOpen && i === 0 ? "rotate(45deg) translate(5px,5px)" : menuOpen && i === 2 ? "rotate(-45deg) translate(5px,-5px)" : "none",
-            opacity: menuOpen && i === 1 ? 0 : 1,
-          }} />
-        ))}
-      </button>
 
       {/* Mobile menu */}
       {menuOpen && (
@@ -346,18 +330,10 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
             </span>
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} C={C} />
           </div>
-          {NAV_LINKS.map(link => (
-            <a key={link} href={`#${link.toLowerCase()}`}
-              onClick={() => setMenuOpen(false)}
-              style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: C.muted, textDecoration: "none", transition: "color 0.4s" }}
-            >
-              {link}
-            </a>
-          ))}
           <Link to="/register" onClick={() => setMenuOpen(false)}
             style={{ marginTop: 8, padding: "12px 0", textAlign: "center", background: C.lime, color: C.bg, fontWeight: 700, fontSize: 13, textDecoration: "none", letterSpacing: "0.04em", textTransform: "uppercase", transition: "background 0.4s" }}
           >
-            Mulai Gratis
+            Mulai Sekarang
           </Link>
         </div>
       )}
@@ -381,7 +357,7 @@ function Hero({ C, isDark }) {
 
   return (
     <section 
-      className="hero-wrapper h-[93vh] overflow-hidden relative" 
+      className="hero-wrapper md:py-0 h-[62vh] md:h-[93vh] overflow-hidden relative" 
       style={{ 
         display: "grid", 
         gridTemplateRows: "1fr auto", 
