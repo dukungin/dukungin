@@ -1630,6 +1630,7 @@ export const DashboardStreamer = () => {
 
   const TAB_TITLE = {
     settings: 'Dashboard', history: 'Riwayat', wallet: 'Wallet', community: 'Community',
+    myDonations: 'Riwayat Berdonasi',     
     profile: 'Profil', poll: 'Poll & Voting', subathon: 'Subathon', milestones: 'Milestones',
     leaderboard: 'Leaderboard', contact: 'Contact', ghostAlert: 'Notif Hantu', admin: 'Admin',
   };
@@ -1962,6 +1963,12 @@ export const DashboardStreamer = () => {
             {activeTab === 'history' && (
               <motion.div key="history" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <HistoryPage />
+              </motion.div>
+            )}
+
+            {activeTab === 'myDonations' && (
+              <motion.div key="myDonations" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <MyDonationsHistory />
               </motion.div>
             )}
 
