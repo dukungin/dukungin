@@ -102,9 +102,9 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
       <aside className={`
         fixed lg:sticky top-0 left-0 h-screen overflow-y-auto
         w-full lg:w-72
-        bg-white dark:bg-slate-900
+        bg-white dark:bg-slate-950
         border-r border-slate-100 dark:border-slate-800
-        py-4 px-6 z-[99999] lg:z-[1] flex flex-col
+        py-4 px-4 md:px-6 z-[99999] lg:z-[1] flex flex-col
         transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
@@ -112,7 +112,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         {/* Logo */}
         <div className="flex items-center justify-between mb-8 md:mb-11">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
+            <div className="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg">
               <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
             </div>
             <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">TapTipTup</h1>
@@ -126,11 +126,11 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         </div>
 
         <div className="md:flex hidden pt-0 pb-2 px-1 mb-4">
-          <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Menu Utama</p>
+          <p className="text-[10px] font-black text-slate-400 dark:text-slate-100 uppercase tracking-widest">Menu Utama</p>
         </div>
 
         {/* Navigation */}
-        <nav className="md:flex-1 space-y-2">
+        <nav className="md:flex-1 space-y-3.5">
           {menuItems.map((item) => (
             <button
               key={item.id}

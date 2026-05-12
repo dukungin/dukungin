@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 const getTheme = (dark) => ({
   pageBg:           dark ? '#0f0c29'                       : '#f5f4ff',
   rightBg:          dark ? '#13111f'                       : '#ffffff',
-  inputBg:          dark ? 'rgba(255,255,255,0.05)'        : 'rgba(79,70,229,0.04)',
-  inputBgFocus:     dark ? 'rgba(255,255,255,0.08)'        : 'rgba(79,70,229,0.07)',
+  inputBg:          dark ? 'rgba(255,255,255,1)'        : 'rgba(79,70,229,0.04)',
+  inputBgFocus:     dark ? 'rgba(255,255,255,1)'        : 'rgba(79,70,229,0.07)',
   inputBorder:      dark ? 'rgba(255,255,255,0.12)'        : 'rgba(79,70,229,0.18)',
   inputBorderFocus: dark ? 'rgba(99,102,241,0.7)'          : 'rgba(79,70,229,0.8)',
   tabBg:            dark ? 'rgba(255,255,255,0.04)'        : 'rgba(79,70,229,0.06)',
@@ -146,11 +146,12 @@ const ThemeToggle = ({ isDark, onToggle, T }) => (
     onClick={onToggle}
     whileTap={{ scale:0.90 }}
     style={{
-      position:'absolute', top:20, right:20,
+      position:'absolute', top:0, right:0,
       display:'flex', alignItems:'center', gap:7,
       background: T.toggleBg,
-      border: `1px solid ${T.toggleBorder}`,
-      borderRadius:999, padding:'8px 14px',
+      // border: `1px solid ${T.toggleBorder}`,
+      // borderRadius:999, 
+      padding:'12px 18px',
       cursor:'pointer', zIndex:20,
       transition:'background 0.35s, border-color 0.35s',
     }}
@@ -175,7 +176,7 @@ const ThemeToggle = ({ isDark, onToggle, T }) => (
 
 // ─── Main Auth ─────────────────────────────────────────────────────────────────
 const Auth = () => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const T = getTheme(isDark);
 
   const [isLogin, setIsLogin] = useState(true);
@@ -247,8 +248,8 @@ const Auth = () => {
         <NotifModal notification={notification} onClose={closeNotif} />
 
         {/* ── LEFT: Brand Panel (always dark) ── */}
-        <div className="auth-left" style={{
-          position:'relative', width:'48%', minHeight:'100vh',
+        <div className="auth-left md:h-[100vh] h-max" style={{
+          position:'relative', width:'48%',
           background:'linear-gradient(145deg, #312e81 0%, #4f46e5 45%, #6d28d9 100%)',
           display:'flex', flexDirection:'column', justifyContent:'space-between',
           padding:'48px 44px', overflow:'hidden',
@@ -257,43 +258,43 @@ const Auth = () => {
           <Orbs />
 
           <div style={{ position:'relative', zIndex:10 }}>
-            <div style={{ display:'inline-flex', alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:14, padding:'8px 16px', marginBottom:48 }}>
+            <div className='md:mb-[48px] mb-0' style={{ display:'inline-flex', alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:14, padding:'8px 16px' }}>
               <div style={{ width:26, height:26, background:'white', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <span style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>S</span>
               </div>
               <span style={{ color:'white', fontWeight:800, fontSize:13, letterSpacing:'-0.01em' }}>TAPTIPTUP From Indonesia 🚀</span>
             </div>
 
-            <div style={{ position:'relative', marginBottom:32 }}>
-              <motion.img src="/jellyfish.png" alt=""
+            <div style={{ position:'relative' }} className='md:mb-[32px] mt-0 md:mt-[-10px] mb-[16px]'>
+              <motion.img className='md:block hidden' src="/jellyfish.png" alt=""
                 animate={{ y:[0,-10,0] }} transition={{ duration:4, repeat:Infinity, ease:'easeInOut' }}
-                style={{ width:'18%', display:'block', userSelect:'none', pointerEvents:'none' }} />
-              <motion.img src="/jellyfish.png" alt=""
+                style={{ width:'18%', userSelect:'none', pointerEvents:'none' }} />
+              <motion.img className='md:block hidden' src="/jellyfish.png" alt=""
                 animate={{ y:[0,8,0], rotate:[-45,-38,-45] }} transition={{ duration:5.5, repeat:Infinity, ease:'easeInOut', delay:0.8 }}
                 style={{ position:'absolute', top:-60, right:-30, width:'44%', opacity:0.45, transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} />
             </div>
 
-            <h1 style={{ fontSize:'clamp(28px,3.2vw,40px)', fontWeight:900, color:'white', lineHeight:1.15, letterSpacing:'-0.02em', marginBottom:14 }}>
+            <h1 style={{ fontSize:'clamp(28px,3.2vw,40px)', fontWeight:900, color:'white', lineHeight:1.20, letterSpacing:'-0.02em', marginBottom:14 }}>
               Mulai Terima<br />
               <span style={{ color:'#a5b4fc' }}>Dukungan</span> Real-time.
             </h1>
-            <p style={{ color:'rgba(199,210,254,0.8)', fontSize:15, lineHeight:1.65, maxWidth: '94%' }}>
+            <p style={{ color:'rgba(199,210,254,0.8)', lineHeight:1.65 }} className='md:text-[15px] text-[13px] md:w-[90%] w-[98%]'>
               Platform donasi real-time untuk streamer Indonesia dengan overlay OBS custom, pembayaran lokal, dan pencairan cepat.
             </p>
           </div>
 
-          <div style={{ position:'relative', zIndex:10 }}>
+          <div style={{ position:'relative', zIndex:10 }} className='md:inline hidden'>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:28 }}>
               <StatBadge value="12K+" label="Streamer Aktif" />
               <StatBadge value="99.9%" label="Uptime" />
               <StatBadge value="<2det" label="Notif Alert" />
             </div>
-            <div style={{ height:1, background:'rgba(255,255,255,0.1)', marginBottom:20 }} />
-            <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+            {/* <div style={{ height:1, background:'rgba(255,255,255,0.1)', marginBottom:20 }} /> */}
+            {/* <div className='hidden md:flex' style={{ flexWrap:'wrap', gap:8 }}>
               <Pill label="Integrasi Midtrans" />
               <Pill label="Overlay OBS Custom" />
-              <Pill label="Pencairan Cepat" />
-            </div>
+              <Pill label="Interface Modern" />
+            </div> */}
           </div>
 
           {/* <p style={{ position:'relative', zIndex:10, color:'rgba(255,255,255,0.28)', fontSize:11, fontWeight:500 }}>
@@ -302,16 +303,17 @@ const Auth = () => {
         </div>
 
         {/* ── RIGHT: Form Panel ── */}
-        <div style={{
+        <div 
+          className='md:min-h-[100vh] h-max pb-8 md:pb-[40px] md:py-[40px] md:px-[24px] py-[20px]'
+          style={{
           flex:1, position:'relative',
           background: T.rightBg,
           display:'flex', alignItems:'center', justifyContent:'center',
-          padding:'40px 24px', minHeight:'100vh',
           transition:'background 0.35s',
         }}>
           <ThemeToggle isDark={isDark} onToggle={() => setIsDark(d => !d)} T={T} />
 
-          <div style={{ width:'100%', maxWidth: '90%' }}>
+          <div style={{ width:'100%', maxWidth: '90%', marginTop: 16 }}>
             <AnimatePresence mode="wait">
 
               {/* FORGOT PASSWORD */}

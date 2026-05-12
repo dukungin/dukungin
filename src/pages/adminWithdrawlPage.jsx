@@ -76,7 +76,7 @@ export const AdminWithdrawalPage = () => {
           <button key={f.val} onClick={() => setStatusFilter(f.val)}
             className={`px-4 py-2 rounded-xl font-black text-sm transition-all ${
               statusFilter === f.val
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
+                ? 'bg-indigo-600 text-white shadow-none'
                 : 'bg-white text-slate-400 border border-slate-100 hover:border-indigo-200 hover:text-indigo-600'
             }`}>
             {f.label}

@@ -1,24 +1,21 @@
 import { motion } from 'framer-motion';
 import {
-    AtSign,
-    Clock,
-    Code2,
-    ExternalLink,
-    GitBranch,
-    Globe,
-    Headphones,
-    Link2,
-    Link,
-    Mail,
-    MapPin,
-    MessageCircle,
-    Phone,
-    Send,
-    Shield,
-    Sparkles,
+  AtSign,
+  Clock,
+  Code2,
+  ExternalLink,
+  GitBranch,
+  Globe,
+  Headphones,
+  Link2,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Send,
+  Shield,
+  Sparkles,
 } from 'lucide-react';
-
-// ── Note: replaced Github→GitBranch, Instagram→AtSign, HeadphonesIcon→Headphones
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -36,7 +33,7 @@ const DEVELOPER = {
   phone: '+62 895-1309-3406',
   github: 'github.com/khoirulhudaaa',
   Link: 'taptiptup.id',
-  instagram: '@TapTipTup_Support',
+  instagram: '@taptiptup.official',
   website: 'taptiptup.id',
   location: 'Cirebon, Indonesia',
   timezone: 'WIB (UTC+7)',
@@ -49,7 +46,7 @@ const PLATFORM = {
   email: 'taptiptup.support@gmail.com',
   emailBiz: 'taptiptup.support@gmail.com',
   whatsapp: '+62 895-1309-3406',
-  instagram: '@TapTipTup_Support',
+  instagram: '@taptiptup.official',
   website: 'taptiptup.id',
   location: 'Jakarta Selatan, Indonesia',
   address: 'Jl. Cideng Jaya No. 299, Jawa Barat',
@@ -63,36 +60,33 @@ const ContactCard = ({ icon, label, value, href, mono = false }) => (
     href={href || '#'}
     target={href && href !== '#' ? '_blank' : undefined}
     rel="noreferrer"
-    className={`group flex items-start gap-3.5 p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-indigo-100 hover:shadow-md hover:shadow-indigo-50 transition-all duration-300 ${href && href !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
+    className={`group flex items-start gap-3.5 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 hover:border-indigo-100 dark:hover:border-indigo-800 hover:shadow-md hover:shadow-indigo-50 dark:hover:shadow-indigo-900/20 transition-all duration-300 ${href && href !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
   >
-    <div className="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-indigo-500 flex-shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all duration-300">
+    <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 flex items-center justify-center text-indigo-500 dark:text-indigo-400 flex-shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all duration-300">
       {icon}
     </div>
     <div className="min-w-0">
-      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">{label}</p>
-      <p className={`text-sm font-bold text-slate-700 truncate ${mono ? 'font-mono' : ''}`}>{value}</p>
+      <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-0.5">{label}</p>
+      <p className={`text-sm font-bold text-slate-700 dark:text-slate-200 truncate ${mono ? 'font-mono' : ''}`}>{value}</p>
     </div>
     {href && href !== '#' && (
-      <ExternalLink size={13} className="text-slate-300 group-hover:text-indigo-400 transition-colors ml-auto flex-shrink-0 mt-1" />
+      <ExternalLink size={13} className="text-slate-300 dark:text-slate-600 group-hover:text-indigo-400 transition-colors ml-auto flex-shrink-0 mt-1" />
     )}
   </a>
 );
 
 export const ContactPage = () => {
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="min-h-screen bg-[#f9fafb] dark:bg-transparent">
 
-      {/* Hero */}
+      {/* Hero — gradient stays dark by design */}
       <motion.div
         className="relative overflow-hidden rounded-3xl mx-0 mb-8 px-8 py-12"
-        style={{
-          background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
-        }}
+        style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}
       >
         <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full border border-white/5" />
         <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full border border-white/5" />
         <div className="absolute top-8 right-40 w-3 h-3 rounded-full bg-indigo-400/30" />
-        {/* <div className="absolute bottom-12 right-24 w-1.5 h-1.5 rounded-full bg-purple-400/40" /> */}
 
         <div className="relative z-[2] max-w-full">
           <div className="flex items-center gap-2 mb-5">
@@ -107,16 +101,15 @@ export const ContactPage = () => {
           <p className="text-white/50 text-sm font-medium leading-relaxed">
             Tim kami siap membantu kamu. Hubungi developer atau admin platform melalui kanal yang tersedia di bawah.
           </p>
-
-          <img src="/jellyfish.png" alt="icon" className='w-[16%] opacity-90 z-[1] absolute top-[10%] right-[-60px] -rotate-40' />
+          <img src="/jellyfish.png" alt="icon" className="w-[16%] opacity-90 z-[1] absolute top-[10%] right-[-60px] -rotate-40" />
         </div>
 
         <div className="relative z-10 grid grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">
           {[
-            { val: '1x24 Jam',  label: 'Avg. Response' },
-            { val: '98%',      label: 'Resolved Tickets' },
-            { val: '24/7',     label: 'System Monitor' },
-            { val: '2026',     label: 'New Generation' },
+            { val: '1x24 Jam', label: 'Avg. Response'     },
+            { val: '98%',      label: 'Resolved Tickets'  },
+            { val: '24/7',     label: 'System Monitor'    },
+            { val: '2026',     label: 'New Generation'    },
           ].map((s, i) => (
             <div key={i}>
               <p className="text-xl font-black text-white">{s.val}</p>
@@ -129,9 +122,9 @@ export const ContactPage = () => {
       <div className="space-y-8">
 
         {/* ── Developer Section ── */}
-        <motion.div {...fadeUp(0.05)} className="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+        <motion.div {...fadeUp(0.05)} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 overflow-hidden">
 
-          <div className="px-8 pt-8 pb-6 border-b border-slate-50">
+          <div className="px-8 pt-8 pb-6 border-b border-slate-50 dark:border-slate-800">
             <div className="flex items-start gap-5">
               <div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-black text-xl flex-shrink-0"
@@ -141,13 +134,13 @@ export const ContactPage = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-lg font-black text-slate-800">{DEVELOPER.name}</h3>
-                  <span className="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                  <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">{DEVELOPER.name}</h3>
+                  <span className="px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-black uppercase tracking-widest">
                     Developer
                   </span>
                 </div>
-                <p className="text-xs font-bold text-indigo-500 mt-0.5">{DEVELOPER.role}</p>
-                <p className="text-xs text-slate-400 font-medium mt-2 leading-relaxed max-w-lg">{DEVELOPER.bio}</p>
+                <p className="text-xs font-bold text-indigo-500 dark:text-indigo-400 mt-0.5">{DEVELOPER.role}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-2 leading-relaxed max-w-lg">{DEVELOPER.bio}</p>
               </div>
             </div>
           </div>
@@ -155,34 +148,31 @@ export const ContactPage = () => {
           <div className="px-8 py-7 space-y-7">
 
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Kontak Langsung</p>
+              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Kontak Langsung</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<Mail size={16} />}        label="Email"     value={DEVELOPER.email}    href={`mailto:${DEVELOPER.email}`} />
+                <ContactCard icon={<Mail size={16} />}          label="Email"    value={DEVELOPER.email}    href={`mailto:${DEVELOPER.email}`} />
                 <ContactCard icon={<MessageCircle size={16} />} label="WhatsApp" value={DEVELOPER.whatsapp} href={`https://wa.me/${DEVELOPER.whatsapp.replace(/\D/g, '')}`} />
-                <ContactCard icon={<Phone size={16} />}       label="Telepon"   value={DEVELOPER.phone}    href={`tel:${DEVELOPER.phone.replace(/\D/g, '')}`} />
-                <ContactCard icon={<Globe size={16} />}       label="Website"   value={DEVELOPER.website}  href={`https://${DEVELOPER.website}`} />
+                <ContactCard icon={<Phone size={16} />}         label="Telepon"  value={DEVELOPER.phone}    href={`tel:${DEVELOPER.phone.replace(/\D/g, '')}`} />
+                <ContactCard icon={<Globe size={16} />}         label="Website"  value={DEVELOPER.website}  href={`https://${DEVELOPER.website}`} />
               </div>
             </div>
 
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Media Sosial</p>
+              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Media Sosial</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {/* Github → GitBranch */}
-                <ContactCard icon={<GitBranch size={16} />}  label="GitHub"       value={DEVELOPER.github}    href={`https://${DEVELOPER.github}`} mono />
-                {/* Link → Link2 */}
-                <ContactCard icon={<Link2 size={16} />}      label="Link"     value={DEVELOPER.Link}  href={`https://${DEVELOPER.Link}`} />
-                {/* Instagram → AtSign */}
-                <ContactCard icon={<AtSign size={16} />}     label="Instagram"    value={DEVELOPER.instagram} href={`https://instagram.com/${DEVELOPER.instagram.replace('@', '')}`} />
+                <ContactCard icon={<GitBranch size={16} />} label="GitHub"    value={DEVELOPER.github}    href={`https://${DEVELOPER.github}`} mono />
+                <ContactCard icon={<Link2 size={16} />}     label="Link"      value={DEVELOPER.Link}      href={`https://${DEVELOPER.Link}`} />
+                <ContactCard icon={<AtSign size={16} />}    label="Instagram" value={DEVELOPER.instagram} href={`https://instagram.com/${DEVELOPER.instagram.replace('@', '')}`} />
               </div>
             </div>
 
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Informasi Lain</p>
+              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Informasi Lain</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<MapPin size={16} />} label="Lokasi"        value={DEVELOPER.location} />
-                <ContactCard icon={<Clock size={16} />}  label="Timezone"      value={DEVELOPER.timezone} />
-                <ContactCard icon={<Clock size={16} />}  label="Jam Tersedia"  value={DEVELOPER.availableHours} />
-                <ContactCard icon={<Code2 size={16} />}  label="Spesialisasi"  value="Fullstack · React · Node.js" />
+                <ContactCard icon={<MapPin size={16} />} label="Lokasi"       value={DEVELOPER.location} />
+                <ContactCard icon={<Clock size={16} />}  label="Timezone"     value={DEVELOPER.timezone} />
+                <ContactCard icon={<Clock size={16} />}  label="Jam Tersedia" value={DEVELOPER.availableHours} />
+                <ContactCard icon={<Code2 size={16} />}  label="Spesialisasi" value="Fullstack · React · Node.js" />
               </div>
             </div>
 
@@ -190,9 +180,9 @@ export const ContactPage = () => {
         </motion.div>
 
         {/* ── Platform Section ── */}
-        <motion.div {...fadeUp(0.1)} className="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+        <motion.div {...fadeUp(0.1)} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 overflow-hidden">
 
-          <div className="px-8 pt-8 pb-6 border-b border-slate-50">
+          <div className="px-8 pt-8 pb-6 border-b border-slate-50 dark:border-slate-800">
             <div className="flex items-start gap-5">
               <div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
@@ -202,16 +192,16 @@ export const ContactPage = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-lg font-black text-slate-800">{PLATFORM.name}</h3>
-                  <span className="px-2.5 py-1 bg-amber-50 text-amber-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                  <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">{PLATFORM.name}</h3>
+                  <span className="px-2.5 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-full text-[10px] font-black uppercase tracking-widest">
                     Platform
                   </span>
-                  <span className="px-2.5 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                  <span className="px-2.5 py-1 bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                     Online
                   </span>
                 </div>
-                <p className="text-xs font-medium text-slate-400 mt-1.5 leading-relaxed max-w-lg">{PLATFORM.tagline}</p>
+                <p className="text-xs font-medium text-slate-400 dark:text-slate-500 mt-1.5 leading-relaxed max-w-lg">{PLATFORM.tagline}</p>
               </div>
             </div>
           </div>
@@ -219,7 +209,7 @@ export const ContactPage = () => {
           <div className="px-8 py-7 space-y-7">
 
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Kontak Support</p>
+              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Kontak Support</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <ContactCard icon={<Mail size={16} />}          label="Email Support"  value={PLATFORM.email}    href={`mailto:${PLATFORM.email}`} />
                 <ContactCard icon={<Mail size={16} />}          label="Email Bisnis"   value={PLATFORM.emailBiz} href={`mailto:${PLATFORM.emailBiz}`} />
@@ -229,14 +219,14 @@ export const ContactPage = () => {
             </div>
 
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Media Sosial Platform</p>
+              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Media Sosial Platform</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <ContactCard icon={<AtSign size={16} />} label="Instagram"   value={PLATFORM.instagram} href={`https://instagram.com/${PLATFORM.instagram.replace('@', '')}`} />
+                <ContactCard icon={<AtSign size={16} />} label="Instagram" value={PLATFORM.instagram} href={`https://instagram.com/${PLATFORM.instagram.replace('@', '')}`} />
               </div>
             </div>
 
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Informasi Operasional</p>
+              <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Informasi Operasional</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <ContactCard icon={<Clock size={16} />}  label="Jam Operasional" value={PLATFORM.operationalHours} />
                 <ContactCard icon={<Send size={16} />}   label="Waktu Respons"   value={PLATFORM.responseTime} />
@@ -249,25 +239,25 @@ export const ContactPage = () => {
         </motion.div>
 
         {/* ── FAQ Quick ── */}
-        <motion.div {...fadeUp(0.15)} className="bg-white rounded-3xl border border-slate-100 px-8 py-7">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-5">Pertanyaan Umum</p>
+        <motion.div {...fadeUp(0.15)} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 px-8 py-7">
+          <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-5">Pertanyaan Umum</p>
           <div className="space-y-3">
             {[
-              { q: 'Berapa lama proses penarikan dana?',     a: 'Proses penarikan manual dilakukan admin dalam 1×24 jam di hari kerja.' },
-              { q: 'Apakah ada biaya untuk membuat akun?',   a: 'Tidak. TapTipTup gratis untuk semua streamer. Kami hanya mengambil fee kecil per transaksi.' },
-              { q: 'Bagaimana cara pasang widget di OBS?',   a: 'Salin Widget URL dari menu Editor Overlay lalu tambahkan sebagai Browser Source di OBS.' },
-              { q: 'Kenapa donasi saya belum masuk?',        a: 'Pastikan status pembayaran sudah Settlement di Midtrans. Jika sudah 1 jam belum masuk, hubungi support.' },
-              { q: 'Apakah bisa ganti metode pembayaran?',   a: 'Semua metode pembayaran Midtrans tersedia: QRIS, transfer bank, e-wallet, kartu kredit.' },
+              { q: 'Berapa lama proses penarikan dana?',   a: 'Proses penarikan manual dilakukan admin dalam 1×24 jam di hari kerja.' },
+              { q: 'Apakah ada biaya untuk membuat akun?', a: 'Tidak. TapTipTup gratis untuk semua streamer. Kami hanya mengambil fee kecil per transaksi.' },
+              { q: 'Bagaimana cara pasang widget di OBS?', a: 'Salin Widget URL dari menu Editor Overlay lalu tambahkan sebagai Browser Source di OBS.' },
+              { q: 'Kenapa donasi saya belum masuk?',      a: 'Pastikan status pembayaran sudah Settlement di Midtrans. Jika sudah 1 jam belum masuk, hubungi support.' },
+              { q: 'Apakah bisa ganti metode pembayaran?', a: 'Semua metode pembayaran Midtrans tersedia: QRIS, transfer bank, e-wallet, kartu kredit.' },
             ].map((item, i) => (
-              <div key={i} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-                <p className="text-sm font-black text-slate-700">{item.q}</p>
-                <p className="text-xs text-slate-400 font-medium leading-relaxed">{item.a}</p>
+              <div key={i} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 space-y-1.5">
+                <p className="text-sm font-black text-slate-700 dark:text-slate-200">{item.q}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium leading-relaxed">{item.a}</p>
               </div>
             ))}
           </div>
         </motion.div>
 
-        {/* ── Bottom CTA ── */}
+        {/* ── Bottom CTA — gradient stays dark by design ── */}
         <motion.div
           {...fadeUp(0.2)}
           className="rounded-3xl px-8 py-8 text-center"
