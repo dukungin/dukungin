@@ -1498,8 +1498,9 @@ export const DashboardStreamer = () => {
     setShowFollowModal(true);
   };
 
-  if (profileData) {
-    setProfileForm({
+  useEffect(() => {
+    if (profileData) {
+      setProfileForm({
         username: profileData?.user?.username || profileData?.User?.username || '',
         email:    profileData?.user?.email    || profileData?.User?.email    || '',
         bio:      profileData?.user?.bio      || profileData?.User?.bio      || '',
