@@ -147,7 +147,11 @@ const getTokenPayload = () => {
 
 const SectionHeader = ({ icon, title, color }) => (
   <div className="flex items-center gap-4">
-    <div className={`${color} p-3 rounded-xl text-white shadow-lg`}>{icon}</div>
+    {
+      icon && (
+        <div className={`${color} p-3 rounded-xl text-white shadow-lg`}>{icon ? icon : null}</div>
+      )
+    }
     <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">{title}</h3>
   </div>
 );
@@ -777,10 +781,10 @@ const QrCodeCard = ({ username }) => {
   const copy = () => { navigator.clipboard.writeText(donateUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); };
   return (
     <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
-      <SectionHeader icon={<span className="text-lg">◼</span>} title="QR Code Donasi" color="bg-slate-800" />
+      {/* <SectionHeader title="QR Code Donasi" color="bg-slate-800" /> */}
       <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Tampilkan QR ini di stream / sosmed. Scan langsung ke halaman donasi kamu.</p>
       <div className="flex flex-col items-start gap-4">
-        <div className="p-4 bg-white rounded-3xl border-4 border-slate-900 shadow-xl inline-block">
+        <div className="p-4 bg-white rounded-xl border-4 border-slate-900 shadow-xl inline-block">
           <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(donateUrl)}&color=0f172a&bgcolor=ffffff&format=svg&margin=0`} alt="QR Code" width={200} height={200} />
         </div>
         <p className="font-black text-slate-700 dark:text-slate-300 text-sm">{donateUrl}</p>
@@ -1974,14 +1978,14 @@ export const DashboardStreamer = () => {
                         <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
                       </div>
                       {/* ── FITUR 1: saldo dengan eye toggle di profil ── */}
-                      <div className="flex items-center gap-3 mt-1">
+                      {/* <div className="flex items-center gap-3 mt-1">
                         <p className={`font-black text-lg transition-all ${showBalance ? 'text-white' : 'text-white/30 select-none tracking-widest'}`}>
                           {displayBalance}
                         </p>
                         <button onClick={() => setShowBalance(v => !v)} className="cursor-pointer p-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-all">
                           {showBalance ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
-                      </div>
+                      </div> */}
                       <p className="text-slate-200 font-medium text-sm">{user.email}</p>
                     </div>
                   </div>
@@ -1989,7 +1993,7 @@ export const DashboardStreamer = () => {
                   <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
                 </div>
                 {/* Profil Publik */}
-                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-100 dark:border-slate-800">
+                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
                   <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-indigo-500" />
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
