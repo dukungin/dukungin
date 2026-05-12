@@ -1996,8 +1996,8 @@ export const DashboardStreamer = () => {
                 <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
                   <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-indigo-500" />
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                    <div className="md:col-span-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+                    <div className="md:col-span-2 mb-1">
                       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">
                         Link Halaman Donasi
                       </label>
@@ -2010,7 +2010,7 @@ export const DashboardStreamer = () => {
                         </button>
                       </div>
                     </div>
-
+                    
                     <InputField label="Display Name" value={profileForm.username} 
                       onChange={v => setProfileForm(f => ({ ...f, username: v }))} />
 
