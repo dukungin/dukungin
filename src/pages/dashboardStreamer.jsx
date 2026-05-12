@@ -2130,7 +2130,7 @@
 
 //                   <div className="bg-white rounded-xl p-4 md:p-6 shadow-xs border border-slate-100">
 //                     <div className="bg-slate-200 p-6 rounded-xl border-2 border-dashed border-slate-200 mb-8">
-//                       <label className="block text-[10px] font-black bg-yellow-300 w-max text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
+//                       <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-500 mb-2 uppercase tracking-widest">OBS URL</label>
 //                       <div className="flex gap-3">
 //                         <input readOnly value={user.overlayUrl} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 font-bold outline-none overflow-hidden text-ellipsis" />
 //                         <button onClick={() => copyToClipboard(user.overlayUrl)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
@@ -3904,7 +3904,7 @@ const DashboardStreamer = () => {
                       ))}
                       <div className="bg-white dark:bg-slate-900">
                         <div className="bg-slate-100 dark:bg-slate-800 p-5 rounded-xl border border-slate-100/10 mb-8">
-                          <label className="block text-[10px] font-black bg-yellow-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">DONATE URL</label>
+                          <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">DONATE URL</label>
                           <div className="flex gap-3">
                             <input readOnly value={`https://taptiptup.vercel.app/donate/${user.username}`} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none overflow-hidden text-ellipsis" />
                             <button onClick={() => copyToClipboard(`https://taptiptup.vercel.app/donate/${user.username}`)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
@@ -4030,7 +4030,7 @@ const DashboardStreamer = () => {
                   {/* ── OBS URL ── */}
                   <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 mb-8">
-                      <label className="block text-[10px] font-black bg-yellow-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">OBS URL</label>
+                      <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">OBS URL</label>
                       <div className="flex gap-3">
                         <input readOnly value={user.overlayUrl} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none overflow-hidden text-ellipsis" />
                         <button onClick={() => copyToClipboard(user.overlayUrl)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>

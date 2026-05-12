@@ -62,7 +62,7 @@ const THEMES = {
     bg2:   "#12141d",
     bg3:   "#1b1e2b",
     line:  "#232736",
-    line2: "#2d334a",
+    line2: "#2d334b",
     text:  "#f8fafc",
     muted: "white",
     dim:   "#334155",
