@@ -1760,7 +1760,11 @@ export const DashboardStreamer = () => {
                 <section className="xl:col-span-7 space-y-6">
 
                   {/* ── FITUR BARU 4: Instant Test Alert (di atas segalanya) ── */}
-                  <InstantTestAlert overlayToken={user.overlayToken} user={user} settings={settings} />
+                  <InstantTestAlert 
+                    overlayToken={user.overlayToken} 
+                    settings={settings} 
+                    user={user} 
+                  />
 
                   {/* ── Konfigurasi Alert ── */}
                   <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
@@ -1849,10 +1853,38 @@ export const DashboardStreamer = () => {
                       </div>
                     </div>
 
-                    <div className="md:grid-cols-3 space-y-7 w-full grid gap-2.5 mt-7">
-                      <InputField label="Warna Background" type="color" value={settings.primaryColor} onChange={v => upd('primaryColor', v)} />
-                      <InputField label="Warna Teks" type="color" value={settings.textColor} onChange={v => upd('textColor', v)} />
-                      <InputField label="Warna Border" type="color" value={settings.borderColor?.slice(0, 7) || '#ffffff'} onChange={v => { const alpha = settings.borderColor?.slice(7, 9) || '26'; upd('borderColor', `${v}${alpha}`); }} />
+                    <div className="md:grid-cols-2 lg:grid-cols-4 space-y-7 w-full grid gap-2.5 mt-7">
+                      <InputField 
+                        label="Background Alert" 
+                        type="color" 
+                        value={settings.primaryColor} 
+                        onChange={v => upd('primaryColor', v)} 
+                      />
+                      
+                      {/* WARNA BARU */}
+                      <InputField 
+                        label="Highlight Nominal" 
+                        type="color" 
+                        value={settings.highlightColor || '#a5b4fc'} 
+                        onChange={v => upd('highlightColor', v)} 
+                      />
+
+                      <InputField 
+                        label="Warna Teks" 
+                        type="color" 
+                        value={settings.textColor} 
+                        onChange={v => upd('textColor', v)} 
+                      />
+                      
+                      <InputField 
+                        label="Warna Border" 
+                        type="color" 
+                        value={settings.borderColor?.slice(0, 7) || '#ffffff'} 
+                        onChange={v => {
+                          const alpha = settings.borderColor?.slice(7, 9) || '26';
+                          upd('borderColor', `${v}${alpha}`);
+                        }} 
+                      />
                     </div>
 
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
