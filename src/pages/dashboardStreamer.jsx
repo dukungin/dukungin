@@ -186,14 +186,14 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
       <SectionHeader icon={<Plus size={20} />} title="Quick Nominal" color="bg-emerald-500" />
       <p className="text-xs text-slate-400 mt-2 mb-4">Nominal cepat yang muncul di halaman donasi</p>
 
-      <div className="space-y-3">
+      <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
         {amounts.map((amt, i) => (
-          <div key={i} className="flex gap-3 items-center bg-slate-50 dark:bg-slate-800 p-3 rounded-xl">
+          <div key={i} className="w-[100%] flex gap-3 items-center bg-slate-50 dark:bg-slate-800 p-3 rounded-xl">
             <input
               type="number"
               value={amt}
               onChange={e => update(i, e.target.value)}
-              className="flex-1 p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold"
+              className="flex-1 p-3 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold"
             />
             <button onClick={() => remove(i)} className="text-red-500 hover:text-red-600">
               <Trash2 size={18} />
@@ -202,14 +202,14 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
         ))}
       </div>
 
-      <button onClick={add} className="w-full mt-4 py-3 border-2 border-dashed border-emerald-300 text-emerald-600 rounded-xl font-black hover:bg-emerald-50">
+      <button onClick={add} className="cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full mt-4 py-3 border-2 border-dashed border-emerald-300 text-emerald-600 rounded-xl font-black hover:bg-emerald-20">
         + Tambah Nominal
       </button>
 
       <button
         onClick={() => saveSettingsMutation.mutate(settings)}
         disabled={saveSettingsMutation.isPending}
-        className="mt-6 w-full py-4 bg-emerald-600 text-white rounded-xl font-black"
+        className="mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-4 bg-emerald-600 text-white rounded-xl font-black"
       >
         Simpan Quick Nominal
       </button>
