@@ -448,25 +448,25 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
                 <div className="flex flex-wrap gap-2">
                   {streamer.instagram && (
                     <a href={`https://instagram.com/${streamer.instagram.replace('@','')}`} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-pink-50 dark:bg-pink-950/30 text-pink-600 rounded-xl text-sm font-medium hover:bg-pink-100">
+                      className="flex items-center gap-2 px-4 py-2 bg-pink-50 dark:bg-pink-600 text-white rounded-xl text-sm font-medium hover:bg-pink-700 active:scale-[0.98]">
                       📷 Instagram
                     </a>
                   )}
                   {streamer.facebook && (
                     <a href={streamer.facebook.startsWith('http') ? streamer.facebook : `https://facebook.com/${streamer.facebook}`} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 rounded-xl text-sm font-medium hover:bg-blue-100">
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 active:scale-[0.98]">
                       👍 Facebook
                     </a>
                   )}
                   {streamer.youtube && (
                     <a href={streamer.youtube} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-950/30 text-red-600 rounded-xl text-sm font-medium hover:bg-red-100">
+                      className="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 active:scale-[0.98]">
                       ▶ YouTube
                     </a>
                   )}
                   {streamer.twitter && (
                     <a href={`https://twitter.com/${streamer.twitter.replace('@','')}`} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-sky-950/30 text-sky-600 rounded-xl text-sm font-medium hover:bg-sky-100">
+                      className="flex items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 active:scale-[0.98]">
                       𝕏 Twitter
                     </a>
                   )}
