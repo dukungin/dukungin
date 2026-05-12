@@ -315,9 +315,9 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
         </motion.div>
       )}
 
-      {/* <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-left">
-        Pastikan OBS overlay kamu sudah dibuka di browser source sebelum test
-      </p> */}
+      <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center">
+        ⚠️ Pastikan OBS overlay kamu sudah dibuka di browser source sebelum test
+      </p>
     </div>
   );
 };
