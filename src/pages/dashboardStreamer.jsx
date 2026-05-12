@@ -1,15 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  Calendar,
   Check,
   CheckCircle2,
   Copy,
   ExternalLink,
   Eye,
   EyeOff,
+  Globe,
   HeadphonesIcon,
+  Heart,
   ImageIcon,
   Menu,
+  MessageSquare,
   Moon,
   Plus,
   RefreshCw,
@@ -360,70 +364,123 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
 
   return (
     <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/70 backdrop-blur-md z-[300] flex items-center justify-center p-4"
-        onClick={onClose}>
-        <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800"
-          onClick={e => e.stopPropagation()}>
-
-          {/* Header */}
-          <div className="bg-gradient-to-br from-indigo-600 to-purple-700 px-8 pt-8 pb-12 relative overflow-hidden">
-            <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 bg-white/20 hover:bg-white/30 rounded-2xl flex items-center justify-center text-white transition-all">
+      <motion.div 
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[999999999999999] flex items-center justify-center p-4 overflow-y-auto"
+        onClick={onClose}
+      >
+        <motion.div 
+          initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }}
+          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900 rounded-xl h-[76vh] md:max-h-[90vh] overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
+          onClick={e => e.stopPropagation()}
+        >
+          
+          {/* Header Cover (Full Width) */}
+          <div className="h-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 relative">
+            <button onClick={onClose} className="absolute top-4 right-4 z-10 w-9 h-9 bg-white hover:bg-slate-100 backdrop-blur-md rounded-full flex items-center justify-center text-black cursor-pointer active:scale-[0.98] hover:brightness-[90%] transition-all">
               <X size={18} />
             </button>
-
-            <div className="w-20 h-20 mx-auto bg-white rounded-3xl flex items-center justify-center text-5xl font-black text-slate-800 shadow-2xl mb-4 border-4 border-white/30">
-              {username?.charAt(0).toUpperCase()}
-            </div>
-            <h2 className="text-3xl font-black text-white text-center">@{username}</h2>
-            <p className="text-center text-indigo-200 mt-1">Streamer • TapTipTup</p>
           </div>
 
-          <div className="p-8 space-y-6 -mt-4">
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <RefreshCw size={28} className="animate-spin text-indigo-500" />
-              </div>
-            ) : (
-              <>
-                {/* Bio / Stats */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-5 text-center border border-slate-100 dark:border-slate-700">
-                    <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400">
-                      {streamer?.followersCount ?? 0}
-                    </p>
-                    <p className="text-xs font-black uppercase tracking-widest text-slate-500 mt-1">Followers</p>
-                  </div>
-                  <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-5 text-center border border-slate-100 dark:border-slate-700">
-                    <p className="text-3xl font-black text-purple-600 dark:text-purple-400">
-                      {streamer?.followingCount ?? 0}
-                    </p>
-                    <p className="text-xs font-black uppercase tracking-widest text-slate-500 mt-1">Following</p>
+          {/* Container Konten Utama: Flexbox Menyamping di Desktop */}
+          <div className="flex flex-col md:flex-row">
+            
+            {/* SISI KIRI: Profil & Info Dasar (Sticky-like di Desktop) */}
+            <div className="md:w-[40%] p-6 md:p-8 md:border-r border-slate-50 dark:border-slate-800/50 flex flex-col justify-between">
+              <div className="relative mt-0 md:mt-0 mb-4">
+                <div className="p-1.5 bg-white dark:bg-slate-900 rounded-[2.2rem] shadow-xl inline-block">
+                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-[2rem] bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black text-indigo-600 border-4 border-white dark:border-slate-900 overflow-hidden">
+                    {streamer?.avatar ? (
+                      <img src={streamer.avatar} alt={username} className="w-full h-full object-cover" />
+                    ) : (
+                      username?.charAt(0).toUpperCase()
+                    )}
                   </div>
                 </div>
+                <h2 className="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-2">
+                  {streamer?.fullName || username}
+                  <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                  </div>
+                </h2>
+                <p className="text-indigo-600 dark:text-indigo-400 font-bold text-sm">@{username}</p>
+              </div>
 
-                {/* Donate Button */}
+              <div className="space-y-2">
+                <div className="flex flex-col mt-auto space-y-1 gap-2 mt-4">
+                  <button className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-sm shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                    <Heart size={16} /> Follow
+                  </button>
+                  <button className="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-2xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
+                    <MessageSquare size={16} /> Kirim Pesan
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* SISI KANAN: Bio, Stats, Socials, & Actions */}
+            <div className="md:w-[60%] p-6 md:p-8 bg-slate-50/50 dark:bg-slate-900/50 space-y-6">
+              
+              {/* Bio Section */}
+              <div>
+                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Tentang Creator</h4>
+                <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                  {streamer?.bio || "Creator ini belum menuliskan bio. Mari beri dukungan agar terus berkarya! 🚀"}
+                </p>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                  <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{streamer?.followersCount ?? 0}</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Followers</p>
+                </div>
+                <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                  <p className="text-2xl font-black text-purple-600 dark:text-purple-400">{streamer?.supportersCount ?? 0}</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Supporters</p>
+                </div>
+              </div>
+
+              {/* Social Media Grid */}
+              <div>
+                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Media Sosial</h4>
+                <div className="flex flex-wrap gap-2">
+                  <a href="#" className="flex-1 min-w-[40px] flex items-center justify-center py-3 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white rounded-xl hover:scale-105 transition-all">
+                    <Globe size={18} />
+                  </a>
+                  <a href="#" className="flex-1 min-w-[40px] flex items-center justify-center py-3 bg-black text-white rounded-xl hover:scale-105 transition-all">
+                    <Globe size={18} />
+                  </a>
+                  <a href="#" className="flex-1 min-w-[40px] flex items-center justify-center py-3 bg-[#1877F2] text-white rounded-xl hover:scale-105 transition-all">
+                    <Globe size={18} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Donation & Copy Link */}
+              <div className="pt-2 space-y-3">
                 <a href={donateUrl} target="_blank" rel="noopener noreferrer"
-                  className="block w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-center rounded-2xl font-black text-lg shadow-lg transition-all active:scale-[0.97]">
-                  💜 Donasi ke @{username}
+                  className="flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-2xl font-black text-md shadow-xl shadow-indigo-100 dark:shadow-indigo-900/20 hover:brightness-110 transition-all active:scale-[0.98]">
+                  <Heart size={20} fill="white" /> Dukung @{username}
                 </a>
-
-                {/* Copy Donate Link */}
                 <button
-                  onClick={() => navigator.clipboard.writeText(donateUrl)}
-                  className="w-full flex items-center justify-center gap-3 py-3.5 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl text-slate-600 dark:text-slate-400 hover:border-indigo-300 hover:text-indigo-600 transition-all">
-                  <Copy size={18} /> Salin Link Donasi
+                  onClick={() => {
+                    navigator.clipboard.writeText(donateUrl);
+                    alert('Link profil berhasil disalin!');
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-2xl font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
+                >
+                  <Copy size={14} /> Salin Link Profil
                 </button>
-              </>
-            )}
+              </div>
+            </div>
+
           </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
   );
 };
-
 // ─── BannedWordsEditor ────────────────────────────────────────────────────────
 
 const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
@@ -1411,7 +1468,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
         <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
       </div>
 
-      <div className="gap-3 grid grid-cols-5">
+      <div className="gap-3 grid grid-cols-3 md:grid-cols-5">
         {subTabs.map(t => (
           <button key={t.id} onClick={() => setSubTab(t.id)}
             className={`w-full cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-xl font-black text-sm transition-all ${subTab === t.id ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:brightness-[80%]'}`}>
