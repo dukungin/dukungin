@@ -156,7 +156,7 @@ const InputField = ({ label, ...props }) => (
   <div className="w-full">
     <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">{label}</label>
     <input
-      className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl p-5 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all font-bold text-sm text-slate-900 dark:text-slate-100 shadow-sm"
+      className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl p-3 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all font-bold text-sm text-slate-900 dark:text-slate-100 shadow-sm"
       {...props}
       onChange={e => props.onChange?.(e.target.value)}
     />
@@ -353,7 +353,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
             onClick={e => e.stopPropagation()}>
             <p className="text-red-500 text-4xl mb-4">⚠️</p>
             <p className="font-black text-xl">Gagal memuat profil</p>
-            <button onClick={onClose} className="mt-6 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold">
+            <button onClick={onClose} className="mt-6 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold">
               Tutup
             </button>
           </motion.div>
@@ -408,10 +408,10 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
 
               <div className="space-y-2">
                 <div className="flex flex-col mt-auto space-y-1 gap-2 mt-4">
-                  <button className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-sm shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                  <button className="w-full py-4 bg-indigo-600 text-white rounded-xl font-black text-sm shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
                     <Heart size={16} /> Follow
                   </button>
-                  <button className="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-2xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
+                  <button className="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
                     <MessageSquare size={16} /> Kirim Pesan
                   </button>
                 </div>
@@ -431,11 +431,11 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
                   <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{streamer?.followersCount ?? 0}</p>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Followers</p>
                 </div>
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
                   <p className="text-2xl font-black text-purple-600 dark:text-purple-400">{streamer?.supportersCount ?? 0}</p>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Supporters</p>
                 </div>
@@ -477,7 +477,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
               {/* Donation & Copy Link */}
               <div className="pt-2 space-y-3">
                 <a href={donateUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-2xl font-black text-md shadow-xl shadow-indigo-100 dark:shadow-indigo-900/20 hover:brightness-110 transition-all active:scale-[0.98]">
+                  className="flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-md shadow-xl shadow-indigo-100 dark:shadow-indigo-900/20 hover:brightness-110 transition-all active:scale-[0.98]">
                   <Heart size={20} fill="white" /> Dukung @{username}
                 </a>
                 <button
@@ -485,7 +485,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
                     navigator.clipboard.writeText(donateUrl);
                     alert('Link profil berhasil disalin!');
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-2xl font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
                 >
                   <Copy size={14} /> Salin Link Profil
                 </button>
@@ -926,12 +926,12 @@ const AdminWithdrawalPage = () => {
                   {showApproveModal && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowApproveModal(false)}>
                       <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 text-center border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
-                        <div className="w-20 h-20 mx-auto mb-6 bg-green-100 dark:bg-green-950/40 rounded-2xl flex items-center justify-center text-5xl">✅</div>
+                        <div className="w-20 h-20 mx-auto mb-6 bg-green-100 dark:bg-green-950/40 rounded-xl flex items-center justify-center text-5xl">✅</div>
                         <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Approve</h3>
                         <p className="text-slate-600 dark:text-slate-400 mb-8">Apakah Anda yakin sudah mentransfer dana ke streamer ini?</p>
                         <div className="flex gap-3">
-                          <button onClick={() => setShowApproveModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-2xl">Batal</button>
-                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-green-600 hover:bg-green-700 text-white font-black rounded-2xl transition-all disabled:opacity-70">
+                          <button onClick={() => setShowApproveModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-xl">Batal</button>
+                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-green-600 hover:bg-green-700 text-white font-black rounded-xl transition-all disabled:opacity-70">
                             {updateMutation.isPending ? 'Memproses...' : 'Ya, Sudah Transfer'}
                           </button>
                         </div>
@@ -945,10 +945,10 @@ const AdminWithdrawalPage = () => {
                       <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
                         <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2 text-center">Tolak Penarikan</h3>
                         <p className="text-slate-600 dark:text-slate-400 text-center mb-6">Berikan alasan penolakan (opsional)</p>
-                        <textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Contoh: Rekening tidak valid..." className="w-full h-32 p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-2xl focus:border-red-400 outline-none resize-y font-medium" />
+                        <textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Contoh: Rekening tidak valid..." className="w-full h-32 p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-xl focus:border-red-400 outline-none resize-y font-medium" />
                         <div className="flex gap-3 mt-6">
-                          <button onClick={() => setShowRejectModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-2xl">Batal</button>
-                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'FAILED', note: rejectNote || 'Ditolak oleh admin' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-red-600 hover:bg-red-700 text-white font-black rounded-2xl transition-all disabled:opacity-70">
+                          <button onClick={() => setShowRejectModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-xl">Batal</button>
+                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'FAILED', note: rejectNote || 'Ditolak oleh admin' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-red-600 hover:bg-red-700 text-white font-black rounded-xl transition-all disabled:opacity-70">
                             {updateMutation.isPending ? 'Memproses...' : 'Konfirmasi Tolak'}
                           </button>
                         </div>
@@ -1644,12 +1644,12 @@ export const DashboardStreamer = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowCopyModal(false)}>
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-3xl md:max-w-sm max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
               <div className="p-4 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 mt-1 md:mt-2 bg-green-100 dark:bg-green-950/40 rounded-2xl flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-6 mt-1 md:mt-2 bg-green-100 dark:bg-green-950/40 rounded-xl flex items-center justify-center">
                   <CheckCircle2 size={40} className="text-green-600 dark:text-green-400" />
                 </div>
                 <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">URL Tersalin!</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-6">Widget <span className="font-bold text-indigo-600 dark:text-indigo-400">{copiedLabel}</span> berhasil disalin.</p>
-                <button onClick={() => setShowCopyModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white font-black rounded-2xl transition-all active:scale-[0.99]">OK, Mengerti</button>
+                <button onClick={() => setShowCopyModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white font-black rounded-xl transition-all active:scale-[0.99]">OK, Mengerti</button>
               </div>
             </motion.div>
           </motion.div>
@@ -1662,12 +1662,12 @@ export const DashboardStreamer = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowFollowModal(false)}>
             <motion.div initial={{ scale: 0.88, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.88, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
               <div className="p-8 text-center">
-                <div className={`w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center text-5xl ${followAction.type === 'follow' ? 'bg-green-100 dark:bg-green-950/40' : 'bg-orange-100 dark:bg-orange-950/40'}`}>
+                <div className={`w-20 h-20 mx-auto mb-6 rounded-xl flex items-center justify-center text-5xl ${followAction.type === 'follow' ? 'bg-green-100 dark:bg-green-950/40' : 'bg-orange-100 dark:bg-orange-950/40'}`}>
                   {followAction.type === 'follow' ? '🤝' : '👋'}
                 </div>
                 <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-1">{followAction.type === 'follow' ? 'Berhasil Follow!' : 'Berhasil Unfollow'}</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-8">Kamu {followAction.type === 'follow' ? 'sekarang mengikuti' : 'tidak lagi mengikuti'} <span className="font-bold text-indigo-600 dark:text-indigo-400">@{followAction.username}</span></p>
-                <button onClick={() => setShowFollowModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white font-black rounded-2xl transition-all active:scale-[0.97]">OK, Mengerti</button>
+                <button onClick={() => setShowFollowModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white font-black rounded-xl transition-all active:scale-[0.97]">OK, Mengerti</button>
               </div>
             </motion.div>
           </motion.div>
@@ -2060,7 +2060,7 @@ export const DashboardStreamer = () => {
                       <button 
                         onClick={() => updateProfileMutation.mutate(profileForm)} 
                         disabled={updateProfileMutation.isPending}
-                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                       >
                         <Save size={20} />
                         {updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
