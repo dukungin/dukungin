@@ -2328,6 +2328,7 @@ import {
   Check,
   CheckCircle2,
   Copy,
+  HeadphonesIcon,
   ImageIcon,
   Menu,
   Plus,
@@ -2340,6 +2341,7 @@ import {
   TrendingUp,
   Trophy,
   User,
+  Users,
   Video,
   Vote,
   X
@@ -3594,11 +3596,11 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
         <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
         <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
       </div>
-      <div className="flex gap-2 flex-wrap">
+      <div className="gap-3 grid grid-cols-3">
         {subTabs.map(t => (
           <button key={t.id} onClick={() => setSubTab(t.id)}
-            className={`cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-xl font-black text-sm transition-all ${
-              subTab === t.id ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 hover:text-indigo-600'
+            className={`w-full cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-xl font-black text-sm transition-all ${
+              subTab === t.id ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:brightness-[80%]'
             }`}>
             {t.label}
             {t.count !== undefined && <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${subTab === t.id ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-700'}`}>{t.count}</span>}
@@ -3838,9 +3840,43 @@ const DashboardStreamer = () => {
           <div className="w-10 h-10 p-2 bg-red-200 rounded-lg flex items-center justify-center"><img src="/jellyfish.png" alt="icon" /></div>
           <span className="font-black text-lg tracking-tight text-slate-800 dark:text-slate-100">TapTipTup</span>
         </div>
-        <button onClick={() => setIsSidebarOpen(true)} className="cursor-pointer active:scale-[0.97] p-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-slate-600 dark:text-slate-400">
-          <Menu size={24} />
-        </button>
+
+        <div className='flex items-center gap-2'>
+          {/* Bantuan */}
+          <button
+            onClick={() => setActiveTab('contact')}
+            className={`cursor-pointer h-[40px] active:scale-[0.97] flex items-center gap-2 px-3 rounded-xl border font-medium text-md transition-all ${
+              activeTab === 'contact'
+                ? 'bg-slate-800 dark:bg-slate-700 text-white border-transparent'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
+            }`}>
+            <HeadphonesIcon size={14} />
+          </button>
+
+          {/* Komunitas */}
+          <button
+            onClick={() => setActiveTab('community')}
+            className="cursor-pointer hover:brightness-90 h-[38px] active:scale-[0.97] relative flex items-center gap-2 px-3 py-3 rounded-xl font-medium text-md overflow-hidden"
+            style={{
+              background: 'linear-gradient(90deg, #0f0c29, #302b63, #24243e, #0f0c29)',
+              backgroundSize: '300% 100%',
+              animation: 'rainbowSlide 3s ease-in-out infinite',
+              boxShadow: '0 0 12px 1px rgba(48,43,99,0.4)',
+            }}>
+            <span
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'white',
+                backgroundSize: '250% 100%',
+                animation: 'shimmerSlide 3s ease-in-out infinite',
+              }}
+            />
+            <Users size={16} className="relative z-10 text-black" />
+          </button>
+          <button onClick={() => setIsSidebarOpen(true)} className="cursor-pointer active:scale-[0.97] p-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-slate-600 dark:text-slate-400">
+            <Menu size={24} />
+          </button>
+        </div>
       </div>
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
