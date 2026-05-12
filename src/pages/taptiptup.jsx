@@ -196,7 +196,7 @@ function BigTitle({ children, style, C }) {
   return (
     <h2 style={{
       fontFamily: "'Bebas Neue', sans-serif",
-      fontSize: "clamp(48px,6vw,72px)",
+      fontSize: "clamp(42px,6vw,72px)",
       lineHeight: 0.95, letterSpacing: "0.01em", color: C.text,
       ...style,
     }}>
@@ -209,7 +209,7 @@ function BtnMain({ children, href, style, C }) {
   return (
     <Link 
       to={href || "/"} 
-      className="w-full sm:w-auto text-center" // Tambahkan class ini
+      className="w-[86vw] sm:w-auto text-center" // Tambahkan class ini
       style={{
         fontFamily: "'Space Grotesk', sans-serif",
         fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
@@ -232,7 +232,7 @@ function BtnGhost({ children, href, style, C }) {
   return (
     <Link 
       to={href || "/"} 
-      className="w-full sm:w-auto text-center"
+      className="w-[86vw] sm:w-auto text-center"
       target="__blank" 
       style={{
       fontFamily: "'Space Grotesk', sans-serif",
@@ -277,7 +277,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 99,
       display: "flex", alignItems: "center", justifyContent: "space-between",
-      padding: "18px 40px",
+      padding: "18px clamp(30px, 5vw, 40px)",
       background: C.navBg,
       backdropFilter: "blur(12px)",
       borderBottom: `1px solid ${C.line}`,
@@ -439,12 +439,14 @@ function Hero({ C, isDark }) {
               transition: "color 0.4s",
             }}
           >
-            <span>UBAH HOBI</span>
-            <img
-              className="relative md:top-[-7px] h-[0.8em] md:h-[0.85em] w-auto"
-              src="/jellyfish.png"
-              alt="icon"
-            />
+            <span className="flex items-center justify-center gap-[0.1em]">
+              UBAH HOBI
+              <img
+                className="relative top-[-2px] md:top-[-7px] md:inline-block hidden ml-[7px] h-[0.8em] md:h-[0.85em] w-auto"
+                src="/jellyfish.png"
+                alt="icon"
+              />
+            </span>
             <span>STREAMING</span>
             <span className="w-full">MENJADI BER-CUAN</span>
           </h1>
@@ -568,7 +570,7 @@ function Testimonials({ C }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)" }}
         className="testimonials-grid">
         {TESTIMONIALS.map((t, i) => (
-          <div key={t.name} style={{ padding: "36px 32px", borderRight: i < 2 ? `1px solid ${C.line}` : "none", display: "flex", flexDirection: "column", transition: "border-color 0.4s" }}>
+          <div key={t.name} style={{ padding: "36px 30px", borderRight: i < 2 ? `1px solid ${C.line}` : "none", display: "flex", flexDirection: "column", transition: "border-color 0.4s" }}>
             <span style={{ fontSize: 12, color: C.lime, letterSpacing: 2, marginBottom: 20, display: "block", transition: "color 0.4s" }}>★★★★★</span>
             <p style={{ fontSize: 13, lineHeight: 1.75, color: C.muted, fontWeight: 400, marginBottom: 24, flex: 1, transition: "color 0.4s" }}>{t.text}</p>
             <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 20, borderTop: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
@@ -759,12 +761,18 @@ function buildGlobalStyles(C) {
     .show-mobile { display: flex !important; }
 
     .hero-title {
-      font-size: 4rem !important;
+      font-size: 3.5rem !important;
       line-height: 1 !important;
       padding: 0 20px;
       gap: 0.1em !important;
     }
-    .hero-title span {
+   .hero-title span {
+      display: inline-block; /* Gunakan inline-block, jangan block murni */
+      width: auto; /* Biarkan lebar mengikuti konten kecuali yang diberi w-full */
+    }
+    
+    /* Hanya span yang merupakan anak langsung dan punya class w-full yang mengambil 1 baris */
+    .hero-title > span.w-full {
       display: block;
       width: 100%;
     }

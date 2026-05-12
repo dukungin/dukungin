@@ -195,7 +195,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           <div className="relative">
             <button
               onClick={() => setShowLogout(v => !v)}
-              className="cursor-pointer h-[38px] flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl px-2.5 py-3 transition-all active:scale-[0.97]"
+              className="cursor-pointer h-[38.4px] flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl px-1.5 py-3 transition-all active:scale-[0.97]"
             >
               <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-medium text-md flex-shrink-0">
                 {user.username.charAt(0).toUpperCase()}
