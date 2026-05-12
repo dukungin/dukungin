@@ -29,6 +29,7 @@ const getTokenPayload = () => {
 const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  
   const payload = getTokenPayload();
   const isSuperAdmin = payload?.role === 'superAdmin';
 
@@ -37,16 +38,21 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     navigate('/login'); 
   };
 
+  // Menu utama dengan kondisi
   const menuItems = [
     { id: 'settings', label: 'Editor Overlay', icon: <Layout size={20} /> },
-    // { id: 'community', label: 'Komunitas', icon: <Users size={20} /> },
     { id: 'history', label: 'Riwayat Donasi', icon: <History size={20} /> },
     { id: 'wallet', label: 'Penarikan Dana', icon: <Wallet size={20} /> },
     { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' },
     { id: 'subathon', icon: <Timer size={20} />,   label: 'Subathon' },
     { id: 'milestones', icon: <TrendingUp size={20} />, label: 'Milestones' },
     { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' },
-    { id: 'ghostAlert', icon: <Zap size={20} />, label: 'Admin Notif' }
+    // Ghost Alert hanya untuk Super Admin
+    ...(isSuperAdmin ? [{
+      id: 'ghostAlert',
+      icon: <Zap size={20} />,
+      label: 'Admin Notif Hantu'
+    }] : [])
   ];
 
   return (
@@ -55,7 +61,6 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
       <AnimatePresence>
         {showLogoutConfirm && (
           <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-6">
-            {/* Backdrop Blur */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -64,7 +69,6 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
             />
 
-            {/* Modal Box */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -170,9 +174,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
           className="md:hidden flex items-center gap-4 p-4 bg-red-100 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black transition-all"
         >
           <LogOut size={18} /> 
-          <p className='text-sm ml-[3px]'>
-            Keluar
-          </p>
+          <p className='text-sm ml-[3px]'>Keluar</p>
         </button>
       </aside>
     </>

@@ -27,35 +27,35 @@ const fadeUp = (delay = 0) => ({
 });
 
 const DEVELOPER = {
-  name: 'Ahmad Rizky Pratama',
+  name: 'Muhammad Khoirul huda',
   role: 'Fullstack Developer & Founder',
-  avatar: 'AR',
+  avatar: 'MH',
   bio: 'Membangun TapTipTup dari nol dengan passion untuk mendukung ekosistem kreator konten Indonesia.',
-  email: 'dev@sawerapp.id',
-  whatsapp: '+62 812-3456-7890',
-  phone: '+62 812-3456-7890',
-  github: 'github.com/ahmadrizky',
-  Link: 'Link.com/in/ahmadrizky',
-  instagram: '@ahmadrizky.dev',
-  website: 'ahmadrizky.dev',
-  location: 'Jakarta, Indonesia',
+  email: 'taptiptup.support@gmail.com',
+  whatsapp: '+62 895-1309-3406',
+  phone: '+62 895-1309-3406',
+  github: 'github.com/khoirulhudaaa',
+  Link: 'taptiptup.id',
+  instagram: '@TapTipTup_Support',
+  website: 'taptiptup.id',
+  location: 'Cirebon, Indonesia',
   timezone: 'WIB (UTC+7)',
-  availableHours: 'Senin – Jumat, 09.00 – 18.00 WIB',
+  availableHours: 'Senin – Minggu, 08.00 – 20.00 WIB',
 };
 
 const PLATFORM = {
   name: 'TapTipTup',
   tagline: 'Platform donasi & monetisasi untuk kreator Indonesia',
-  email: 'support@sawerapp.id',
-  emailBiz: 'business@sawerapp.id',
-  whatsapp: '+62 878-9012-3456',
-  instagram: '@sawer.id',
-  website: 'sawerapp.id',
+  email: 'taptiptup.support@gmail.com',
+  emailBiz: 'taptiptup.support@gmail.com',
+  whatsapp: '+62 895-1309-3406',
+  instagram: '@TapTipTup_Support',
+  website: 'taptiptup.id',
   location: 'Jakarta Selatan, Indonesia',
-  address: 'Jl. Sudirman No. 123, Lantai 8, Jakarta Selatan 12190',
-  operationalHours: 'Senin – Sabtu, 08.00 – 21.00 WIB',
+  address: 'Jl. Cideng Jaya No. 299, Jawa Barat',
+  operationalHours: 'Senin – Minggu, 08.00 – 22.00 WIB',
   responseTime: 'Maks. 1×24 jam',
-  established: '2024',
+  established: '2026',
 };
 
 const ContactCard = ({ icon, label, value, href, mono = false }) => (
@@ -94,7 +94,7 @@ export const ContactPage = () => {
         <div className="absolute top-8 right-40 w-3 h-3 rounded-full bg-indigo-400/30" />
         {/* <div className="absolute bottom-12 right-24 w-1.5 h-1.5 rounded-full bg-purple-400/40" /> */}
 
-        <div className="relative z-10 max-w-full">
+        <div className="relative z-[2] max-w-full">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
               <Headphones size={16} className="text-white/80" />
@@ -108,7 +108,7 @@ export const ContactPage = () => {
             Tim kami siap membantu kamu. Hubungi developer atau admin platform melalui kanal yang tersedia di bawah.
           </p>
 
-          <img src="/jellyfish.png" alt="icon" className='w-[16%] opacity-90 absolute top-[10%] right-[-60px] -rotate-40' />
+          <img src="/jellyfish.png" alt="icon" className='w-[16%] opacity-90 z-[1] absolute top-[10%] right-[-60px] -rotate-40' />
         </div>
 
         <div className="relative z-10 grid grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">

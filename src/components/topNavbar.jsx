@@ -16,7 +16,7 @@ const TAB_LABELS = {
   admin:       'Permintaan Penarikan',
 };
 
-export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab }) => {
+export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, navbar }) => {
   const [showLogout, setShowLogout] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const navigate = useNavigate();
@@ -26,9 +26,11 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab }
     navigate('/login');
   };
 
+  console.log('navabr', navbar)
+
   return (
     <>
-      <div className="sticky top-0 z-[3] w-full bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between gap-4">
+      <div className={`sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between gap-4`}>
 
         {/* Kiri: Breadcrumb */}
         <div className="flex items-center gap-1.5 min-w-0">

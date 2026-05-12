@@ -412,15 +412,17 @@ export const SubathonManager = ({ overlayToken }) => {
   const [subCopied, setSubCopied] = useState(false);
   const upd = (k, v) => setLocalTimer(t => ({ ...t, [k]: v }));
 
-  const save = () => configMutation.mutate({
-    mode: localTimer.mode,
-    initialSeconds: localTimer.initialSeconds,
-    autoAddEnabled: localTimer.autoAddEnabled,
-    addSecondsPerAmount: localTimer.addSecondsPerAmount,
-    addPerAmount: localTimer.addPerAmount,
-    maxSeconds: localTimer.maxSeconds,
-    title: localTimer.title,
-  });
+  const save = () => {
+    configMutation.mutate({
+      mode: localTimer.mode,
+      initialSeconds: localTimer.initialSeconds,
+      autoAddEnabled: localTimer.autoAddEnabled,
+      addSecondsPerAmount: localTimer.addSecondsPerAmount || 60,           // default jika kosong
+      addPerAmount: localTimer.addPerAmount || 10000,                     // default jika kosong
+      maxSeconds: localTimer.maxSeconds,
+      title: localTimer.title,
+    });
+  };
 
   if (isLoading || !localTimer) {
     return <div className="text-slate-400 text-sm font-bold animate-pulse py-4">Memuat timer...</div>;
@@ -576,17 +578,42 @@ export const SubathonManager = ({ overlayToken }) => {
 
           {localTimer.autoAddEnabled && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
+             {/* +Detik per Tier */}
               <div className="w-full space-y-1.5">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">+Detik per Tier</label>
-                <input type="number" value={localTimer.addSecondsPerAmount}
-                  onChange={e => upd('addSecondsPerAmount', Number(e.target.value))}
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  +Detik per Tier
+                </label>
+                <input 
+                  type="text"
+                  inputMode="numeric"
+                  value={localTimer.addSecondsPerAmount ?? ''}
+                  onChange={e => {
+                    const val = e.target.value.trim();
+                    if (val === '' || /^\d+$/.test(val)) {
+                      upd('addSecondsPerAmount', val === '' ? '' : Number(val));
+                    }
+                  }}
+                  placeholder="60"
                   className="w-full p-3 bg-white border-2 border-indigo-100 rounded-xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
                 />
               </div>
+
+              {/* Per Rp (1 tier) */}
               <div className="w-full space-y-1.5">
-                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Per Rp (1 tier)</label>
-                <input type="number" value={localTimer.addPerAmount}
-                  onChange={e => upd('addPerAmount', Number(e.target.value))}
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  Per Rp (1 tier)
+                </label>
+                <input 
+                  type="text"
+                  inputMode="numeric"
+                  value={localTimer.addPerAmount ?? ''}
+                  onChange={e => {
+                    const val = e.target.value.trim();
+                    if (val === '' || /^\d+$/.test(val)) {
+                      upd('addPerAmount', val === '' ? '' : Number(val));   // ← Kosong diperbolehkan
+                    }
+                  }}
+                  placeholder="10000"
                   className="w-full p-3 bg-white border-2 border-indigo-100 rounded-xl font-bold text-sm outline-none focus:border-indigo-400 transition-all"
                 />
               </div>

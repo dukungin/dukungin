@@ -1036,7 +1036,7 @@ const MediaTriggersEditor = ({ triggers, onChange, saveSettingsMutation }) => {
 
 // ─── YouTubeLivePreview ───────────────────────────────────────────────────────
 
-const YouTubeLivePreview = ({ settings, username }) => {
+const YouTubeLivePreview = ({ settings, username, testFullScreen}) => {
   const [showAlert, setShowAlert] = useState(false);
   const [animKey, setAnimKey] = useState(0);
   const [currentDonor, setCurrentDonor] = useState(null);
@@ -1087,6 +1087,11 @@ const YouTubeLivePreview = ({ settings, username }) => {
   const maxW  = settings.maxWidth || 280;
   const theme = settings.theme || 'modern';
   const dur   = currentDonor ? getDuration(settings, currentDonor.amount) : 5;
+
+  const handleFullScreen = () => {
+    testFullScreen()
+    setIsFullscreen(!isFullscreen)
+  }
 
   const renderAlert = () => {
     if (!currentDonor) return null;
@@ -1171,7 +1176,7 @@ const YouTubeLivePreview = ({ settings, username }) => {
                 className="cursor-pointer active:scale-[0.97] hover:brightness-90 flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-xs transition-all">
                 <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" /> Simulasi Donasi
               </button>
-              <button onClick={() => setIsFullscreen(false)}
+              <button onClick={() => handleFullScreen()}
                 className="cursor-pointer active:scale-[0.97] hover:brightness-90 flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-black text-xs transition-all border border-white/10">
                 ✕ Tutup
               </button>
@@ -1268,7 +1273,7 @@ const YouTubeLivePreview = ({ settings, username }) => {
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-black text-sm border-2 border-indigo-100 transition-all flex items-center justify-center gap-2">
         <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" /> Simulasi Donasi Masuk
       </button>
-      <button onClick={() => setIsFullscreen(true)}
+      <button onClick={() => handleFullScreen()}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-sm transition-all flex items-center justify-center gap-2 border border-slate-700">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
@@ -1641,6 +1646,7 @@ const DashboardStreamer = () => {
   const [copiedUrl, setCopiedUrl] = useState('');
   const [copiedLabel, setCopiedLabel] = useState('');
   const [showFollowModal, setShowFollowModal] = useState(false);
+  const [navbar, setNavbar] = useState(false);
   const [followAction, setFollowAction] = useState({ type: '', username: '' });
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ['profile'],
@@ -1906,8 +1912,8 @@ const DashboardStreamer = () => {
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-      <main className="flex-1 md:w-8xl z-[4] mx-auto w-full relative">
-        <TopNavbar user={user} onLogout={() => {
+      <main className="flex-1 md:w-8xl z-[2] mx-auto w-full relative">
+        <TopNavbar user={user} navbar={navbar} onLogout={() => {
           localStorage.removeItem('token');
           window.location.href = '/login';
         }} onProfile={() => setActiveTab('profile')} activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -1926,6 +1932,7 @@ const DashboardStreamer = () => {
                   : activeTab === 'milestones'  ? 'Milestones'
                   : activeTab === 'leaderboard' ? 'Leaderboard'
                   : activeTab === 'contact' ? 'Contact'
+                  : activeTab === 'ghostAlert' ? 'Notif Hantu'
                   : 'Admin'
                 }
               </h2>
@@ -2170,8 +2177,8 @@ const DashboardStreamer = () => {
                   </div>
                 </section>
 
-                <section className="xl:col-span-5 z-[3]">
-                  <YouTubeLivePreview settings={settings} username={user.username} />
+                <section className="xl:col-span-5 z-[2]">
+                  <YouTubeLivePreview settings={settings} username={user.username} testFullScreen={() => setNavbar(!navbar)} />
                 </section>
               </motion.div>
             )}

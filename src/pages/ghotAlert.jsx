@@ -222,7 +222,7 @@ const GhostAlertPage = () => {
     if (!isSuperAdmin) return;
     setLoadingStreamers(true);
     axios
-      .get(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
+      .get(`${import.meta.env.VITE_API_URL}/api/midtrans/admin/users`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
       .then((res) => {
@@ -307,7 +307,7 @@ const GhostAlertPage = () => {
 
   // ── Main UI ───────────────────────────────────────────────────────────────
   return (
-    <div className="max-w-4xl mx-auto px-4 md:px-6 py-8 space-y-6">
+    <div className="max-w-7xl mx-auto px-4 md:px-0 py-0 space-y-6">
 
       {/* Toast */}
       <div className="fixed bottom-6 right-6 z-[9999] pointer-events-none">
@@ -322,27 +322,6 @@ const GhostAlertPage = () => {
           )}
         </AnimatePresence>
       </div>
-
-      {/* Page Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-4"
-      >
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center text-white shadow-xl shadow-indigo-200 flex-shrink-0">
-          <Zap size={22} />
-        </div>
-        <div>
-          <h1 className="text-2xl font-black text-slate-800 leading-none">Ghost Alert</h1>
-          <p className="text-slate-400 text-sm mt-1 font-medium">
-            Kirim overlay alert ke streamer tanpa transaksi pembayaran
-          </p>
-        </div>
-        <div className="ml-auto hidden md:flex items-center gap-2 px-3 py-1.5 bg-violet-50 border border-violet-100 rounded-xl">
-          <ShieldAlert size={13} className="text-violet-600" />
-          <span className="text-[11px] font-black text-violet-600 uppercase tracking-wider">SuperAdmin Only</span>
-        </div>
-      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
 

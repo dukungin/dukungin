@@ -13,8 +13,9 @@ import SupporterPage from './pages/supporterPage';
 import LeaderboardWidget from './components/leaderboard';
 import MilestonesWidget from './components/milestoneWidget';
 import QrCodeWidget from './components/qrCodeWidget';
+import LandingPage from './pages/landingPage'; // ← import landing page
+import PrivacyPolicy from './pages/privacyPolice';
 
-// Buat instance QueryClient sekali di luar komponen
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -31,29 +32,55 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// Redirect ke dashboard jika sudah login, ke landing page jika belum
+const PublicOnlyRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  if (token) return <Navigate to="/dashboard" replace />;
+  return children;
+};
+
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>  {/* ← tambah ini */}
+    <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          <Route path="/login" element={<Auth />} />
-          <Route path="/register" element={<Auth />} />
+          {/* Landing page sebagai halaman utama */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+          {/* Auth — redirect ke dashboard kalau sudah login */}
+          <Route path="/login"    element={<PublicOnlyRoute><Auth /></PublicOnlyRoute>} />
+          <Route path="/register" element={<PublicOnlyRoute><Auth /></PublicOnlyRoute>} />
+
+          {/* Dashboard — harus login */}
           <Route path="/dashboard" element={<ProtectedRoute><DashboardStreamer /></ProtectedRoute>} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/donate/:username" element={<SupporterPage />} />
+
+          {/* Reset password */}
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+          {/* Halaman donasi publik */}
+          <Route path="/donate/:username" element={<SupporterPage />} />
+
+          {/* Hasil donasi */}
           <Route path="/donation/success" element={<DonationSuccess />} />
-          <Route path="/donation/failed" element={<DonationFailed />} />
+          <Route path="/donation/failed"  element={<DonationFailed />} />
           <Route path="/donation/pending" element={<DonationPending />} />
-          <Route path="/widget/:token/subathon" element={<SubathonWidget />} />
-          <Route path="/widget/:token/poll"     element={<PollWidget />} />
-          <Route path="/widget/:token/leaderboard"     element={<LeaderboardWidget />} />
-          <Route path="/widget/:token/milestones"     element={<MilestonesWidget />} />
-          <Route path="/widget/:token/qrcode"     element={<QrCodeWidget />} />
+
+          {/* OBS Widgets */}
+          <Route path="/widget/:token/subathon"   element={<SubathonWidget />} />
+          <Route path="/widget/:token/poll"        element={<PollWidget />} />
+          <Route path="/widget/:token/leaderboard" element={<LeaderboardWidget />} />
+          <Route path="/widget/:token/milestones"  element={<MilestonesWidget />} />
+          <Route path="/widget/:token/qrcode"      element={<QrCodeWidget />} />
+
+          {/* Overlay OBS */}
           <Route path="/overlay/:token" element={<OverlayAlert />} />
+
+          {/* Fallback — 404 redirect ke landing */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
-    </QueryClientProvider> 
+    </QueryClientProvider>
   );
 }
 
