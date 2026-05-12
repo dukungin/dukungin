@@ -1759,13 +1759,7 @@ export const DashboardStreamer = () => {
               <motion.div key="settings" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="grid grid-cols-1 xl:grid-cols-12 gap-5">
                 <section className="xl:col-span-7 space-y-6">
 
-                  {/* ── FITUR BARU 4: Instant Test Alert (di atas segalanya) ── */}
-                  <InstantTestAlert 
-                    overlayToken={user.overlayToken} 
-                    settings={settings} 
-                    user={user} 
-                  />
-
+                  
                   {/* ── Konfigurasi Alert ── */}
                   <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <SectionHeader icon={<Settings size={20} />} title="Konfigurasi Alert" color="bg-indigo-500" />
@@ -1853,38 +1847,96 @@ export const DashboardStreamer = () => {
                       </div>
                     </div>
 
-                    <div className="md:grid-cols-2 lg:grid-cols-2 space-y-7 w-full grid gap-2.5 mt-7">
-                      <InputField 
-                        label="Background Alert" 
-                        type="color" 
-                        value={settings.primaryColor} 
-                        onChange={v => upd('primaryColor', v)} 
-                      />
+                    {/* ── Warna Alert dengan Preview ── */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-8">
                       
-                      {/* WARNA BARU */}
-                      <InputField 
-                        label="Highlight Nominal" 
-                        type="color" 
-                        value={settings.highlightColor || '#a5b4fc'} 
-                        onChange={v => upd('highlightColor', v)} 
-                      />
+                      {/* Background Alert */}
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
+                          Background Alert
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <input 
+                            type="color" 
+                            value={settings.primaryColor} 
+                            onChange={v => upd('primaryColor', v)} 
+                            className="w-12 h-11 rounded-xl cursor-pointer"
+                          />
+                          <div className="flex-1">
+                            <div 
+                              className="w-full h-8.5 top-[1px]"
+                              style={{ backgroundColor: settings.primaryColor }}
+                            />
+                          </div>
+                        </div>
+                      </div>
 
-                      <InputField 
-                        label="Warna Teks" 
-                        type="color" 
-                        value={settings.textColor} 
-                        onChange={v => upd('textColor', v)} 
-                      />
-                      
-                      <InputField 
-                        label="Warna Border" 
-                        type="color" 
-                        value={settings.borderColor?.slice(0, 7) || '#ffffff'} 
-                        onChange={v => {
-                          const alpha = settings.borderColor?.slice(7, 9) || '26';
-                          upd('borderColor', `${v}${alpha}`);
-                        }} 
-                      />
+                      {/* Highlight Nominal */}
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
+                          Highlight Nominal (Rp)
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <input 
+                            type="color" 
+                            value={settings.highlightColor || '#a5b4fc'} 
+                            onChange={v => upd('highlightColor', v)} 
+                            className="w-12 h-11 rounded-xl cursor-pointer"
+                          />
+                          <div className="flex-1">
+                            <div 
+                              className="w-full h-8.5 top-[1px]"
+                              style={{ backgroundColor: settings.highlightColor || '#a5b4fc' }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Warna Teks */}
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
+                          Warna Teks Utama
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <input 
+                            type="color" 
+                            value={settings.textColor} 
+                            onChange={v => upd('textColor', v)} 
+                            className="w-12 h-11 rounded-xl cursor-pointer"
+                          />
+                          <div className="flex-1">
+                            <div 
+                              className="w-full h-8.5 top-[1px]"
+                              style={{ backgroundColor: settings.textColor }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Warna Border */}
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
+                          Warna Border
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <input 
+                            type="color" 
+                            value={settings.borderColor?.slice(0, 7) || '#ffffff'} 
+                            onChange={v => {
+                              const alpha = settings.borderColor?.slice(7, 9) || '26';
+                              upd('borderColor', `${v}${alpha}`);
+                            }} 
+                            className="w-12 h-11 rounded-xl cursor-pointer"
+                          />
+                          <div className="flex-1">
+                            <div 
+                              className="w-full h-8.5 top-[1px]"
+                              style={{ backgroundColor: settings.borderColor?.slice(0, 7) || '#ffffff' }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
 
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
@@ -1892,6 +1944,13 @@ export const DashboardStreamer = () => {
                       <Save size={20} />{saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}
                     </button>
                   </div>
+
+                  {/* ── FITUR BARU 4: Instant Test Alert (di atas segalanya) ── */}
+                  <InstantTestAlert 
+                    overlayToken={user.overlayToken} 
+                    settings={settings} 
+                    user={user} 
+                  />
 
                   {/* ── FITUR BARU 2: Quick Nominal Editor ── */}
                   <QuickAmountsEditor 
