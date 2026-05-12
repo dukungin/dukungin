@@ -1411,7 +1411,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
         <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
       </div>
 
-      <div className="gap-3 grid grid-cols-3">
+      <div className="gap-3 grid grid-cols-5">
         {subTabs.map(t => (
           <button key={t.id} onClick={() => setSubTab(t.id)}
             className={`w-full cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-xl font-black text-sm transition-all ${subTab === t.id ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:brightness-[80%]'}`}>
@@ -1419,16 +1419,16 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
             {t.count !== undefined && <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${subTab === t.id ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-700'}`}>{t.count}</span>}
           </button>
         ))}
+        {subTab === 'discover' && (
+          <div className="flex gap-3">
+            <input value={searchInput} onChange={e => setSearchInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && setSearch(searchInput)}
+              placeholder="Cari username streamer..."
+              className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl px-5 py-3.5 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
+            <button onClick={() => setSearch(searchInput)} className="cursor-pointer active:scale-[0.97] px-6 py-3.5 bg-indigo-600 text-white rounded-xl font-black text-sm hover:bg-indigo-700 transition-all">Cari</button>
+          </div>
+        )}
       </div>
 
-      {subTab === 'discover' && (
-        <div className="flex gap-3">
-          <input value={searchInput} onChange={e => setSearchInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && setSearch(searchInput)}
-            placeholder="Cari username streamer..."
-            className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl px-5 py-3.5 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
-          <button onClick={() => setSearch(searchInput)} className="cursor-pointer active:scale-[0.97] px-6 py-3.5 bg-indigo-600 text-white rounded-xl font-black text-sm hover:bg-indigo-700 transition-all">Cari</button>
-        </div>
-      )}
 
       {subTab === 'discover'  && renderUsers(discoverData?.users,  discoverLoading,  true)}
       {subTab === 'followers' && renderUsers(followersData?.users, followersLoading, false)}
@@ -1446,7 +1446,15 @@ export const DashboardStreamer = () => {
   const [showToast, setShowToast]         = useState(false);
   const [localSettings, setLocalSettings] = useState(null);
   const [donationToasts, setDonationToasts] = useState([]);
-  const [profileForm, setProfileForm]     = useState({ username: '', email: '', bio: '' });
+  const [profileForm, setProfileForm] = useState({
+    username: '',
+    email: '',
+    bio: '',
+    instagram: '',
+    facebook: '',
+    youtube: '',
+    twitter: '',
+  });
   const [showCopyModal, setShowCopyModal] = useState(false);
   const [copiedLabel, setCopiedLabel]     = useState('');
   const [copiedUrl, setCopiedUrl]         = useState('');
@@ -1490,12 +1498,15 @@ export const DashboardStreamer = () => {
     setShowFollowModal(true);
   };
 
-  useEffect(() => {
-    if (profileData) {
-      setProfileForm({
+  if (profileData) {
+    setProfileForm({
         username: profileData?.user?.username || profileData?.User?.username || '',
         email:    profileData?.user?.email    || profileData?.User?.email    || '',
-        bio: '',
+        bio:      profileData?.user?.bio      || profileData?.User?.bio      || '',
+        instagram: profileData?.user?.instagram || profileData?.User?.instagram || '',
+        facebook:  profileData?.user?.facebook  || profileData?.User?.facebook  || '',
+        youtube:   profileData?.user?.youtube   || profileData?.User?.youtube   || '',
+        twitter:   profileData?.user?.twitter   || profileData?.User?.twitter   || '',
       });
     }
   }, [profileData]);
@@ -1902,26 +1913,82 @@ export const DashboardStreamer = () => {
                   <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
                   <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
                 </div>
-                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 shadow-sm border border-slate-100 dark:border-slate-800">
+                {/* Profil Publik */}
+                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-100 dark:border-slate-800">
                   <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-indigo-500" />
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
                     <div className="md:col-span-2">
-                      <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">Link Halaman Donasi Kamu</label>
+                      <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">
+                        Link Halaman Donasi
+                      </label>
                       <div className="flex gap-2">
-                        <input readOnly value={`${window.location.origin}/${user.username}`} className="flex-1 bg-indigo-50 dark:bg-indigo-950/40 border-2 border-indigo-100 dark:border-indigo-900 rounded-xl p-5 font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none" />
-                        <button onClick={() => copyToClipboard(`${window.location.origin}/${user.username}`)} className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-6 rounded-xl transition-all flex items-center justify-center active:scale-95"><Copy size={20} /></button>
+                        <input readOnly value={`${window.location.origin}/${user.username}`} 
+                          className="flex-1 bg-indigo-50 dark:bg-indigo-950/40 border-2 border-indigo-100 dark:border-indigo-900 rounded-xl p-5 font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none" />
+                        <button onClick={() => copyToClipboard(`${window.location.origin}/${user.username}`)} 
+                          className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-6 rounded-xl transition-all flex items-center justify-center active:scale-95">
+                          <Copy size={20} />
+                        </button>
                       </div>
                     </div>
-                    <InputField label="Display Name" value={profileForm.username} placeholder="Nama di halaman donasi" onChange={v => setProfileForm(f => ({ ...f, username: v }))} />
-                    <InputField label="Email Address" type="email" value={profileForm.email} onChange={v => setProfileForm(f => ({ ...f, email: v }))} />
+
+                    <InputField label="Display Name" value={profileForm.username} 
+                      onChange={v => setProfileForm(f => ({ ...f, username: v }))} />
+
+                    <InputField label="Email Address" type="email" value={profileForm.email} 
+                      onChange={v => setProfileForm(f => ({ ...f, email: v }))} />
+
                     <div className="md:col-span-2">
-                      <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1 mb-2 block">Bio Singkat</label>
-                      <textarea className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-xl font-bold outline-none focus:border-indigo-500 h-32 transition-all" placeholder="Ceritakan tentang kontenmu..." value={profileForm.bio} onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))} />
+                      <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1 mb-2 block">
+                        Bio Singkat
+                      </label>
+                      <textarea 
+                        value={profileForm.bio} 
+                        onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))}
+                        className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-xl font-bold outline-none focus:border-indigo-500 h-32 transition-all" 
+                        placeholder="Ceritakan tentang kontenmu..." 
+                      />
                     </div>
+
+                    {/* Social Media */}
                     <div className="md:col-span-2">
-                      <button onClick={() => updateProfileMutation.mutate({ username: profileForm.username, email: profileForm.email, bio: profileForm.bio })} disabled={updateProfileMutation.isPending}
-                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black transition-all flex items-center justify-center gap-2 disabled:opacity-70">
-                        <Save size={18} />{updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Profil'}
+                      <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-4 uppercase tracking-widest">Social Media</label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <InputField 
+                          label="Instagram" 
+                          value={profileForm.instagram} 
+                          placeholder="@username" 
+                          onChange={v => setProfileForm(f => ({ ...f, instagram: v }))} 
+                        />
+                        <InputField 
+                          label="Facebook" 
+                          value={profileForm.facebook} 
+                          placeholder="facebook.com/username" 
+                          onChange={v => setProfileForm(f => ({ ...f, facebook: v }))} 
+                        />
+                        <InputField 
+                          label="YouTube" 
+                          value={profileForm.youtube} 
+                          placeholder="youtube.com/@channel" 
+                          onChange={v => setProfileForm(f => ({ ...f, youtube: v }))} 
+                        />
+                        <InputField 
+                          label="X / Twitter" 
+                          value={profileForm.twitter} 
+                          placeholder="@username" 
+                          onChange={v => setProfileForm(f => ({ ...f, twitter: v }))} 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <button 
+                        onClick={() => updateProfileMutation.mutate(profileForm)} 
+                        disabled={updateProfileMutation.isPending}
+                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                      >
+                        <Save size={20} />
+                        {updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                       </button>
                     </div>
                   </div>
