@@ -161,7 +161,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
         <div className="flex items-center gap-2.5 flex-shrink-0">
 
           {/* Saldo */}
-          <div className="hidden sm:flex items-center gap-2 rounded-xl px-3.5 py-2 border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60">
+          <div className="hidden sm:flex items-center h-[40px] gap-2 rounded-xl px-3.5 py-2 border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60">
             <Wallet size={18} className="text-indigo-400" />
             <span className="font-medium text-indigo-600 dark:text-indigo-400 text-md tracking-wide">
               {showBalance 
@@ -221,8 +221,8 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                 {user.username.charAt(0).toUpperCase()}
               </div>
               <div className="text-left hidden sm:block">
-                <p className="font-medium text-slate-800 dark:text-slate-200 text-[14px] leading-tight">@{user.username}</p>
-                <p className="text-[11px] text-slate-400 font-medium truncate max-w-[120px]">{user.email}</p>
+                <p className="font-medium text-slate-800 dark:text-slate-200 text-md leading-tight">@{user.username}</p>
+                {/* <p className="text-[11px] text-slate-400 font-medium truncate max-w-[120px]">{user.email}</p> */}
               </div>
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400 ml-0.5">
                 <path d="M6 9l6 6 6-6" />

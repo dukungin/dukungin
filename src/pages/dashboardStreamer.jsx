@@ -42,6 +42,7 @@ import api from '../lib/axiosInstance';
 import GhostAlertPage from './ghotAlert';
 import { ContactPage } from './support';
 import { WithdrawPage } from './withdrawPage';
+import MyDonationsHistory from './MyDonationsHistory';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -228,40 +229,27 @@ const InstantTestAlert = ({ overlayToken, settings }) => {
 
   const SOCKET_URL = 'https://server-dukungin-production.up.railway.app';
 
-  const sendTest = () => {
+  const sendTest = async () => {
     if (!overlayToken) return;
     setIsSending(true);
 
-    const socket = io(SOCKET_URL, { reconnection: false, timeout: 5000 });
+    try {
+      await api.post('/api/test-alert/send', {
+        targetUsername: user.username,        // atau username streamer target
+        donorName: customName,
+        amount: Number(customAmount),
+        message: customMsg,
+        mediaUrl: null,
+        mediaType: null,
+      });
 
-    socket.on('connect', () => {
-      socket.emit('join-room', overlayToken);
-      setTimeout(() => {
-        socket.emit('new-donation', {
-          donorName: customName || 'TestDonor',
-          amount: Number(customAmount) || 50000,
-          message: customMsg || 'Test notif dari dashboard!',
-          mediaUrl: null,
-          mediaType: null,
-          receivedAt: new Date().toISOString(),
-          soundUrl: settings?.soundUrl || null,
-          isTestAlert: true,
-        });
-        setLastSent(new Date());
-        setIsSending(false);
-        socket.disconnect();
-      }, 500);
-    });
-
-    socket.on('connect_error', () => {
+      setLastSent(new Date());
+      // Optional: tampilkan toast sukses
+    } catch (err) {
+      alert(err.response?.data?.message || 'Gagal mengirim test alert');
+    } finally {
       setIsSending(false);
-      socket.disconnect();
-    });
-
-    setTimeout(() => {
-      setIsSending(false);
-      socket.disconnect();
-    }, 6000);
+    }
   };
 
   return (
@@ -392,8 +380,8 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
             {/* SISI KIRI: Profil & Info Dasar (Sticky-like di Desktop) */}
             <div className="md:w-[40%] p-6 md:p-8 md:border-r border-slate-50 dark:border-slate-800/50 flex flex-col justify-between">
               <div className="relative mt-0 md:mt-0 mb-4">
-                <div className="p-1.5 bg-white dark:bg-slate-900 rounded-[2.2rem] shadow-xl inline-block">
-                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-[2rem] bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black text-indigo-600 border-4 border-white dark:border-slate-900 overflow-hidden">
+                <div className="bg-white dark:bg-slate-900 rounded-xl ml-[-5px] mb-4 shadow-xl inline-block">
+                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black text-indigo-600 border-4 border-white dark:border-slate-900 overflow-hidden">
                     {streamer?.avatar ? (
                       <img src={streamer.avatar} alt={username} className="w-full h-full object-cover" />
                     ) : (
@@ -818,15 +806,15 @@ const LeaderboardCard = ({ stats }) => {
       <div className="py-0 px-4 space-y-3">
         {topDonors.slice(0, 3).map((donor, i) => (
           <motion.div key={donor.name} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}
-            className={`flex items-center gap-4 p-4 border-t border-slate-200 text-black`}>
+            className={`flex items-center gap-4 p-4 dark:border-slate-100/10 border-t border-slate-200 dark:text-white text-black`}>
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg flex-shrink-0 ${i < 3 ? 'bg-white/20' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
               {i < 3 ? medals[i] : `#${i + 1}`}
             </div>
             <div className="flex-1 min-w-0">
-              <p className={`font-black text-sm truncate ${i < 3 ? 'text-black' : 'text-slate-800 dark:text-slate-100'}`}>{donor.name}</p>
-              <p className={`text-[10px] font-medium ${i < 3 ? 'text-black/70' : 'text-slate-400 dark:text-slate-500'}`}>{donor.count}x donasi</p>
+              <p className={`font-black text-sm truncate ${i < 3 ? 'dark:text-white text-black' : 'text-slate-800 dark:text-slate-100'}`}>{donor.name}</p>
+              <p className={`text-[10px] font-medium ${i < 3 ? 'dark:text-white text-black/70' : 'text-slate-400 dark:text-slate-500'}`}>{donor.count}x donasi</p>
             </div>
-            <p className={`font-black text-sm flex-shrink-0 ${i < 3 ? 'text-black' : 'text-indigo-600 dark:text-indigo-400'}`}>
+            <p className={`font-black text-sm flex-shrink-0 ${i < 3 ? 'dark:text-white text-black' : 'text-indigo-600 dark:text-indigo-400'}`}>
               Rp {Number(donor.totalAmount).toLocaleString('id-ID')}
             </p>
           </motion.div>
@@ -1747,7 +1735,7 @@ export const DashboardStreamer = () => {
         />
 
         <div className="relative mt-[-14px] px-3 md:px-7 py-0 lg:py-4 w-full">
-          <header className="flex flex-col md:mt-4 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-8 relative">
+          <header className="flex flex-col md:mt-6 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-8 relative">
             <div className="z-10 md:flex flex-col hidden">
               <h2 className="text-2xl md:text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight leading-none">{TAB_TITLE[activeTab] || activeTab}</h2>
               <p className="text-slate-400 dark:text-slate-500 font-medium mt-1">Selamat datang kembali, <span className="text-slate-800 dark:text-slate-200 font-bold">@{user.username}</span></p>
@@ -1860,7 +1848,7 @@ export const DashboardStreamer = () => {
                       </div>
                     </div>
 
-                    <div className="md:grid-cols-3 space-y-7 w-full grid mt-7">
+                    <div className="md:grid-cols-3 space-y-7 w-full grid gap-2.5 mt-7">
                       <InputField label="Warna Background" type="color" value={settings.primaryColor} onChange={v => upd('primaryColor', v)} />
                       <InputField label="Warna Teks" type="color" value={settings.textColor} onChange={v => upd('textColor', v)} />
                       <InputField label="Warna Border" type="color" value={settings.borderColor?.slice(0, 7) || '#ffffff'} onChange={v => { const alpha = settings.borderColor?.slice(7, 9) || '26'; upd('borderColor', `${v}${alpha}`); }} />
