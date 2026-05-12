@@ -2002,9 +2002,9 @@ export const DashboardStreamer = () => {
                         Link Halaman Donasi
                       </label>
                       <div className="flex gap-2">
-                        <input readOnly value={`${window.location.origin}/${user.username}`} 
+                        <input readOnly value={`${window.location.origin}/donate/${user.username}`} 
                           className="flex-1 bg-indigo-50 dark:bg-indigo-950/40 border-2 border-indigo-100 dark:border-indigo-900 rounded-xl p-5 font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none" />
-                        <button onClick={() => copyToClipboard(`${window.location.origin}/${user.username}`)} 
+                        <button onClick={() => copyToClipboard(`${window.location.origin}/donate/${user.username}`)} 
                           className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-6 rounded-xl transition-all flex items-center justify-center active:scale-95">
                           <Copy size={20} />
                         </button>
