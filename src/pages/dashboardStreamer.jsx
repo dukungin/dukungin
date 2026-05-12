@@ -1853,7 +1853,7 @@ export const DashboardStreamer = () => {
                       </div>
                     </div>
 
-                    <div className="md:grid-cols-2 lg:grid-cols-4 space-y-7 w-full grid gap-2.5 mt-7">
+                    <div className="md:grid-cols-2 lg:grid-cols-2 space-y-7 w-full grid gap-2.5 mt-7">
                       <InputField 
                         label="Background Alert" 
                         type="color" 
