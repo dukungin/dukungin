@@ -2331,11 +2331,13 @@ import {
   HeadphonesIcon,
   ImageIcon,
   Menu,
+  Moon,
   Plus,
   RefreshCw,
   Save,
   Settings,
   ShieldCheck,
+  Sun,
   Timer,
   Trash2,
   TrendingUp,
@@ -2355,6 +2357,7 @@ import { TopNavbar } from '../components/topNavbar';
 import { WithdrawPage } from './withdrawPage';
 import { ContactPage } from './support';
 import GhostAlertPage from './ghotAlert';
+import { useTheme } from '../hooks/useTheme';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -3639,6 +3642,7 @@ const DashboardStreamer = () => {
   const [showFollowModal, setShowFollowModal] = useState(false);
   const [followAction, setFollowAction] = useState({ type: '', username: '' });
   const [navbar, setNavbar]             = useState(false);
+  const { theme, toggle } = useTheme()
 
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ['profile'],
@@ -3838,17 +3842,28 @@ const DashboardStreamer = () => {
       <div className="lg:hidden fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 z-50 px-3 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 p-2 bg-red-200 rounded-lg flex items-center justify-center"><img src="/jellyfish.png" alt="icon" /></div>
-          <span className="font-black text-lg tracking-tight text-slate-800 dark:text-slate-100">TapTipTup</span>
+          <span className="font-black text-lg tracking-tight text-slate-800 dark:text-slate-100">TTT</span>
         </div>
 
         <div className='flex items-center gap-2'>
           {/* Bantuan */}
           <button
-            onClick={() => setActiveTab('contact')}
-            className={`cursor-pointer h-[40px] active:scale-[0.97] flex items-center gap-2 px-3 rounded-xl border font-medium text-md transition-all ${
+            onClick={toggle}
+            className={`h-[40px] not-only-of-type:cursor-pointer active:scale-[0.97] flex items-center gap-2 px-3 rounded-lg border shadow-none font-medium text-md transition-all ${
               activeTab === 'contact'
                 ? 'bg-slate-800 dark:bg-slate-700 text-white border-transparent'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
+                : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
+            }`}>
+              {
+                theme === 'dark' ? <Sun size={14} /> : <Moon size={14} /> 
+              }
+          </button>
+          <button
+            onClick={() => setActiveTab('contact')}
+            className={`h-[40px] not-only-of-type:cursor-pointer active:scale-[0.97] flex items-center gap-2 px-3 rounded-lg border shadow-none font-medium text-md transition-all ${
+              activeTab === 'contact'
+                ? 'bg-slate-800 dark:bg-slate-700 text-white border-transparent'
+                : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}>
             <HeadphonesIcon size={14} />
           </button>
@@ -3856,12 +3871,12 @@ const DashboardStreamer = () => {
           {/* Komunitas */}
           <button
             onClick={() => setActiveTab('community')}
-            className="cursor-pointer hover:brightness-90 h-[38px] active:scale-[0.97] relative flex items-center gap-2 px-3 py-3 rounded-xl font-medium text-md overflow-hidden"
+            className="h-[40px] cursor-pointer hover:brightness-90 active:scale-[0.97] relative flex items-center gap-2 px-3 py-3 rounded-lg font-medium text-md overflow-hidden"
             style={{
               background: 'linear-gradient(90deg, #0f0c29, #302b63, #24243e, #0f0c29)',
               backgroundSize: '300% 100%',
               animation: 'rainbowSlide 3s ease-in-out infinite',
-              boxShadow: '0 0 12px 1px rgba(48,43,99,0.4)',
+              // boxShadow: '0 0 12px 1px rgba(48,43,99,0.4)',
             }}>
             <span
               className="absolute inset-0 pointer-events-none"
@@ -3873,7 +3888,7 @@ const DashboardStreamer = () => {
             />
             <Users size={16} className="relative z-10 text-black" />
           </button>
-          <button onClick={() => setIsSidebarOpen(true)} className="cursor-pointer active:scale-[0.97] p-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-slate-600 dark:text-slate-400">
+          <button onClick={() => setIsSidebarOpen(true)} className="h-[40px] cursor-pointer active:scale-[0.97] p-2 bg-white dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
             <Menu size={24} />
           </button>
         </div>
