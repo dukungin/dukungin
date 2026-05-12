@@ -1,68 +1,101 @@
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
+import { AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff, Lock, Mail, Moon, Sun, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// ─── Animated background blobs ────────────────────────────────────────────────
-const BgBlobs = () => (
+// ─── Theme tokens ──────────────────────────────────────────────────────────────
+const getTheme = (dark) => ({
+  pageBg:           dark ? '#0f0c29'                       : '#f5f4ff',
+  rightBg:          dark ? '#13111f'                       : '#ffffff',
+  inputBg:          dark ? 'rgba(255,255,255,0.05)'        : 'rgba(79,70,229,0.04)',
+  inputBgFocus:     dark ? 'rgba(255,255,255,0.08)'        : 'rgba(79,70,229,0.07)',
+  inputBorder:      dark ? 'rgba(255,255,255,0.12)'        : 'rgba(79,70,229,0.18)',
+  inputBorderFocus: dark ? 'rgba(99,102,241,0.7)'          : 'rgba(79,70,229,0.8)',
+  tabBg:            dark ? 'rgba(255,255,255,0.04)'        : 'rgba(79,70,229,0.06)',
+  tabBorder:        dark ? 'rgba(255,255,255,0.08)'        : 'rgba(79,70,229,0.14)',
+  tabInactive:      dark ? '#475569'                       : '#94a3b8',
+  divider:          dark ? 'rgba(255,255,255,0.2)'        : 'rgba(0,0,0,0.08)',
+  dividerText:      dark ? '#ffffff'                       : '#94a3b8',
+  toggleBg:         dark ? 'rgba(255,255,255,0.08)'        : 'rgba(79,70,229,0.08)',
+  toggleBorder:     dark ? 'rgba(255,255,255,0.15)'        : 'rgba(79,70,229,0.2)',
+  toggleColor:      dark ? '#a5b4fc'                       : '#4f46e5',
+  heading:          dark ? '#ffffff'                       : '#1e1b4b',
+  subtext:          dark ? '#475569'                       : '#64748b',
+  label:            dark ? '#818cf8'                       : '#4f46e5',
+  inputText:        dark ? '#ffffff'                       : '#1e1b4b',
+  inputPlaceholder: dark ? 'rgba(255,255,255,0.28)'        : 'rgba(100,90,200,0.35)',
+  iconDefault:      dark ? '#94a3b8'                       : '#94a3b8',
+  switchText:       dark ? '#475569'                       : '#64748b',
+  switchLink:       dark ? '#818cf8'                       : '#4f46e5',
+  backBtn:          dark ? '#94a3b8'                       : '#64748b',
+  forgotColor:      dark ? '#818cf8'                       : '#4f46e5',
+  forgotHover:      dark ? '#a78bfa'                       : '#7c3aed',
+});
+
+// ─── Left panel BG (always dark) ──────────────────────────────────────────────
+const BgCanvas = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <div className="absolute -top-32 -left-32 w-80 h-80 rounded-full bg-indigo-500/20 blur-3xl animate-pulse" />
-    <div className="absolute top-1/2 -right-24 w-64 h-64 rounded-full bg-violet-400/15 blur-3xl" style={{ animationDelay: '1s' }} />
-    <div className="absolute -bottom-20 left-1/4 w-72 h-72 rounded-full bg-indigo-400/10 blur-3xl" />
+    <div style={{ position:'absolute', top:'-80px', left:'-60px', width:'420px', height:'420px', borderRadius:'50%', background:'radial-gradient(circle, rgba(99,102,241,0.28) 0%, transparent 70%)' }} />
+    <div style={{ position:'absolute', bottom:'-100px', right:'-80px', width:'360px', height:'360px', borderRadius:'50%', background:'radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)' }} />
+    <svg width="100%" height="100%" style={{ opacity:0.06 }}>
+      <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1.5" cy="1.5" r="1.5" fill="white" />
+      </pattern>
+      <rect width="100%" height="100%" fill="url(#dots)" />
+    </svg>
   </div>
 );
 
-// ─── Notification modal ───────────────────────────────────────────────────────
+const Orbs = () => (
+  <>
+    <motion.div animate={{ y:[0,-14,0], rotate:[0,8,0] }} transition={{ duration:6, repeat:Infinity, ease:'easeInOut' }}
+      style={{ position:'absolute', top:'12%', right:'8%', width:110, height:110, background:'rgba(255,255,255,0.07)', borderRadius:'38% 62% 55% 45% / 48% 40% 60% 52%', border:'1px solid rgba(255,255,255,0.14)' }} />
+    <motion.div animate={{ y:[0,10,0], rotate:[0,-5,0] }} transition={{ duration:8, repeat:Infinity, ease:'easeInOut', delay:1.5 }}
+      style={{ position:'absolute', bottom:'18%', left:'6%', width:72, height:72, background:'rgba(255,255,255,0.05)', borderRadius:'60% 40% 35% 65% / 50% 60% 40% 50%', border:'1px solid rgba(255,255,255,0.10)' }} />
+  </>
+);
+
+// ─── Notification Modal ────────────────────────────────────────────────────────
 const NotifModal = ({ notification, onClose }) => (
   <AnimatePresence>
     {notification.show && (
-      <>
+      <div className='fixed z-[9999] w-screen h-screen flex justify-center items-center'>
+        <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+          style={{ position:'fixed', inset:0, zIndex:100, background:'rgba(15,15,30,0.75)', backdropFilter:'blur(10px)' }}
+          onClick={onClose} />
         <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] bg-slate-900/70 backdrop-blur-md"
-          onClick={onClose}
-        />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85, y: 24 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.85, y: 24 }}
-          transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-          className="fixed z-[101] flex w-screen h-screen justify-center items-center bottom-8 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-96"
-        >
-          <div className="bg-white mx-auto w-[92vw] md:min-w-[26vw] rounded-3xl p-8 shadow-2xl text-center">
-            <div className={`w-16 h-16 mx-auto mb-5 rounded-2xl flex items-center justify-center ${
-              notification.type === 'success' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-500'
-            }`}>
-              {notification.type === 'success' ? <CheckCircle2 size={32} /> : <AlertCircle size={32} />}
-            </div>
-            <h3 className="text-xl font-black text-slate-800 mb-2">{notification.title}</h3>
-            <p className="text-slate-500 text-sm font-medium leading-relaxed mb-6">{notification.message}</p>
-            <button
-              onClick={onClose}
-              className={`cursor-pointer active:scale-[0.97] hover:brightness-95 w-full py-3.5 rounded-2xl font-black text-sm transition-all ${
-                notification.type === 'success'
-                  ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                  : 'bg-red-500 text-white hover:bg-red-600'
-              }`}
-            >
-              {notification.type === 'success' ? 'Lanjutkan' : 'Coba Lagi'}
+          initial={{ opacity:0, scale:0.88, y:28 }} animate={{ opacity:1, scale:1, y:0 }} exit={{ opacity:0, scale:0.88, y:28 }}
+          transition={{ type:'spring', stiffness:340, damping:30 }}
+          style={{ position:'fixed', zIndex:101, transform:'translate(-50%,-50%)', width:'92vw', maxWidth:400 }}>
+          <div style={{ background:'rgba(255,255,255,0.97)', borderRadius:28, padding:'36px 32px', boxShadow:'0 32px 80px rgba(0,0,0,0.22)', textAlign:'center' }}>
+            <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', stiffness:400, damping:20, delay:0.1 }}
+              style={{ width:68, height:68, borderRadius:20, margin:'0 auto 20px', display:'flex', alignItems:'center', justifyContent:'center', background: notification.type==='success' ? '#ecfdf5' : '#fff1f2', color: notification.type==='success' ? '#059669' : '#e11d48' }}>
+              {notification.type==='success' ? <CheckCircle2 size={34}/> : <AlertCircle size={34}/>}
+            </motion.div>
+            <h3 style={{ fontSize:20, fontWeight:900, color:'#1e1b4b', marginBottom:8 }}>{notification.title}</h3>
+            <p style={{ fontSize:14, color:'#64748b', lineHeight:1.6, marginBottom:24 }}>{notification.message}</p>
+            <button onClick={onClose}
+              style={{ width:'100%', padding:'14px 0', borderRadius:16, fontWeight:900, fontSize:14, border:'none', cursor:'pointer', background: notification.type==='success' ? '#4f46e5' : '#e11d48', color:'white', transition:'opacity 0.2s' }}
+              onMouseEnter={e => e.target.style.opacity='0.88'} onMouseLeave={e => e.target.style.opacity='1'}>
+              {notification.type==='success' ? 'Lanjutkan →' : 'Coba Lagi'}
             </button>
           </div>
         </motion.div>
-      </>
+      </div>
     )}
   </AnimatePresence>
 );
 
-// ─── Input field ──────────────────────────────────────────────────────────────
-const AuthInput = ({ icon, type, value, onChange, placeholder }) => {
+// ─── Input Field ───────────────────────────────────────────────────────────────
+const AuthInput = ({ icon, type='text', value, onChange, placeholder, T }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [focused, setFocused] = useState(false);
   const isPassword = type === 'password';
 
   return (
-    <div className="relative group">
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors z-10">
+    <div style={{ position:'relative' }}>
+      <div style={{ position:'absolute', left:16, top:'50%', transform:'translateY(-50%)', color: focused ? '#4f46e5' : T.iconDefault, transition:'color 0.2s', zIndex:1, display:'flex' }}>
         {icon}
       </div>
       <input
@@ -70,41 +103,91 @@ const AuthInput = ({ icon, type, value, onChange, placeholder }) => {
         value={value}
         onChange={e => onChange(e.target.value.replace(/<script.*?>.*?<\/script>/gi, ''))}
         placeholder={placeholder}
-        className="w-full bg-slate-200/80 border border-slate-300 rounded-2xl py-4 pl-12 pr-12 outline-none focus:border-indigo-500 focus:bg-white transition-all font-semibold text-slate-700 placeholder:text-slate-400 placeholder:font-normal text-[15px]"
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={{
+          width:'100%', boxSizing:'border-box',
+          background: focused ? T.inputBgFocus : T.inputBg,
+          border: `1.5px solid ${focused ? T.inputBorderFocus : T.inputBorder}`,
+          borderRadius:14, padding:'15px 48px',
+          color: T.inputText, fontSize:15, fontWeight:600,
+          outline:'none', transition:'all 0.2s',
+        }}
+        className="auth-input-field"
       />
       {isPassword && (
-        <button
-          type="button"
-          onClick={() => setShowPassword(v => !v)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-500 transition-colors cursor-pointer z-10"
-        >
-          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        <button type="button" onClick={() => setShowPassword(v => !v)}
+          style={{ position:'absolute', right:16, top:'50%', transform:'translateY(-50%)', background:'none', border:'none', cursor:'pointer', color: T.iconDefault, display:'flex', zIndex:1 }}>
+          {showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}
         </button>
       )}
     </div>
   );
 };
 
-// ─── Feature pill ─────────────────────────────────────────────────────────────
+// ─── Left panel sub-components ─────────────────────────────────────────────────
 const Pill = ({ label }) => (
-  <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-3 py-1.5">
-    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-    <span className="text-white/90 text-xs font-semibold">{label}</span>
+  <div style={{ display:'flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:999, padding:'6px 14px' }}>
+    <div style={{ width:6, height:6, borderRadius:'50%', background:'#34d399', flexShrink:0 }} />
+    <span style={{ color:'rgba(255,255,255,0.85)', fontSize:12, fontWeight:700, whiteSpace:'nowrap' }}>{label}</span>
   </div>
 );
 
-// ─── Main Auth ────────────────────────────────────────────────────────────────
+const StatBadge = ({ value, label }) => (
+  <div style={{ background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:16, padding:'14px 20px', textAlign:'center' }}>
+    <div style={{ fontSize:22, fontWeight:900, color:'white', lineHeight:1 }}>{value}</div>
+    <div style={{ fontSize:11, color:'rgba(255,255,255,0.5)', marginTop:4, fontWeight:600 }}>{label}</div>
+  </div>
+);
+
+// ─── Theme Toggle Button ───────────────────────────────────────────────────────
+const ThemeToggle = ({ isDark, onToggle, T }) => (
+  <motion.button
+    onClick={onToggle}
+    whileTap={{ scale:0.90 }}
+    style={{
+      position:'absolute', top:20, right:20,
+      display:'flex', alignItems:'center', gap:7,
+      background: T.toggleBg,
+      border: `1px solid ${T.toggleBorder}`,
+      borderRadius:999, padding:'8px 14px',
+      cursor:'pointer', zIndex:20,
+      transition:'background 0.35s, border-color 0.35s',
+    }}
+  >
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={isDark ? 'moon' : 'sun'}
+        initial={{ opacity:0, rotate:-30, scale:0.7 }}
+        animate={{ opacity:1, rotate:0, scale:1 }}
+        exit={{ opacity:0, rotate:30, scale:0.7 }}
+        transition={{ duration:0.22 }}
+        style={{ display:'flex', color: T.toggleColor }}
+      >
+        {isDark ? <Moon size={15}/> : <Sun size={15}/>}
+      </motion.div>
+    </AnimatePresence>
+    <span style={{ fontSize:12, fontWeight:800, color: T.toggleColor, letterSpacing:'0.02em', transition:'color 0.35s' }}>
+      {isDark ? 'Dark' : 'Light'}
+    </span>
+  </motion.button>
+);
+
+// ─── Main Auth ─────────────────────────────────────────────────────────────────
 const Auth = () => {
+  const [isDark, setIsDark] = useState(true);
+  const T = getTheme(isDark);
+
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ username:'', email:'', password:'' });
   const [isForgot, setIsForgot] = useState(false);
   const [emailReset, setEmailReset] = useState('');
   const navigate = useNavigate();
 
-  const [notification, setNotification] = useState({ show: false, title: '', message: '', type: 'success' });
-  const notify = (title, message, type = 'success') => setNotification({ show: true, title, message, type });
-  const closeNotif = () => setNotification(n => ({ ...n, show: false }));
+  const [notification, setNotification] = useState({ show:false, title:'', message:'', type:'success' });
+  const notify = (title, message, type='success') => setNotification({ show:true, title, message, type });
+  const closeNotif = () => setNotification(n => ({ ...n, show:false }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -118,7 +201,7 @@ const Auth = () => {
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
         notify('Hai Streamer!', 'Akun kamu berhasil dibuat. Silakan login.', 'success');
-        setFormData({ username: '', email: '', password: '' });
+        setFormData({ username:'', email:'', password:'' });
         setTimeout(() => { closeNotif(); setIsLogin(true); }, 2000);
       }
     } catch (err) {
@@ -141,202 +224,205 @@ const Auth = () => {
     }
   };
 
+  const isTabActive = (i) => (isLogin && i === 0) || (!isLogin && i === 1);
+
   return (
-    <div className="min-h-screen overflow-hidden bg-slate-50 font-sans flex flex-col lg:flex-row">
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        .auth-root * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+        .auth-input-field::placeholder { color: ${T.inputPlaceholder}; font-weight: 400; }
+        .tab-btn { transition: all 0.22s cubic-bezier(.4,0,.2,1); }
+        .tab-btn:active { transform: scale(0.97); }
+        .submit-btn:active { transform: scale(0.97) !important; }
+        .submit-btn:hover { filter: brightness(1.08); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) {
+          .auth-root { flex-direction: column !important; }
+          .auth-left { width: 100% !important; min-height: auto !important; padding: 32px 24px !important; }
+        }
+      `}</style>
 
-      <NotifModal notification={notification} onClose={closeNotif} />
+      <div className="auth-root" style={{ minHeight:'100vh', overflow:'hidden', background: T.pageBg, display:'flex', flexDirection:'row', transition:'background 0.35s' }}>
+        <NotifModal notification={notification} onClose={closeNotif} />
 
-      {/* ── LEFT / TOP: Brand Hero ── */}
-      <div className="relative lg:w-[45%] lg:min-h-screen bg-indigo-600 flex flex-col justify-center overflow-hidden
-                      px-4 pt-8 pb-8 lg:px-12 lg:pt-16 lg:pb-12">
-        <BgBlobs />
+        {/* ── LEFT: Brand Panel (always dark) ── */}
+        <div className="auth-left" style={{
+          position:'relative', width:'48%', minHeight:'100vh',
+          background:'linear-gradient(145deg, #312e81 0%, #4f46e5 45%, #6d28d9 100%)',
+          display:'flex', flexDirection:'column', justifyContent:'space-between',
+          padding:'48px 44px', overflow:'hidden',
+        }}>
+          <BgCanvas />
+          <Orbs />
 
-        {/* Grid texture */}
-        <div className="absolute inset-0 opacity-[0.07]">
-          <svg width="100%" height="100%">
-            <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-              <path d="M 32 0 L 0 0 0 32" fill="none" stroke="white" strokeWidth="0.8"/>
-            </pattern>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-        </div>
-
-        {/* Jellyfish decoration */}
-
-        <div className="relative z-10">
-          {/* Logo */}
-          <div className="hidden md:inline-flex items-center gap-2 bg-white/15 border border-white/25 rounded-2xl px-4 py-2 mb-8 lg:mb-6">
-            <div className="w-6 h-6 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-indigo-600 font-black text-xs italic">S</span>
+          <div style={{ position:'relative', zIndex:10 }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:14, padding:'8px 16px', marginBottom:48 }}>
+              <div style={{ width:26, height:26, background:'white', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <span style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>S</span>
+              </div>
+              <span style={{ color:'white', fontWeight:800, fontSize:13, letterSpacing:'-0.01em' }}>TAPTIPTUP From Indonesia 🚀</span>
             </div>
-            <span className="text-white font-black text-sm tracking-tight">TAPTIPTUP From Indonesia 🚀</span>
+
+            <div style={{ position:'relative', marginBottom:32 }}>
+              <motion.img src="/jellyfish.png" alt=""
+                animate={{ y:[0,-10,0] }} transition={{ duration:4, repeat:Infinity, ease:'easeInOut' }}
+                style={{ width:'18%', display:'block', userSelect:'none', pointerEvents:'none' }} />
+              <motion.img src="/jellyfish.png" alt=""
+                animate={{ y:[0,8,0], rotate:[-45,-38,-45] }} transition={{ duration:5.5, repeat:Infinity, ease:'easeInOut', delay:0.8 }}
+                style={{ position:'absolute', top:-60, right:-30, width:'44%', opacity:0.45, transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} />
+            </div>
+
+            <h1 style={{ fontSize:'clamp(28px,3.2vw,40px)', fontWeight:900, color:'white', lineHeight:1.15, letterSpacing:'-0.02em', marginBottom:14 }}>
+              Mulai Terima<br />
+              <span style={{ color:'#a5b4fc' }}>Dukungan</span> Real-time.
+            </h1>
+            <p style={{ color:'rgba(199,210,254,0.8)', fontSize:15, lineHeight:1.65, maxWidth: '94%' }}>
+              Platform donasi real-time untuk streamer Indonesia dengan overlay OBS custom, pembayaran lokal, dan pencairan cepat.
+            </p>
           </div>
-          <img src="/jellyfish.png" alt=""
-            className="relative w-[14%] lg:w-[15%] mb-6 pointer-events-none select-none" />
-          <img src="/jellyfish.png" alt=""
-            className="absolute -top-4 -right-16 w-[26%] lg:w-[46%] -rotate-45 mb-6 pointer-events-none select-none" />
 
-          {/* Headline */}
-          <h1 className="text-3xl lg:text-4xl font-black text-white leading-[1.15] tracking-tight">
-            Mulai Terima<br />
-            <span className="text-indigo-200 mr-1.5">Dukungan</span>
-            Real-time.
-          </h1>
-          <p className="text-indigo-200 mt-3 font-medium text-sm lg:text-base leading-relaxed max-w-[90%]">
-            Dashboard paling clean untuk para streamer Indonesia.
-          </p>
+          <div style={{ position:'relative', zIndex:10 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:28 }}>
+              <StatBadge value="12K+" label="Streamer Aktif" />
+              <StatBadge value="99.9%" label="Uptime" />
+              <StatBadge value="<2det" label="Notif Alert" />
+            </div>
+            <div style={{ height:1, background:'rgba(255,255,255,0.1)', marginBottom:20 }} />
+            <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+              <Pill label="Integrasi Midtrans" />
+              <Pill label="Overlay OBS Custom" />
+              <Pill label="Pencairan Cepat" />
+            </div>
+          </div>
+
+          {/* <p style={{ position:'relative', zIndex:10, color:'rgba(255,255,255,0.28)', fontSize:11, fontWeight:500 }}>
+            © 2025 TapTipTup · Made with ❤️ in Indonesia
+          </p> */}
         </div>
 
-        {/* Pills — hidden on very small mobile to save space */}
-        <div className="relative z-10 hidden sm:flex lg:flex flex-wrap gap-2 mt-6 lg:mt-12">
-          <Pill label="Integrasi Midtrans" />
-          <Pill label="Overlay OBS Custom" />
-          <Pill label="Pencairan Cepat" />
-        </div>
-      </div>
+        {/* ── RIGHT: Form Panel ── */}
+        <div style={{
+          flex:1, position:'relative',
+          background: T.rightBg,
+          display:'flex', alignItems:'center', justifyContent:'center',
+          padding:'40px 24px', minHeight:'100vh',
+          transition:'background 0.35s',
+        }}>
+          <ThemeToggle isDark={isDark} onToggle={() => setIsDark(d => !d)} T={T} />
 
-      {/* ── RIGHT / BOTTOM: Form ── */}
-      <div className="md:flex-1 flex items-center justify-center px-4 pb-0 pt-5 md:h-[100vh] h-max md:py-10 lg:px-0">
-        <div className="w-full max-w-lg h-max">
+          <div style={{ width:'100%', maxWidth: '90%' }}>
+            <AnimatePresence mode="wait">
 
-          <AnimatePresence mode="wait">
-
-            {/* ── FORGOT PASSWORD ── */}
-            {isForgot ? (
-              <motion.div
-                key="forgot"
-                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.25 }}
-              >
-                <button onClick={() => setIsForgot(false)}
-                  className="flex items-center gap-2 text-slate-400 hover:text-indigo-600 text-sm font-semibold mb-8 transition-colors">
-                  ← Kembali
-                </button>
-                <h2 className="text-2xl font-black text-slate-800 mb-1">Lupa Password?</h2>
-                <p className="text-slate-500 text-sm font-medium mb-8 leading-relaxed">
-                  Masukkan email kamu dan kami akan kirim link reset.
-                </p>
-                <div className="space-y-6">
-                  <AuthInput
-                    icon={<Mail size={18} />}
-                    placeholder="Email kamu"
-                    value={emailReset}
-                    onChange={setEmailReset}
-                  />
-                  <button
-                    onClick={handleForgotPassword}
-                    disabled={loading}
-                    className="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black text-sm hover:bg-indigo-700 transition-all active:scale-[0.97] flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-indigo-100"
-                  >
-                    {loading
-                      ? <div className="w-4 h-4 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                      : 'Kirim Link Reset →'
-                    }
+              {/* FORGOT PASSWORD */}
+              {isForgot ? (
+                <motion.div key="forgot" initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-20 }} transition={{ duration:0.22 }}>
+                  <button onClick={() => setIsForgot(false)}
+                    style={{ background:'none', border:'none', cursor:'pointer', color: T.backBtn, fontSize:14, fontWeight:700, display:'flex', alignItems:'center', gap:6, marginBottom:32, transition:'color 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.color='#4f46e5'}
+                    onMouseLeave={e => e.currentTarget.style.color=T.backBtn}>
+                    ← Kembali
                   </button>
-                </div>
-              </motion.div>
-
-            ) : (
-
-              /* ── LOGIN / REGISTER ── */
-              <motion.div
-                key={isLogin ? 'login' : 'register'}
-                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.25 }}
-              >
-                {/* Tab switcher */}
-                <div className="flex border border-slate-200 bg-slate-100 rounded-2xl p-1 mb-8">
-                  {['Login', 'Daftar'].map((label, i) => (
-                    <button
-                      key={label}
-                      onClick={() => setIsLogin(i === 0)}
-                      className={`cursor-pointer active:scale-[0.97] flex-1 py-2.5 rounded-xl font-black text-sm transition-all ${
-                        (isLogin && i === 0) || (!isLogin && i === 1)
-                          ? 'bg-white text-indigo-600 shadow-sm'
-                          : 'text-slate-400 hover:text-slate-600'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-
-                <h2 className="text-2xl md:flex flex-col hidden font-black text-slate-800 mb-1">
-                  {isLogin ? 'Selamat Datang' : 'Buat Akun Baru'}
-                </h2>
-                <p className="text-slate-500 text-sm font-medium mb-7 leading-relaxed">
-                  {isLogin
-                    ? 'Masuk untuk mengelola overlay kamu.'
-                    : 'Daftar sekarang dan mulai kustomisasi alert.'}
-                </p>
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {!isLogin && (
-                    <AuthInput
-                      icon={<User size={18} />}
-                      placeholder="Username"
-                      value={formData.username}
-                      onChange={v => setFormData(f => ({ ...f, username: v }))}
-                    />
-                  )}
-                  <AuthInput
-                    icon={<Mail size={18} />}
-                    type="email"
-                    placeholder="Alamat Email"
-                    value={formData.email}
-                    onChange={v => setFormData(f => ({ ...f, email: v }))}
-                  />
-                  <AuthInput
-                    icon={<Lock size={18} />}
-                    type="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={v => setFormData(f => ({ ...f, password: v }))}
-                  />
-
-                  {/* {isLogin && (
-                    <div className="text-right">
-                      <button type="button" onClick={() => setIsForgot(true)}
-                        className="text-xs text-indigo-500 hover:text-indigo-700 font-semibold transition-colors">
-                        Lupa Password?
-                      </button>
-                    </div>
-                  )} */}
-
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="cursor-pointer active:scale-[0.97] hover:brightness-95 w-full bg-indigo-600 text-white py-4 rounded-2xl font-black text-[15px] hover:bg-indigo-700 transition-all active:scale-[0.97] flex items-center justify-center gap-2 disabled:opacity-60 shadow-xl shadow-indigo-100"
-                    >
-                      {loading ? (
-                        <div className="w-4 h-4 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                      ) : (
-                        <>
-                          {isLogin ? 'Login Dashboard' : 'Daftar Sekarang'}
-                          <ArrowRight size={16} />
-                        </>
-                      )}
+                  <h2 style={{ fontSize:26, fontWeight:900, color: T.heading, marginBottom:8, transition:'color 0.35s' }}>Lupa Password?</h2>
+                  <p style={{ color: T.subtext, fontSize:14, lineHeight:1.6, marginBottom:28, transition:'color 0.35s' }}>
+                    Masukkan email kamu dan kami akan kirim link reset.
+                  </p>
+                  <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+                    <AuthInput icon={<Mail size={18}/>} placeholder="Email kamu" value={emailReset} onChange={setEmailReset} T={T} />
+                    <button onClick={handleForgotPassword} disabled={loading} className="submit-btn"
+                      style={{ width:'100%', padding:'15px 0', borderRadius:14, fontWeight:900, fontSize:14, border:'none', cursor:'pointer', background:'linear-gradient(135deg, #4f46e5, #7c3aed)', color:'white', opacity: loading ? 0.6 : 1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 8px 32px rgba(79,70,229,0.35)', transition:'all 0.2s' }}>
+                      {loading
+                        ? <div style={{ width:16, height:16, border:'3px solid rgba(255,255,255,0.3)', borderTopColor:'white', borderRadius:'50%', animation:'spin 0.7s linear infinite' }} />
+                        : 'Kirim Link Reset →'}
                     </button>
                   </div>
-                </form>
+                </motion.div>
 
-                <p className="mt-6 text-center text-slate-400 text-sm font-medium">
-                  {isLogin ? 'Belum punya akun?' : 'Sudah punya akun?'}
-                  <button
-                    onClick={() => setIsLogin(!isLogin)}
-                    className="ml-1.5 text-indigo-600 font-black hover:underline"
-                  >
-                    {isLogin ? 'Daftar Gratis' : 'Login'}
-                  </button>
-                </p>
-              </motion.div>
-            )}
+              ) : (
 
-          </AnimatePresence>
+                /* LOGIN / REGISTER */
+                <motion.div key={isLogin ? 'login' : 'register'} initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-20 }} transition={{ duration:0.22 }}>
+                  <div style={{ marginBottom:28 }}>
+                    {/* <p style={{ color: T.label, fontSize:13, fontWeight:800, letterSpacing:'0.06em', textTransform:'uppercase', marginBottom:6, transition:'color 0.35s' }}>
+                      {isLogin ? '👋 Selamat datang kembali' : '✨ Bergabung sekarang'}
+                    </p> */}
+                    <h2 style={{ fontSize:28, fontWeight:900, color: T.heading, lineHeight:1.2, letterSpacing:'-0.01em', transition:'color 0.35s' }}>
+                      {isLogin ? 'Login ke Dashboard' : 'Buat Akun Baru'}
+                    </h2>
+                    <p style={{ color: T.subtext, fontSize:14, marginTop:8, lineHeight:1.55, transition:'color 0.35s' }}>
+                      {isLogin ? 'Masuk untuk mengelola overlay dan donasi kamu.' : 'Daftar sekarang dan mulai kustomisasi alert-mu.'}
+                    </p>
+                  </div>
+
+                  {/* Tab switcher */}
+                  <div style={{ display:'flex', background: T.tabBg, border:`1px solid ${T.tabBorder}`, borderRadius:14, padding:4, marginBottom:28, transition:'all 0.35s' }}>
+                    {['Login','Daftar'].map((label, i) => (
+                      <button key={label} className="tab-btn" onClick={() => setIsLogin(i === 0)}
+                        style={{ flex:1, padding:'10px 0', borderRadius:11, fontWeight:800, fontSize:14, border:'none', cursor:'pointer',
+                          background: isTabActive(i) ? 'linear-gradient(135deg, #4f46e5, #7c3aed)' : 'transparent',
+                          color: isTabActive(i) ? 'white' : T.tabInactive,
+                          boxShadow: isTabActive(i) ? '0 4px 16px rgba(79,70,229,0.3)' : 'none',
+                        }}>
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <form onSubmit={handleSubmit}>
+                    <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:20 }}>
+                      <AnimatePresence>
+                        {!isLogin && (
+                          <motion.div key="username" initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }} exit={{ opacity:0, height:0 }} transition={{ duration:0.2 }}>
+                            <AuthInput icon={<User size={18}/>} placeholder="Username" value={formData.username} onChange={v => setFormData(f => ({ ...f, username:v }))} T={T} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                      <AuthInput icon={<Mail size={18}/>} type="email" placeholder="Alamat Email" value={formData.email} onChange={v => setFormData(f => ({ ...f, email:v }))} T={T} />
+                      <AuthInput icon={<Lock size={18}/>} type="password" placeholder="Password" value={formData.password} onChange={v => setFormData(f => ({ ...f, password:v }))} T={T} />
+                    </div>
+
+                    {isLogin && (
+                      <div style={{ textAlign:'right', marginBottom:20 }}>
+                        <button type="button" onClick={() => setIsForgot(true)}
+                          style={{ background:'none', border:'none', cursor:'pointer', color: T.forgotColor, fontSize:12, fontWeight:700, transition:'color 0.2s' }}
+                          onMouseEnter={e => e.currentTarget.style.color=T.forgotHover}
+                          onMouseLeave={e => e.currentTarget.style.color=T.forgotColor}>
+                          Lupa Password?
+                        </button>
+                      </div>
+                    )}
+
+                    <button type="submit" disabled={loading} className="submit-btn"
+                      style={{ width:'100%', padding:'15px 0', borderRadius:14, fontWeight:900, fontSize:15, border:'none', cursor:'pointer', background:'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', color:'white', opacity: loading ? 0.65 : 1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 8px 32px rgba(79,70,229,0.4)', transition:'all 0.2s' }}>
+                      {loading
+                        ? <div style={{ width:18, height:18, border:'3px solid rgba(255,255,255,0.3)', borderTopColor:'white', borderRadius:'50%', animation:'spin 0.7s linear infinite' }} />
+                        : <>{isLogin ? 'Login Dashboard' : 'Daftar Sekarang'}<ArrowRight size={16}/></>
+                      }
+                    </button>
+                  </form>
+
+                  <div style={{ display:'flex', alignItems:'center', gap:12, margin:'22px 0' }}>
+                    <div style={{ flex:1, height:1, background: T.divider, transition:'background 0.35s' }} />
+                    <span style={{ color: T.dividerText, fontSize:12, fontWeight:600, transition:'color 0.35s' }}>atau</span>
+                    <div style={{ flex:1, height:1, background: T.divider, transition:'background 0.35s' }} />
+                  </div>
+
+                  <p style={{ textAlign:'left', color: T.switchText, fontSize:14, transition:'color 0.35s' }}>
+                    {isLogin ? 'Belum punya akun?' : 'Sudah punya akun?'}{' '}
+                    <button onClick={() => setIsLogin(!isLogin)}
+                      style={{ background:'none', border:'none', cursor:'pointer', color: T.switchLink, fontWeight:800, fontSize:14, transition:'color 0.2s' }}
+                      onMouseEnter={e => e.currentTarget.style.color='#7c3aed'}
+                      onMouseLeave={e => e.currentTarget.style.color=T.switchLink}>
+                      {isLogin ? 'Daftar Gratis' : 'Login'}
+                    </button>
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

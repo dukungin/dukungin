@@ -207,14 +207,19 @@ function BigTitle({ children, style, C }) {
 
 function BtnMain({ children, href, style, C }) {
   return (
-    <Link to={href || "/"} style={{
-      fontFamily: "'Space Grotesk', sans-serif",
-      fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
-      padding: "14px 28px", background: C.lime, color: C.bg,
-      border: "none", cursor: "pointer", textDecoration: "none",
-      display: "inline-block", transition: "background 0.15s, opacity 0.15s",
-      ...style,
-    }}
+    <Link 
+      to={href || "/"} 
+      className="w-full sm:w-auto text-center" // Tambahkan class ini
+      style={{
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
+        padding: "14px 28px", background: C.lime, color: C.bg,
+        border: "none", cursor: "pointer", textDecoration: "none",
+        display: "inline-block", // Penting agar width: 100% bekerja
+        transition: "background 0.15s, opacity 0.15s",
+        boxSizing: "border-box", // Pastikan padding tidak merusak lebar
+        ...style,
+      }}
       onMouseOver={e => e.currentTarget.style.opacity = "0.85"}
       onMouseOut={e => e.currentTarget.style.opacity = "1"}
     >
@@ -225,7 +230,11 @@ function BtnMain({ children, href, style, C }) {
 
 function BtnGhost({ children, href, style, C }) {
   return (
-    <Link to={href || "/"} style={{
+    <Link 
+      to={href || "/"} 
+      className="w-full sm:w-auto text-center"
+      target="__blank" 
+      style={{
       fontFamily: "'Space Grotesk', sans-serif",
       fontSize: 13, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase",
       padding: "13px 24px", border: `1px solid ${C.line2}`,
@@ -358,11 +367,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
 
 function Hero({ C, isDark }) {
   const [alertVisible, setAlertVisible] = useState(false);
-  const [statsRef, statsInView] = useInView(0.3);
-
-  const s1 = useCounter(12400, 2000, statsInView);
-  const s2 = useCounter(4800, 2500, statsInView);
-  const s3 = useCounter(98700, 2200, statsInView);
+  const [ref, inView] = useInView(0.3);
 
   useEffect(() => {
     const cycle = () => {
@@ -375,51 +380,122 @@ function Hero({ C, isDark }) {
   }, []);
 
   return (
-    <section className="hero-wrapper h-[93vh] overflow-hidden" style={{ display: "grid", gridTemplateRows: "1fr auto", paddingTop: 70, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
-      <div style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} className="hero-main-grid">
-        <div className="relative top-[-6px] text-center mx-auto w-full flex flex-col justify-center items-center" style={{ padding: "60px 40px", display: "flex", flexDirection: "column", justifyContent: "space-center" }}>
-          <div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "'Space Mono',monospace", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: C.muted, marginBottom: 40, marginTop: 0, transition: "color 0.4s" }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.lime, animation: "blink 2s infinite", display: "inline-block", transition: "background 0.4s" }} />
-              Platform Donasi Streamer Dari Indonesia
-            </div>
-            <h1
-              className="hero-title"
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "9rem",
-                lineHeight: 0.85,
-                letterSpacing: "-0.01em",
-                color: C.text,
-                marginBottom: 40,
-                textAlign: "center",
-                display: "flex",
-                flexWrap: "wrap",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.15em",
-                transition: "color 0.4s",
-              }}
+    <section 
+      className="hero-wrapper h-[93vh] overflow-hidden relative" 
+      style={{ 
+        display: "grid", 
+        gridTemplateRows: "1fr auto", 
+        paddingTop: 70, 
+        borderBottom: `1px solid ${C.line}`, 
+        transition: "border-color 0.4s",
+        background: C.bg 
+      }}
+    >
+      {/* Aurora Background Effect */}
+      <div 
+        className="absolute inset-0 overflow-hidden pointer-events-none" 
+        style={{ zIndex: 0, opacity: isDark ? 0.3 : 0.5 }}
+      >
+        <div className="aurora-blob aurora-1" style={{ background: C.lime }} />
+        <div className="aurora-blob aurora-2" style={{ background: '#6366f1' }} />
+        <div className="aurora-blob aurora-3" style={{ background: '#a855f7' }} />
+      </div>
+
+      <div style={{ zIndex: 1, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} className="hero-main-grid relative h-full flex items-center">
+        <div className="text-center mx-auto w-full flex flex-col justify-center items-center px-6" style={{ paddingBottom: "0px" }}>
+          
+          {/* Badge Atas */}
+          <div style={{ 
+            display: "inline-flex", alignItems: "center", gap: 8, 
+            fontFamily: "'Space Mono',monospace", fontSize: 10, 
+            marginTop: 6,
+            letterSpacing: "0.1em", textTransform: "uppercase", 
+            color: C.muted, marginBottom: 30, transition: "color 0.4s" 
+          }}>
+            <span style={{ 
+              width: 6, height: 6, borderRadius: "50%", 
+              background: C.lime, animation: "blink 2s infinite", 
+              display: "inline-block" 
+            }} />
+            Platform Donasi Streamer Dari Indonesia
+          </div>
+
+          {/* Judul Hero */}
+          <h1
+            className="hero-title"
+            style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "clamp(3.5rem, 12vw, 9rem)", // Responsif font size
+              lineHeight: 0.85,
+              letterSpacing: "-0.01em",
+              color: C.text,
+              marginBottom: 40,
+              textAlign: "center",
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.1em",
+              transition: "color 0.4s",
+            }}
+          >
+            <span>UBAH HOBI</span>
+            <img
+              className="relative md:top-[-7px] h-[0.8em] md:h-[0.85em] w-auto"
+              src="/jellyfish.png"
+              alt="icon"
+            />
+            <span>STREAMING</span>
+            <span className="w-full">MENJADI BER-CUAN</span>
+          </h1>
+
+          {/* Container Tombol */}
+          <div className="w-full max-w-md md:max-w-none px-4">
+            <div 
+              className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center"
             >
-              <span>UBAH HOBI</span>
-              <img
-                className="relative top-[-7px]"
-                src="/jellyfish.png"
-                alt="icon"
-                style={{ height: "0.85em", width: "auto" }}
-              />
-              <span>STREAMING</span>
-              <span>MENJADI BER-CUAN</span>
-            </h1>
-          </div>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <BtnMain href="/register" C={C}>Mulai Sekarang →</BtnMain>
-              <BtnGhost href="#cara-kerja" C={C}>Lihat Dashboard</BtnGhost>
+              <BtnGhost href="https://wa.me/6289513093406" C={C}>Hubungi Developer</BtnGhost>
             </div>
           </div>
+
         </div>
       </div>
+
+      {/* Global CSS for Animations */}
+      <style>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.3; }
+        }
+
+        .aurora-blob {
+          position: absolute;
+          width: 50vw;
+          height: 50vw;
+          min-width: 300px;
+          min-height: 300px;
+          border-radius: 50%;
+          filter: blur(100px);
+          mix-blend-mode: ${isDark ? 'screen' : 'multiply'};
+          opacity: 0.4;
+          animation: move 20s infinite alternate ease-in-out;
+        }
+        
+        .aurora-1 { top: -10%; left: -10%; animation-duration: 18s; }
+        .aurora-2 { bottom: -10%; right: -5%; animation-delay: -5s; animation-duration: 25s; }
+        .aurora-3 { top: 20%; left: 30%; animation-delay: -2s; animation-duration: 30s; }
+
+        @keyframes move {
+          0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+          50% { transform: translate(10%, 15%) scale(1.1) rotate(45deg); }
+          100% { transform: translate(-5%, 10%) scale(0.9) rotate(-45deg); }
+        }
+
+        @media (max-width: 640px) {
+          .hero-title span { width: 100%; }
+        }
+      `}</style>
     </section>
   );
 }
@@ -457,7 +533,7 @@ function HowItWorks({ C }) {
           Proses setup yang dirancang seminimal mungkin
         </p>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)" }} className="how-steps-grid">
+      <div className="grid grid-cols-4 how-steps-grid md:grid flex-col hidden">
         {HOW_IT_WORKS.map((step, i) => (
           <HowStep key={step.num} step={step} last={i === HOW_IT_WORKS.length - 1} C={C} />
         ))}
@@ -515,7 +591,7 @@ function Testimonials({ C }) {
 
 function CTA({ C, isDark }) {
   return (
-    <section className='relative flex flex-col justify-center h-max items-center text-center pb-12'>
+    <section id="dashboards" className='relative flex flex-col justify-center h-max items-center text-center pb-12'>
       <div
         className="w-full flex flex-col justify-center items-center"
         style={{
@@ -558,7 +634,7 @@ function CTA({ C, isDark }) {
         </span>
         </h2>
         </div>
-        <div style={{ marginTop: 0, marginBottom: 40 }}>
+        <div style={{ marginTop: 0, marginBottom: 40, zIndex: 99 }}>
           <BtnMain href="/register" style={{ fontSize: 14, padding: "16px 36px" }} C={C}>
             Mulai Dari Sekarang →
           </BtnMain>

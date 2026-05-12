@@ -29,25 +29,23 @@ const getTokenPayload = () => {
 const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  
+
   const payload = getTokenPayload();
   const isSuperAdmin = payload?.role === 'superAdmin';
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/login'); 
+    navigate('/login');
   };
 
-  // Menu utama dengan kondisi
   const menuItems = [
-    { id: 'settings', label: 'Editor Overlay', icon: <Layout size={20} /> },
-    { id: 'history', label: 'Riwayat Donasi', icon: <History size={20} /> },
-    { id: 'wallet', label: 'Penarikan Dana', icon: <Wallet size={20} /> },
-    { id: 'poll',     icon: <Vote size={20} />,    label: 'Poll & Voting' },
-    { id: 'subathon', icon: <Timer size={20} />,   label: 'Subathon' },
-    { id: 'milestones', icon: <TrendingUp size={20} />, label: 'Milestones' },
-    { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Leaderboard' },
-    // Ghost Alert hanya untuk Super Admin
+    { id: 'settings',    label: 'Editor Overlay',   icon: <Layout size={20} /> },
+    { id: 'history',     label: 'Riwayat Donasi',   icon: <History size={20} /> },
+    { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },
+    { id: 'poll',        label: 'Poll & Voting',    icon: <Vote size={20} /> },
+    { id: 'subathon',    label: 'Subathon',         icon: <Timer size={20} /> },
+    { id: 'milestones',  label: 'Milestones',       icon: <TrendingUp size={20} /> },
+    { id: 'leaderboard', label: 'Leaderboard',      icon: <Trophy size={20} /> },
     ...(isSuperAdmin ? [{
       id: 'ghostAlert',
       icon: <Zap size={20} />,
@@ -57,43 +55,40 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
   return (
     <>
-      {/* MODAL LOGOUT */}
+      {/* ── MODAL LOGOUT ── */}
       <AnimatePresence>
         {showLogoutConfirm && (
           <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-6">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowLogoutConfirm(false)}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
             />
-
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white rounded-xl p-10 z-[9999] md:z-[3] shadow-2xl text-center overflow-hidden"
+              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-xl p-10 z-[9999] shadow-2xl text-center overflow-hidden border border-slate-100 dark:border-slate-800"
             >
-              <div className="w-20 h-20 mx-auto mb-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 mx-auto mb-6 bg-red-100 dark:bg-red-950/40 text-red-600 rounded-full flex items-center justify-center">
                 <AlertCircle size={40} />
               </div>
-
-              <h3 className="text-2xl font-black text-slate-800 mb-2">Konfirmasi Keluar</h3>
-              <p className="text-slate-500 font-medium mb-8">
+              <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Keluar</h3>
+              <p className="text-slate-500 dark:text-slate-400 font-medium mb-8">
                 Apakah kamu yakin ingin mengakhiri sesi ini?
               </p>
-
               <div className="flex flex-col gap-3">
-                <button 
+                <button
                   onClick={handleLogout}
-                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-200 hover:bg-red-700 active:scale-[0.98] transition-all"
+                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
                 >
                   Ya, Keluar
                 </button>
-                <button 
+                <button
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-slate-100 text-slate-600 rounded-2xl font-black text-lg hover:bg-slate-200 active:scale-[0.98] transition-all"
+                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-black text-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
                 >
                   Batal
                 </button>
@@ -103,33 +98,39 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         )}
       </AnimatePresence>
 
-      {/* SIDEBAR */}
+      {/* ── SIDEBAR ── */}
       <aside className={`
-        fixed lg:sticky top-0 left-0 h-screen overflow-y-auto 
-        w-full lg:w-72 bg-white border-r border-slate-100 
-        py-4 px-6 z-[99999] lg:z-[1] flex flex-col 
+        fixed lg:sticky top-0 left-0 h-screen overflow-y-auto
+        w-full lg:w-72
+        bg-white dark:bg-slate-900
+        border-r border-slate-100 dark:border-slate-800
+        py-4 px-6 z-[99999] lg:z-[1] flex flex-col
         transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* LOGO AREA */}
+
+        {/* Logo */}
         <div className="flex items-center justify-between mb-8 md:mb-11">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-indigo-100">
-              <img src="/jellyfish.png" alt="icon" className='w-[60%]' />
+              <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
             </div>
-            <h1 className="text-lg font-black tracking-tight text-slate-800">TapTipTup</h1>
+            <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">TapTipTup</h1>
           </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="relative left-3.5 w-max cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500">
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="relative left-3.5 w-max cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500"
+          >
             <X size={30} />
           </button>
         </div>
 
         <div className="md:flex hidden pt-0 pb-2 px-1 mb-4">
-          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Menu Utama</p>
+          <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Menu Utama</p>
         </div>
 
-        {/* NAVIGATION */}
-        <nav className="md:flex-1 space-y-4">
+        {/* Navigation */}
+        <nav className="md:flex-1 space-y-2">
           {menuItems.map((item) => (
             <button
               key={item.id}
@@ -137,18 +138,18 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab(item.id);
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer w-full flex items-center gap-4 px-4 p-3 rounded-2xl font-black transition-all ${
+              className={`cursor-pointer w-full flex items-center gap-4 px-4 p-3 rounded-2xl font-black transition-all text-sm ${
                 activeTab === item.id
-                  ? 'bg-indigo-600 text-white shadow-indigo-100' 
-                  : 'text-slate-400 bg-slate-100 hover:bg-slate-200'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 dark:shadow-indigo-900/30'
+                  : 'text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
               {item.icon}
-              <span className="text-sm">{item.label}</span>
+              <span>{item.label}</span>
             </button>
           ))}
 
-          <div className='w-full h-[1px] my-5 bg-slate-300'></div>
+          <div className="w-full h-[1px] my-5 bg-slate-200 dark:bg-slate-800" />
 
           {isSuperAdmin && (
             <button
@@ -156,25 +157,25 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab('admin');
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer mb-2 w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all ${
+              className={`cursor-pointer mb-2 w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all text-sm ${
                 activeTab === 'admin'
-                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
-                  : 'text-slate-400 hover:bg-slate-200'
+                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 dark:shadow-indigo-900/30'
+                  : 'text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
               <ShieldAlert size={20} />
-              <span className="text-sm">Permintaan Penarikan</span>
+              <span>Permintaan Penarikan</span>
             </button>
           )}
         </nav>
 
-        {/* LOGOUT BUTTON */}
-        <button 
+        {/* Logout button (mobile only) */}
+        <button
           onClick={() => setShowLogoutConfirm(true)}
-          className="md:hidden flex items-center gap-4 p-4 bg-red-100 text-red-500 hover:bg-red-50 rounded-2xl cursor-pointer active:scale-[0.98] font-black transition-all"
+          className="md:hidden flex items-center gap-4 p-4 bg-red-100 dark:bg-red-950/40 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/60 rounded-2xl cursor-pointer active:scale-[0.98] font-black transition-all mt-4"
         >
-          <LogOut size={18} /> 
-          <p className='text-sm ml-[3px]'>Keluar</p>
+          <LogOut size={18} />
+          <span className="text-sm ml-[3px]">Keluar</span>
         </button>
       </aside>
     </>

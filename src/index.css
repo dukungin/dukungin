@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 ::-webkit-scrollbar {
     background-color: rgb(255, 255, 255);
     width: 4px;
