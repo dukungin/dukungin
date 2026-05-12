@@ -277,7 +277,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 99,
       display: "flex", alignItems: "center", justifyContent: "space-between",
-      padding: "18px clamp(30px, 5vw, 40px)",
+      padding: "18px clamp(28px, 5vw, 40px)",
       background: C.navBg,
       backdropFilter: "blur(12px)",
       borderBottom: `1px solid ${C.line}`,
