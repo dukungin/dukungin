@@ -44,15 +44,29 @@ const renderIcon = (customIcon, size = 20) => {
   return customIcon;
 };
 
+// const getAlertDuration = (config, amount) => {
+//   if (!config) return 8000;
+//   const tiers = config.durationTiers || [];
+//   if (tiers.length > 0) {
+//     const sorted = [...tiers].sort((a, b) => b.minAmount - a.minAmount);
+//     for (const tier of sorted) {
+//       const inRange =
+//         amount >= tier.minAmount &&
+//         (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);
+//       if (inRange) return tier.duration * 1000;
+//     }
+//   }
+//   return (config.baseDuration || 8) * 1000;
+// };
+
 const getAlertDuration = (config, amount) => {
   if (!config) return 8000;
   const tiers = config.durationTiers || [];
   if (tiers.length > 0) {
     const sorted = [...tiers].sort((a, b) => b.minAmount - a.minAmount);
     for (const tier of sorted) {
-      const inRange =
-        amount >= tier.minAmount &&
-        (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);
+      const inRange = amount >= tier.minAmount &&
+        (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);  // ✅ Fixed
       if (inRange) return tier.duration * 1000;
     }
   }
@@ -264,86 +278,186 @@ const MediaShareOverlay = () => {
     </div>
   );
 
-  const renderInner = () => {
-    if (theme === 'modern') {
-      return (
-        <>
-          <div style={{ padding: '16px 18px 12px' }}>
-            {renderMedia()}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: 0,
-                background: 'rgba(255,255,255,0.12)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 22, flexShrink: 0, fontWeight: 900
-              }}>
-                {renderIcon(customIcon, 30)}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, opacity: 0.65, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4, color: fg, fontWeight: 900 }}>
-                  🎬 Media Share
-                </div>
-                <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
-                  @{alert.donorName}
-                </div>
-                <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: highlight, letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 900 }}>
-                  Rp {Number(alert.amount).toLocaleString('id-ID')}
-                </div>
-                {alert.message && (
-                  <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, fontStyle: 'italic', lineHeight: 1.4, fontWeight: 900 }}>
-                    {alert.message}
-                  </div>
-                )}
-                {renderTimestamp()}
-              </div>
-            </div>
-          </div>
-          {renderProgressBar()}
-        </>
-      );
-    }
+  // const renderInner = () => {
+  //   if (theme === 'modern') {
+  //     return (
+  //       <>
+  //         <div style={{ padding: '16px 18px 12px' }}>
+  //           {renderMedia()}
+  //           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+  //             <div style={{
+  //               width: 44, height: 44, borderRadius: 0,
+  //               background: 'rgba(255,255,255,0.12)',
+  //               border: '1px solid rgba(255,255,255,0.15)',
+  //               display: 'flex', alignItems: 'center', justifyContent: 'center',
+  //               fontSize: 22, flexShrink: 0, fontWeight: 900
+  //             }}>
+  //               {renderIcon(customIcon, 30)}
+  //             </div>
+  //             <div style={{ flex: 1, minWidth: 0 }}>
+  //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, opacity: 0.65, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4, color: fg, fontWeight: 900 }}>
+  //                 🎬 Media Share
+  //               </div>
+  //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
+  //                 @{alert.donorName}
+  //               </div>
+  //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: highlight, letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 900 }}>
+  //                 Rp {Number(alert.amount).toLocaleString('id-ID')}
+  //               </div>
+  //               {alert.message && (
+  //                 <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, fontStyle: 'italic', lineHeight: 1.4, fontWeight: 900 }}>
+  //                   {alert.message}
+  //                 </div>
+  //               )}
+  //               {renderTimestamp()}
+  //             </div>
+  //           </div>
+  //         </div>
+  //         {renderProgressBar()}
+  //       </>
+  //     );
+  //   }
 
-    if (theme === 'classic') {
-      return (
-        <>
-          <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
-            {renderMedia()}
-            <div style={{ fontSize: 9, fontWeight: 900, opacity: 0.6, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, color: fg, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
-              🎬 Media Share!
-            </div>
-            <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
-              Rp {Number(alert.amount).toLocaleString('id-ID')}
-            </div>
-            <div style={{ color: fg, fontSize: 22, fontWeight: 900, marginTop: 3 }}>
-              @{alert.donorName}
-            </div>
-            {alert.message && (
-              <div style={{ color: fg, fontSize: 22, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
-                {alert.message}
-              </div>
-            )}
-            {renderTimestamp()}
-          </div>
-          {renderProgressBar()}
-        </>
-      );
-    }
+  //   if (theme === 'classic') {
+  //     return (
+  //       <>
+  //         <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
+  //           {renderMedia()}
+  //           <div style={{ fontSize: 9, fontWeight: 900, opacity: 0.6, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, color: fg, display: 'flex', alignItems: 'center', gap: 6 }}>
+  //             <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
+  //             🎬 Media Share!
+  //           </div>
+  //           <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
+  //             Rp {Number(alert.amount).toLocaleString('id-ID')}
+  //           </div>
+  //           <div style={{ color: fg, fontSize: 22, fontWeight: 900, marginTop: 3 }}>
+  //             @{alert.donorName}
+  //           </div>
+  //           {alert.message && (
+  //             <div style={{ color: fg, fontSize: 22, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
+  //               {alert.message}
+  //             </div>
+  //           )}
+  //           {renderTimestamp()}
+  //         </div>
+  //         {renderProgressBar()}
+  //       </>
+  //     );
+  //   }
 
-    // MINIMAL
+  //   // MINIMAL
+  //   return (
+  //     <>
+  //       <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
+  //         {renderMedia()}
+  //         <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
+  //           Rp {Number(alert.amount).toLocaleString('id-ID')}
+  //         </div>
+  //         <div style={{ color: fg, fontSize: 22, fontWeight: 600, marginTop: 4 }}>
+  //           @{alert.donorName}
+  //         </div>
+  //         {alert.message && (
+  //           <div style={{ color: fg, fontSize: 22, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
+  //             {alert.message}
+  //           </div>
+  //         )}
+  //         {renderTimestamp()}
+  //       </div>
+  //       {renderProgressBar()}
+  //     </>
+  //   );
+  // };
+
+  
+const renderInner = () => {
+  if (theme === 'modern') {
     return (
       <>
-        <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
+        <div style={{ padding: '16px 18px 12px' }}>
           {renderMedia()}
-          <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 44, height: 44, borderRadius: 0,
+              background: 'rgba(255,255,255,0.12)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 22, flexShrink: 0,
+            }}>
+              {renderIcon(customIcon, 30)}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              {/* ✅ 22px SEMUA */}
+              <div style={{ 
+                fontSize: 22, fontWeight: 700, opacity: 0.65, 
+                textTransform: 'uppercase', letterSpacing: '0.1em', 
+                marginBottom: 4, color: fg,
+                fontFamily: 'system-ui, sans-serif',
+              }}>
+                🎬 Media Share
+              </div>
+              <div style={{ 
+                fontSize: 22, fontWeight: 700, color: fg, opacity: 0.8, 
+                marginBottom: 2, fontFamily: 'system-ui, sans-serif',
+              }}>
+                @{alert.donorName}
+              </div>
+              <div style={{ 
+                fontSize: 22, fontWeight: 900, color: highlight, 
+                letterSpacing: '-0.02em', lineHeight: 1,
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+              }}>
+                Rp {Number(alert.amount).toLocaleString('id-ID')}
+              </div>
+              {alert.message && (
+                <div style={{ 
+                  fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, 
+                  lineHeight: 1.4, fontFamily: 'system-ui, sans-serif',
+                }}>
+                  {alert.message}
+                </div>
+              )}
+              {renderTimestamp()}
+            </div>
+          </div>
+        </div>
+        {renderProgressBar()}
+      </>
+    );
+  }
+
+  if (theme === 'classic') {
+    return (
+      <>
+        <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
+          {renderMedia()}
+          <div style={{ 
+            fontSize: 22, fontWeight: 700, opacity: 0.6, 
+            textTransform: 'uppercase', letterSpacing: '0.08em', 
+            marginBottom: 8, color: fg, display: 'flex', 
+            alignItems: 'center', gap: 6,
+            fontFamily: 'system-ui, sans-serif',
+          }}>
+            <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
+            🎬 Media Share!
+          </div>
+          <div style={{ 
+            color: highlight, fontSize: 22, fontWeight: 900, 
+            letterSpacing: '-0.02em', lineHeight: 1,
+            fontFamily: 'system-ui, sans-serif',
+          }}>
             Rp {Number(alert.amount).toLocaleString('id-ID')}
           </div>
-          <div style={{ color: fg, fontSize: 22, fontWeight: 600, marginTop: 4 }}>
+          <div style={{ 
+            color: fg, fontSize: 22, fontWeight: 700, marginTop: 3,
+            fontFamily: 'system-ui, sans-serif',
+          }}>
             @{alert.donorName}
           </div>
           {alert.message && (
-            <div style={{ color: fg, fontSize: 22, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
+            <div style={{ 
+              color: fg, fontSize: 22, opacity: 0.75, marginTop: 6,
+              fontFamily: 'system-ui, sans-serif',
+            }}>
               {alert.message}
             </div>
           )}
@@ -352,7 +466,40 @@ const MediaShareOverlay = () => {
         {renderProgressBar()}
       </>
     );
-  };
+  }
+
+  // MINIMAL
+  return (
+    <>
+      <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
+        {renderMedia()}
+        <div style={{ 
+          color: highlight, fontSize: 22, fontWeight: 900, 
+          letterSpacing: '-0.02em', lineHeight: 1,
+          fontFamily: 'system-ui, sans-serif',
+        }}>
+          Rp {Number(alert.amount).toLocaleString('id-ID')}
+        </div>
+        <div style={{ 
+          color: fg, fontSize: 22, fontWeight: 700, marginTop: 4,
+          fontFamily: 'system-ui, sans-serif',
+        }}>
+          @{alert.donorName}
+        </div>
+        {alert.message && (
+          <div style={{ 
+            color: fg, fontSize: 22, opacity: 0.7, marginTop: 4,
+            fontFamily: 'system-ui, sans-serif',
+          }}>
+            {alert.message}
+          </div>
+        )}
+        {renderTimestamp()}
+      </div>
+      {renderProgressBar()}
+    </>
+  );
+};
 
   return (
     <div style={{
