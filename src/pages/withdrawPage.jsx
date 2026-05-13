@@ -99,7 +99,7 @@ export const WithdrawPage = () => {
 
       {/* ── Balance Card ── */}
       <div className="bg-indigo-600 py-7 rounded-none p-6 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-12 opacity-10"><Wallet size={120} /></div>
+        <div className="absolute top-0 right-0 p-12 opacity-10 md:flex hidden"><Wallet size={120} /></div>
         <div className="relative z-[2]">
           <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">Total Saldo Bisa Ditarik</p>
           <h1 className="text-3xl font-black">
@@ -111,7 +111,7 @@ export const WithdrawPage = () => {
             Penarikan diproses manual oleh admin dalam 1×24 jam hari kerja
           </p>
         </div>
-        <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-90" />
+        <img src="/jellyfish.png" alt="icon" className="absolute top-4 md:top-3 right-[-20px] md:right-[-40px] w-[15%] md:w-[17%] -rotate-25 opacity-90" />
         <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-90" />
       </div>
 
