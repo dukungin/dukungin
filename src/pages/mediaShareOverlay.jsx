@@ -112,11 +112,11 @@ const MediaShareOverlay = () => {
 
       // Sound — MediaShareOverlay punya sound sendiri (tidak duplikat dengan OverlayAlert)
       // karena event-nya berbeda. Uncomment kalau mau ada sound di sini juga:
-      // const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
-      // if (soundToPlay && audioRef.current) {
-      //   audioRef.current.src = soundToPlay;
-      //   audioRef.current.play().catch(() => {});
-      // }
+      const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
+      if (soundToPlay && audioRef.current) {
+        audioRef.current.src = soundToPlay;
+        audioRef.current.play().catch(() => {});
+      }
 
       const duration = getAlertDuration(configRef.current, data.amount);
 
