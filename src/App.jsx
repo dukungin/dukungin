@@ -4,18 +4,19 @@ import PollWidget from './components/pollWidget';
 import SubathonWidget from './components/subathonWidget';
 import Auth from './pages/auth';
 // import DashboardStreamer from './pages/dashboardStreamer';
-import DonationFailed from './pages/donationFailed';
-import DonationPending from './pages/donationPending';
-import DonationSuccess from './pages/donationSuccess';
-import OverlayAlert from './pages/overlayAlert';
-import ResetPassword from './pages/resetPassword';
-import SupporterPage from './pages/supporterPage';
 import LeaderboardWidget from './components/leaderboard';
 import MilestonesWidget from './components/milestoneWidget';
 import QrCodeWidget from './components/qrCodeWidget';
-import LandingPage from './pages/landingPage'; // ← import landing page
-import PrivacyPolicy from './pages/privacyPolice';
 import { DashboardStreamer } from './pages/dashboardStreamer';
+import DonationFailed from './pages/donationFailed';
+import DonationPending from './pages/donationPending';
+import DonationSuccess from './pages/donationSuccess';
+import LandingPage from './pages/landingPage'; // ← import landing page
+import MediaShareOverlay from './pages/mediaShareOverlay';
+import OverlayAlert from './pages/overlayAlert';
+import PrivacyPolicy from './pages/privacyPolice';
+import ResetPassword from './pages/resetPassword';
+import SupporterPage from './pages/supporterPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -76,6 +77,7 @@ function App() {
 
           {/* Overlay OBS */}
           <Route path="/overlay/:token" element={<OverlayAlert />} />
+          <Route path="/overlay/:token/media" element={<MediaShareOverlay />} />
 
           {/* Fallback — 404 redirect ke landing */}
           <Route path="*" element={<Navigate to="/" replace />} />

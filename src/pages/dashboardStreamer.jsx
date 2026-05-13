@@ -2174,13 +2174,15 @@ export const DashboardStreamer = () => {
                       <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-none text-[9px] font-black uppercase tracking-widest">Browser Source</span>
                     </div>
                     {[
-                      { label: 'Milestones',  emoji: '🎯', path: 'milestones',  desc: 'Progress bar target donasi', size: '400×280px' },
-                      { label: 'Leaderboard', emoji: '🏆', path: 'leaderboard', desc: 'Top 10 donor terbesar',       size: '360×420px' },
-                      { label: 'QR Code',     emoji: '◼',  path: 'qrcode',      desc: 'QR scan ke halaman donasi',  size: '280×320px' },
-                      { label: 'Poll',        emoji: '🗳️', path: 'poll',        desc: 'Voting poll live',           size: '420×300px' },
-                      { label: 'Subathon',    emoji: '⏱',  path: 'subathon',    desc: 'Timer subathon',             size: '360×180px' },
-                    ].map(({ label, emoji, path, desc, size }) => {
-                      const widgetUrl = `${window.location.origin}/widget/${user.overlayToken}/${path}`;
+                      { label: 'Milestones',   emoji: '🎯', path: 'milestones',  desc: 'Progress bar target donasi',         size: '400×280px' },
+                      { label: 'Leaderboard',  emoji: '🏆', path: 'leaderboard', desc: 'Top 10 donor terbesar',              size: '360×420px' },
+                      { label: 'QR Code',      emoji: '◼',  path: 'qrcode',      desc: 'QR scan ke halaman donasi',          size: '280×320px' },
+                      { label: 'Poll',         emoji: '🗳️', path: 'poll',        desc: 'Voting poll live',                   size: '420×300px' },
+                      { label: 'Subathon',     emoji: '⏱',  path: 'subathon',    desc: 'Timer subathon',                     size: '360×180px' },
+                      // ← BARU: pakai customUrl karena URL-nya /overlay/:token/media, bukan /widget/
+                      { label: 'Media Share', emoji: '🎬', path: null, customUrl: `${window.location.origin}/overlay/${user.overlayToken}/media`, desc: 'Alert + preview gambar/video donor', size: '480×320px' },
+                      ].map(({ label, emoji, path, customUrl, desc, size }) => {
+                        const widgetUrl = customUrl ?? `${window.location.origin}/widget/${user.overlayToken}/${path}`;
                       return (
                         <div key={path} className="flex items-center gap-4 bg-white dark:bg-slate-800 rounded-none p-4 border border-slate-200 dark:border-slate-700">
                           <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-none flex items-center justify-center text-xl flex-shrink-0">{emoji}</div>
