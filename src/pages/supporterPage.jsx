@@ -2263,8 +2263,8 @@ const SupporterPage = () => {
 
             {/* Submit Button */}
             <motion.button
-              whileHover={{ scale: 1.015 }}
-              whileTap={{ scale: 0.97 }}
+              // whileHover={{ scale: 1 }}
+              whileTap={{ scale: 0.99 }}
               onClick={handleDonate}
               disabled={loading || !form.amount}
               className="cursor-pointer w-full py-3 bg-gradient-to-r from-blue-700 to-blue-700 text-white rounded-none font-black text-lg disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
