@@ -250,7 +250,7 @@ const OverlayAlert = () => {
                 </div>
                 {alert.message && (
                   <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4, fontWeight: 900 }}>
-                    "{alert.message}"
+                    {alert.message}
                   </div>
                 )}
                 {renderTimestamp()}
@@ -284,7 +284,7 @@ const OverlayAlert = () => {
             </div>
             {alert.message && (
               <div style={{ color: fg, fontSize: 22, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
-                "{alert.message}"
+                {alert.message}
               </div>
             )}
             {renderTimestamp()}
@@ -307,7 +307,7 @@ const OverlayAlert = () => {
           </div>
           {alert.message && (
             <div style={{ color: fg, fontSize: 22, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
-              "{alert.message}"
+              {alert.message}
             </div>
           )}
           {renderTimestamp()}
