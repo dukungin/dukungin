@@ -274,7 +274,7 @@ const OverlayAlert = () => {
               color: fg, display: 'flex', alignItems: 'center', gap: 6,
             }}>
               <span style={{ fontSize: 14 }}>{renderIcon(customIcon, 14)}</span>
-              Donasi Masuk!
+              Dukungan Masuk!
             </div>
             <div style={{ color: highlight, fontSize: 24, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
               Rp {Number(alert.amount).toLocaleString('id-ID')}
