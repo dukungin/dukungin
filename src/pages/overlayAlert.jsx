@@ -233,7 +233,7 @@ const OverlayAlert = () => {
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{
-                  fontSize: 9, fontWeight: 800, opacity: 0.65,
+                  fontSize: 18, fontWeight: 800, opacity: 0.65,
                   textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4,
                   color: fg,
                 }}>
@@ -243,7 +243,7 @@ const OverlayAlert = () => {
                   @{alert.donorName}
                 </div>
                 <div style={{
-                  fontSize: 18, fontWeight: 900, color: highlight,
+                  fontSize: 20, fontWeight: 900, color: highlight,
                   letterSpacing: '-0.3px', lineHeight: 1,
                 }}>
                   Rp {Number(alert.amount).toLocaleString('id-ID')}
