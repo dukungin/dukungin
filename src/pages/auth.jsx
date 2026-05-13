@@ -110,10 +110,11 @@ const AuthInput = ({ icon, type='text', value, onChange, placeholder, T }) => {
           background: focused ? T.inputBgFocus : T.inputBg,
           border: `1.5px solid ${focused ? T.inputBorderFocus : T.inputBorder}`,
           borderRadius:0, padding:'15px 48px',
-          color: T.inputText, fontSize:15, fontWeight:600,
+          // color: T.inputText, 
+          fontSize:15, fontWeight:600,
           outline:'none', transition:'all 0.2s',
         }}
-        className="auth-input-field"
+        className="auth-input-field dark:text-slate-900 text-white placeholder:text-slate-300"
       />
       {isPassword && (
         <button type="button" onClick={() => setShowPassword(v => !v)}
