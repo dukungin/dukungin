@@ -187,9 +187,9 @@ const OverlayAlert = () => {
   const anim = animVariants[animation] || animVariants.bounce;
 
   // ── Media — semua borderRadius: 0 ───────────────────────────────────────────
-  const renderMedia = () => {
-    return null
-  }
+  // const renderMedia = () => {
+  //   return null
+  // }
 
   const renderTimestamp = () => {
     if (!showTs || !alert?.receivedAt) return null;
@@ -219,7 +219,7 @@ const OverlayAlert = () => {
       return (
         <>
           <div style={{ padding: '16px 18px 12px' }}>
-            {renderMedia()}
+            {/* {renderMedia()} */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{
                 width: 44, height: 44,
@@ -267,7 +267,7 @@ const OverlayAlert = () => {
       return (
         <>
           <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
-            {renderMedia()}
+            {/* {renderMedia()} */}
             <div style={{
               fontSize: 9, fontWeight: 700, opacity: 0.6,
               textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8,
@@ -298,7 +298,7 @@ const OverlayAlert = () => {
     return (
       <>
         <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
-          {renderMedia()}
+          {/* {renderMedia()} */}
           <div style={{ color: highlight, fontSize: 26, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
             Rp {Number(alert.amount).toLocaleString('id-ID')}
           </div>
