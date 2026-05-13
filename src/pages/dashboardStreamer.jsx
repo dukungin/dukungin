@@ -217,14 +217,14 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
         ))}
       </div>
 
-      <button onClick={add} className="cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full mt-4 py-3 border-2 border-dashed border-emerald-300 text-emerald-600 rounded-none font-black hover:bg-emerald-20">
+      <button onClick={add} className="cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full mt-4 py-2.5 border-2 border-dashed border-emerald-400/30 text-emerald-600 rounded-none font-black text-sm hover:bg-emerald-20">
         + Tambah Nominal
       </button>
 
       <button
         onClick={() => saveSettingsMutation.mutate(settings)}
         disabled={saveSettingsMutation.isPending}
-        className="mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-4 bg-emerald-600 text-white rounded-none font-black"
+        className="mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-3 bg-emerald-600 text-white rounded-none font-black"
       >
         Simpan Quick Nominal
       </button>
@@ -1170,7 +1170,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
               <span className="px-2 py-0.5 bg-red-600 text-white text-[10px] font-black rounded-none tracking-widest">OBS SIMULATION</span>
             </div>
             <div className="flex items-center gap-2">
-              <button onClick={triggerDemo} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-xs transition-all">
+              <button onClick={triggerDemo} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-xs transition-all">
                 <span className="w-1.5 h-1.5 bg-red-400 rounded-none animate-pulse" /> Simulasi Donasi
               </button>
               <button onClick={() => handleFullScreen()} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-none font-black text-xs transition-all border border-white/10">
