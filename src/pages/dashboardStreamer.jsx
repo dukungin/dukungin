@@ -210,7 +210,7 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
               onChange={e => update(i, e.target.value)}
               className="flex-1 p-3 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold"
             />
-            <button onClick={() => remove(i)} className="text-red-500 hover:text-red-600">
+            <button onClick={() => remove(i)} className="cursor-pointer active:scale-[0.99] hover:text-red-600 text-red-500 hover:text-red-600">
               <Trash2 size={18} />
             </button>
           </div>
@@ -224,7 +224,7 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
       <button
         onClick={() => saveSettingsMutation.mutate(settings)}
         disabled={saveSettingsMutation.isPending}
-        className="mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-3 bg-emerald-600 text-white rounded-none font-black"
+        className="mt-3 md:mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-3 bg-emerald-600 text-white rounded-none font-black"
       >
         Simpan Quick Nominal
       </button>
