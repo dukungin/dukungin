@@ -1317,7 +1317,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                   </div>
                   <button
                     onClick={onClose}
-                    className="absolute top-0 right-0 cursor-pointer active:scale-[0.98] hover:brightness-90 w-10 h-10 bg-red-200 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 text-red-700 dark:text-slate-500 flex items-center justify-center transition-all"
+                    className="absolute top-0 right-0 cursor-pointer active:scale-[0.98] hover:brightness-90 w-10 h-10 bg-red-200 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-700/80 hover:text-white text-red-700 dark:text-slate-500 hover:dark:text-white flex items-center justify-center transition-all"
                   >
                     <X size={15} />
                   </button>
@@ -2246,12 +2246,6 @@ const SupporterPage = () => {
                         className="px-3 py-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-700 rounded-none hover:bg-indigo-50 dark:hover:bg-slate-100 transition-all cursor-pointer"
                       >
                         Masuk
-                      </button>
-                      <button
-                        onClick={() => openAuth('register')}
-                        className="px-3 py-1.5 text-[10px] font-black text-white bg-indigo-600 dark:bg-indigo-600 rounded-none hover:bg-indigo-700 dark:hover:bg-indigo-700 transition-all cursor-pointer"
-                      >
-                        Daftar
                       </button>
                     </div>
                   </div>
