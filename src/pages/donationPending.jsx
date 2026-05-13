@@ -116,7 +116,7 @@ const DonationPending = () => {
           initial={{ opacity: 0, scale: 0.85, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-          className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-amber-100"
+          className="bg-white rounded-none shadow-2xl overflow-hidden border border-amber-100"
         >
           {/* Top banner */}
           <div className="bg-gradient-to-r from-amber-500 to-yellow-500 p-8 text-center">

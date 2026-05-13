@@ -38,7 +38,7 @@ const DonationFailed = () => {
           initial={{ opacity: 0, scale: 0.8, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-          className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-red-100"
+          className="bg-white rounded-none shadow-2xl overflow-hidden border border-red-100"
         >
           {/* Top banner */}
           <div className="bg-gradient-to-r from-red-400 to-orange-400 p-8 text-center">
