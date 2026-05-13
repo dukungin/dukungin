@@ -1769,6 +1769,8 @@ const SupporterPage = () => {
   const [authProfile, setAuthProfile] = useState(null); // data lengkap dari API
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState('login');
+  const [badges, setBadges] = useState({ streamer: {}, donor: {} }); // ← DEFAULT OBJECT
+
   const isLoggedIn = !!authPayload;
 
   const [form, setForm] = useState({
@@ -1794,20 +1796,31 @@ const SupporterPage = () => {
   };
 
   // After successful login — update payload + fetch profil lengkap
-  const handleAuthSuccess = (data) => {
-    const newPayload = getPayload();
-    setAuthPayload(newPayload);
-    // Gunakan data.user dari response login jika ada, atau fetch sendiri
-    if (data?.user) {
-      setAuthProfile(data.user);
-      setForm((prev) => ({
-        ...prev,
-        donorName: data.user.username || prev.donorName,
-        email: data.user.email || prev.email,
-      }));
-    }
-  };
+  const handleAuthSuccess = async (data) => {
+      const newPayload = getPayload();
+      setAuthPayload(newPayload);
+      
+      if (data?.user) {
+        setAuthProfile(data.user);
+        setForm((prev) => ({
+          ...prev,
+          donorName: data.user.username || prev.donorName,
+          email: data.user.email || prev.email,
+        }));
+      }
 
+      // ✅ FETCH BADGES SETELAH LOGIN
+      if (newPayload?.id) {
+        try {
+          const res = await axios.get(`${BASE_URL}/api/midtrans/badges`, { 
+            headers: authHeader() 
+          });
+          setBadges(res.data.badges || { streamer: {}, donor: {} });
+        } catch (err) {
+          console.log('Failed to fetch badges:', err);
+        }
+      }
+    };
   // Load Midtrans Snap.js
   useEffect(() => {
     const existing = document.querySelector('script[src*="snap.js"]');
@@ -1977,6 +1990,21 @@ const SupporterPage = () => {
         theme={theme}
         toggleTheme={toggleTheme}
       />
+
+       {isLoggedIn && Object.keys(badges.streamer || {}).length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-1.5 justify-center">
+          {badges.streamer['10k'] && <Badge type="streamer" name="10k" active />}
+          {badges.streamer['50k'] && <Badge type="streamer" name="50k" active />}
+          {badges.streamer['100k'] && <Badge type="streamer" name="100k" active />}
+          {badges.streamer['500k'] && <Badge type="streamer" name="500k" active />}
+          {badges.streamer['1jt'] && <Badge type="streamer" name="1jt" active />}
+          
+          {/* Donor badges juga */}
+          {badges.donor['1x'] && <Badge type="donor" name="1x" active />}
+          {badges.donor['5x'] && <Badge type="donor" name="5x" active />}
+          {badges.donor['10k'] && <Badge type="donor" name="10k" active />}
+        </div>
+      )}
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex justify-center items-start md:items-center p-4 md:p-6 font-sans pt-20 md:pt-24">
         <div className="w-full max-w-xl space-y-5 py-4 md:py-0">

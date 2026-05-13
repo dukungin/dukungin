@@ -45,6 +45,7 @@ import { ContactPage } from './support';
 import { WithdrawPage } from './withdrawPage';
 import MyDonationsHistory from './MyDonationsHistory';
 import { useSearchParams } from 'react-router-dom';
+import Badge from '../components/badge';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -1585,44 +1586,66 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
     { id: 'following', label: 'Following',  count: followingData?.pagination?.total },
   ];
 
+  const { data: badgesData } = useQuery({
+    queryKey: ['userBadges'],
+    queryFn: fetchBadges,
+    staleTime: 5 * 60 * 1000, // 5 menit
+  });
+
+
   const renderUsers = (users, isLoading, showFollowBtn = true) => {
     if (isLoading) return <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />Memuat...</div>;
     if (!users?.length) return <div className="text-center py-20 text-slate-400"><p className="text-4xl mb-3">👥</p><p className="font-black text-slate-500">Belum ada streamer</p></div>;
+    
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {users.map(u => (
-          <div key={u._id} className="bg-white dark:bg-slate-900 rounded-none p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-none bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                {u.username.charAt(0).toUpperCase()}
+        {users.map(u => {
+          // Ambil badges user ini
+          const userBadges = badgesData?.[u._id] || {};
+          
+          return (
+            <div key={u._id} className="bg-white dark:bg-slate-900 rounded-none p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-none bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
+                  {u.username.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-black text-slate-800 dark:text-slate-100 truncate">@{u.username}</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{u.email}</p>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-black text-slate-800 dark:text-slate-100 truncate">@{u.username}</p>
-                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{u.email}</p>
-              </div>
-            </div>
-            {u.followersCount !== undefined && (
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">
-                <span className="text-indigo-600 dark:text-indigo-400 font-black">{u.followersCount}</span> followers
-              </p>
-            )}
-            {/* ── Action buttons ── */}
-            <div className="flex gap-2">
-              {/* Lihat Profil — selalu tampil */}
-              <button onClick={() => setViewingProfile(u.username)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 transition-all cursor-pointer active:scale-[0.97]">
-                <User size={12} /> Profil
-              </button>
-              {/* Follow/Unfollow — hanya kalau bukan diri sendiri */}
-              {showFollowBtn && u._id !== currentUserId && (
-                <button onClick={() => toggleMutation.mutate(u._id)} disabled={toggleMutation.isPending}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none font-black text-xs transition-all disabled:opacity-60 cursor-pointer active:scale-[0.97] ${u.isFollowing ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-500' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
-                  {toggleMutation.isPending ? '...' : u.isFollowing ? 'Unfollow' : '+ Follow'}
-                </button>
+              
+              {/* ── BADGES di Community ── */}
+              {userBadges.streamer && Object.keys(userBadges.streamer).some(k => userBadges.streamer[k]) && (
+                <div className="flex flex-wrap gap-1.5">
+                  {Object.entries(userBadges.streamer).map(([name, active]) => 
+                    active && <Badge key={name} type="streamer" name={name} active />
+                  )}
+                </div>
               )}
+              
+              {u.followersCount !== undefined && (
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">
+                  <span className="text-indigo-600 dark:text-indigo-400 font-black">{u.followersCount}</span> followers
+                </p>
+              )}
+              
+              {/* Action buttons */}
+              <div className="flex gap-2">
+                <button onClick={() => setViewingProfile(u.username)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 transition-all cursor-pointer active:scale-[0.97]">
+                  <User size={12} /> Profil
+                </button>
+                {showFollowBtn && u._id !== currentUserId && (
+                  <button onClick={() => toggleMutation.mutate(u._id)} disabled={toggleMutation.isPending}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none font-black text-xs transition-all disabled:opacity-60 cursor-pointer active:scale-[0.97] ${u.isFollowing ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-500' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
+                    {toggleMutation.isPending ? '...' : u.isFollowing ? 'Unfollow' : '+ Follow'}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   };
@@ -2232,6 +2255,8 @@ export const DashboardStreamer = () => {
 
             {activeTab === 'profile' && (
               <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6 pb-6">
+                
+                {/* ── Header dengan Badges ── */}
                 <div className="bg-indigo-600 rounded-none px-6 py-6 text-white relative overflow-hidden">
                   <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
                     <div className="w-16 h-16 bg-white rounded-none flex items-center justify-center text-5xl font-black text-slate-900 shadow-xl">
@@ -2242,25 +2267,39 @@ export const DashboardStreamer = () => {
                         <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2>
                         <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-none text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
                       </div>
-                      {/* ── FITUR 1: saldo dengan eye toggle di profil ── */}
-                      {/* <div className="flex items-center gap-3 mt-1">
-                        <p className={`font-black text-lg transition-all ${showBalance ? 'text-white' : 'text-white/30 select-none tracking-widest'}`}>
-                          {displayBalance}
-                        </p>
-                        <button onClick={() => setShowBalance(v => !v)} className="cursor-pointer p-1.5 rounded-none bg-white/20 hover:bg-white/30 text-white transition-all">
-                          {showBalance ? <EyeOff size={14} /> : <Eye size={14} />}
-                        </button>
-                      </div> */}
+                      
+                      {/* ✅ IMPORT & GUNAKAN Badge.jsx */}
+                      {profileData?.user?.donationMilestones && (
+                        <div className="flex flex-wrap gap-1.5 justify-center md:justify-start mt-2">
+                          {profileData.user.donationMilestones['10k'] && (
+                            <Badge milestoneType="donationMilestones" name="10k" active />
+                          )}
+                          {profileData.user.donationMilestones['50k'] && (
+                            <Badge milestoneType="donationMilestones" name="50k" active />
+                          )}
+                          {profileData.user.donationMilestones['100k'] && (
+                            <Badge milestoneType="donationMilestones" name="100k" active />
+                          )}
+                          {profileData.user.donationMilestones['500k'] && (
+                            <Badge milestoneType="donationMilestones" name="500k" active />
+                          )}
+                          {profileData.user.donationMilestones['1jt'] && (
+                            <Badge milestoneType="donationMilestones" name="1jt" active />
+                          )}
+                        </div>
+                      )}
+                      
                       <p className="text-slate-200 font-medium text-sm">{user.email}</p>
                     </div>
                   </div>
                   <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
                   <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
                 </div>
+
                 {/* Profil Publik */}
                 <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
                   <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-indigo-500" />
-
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
                     <div className="md:col-span-2 mb-1">
                       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">
@@ -2399,5 +2438,3 @@ export const DashboardStreamer = () => {
     </div>
   );
 };
-
-// export default DashboardStreamer;
