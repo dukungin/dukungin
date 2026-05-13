@@ -276,23 +276,23 @@ const MediaShareOverlay = () => {
                 background: 'rgba(255,255,255,0.12)',
                 border: '1px solid rgba(255,255,255,0.15)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 24, flexShrink: 0, fontWeight: 900
+                fontSize: 22, flexShrink: 0, fontWeight: 900
               }}>
                 {renderIcon(customIcon, 30)}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className='font-bold' style={{ fontSize: 24, fontWeight: 900, opacity: 0.65, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4, color: fg, fontWeight: 900 }}>
+                <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, opacity: 0.65, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4, color: fg, fontWeight: 900 }}>
                   🎬 Media Share
                 </div>
-                <div className='font-bold' style={{ fontSize: 24, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
+                <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
                   @{alert.donorName}
                 </div>
-                <div className='font-bold' style={{ fontSize: 24, fontWeight: 900, color: highlight, letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 900 }}>
+                <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: highlight, letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 900 }}>
                   Rp {Number(alert.amount).toLocaleString('id-ID')}
                 </div>
                 {alert.message && (
-                  <div className='font-bold' style={{ fontSize: 24, color: fg, opacity: 0.7, marginTop: 5, fontStyle: 'italic', lineHeight: 1.4, fontWeight: 900 }}>
-                    "{alert.message}"
+                  <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, fontStyle: 'italic', lineHeight: 1.4, fontWeight: 900 }}>
+                    {alert.message}
                   </div>
                 )}
                 {renderTimestamp()}
@@ -310,18 +310,18 @@ const MediaShareOverlay = () => {
           <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
             {renderMedia()}
             <div style={{ fontSize: 9, fontWeight: 900, opacity: 0.6, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, color: fg, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 14 }}>{renderIcon(customIcon, 14)}</span>
+              <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
               🎬 Media Share!
             </div>
-            <div style={{ color: highlight, fontSize: 24, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
+            <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
               Rp {Number(alert.amount).toLocaleString('id-ID')}
             </div>
-            <div style={{ color: fg, fontSize: 16, fontWeight: 900, marginTop: 3 }}>
+            <div style={{ color: fg, fontSize: 22, fontWeight: 900, marginTop: 3 }}>
               @{alert.donorName}
             </div>
             {alert.message && (
-              <div style={{ color: fg, fontSize: 12, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
-                "{alert.message}"
+              <div style={{ color: fg, fontSize: 22, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
+                {alert.message}
               </div>
             )}
             {renderTimestamp()}
@@ -336,15 +336,15 @@ const MediaShareOverlay = () => {
       <>
         <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
           {renderMedia()}
-          <div style={{ color: highlight, fontSize: 26, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
+          <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
             Rp {Number(alert.amount).toLocaleString('id-ID')}
           </div>
-          <div style={{ color: fg, fontSize: 14, fontWeight: 600, marginTop: 4 }}>
+          <div style={{ color: fg, fontSize: 22, fontWeight: 600, marginTop: 4 }}>
             @{alert.donorName}
           </div>
           {alert.message && (
-            <div style={{ color: fg, fontSize: 11, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
-              "{alert.message}"
+            <div style={{ color: fg, fontSize: 22, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
+              {alert.message}
             </div>
           )}
           {renderTimestamp()}
