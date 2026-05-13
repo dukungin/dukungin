@@ -47,7 +47,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },
     { id: 'poll',        label: 'Poll & Voting',    icon: <Vote size={20} /> },
     // Tambahkan property 'mobileOnly' pada profile
-    { id: 'profile',     label: 'Profile Saya',     icon: <User size={20} />, mobileOnly: true },
+    { id: 'profile',     label: 'Profile Saya',     icon: <User size={20} /> },
     { id: 'subathon',    label: 'Subathon',         icon: <Timer size={20} /> },
     { id: 'milestones',  label: 'Milestones',       icon: <TrendingUp size={20} /> },
     { id: 'leaderboard', label: 'Leaderboard',      icon: <Trophy size={20} /> },

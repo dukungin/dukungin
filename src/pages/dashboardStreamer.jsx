@@ -2043,18 +2043,20 @@ export const DashboardStreamer = () => {
                             <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                               {label}
                             </label>
-                            <div className="flex items-center gap-2">
-                              <input
-                                type="color"
-                                value={val}
-                                onChange={e => upd(key, e.target.value)}  // ← e.target.value bukan e
-                                className="w-12 h-12.5 rounded-none cursor-pointer bg-transparent border-0 p-0"
-                              />
-                              <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-none min-w-[40px] text-right">
-                                {val}
-                              </span>
+                            <div className="md:flex items-center gap-2">
+                              <div className='w-full flex items-center gap-1'>
+                                <input
+                                  type="color"
+                                  value={val}
+                                  onChange={e => upd(key, e.target.value)}  // ← e.target.value bukan e
+                                  className="w-12 h-12.5 rounded-none cursor-pointer bg-transparent border-0 p-0"
+                                />
+                                <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-none min-w-[40px] text-right">
+                                  {val}
+                                </span>
+                              </div>
                               <div
-                                className="flex-1 h-11 border border-slate-200 dark:border-slate-700"
+                                className="flex-1 ml-[2px] md:ml-0 h-11 border border-slate-200 dark:border-slate-700"
                                 style={{ backgroundColor: val }}
                               />
                             </div>
@@ -2067,21 +2069,23 @@ export const DashboardStreamer = () => {
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                           Warna Border
                         </label>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="color"
-                            value={settings.borderColor?.slice(0, 7) || '#ffffff'}
-                            onChange={e => {
-                              const alpha = settings.borderColor?.slice(7, 9) || '26';
-                              upd('borderColor', `${e.target.value}${alpha}`);  // ← e.target.value
-                            }}
-                            className="w-12 h-12.5 rounded-none cursor-pointer bg-transparent border-0 p-0"
-                          />
-                          <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-none min-w-[40px] text-right">
-                            {settings.borderColor?.slice(0, 7) || '#ffffff'}
-                          </span>
+                        <div className="md:flex items-center gap-2">
+                          <div className='w-full flex items-center gap-1'>
+                            <input
+                              type="color"
+                              value={settings.borderColor?.slice(0, 7) || '#ffffff'}
+                              onChange={e => {
+                                const alpha = settings.borderColor?.slice(7, 9) || '26';
+                                upd('borderColor', `${e.target.value}${alpha}`);  // ← e.target.value
+                              }}
+                              className="w-12 h-12.5 rounded-none cursor-pointer bg-transparent border-0 p-0"
+                            />
+                            <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-none min-w-[40px] text-right">
+                              {settings.borderColor?.slice(0, 7) || '#ffffff'}
+                            </span>
+                          </div>
                           <div
-                            className="flex-1 h-11 border border-slate-200 dark:border-slate-700"
+                            className="flex-1 ml-[2px] md:ml-0 h-11 border border-slate-200 dark:border-slate-700"
                             style={{ backgroundColor: settings.borderColor?.slice(0, 7) || '#ffffff' }}
                           />
                         </div>
