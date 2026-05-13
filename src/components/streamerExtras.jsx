@@ -138,7 +138,7 @@
 //         <div className="bg-white rounded-none shadow-sm border border-slate-100 overflow-hidden">
 //           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-green-50">
 //             <div className="flex items-center gap-3">
-//               <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+//               <span className="w-2.5 h-2.5 bg-green-500 rounded-none animate-pulse" />
 //               <span className="font-black text-green-700 text-sm uppercase tracking-widest">Poll Aktif</span>
 //             </div>
 //             <div className="flex gap-2">
@@ -168,9 +168,9 @@
 //                       <span className="font-bold text-slate-700">{opt.text}</span>
 //                       <span className="font-black text-indigo-600">{pct}% <span className="text-slate-400 font-medium text-xs">({opt.votes} votes)</span></span>
 //                     </div>
-//                     <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+//                     <div className="h-2.5 bg-slate-100 rounded-none overflow-hidden">
 //                       <motion.div
-//                         className="h-full bg-indigo-500 rounded-full"
+//                         className="h-full bg-indigo-500 rounded-none"
 //                         initial={{ width: 0 }}
 //                         animate={{ width: `${pct}%` }}
 //                         transition={{ duration: 0.5 }}
@@ -253,8 +253,8 @@
 //               </div>
 //               <button
 //                 onClick={() => setShowResults(!showResults)}
-//                 className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer ${showResults ? 'bg-indigo-600' : 'bg-slate-300'}`}>
-//                 <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${showResults ? 'translate-x-8' : 'translate-x-1'}`} />
+//                 className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${showResults ? 'bg-indigo-600' : 'bg-slate-300'}`}>
+//                 <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform duration-300 ${showResults ? 'translate-x-8' : 'translate-x-1'}`} />
 //               </button>
 //             </div>
 
@@ -306,7 +306,7 @@
 //                   )}
 //                 </div>
 //                 <div className="flex items-center gap-2 flex-shrink-0">
-//                   <span className="px-2 py-1 bg-slate-100 text-slate-500 rounded-full text-[10px] font-black">Closed</span>
+//                   <span className="px-2 py-1 bg-slate-100 text-slate-500 rounded-none text-[10px] font-black">Closed</span>
 //                   <button onClick={() => { if (window.confirm('Hapus poll ini?')) deleteMutation.mutate(poll._id); }}
 //                     className="cursor-pointer p-2 text-red-400 hover:text-red-600 transition-colors">
 //                     <Trash2 size={13} />
@@ -443,8 +443,8 @@
 //       {/* Timer Display */}
 //       <div className={`rounded-none p-8 text-center relative overflow-hidden ${isRunning ? 'bg-indigo-600' : 'bg-slate-800'}`}>
 //         <div className="absolute inset-0 opacity-10">
-//           <div className="w-64 h-64 rounded-full border-8 border-white absolute -top-16 -right-16" />
-//           <div className="w-32 h-32 rounded-full border-4 border-white absolute bottom-4 left-4" />
+//           <div className="w-64 h-64 rounded-none border-8 border-white absolute -top-16 -right-16" />
+//           <div className="w-32 h-32 rounded-none border-4 border-white absolute bottom-4 left-4" />
 //         </div>
 //         <div className="relative z-10">
 //           <p className="text-white/60 text-xs font-black uppercase tracking-widest mb-3">
@@ -459,9 +459,9 @@
 //           </p>
 //           {/* Progress Bar */}
 //           {localTimer.mode === 'countdown' && (
-//             <div className="mt-5 h-2 bg-white/20 rounded-full overflow-hidden">
+//             <div className="mt-5 h-2 bg-white/20 rounded-none overflow-hidden">
 //               <motion.div
-//                 className={`h-full rounded-full ${progressColor}`}
+//                 className={`h-full rounded-none ${progressColor}`}
 //                 animate={{ width: `${progressPct}%` }}
 //                 transition={{ duration: 0.5 }}
 //               />
@@ -571,8 +571,8 @@
 //             </div>
 //             <button
 //               onClick={() => upd('autoAddEnabled', !localTimer.autoAddEnabled)}
-//               className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer ${localTimer.autoAddEnabled ? 'bg-indigo-600' : 'bg-slate-300'}`}>
-//               <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${localTimer.autoAddEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
+//               className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${localTimer.autoAddEnabled ? 'bg-indigo-600' : 'bg-slate-300'}`}>
+//               <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform duration-300 ${localTimer.autoAddEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
 //             </button>
 //           </div>
 
@@ -768,8 +768,8 @@
 //           </div>
 //           <button
 //             onClick={() => upd('leaderboardShowAmount', !local.leaderboardShowAmount)}
-//             className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer ${local.leaderboardShowAmount ? 'bg-indigo-600' : 'bg-slate-300'}`}>
-//             <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${local.leaderboardShowAmount ? 'translate-x-8' : 'translate-x-1'}`} />
+//             className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${local.leaderboardShowAmount ? 'bg-indigo-600' : 'bg-slate-300'}`}>
+//             <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform duration-300 ${local.leaderboardShowAmount ? 'translate-x-8' : 'translate-x-1'}`} />
 //           </button>
 //         </div>
 
@@ -900,8 +900,8 @@
 //                 <span>Progress (preview)</span>
 //                 <span>0 / Rp {Number(m.targetAmount || 0).toLocaleString('id-ID')}</span>
 //               </div>
-//               <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-//                 <div className="h-full bg-green-400 rounded-full" style={{ width: '0%' }} />
+//               <div className="h-2 bg-slate-100 rounded-none overflow-hidden">
+//                 <div className="h-full bg-green-400 rounded-none" style={{ width: '0%' }} />
 //               </div>
 //             </div>
 //           </div>
@@ -1078,7 +1078,7 @@ export const PollManager = ({ overlayToken }) => {
         <div className="bg-white dark:bg-slate-900 rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-green-50 dark:bg-green-950/30">
             <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+              <span className="w-2.5 h-2.5 bg-green-500 rounded-none animate-pulse" />
               <span className="font-black text-green-700 dark:text-green-400 text-sm uppercase tracking-widest">Poll Aktif</span>
             </div>
             <div className="flex gap-2">
@@ -1108,9 +1108,9 @@ export const PollManager = ({ overlayToken }) => {
                       <span className="font-bold text-slate-700 dark:text-slate-300">{opt.text}</span>
                       <span className="font-black text-indigo-600 dark:text-indigo-400">{pct}% <span className="text-slate-400 dark:text-slate-500 font-medium text-xs">({opt.votes} votes)</span></span>
                     </div>
-                    <div className="h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-2.5 bg-slate-100 dark:bg-slate-800 rounded-none overflow-hidden">
                       <motion.div
-                        className="h-full bg-indigo-500 rounded-full"
+                        className="h-full bg-indigo-500 rounded-none"
                         initial={{ width: 0 }}
                         animate={{ width: `${pct}%` }}
                         transition={{ duration: 0.5 }}
@@ -1193,8 +1193,8 @@ export const PollManager = ({ overlayToken }) => {
               </div>
               <button
                 onClick={() => setShowResults(!showResults)}
-                className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer ${showResults ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
-                <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${showResults ? 'translate-x-8' : 'translate-x-1'}`} />
+                className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${showResults ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
+                <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform duration-300 ${showResults ? 'translate-x-8' : 'translate-x-1'}`} />
               </button>
             </div>
 
@@ -1246,7 +1246,7 @@ export const PollManager = ({ overlayToken }) => {
                   )}
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-full text-[10px] font-black">Closed</span>
+                  <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-none text-[10px] font-black">Closed</span>
                   <button onClick={() => { if (window.confirm('Hapus poll ini?')) deleteMutation.mutate(poll._id); }}
                     className="cursor-pointer p-2 text-red-400 hover:text-red-600 transition-colors">
                     <Trash2 size={13} />
@@ -1368,8 +1368,8 @@ export const SubathonManager = ({ overlayToken }) => {
       {/* Timer Display */}
       <div className={`rounded-none p-8 text-center relative overflow-hidden ${isRunning ? 'bg-indigo-600' : 'bg-slate-800 dark:bg-slate-700'}`}>
         <div className="absolute inset-0 opacity-10">
-          <div className="w-64 h-64 rounded-full border-8 border-white absolute -top-16 -right-16" />
-          <div className="w-32 h-32 rounded-full border-4 border-white absolute bottom-4 left-4" />
+          <div className="w-64 h-64 rounded-none border-8 border-white absolute -top-16 -right-16" />
+          <div className="w-32 h-32 rounded-none border-4 border-white absolute bottom-4 left-4" />
         </div>
         <div className="relative z-10">
           <p className="text-white/60 text-xs font-black uppercase tracking-widest mb-3">
@@ -1383,9 +1383,9 @@ export const SubathonManager = ({ overlayToken }) => {
             {isRunning ? <span className="text-green-300"> Berjalan</span> : <span className="text-slate-300"> Berhenti</span>}
           </p>
           {localTimer.mode === 'countdown' && (
-            <div className="mt-5 h-2 bg-white/20 rounded-full overflow-hidden">
+            <div className="mt-5 h-2 bg-white/20 rounded-none overflow-hidden">
               <motion.div
-                className={`h-full rounded-full ${progressColor}`}
+                className={`h-full rounded-none ${progressColor}`}
                 animate={{ width: `${progressPct}%` }}
                 transition={{ duration: 0.5 }}
               />
@@ -1493,8 +1493,8 @@ export const SubathonManager = ({ overlayToken }) => {
             </div>
             <button
               onClick={() => upd('autoAddEnabled', !localTimer.autoAddEnabled)}
-              className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer ${localTimer.autoAddEnabled ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
-              <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${localTimer.autoAddEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
+              className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${localTimer.autoAddEnabled ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
+              <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform duration-300 ${localTimer.autoAddEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
             </button>
           </div>
 
@@ -1672,8 +1672,8 @@ export const LeaderboardSettings = ({ overlayToken }) => {
           </div>
           <button
             onClick={() => upd('leaderboardShowAmount', !local.leaderboardShowAmount)}
-            className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer ${local.leaderboardShowAmount ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
-            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${local.leaderboardShowAmount ? 'translate-x-8' : 'translate-x-1'}`} />
+            className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${local.leaderboardShowAmount ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
+            <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform duration-300 ${local.leaderboardShowAmount ? 'translate-x-8' : 'translate-x-1'}`} />
           </button>
         </div>
 
@@ -1796,8 +1796,8 @@ export const MilestonesManager = ({ overlayToken }) => {
                 <span>Progress (preview)</span>
                 <span>0 / Rp {Number(m.targetAmount || 0).toLocaleString('id-ID')}</span>
               </div>
-              <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-green-400 rounded-full" style={{ width: '0%' }} />
+              <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-none overflow-hidden">
+                <div className="h-full bg-green-400 rounded-none" style={{ width: '0%' }} />
               </div>
             </div>
           </div>

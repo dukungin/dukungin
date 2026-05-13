@@ -46,7 +46,7 @@ const DonationFailed = () => {
               initial={{ scale: 0, rotate: 30 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 15 }}
-              className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto shadow-lg"
+              className="w-20 h-20 bg-white rounded-none flex items-center justify-center mx-auto shadow-lg"
             >
               <XCircle size={44} className="text-red-400" strokeWidth={2.5} />
             </motion.div>
@@ -114,7 +114,7 @@ const DonationFailed = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={handleRetry}
-                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-2xl bg-red-500 text-white font-bold text-sm hover:bg-red-600 transition-all"
+                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none bg-red-500 text-white font-bold text-sm hover:bg-red-600 transition-all"
               >
                 <RefreshCcw size={16} />
                 Coba Lagi
@@ -123,7 +123,7 @@ const DonationFailed = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={handleHome}
-                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all"
+                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all"
               >
                 <Home size={16} />
                 {username ? `@${username}` : 'Beranda'}

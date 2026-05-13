@@ -271,7 +271,7 @@ export const WithdrawPage = () => {
             disabled={withdrawMutation.isPending || !canSubmit}
             className="cursor-pointer active:scale-[0.98] hover:brightness-90 w-full bg-indigo-600 text-white py-4 rounded-none font-black text-base hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 dark:shadow-indigo-900/20 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed">
             {withdrawMutation.isPending ? (
-              <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" /> Memproses...</>
+              <><div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-none animate-spin" /> Memproses...</>
             ) : (
               <><ArrowRight size={18} /> Ajukan Penarikan Dana</>
             )}
@@ -307,7 +307,7 @@ export const WithdrawPage = () => {
 
         {historyLoading ? (
           <div className="flex items-center justify-center py-16 text-slate-400 dark:text-slate-500 font-bold gap-3">
-            <div className="w-5 h-5 border-4 border-slate-200 dark:border-slate-700 border-t-indigo-600 rounded-full animate-spin" /> Memuat riwayat...
+            <div className="w-5 h-5 border-4 border-slate-200 dark:border-slate-700 border-t-indigo-600 rounded-none animate-spin" /> Memuat riwayat...
           </div>
         ) : withdrawals.length === 0 ? (
           <div className="py-16 text-center text-slate-400">
@@ -328,7 +328,7 @@ export const WithdrawPage = () => {
                         <p className="font-black text-slate-800 dark:text-slate-100 text-sm">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">{wd.channelCode} • {wd.accountNumber}</p>
                       </div>
-                      <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black ${cfg.className}`}>
+                      <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${cfg.className}`}>
                         {cfg.icon} {cfg.label}
                       </span>
                     </div>
@@ -343,7 +343,7 @@ export const WithdrawPage = () => {
                     )}
                     {wd.status === 'PENDING' && (
                       <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900 rounded-none px-4 py-2.5">
-                        <div className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse flex-shrink-0" />
+                        <div className="w-1.5 h-1.5 bg-amber-400 rounded-none animate-pulse flex-shrink-0" />
                         <p className="text-[11px] text-amber-600 dark:text-amber-400 font-bold">Menunggu diproses admin</p>
                       </div>
                     )}
@@ -392,7 +392,7 @@ export const WithdrawPage = () => {
                         </td>
                         <td className="px-6 py-5">
                           <div className="flex flex-col items-center gap-1.5">
-                            <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black ${cfg.className}`}>
+                            <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${cfg.className}`}>
                               {cfg.icon} {cfg.label}
                             </span>
                             {wd.status === 'FAILED' && wd.note && (

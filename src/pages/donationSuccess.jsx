@@ -80,7 +80,7 @@ const DonationSuccess = () => {
               initial={{ scale: 0, rotate: -30 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 15 }}
-              className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto shadow-lg"
+              className="w-20 h-20 bg-white rounded-none flex items-center justify-center mx-auto shadow-lg"
             >
               <CheckCircle2 size={44} className="text-indigo-500" strokeWidth={2.5} />
             </motion.div>
@@ -111,7 +111,7 @@ const DonationSuccess = () => {
             className="p-8 space-y-6"
           >
             {/* Thank you card */}
-            <div className="bg-indigo-50 rounded-2xl p-5 text-center border border-indigo-100">
+            <div className="bg-indigo-50 rounded-none p-5 text-center border border-indigo-100">
               <Heart size={28} className="text-indigo-500 mx-auto mb-2" strokeWidth={2.5} />
               <p className="text-slate-700 font-semibold text-base leading-relaxed">
                 Terima kasih sudah mendukung!
@@ -121,7 +121,7 @@ const DonationSuccess = () => {
               </p>
             </div>
             {/* Share preview box */}
-            <div className="hidden bg-gray-50 rounded-2xl p-4 border border-gray-100">
+            <div className="hidden bg-gray-50 rounded-none p-4 border border-gray-100">
               <p className="text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Preview pesan share</p>
               <p className="text-slate-500 text-xs leading-relaxed whitespace-pre-line">
                 {username
@@ -142,7 +142,7 @@ const DonationSuccess = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={handleShare}
-                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-indigo-200 text-indigo-600 font-bold text-sm hover:bg-indigo-50 transition-all"
+                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none border-2 border-indigo-200 text-indigo-600 font-bold text-sm hover:bg-indigo-50 transition-all"
               >
                 <Share2 size={16} />
                 Bagikan
@@ -151,7 +151,7 @@ const DonationSuccess = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={handleBack}
-                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-2xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-all"
+                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-all"
               >
                 <Home size={16} />
                 {username ? `@${username}` : 'Beranda'}

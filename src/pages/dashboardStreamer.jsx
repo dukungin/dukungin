@@ -384,7 +384,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
           
           {/* Header Cover (Full Width) */}
           <div className="h-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 relative">
-            <button onClick={onClose} className="absolute top-4 right-4 z-10 w-9 h-9 bg-white hover:bg-slate-100 backdrop-blur-md rounded-full flex items-center justify-center text-black cursor-pointer active:scale-[0.98] hover:brightness-[90%] transition-all">
+            <button onClick={onClose} className="absolute top-4 right-4 z-10 w-9 h-9 bg-white hover:bg-slate-100 backdrop-blur-md rounded-none flex items-center justify-center text-black cursor-pointer active:scale-[0.98] hover:brightness-[90%] transition-all">
               <X size={18} />
             </button>
           </div>
@@ -406,8 +406,8 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
                 </div>
                 <h2 className="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-2">
                   {streamer?.fullName || username}
-                  <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                  <div className="w-4 h-4 bg-blue-500 rounded-none flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 bg-white rounded-none" />
                   </div>
                 </h2>
                 <p className="text-indigo-600 dark:text-indigo-400 font-bold text-sm">@{username}</p>
@@ -865,7 +865,7 @@ const AdminWithdrawalPage = () => {
             <h2 className="text-2xl font-black">Manajemen Penarikan Dana</h2>
           </div>
           <div className="flex items-center gap-2 text-slate-400 text-xs font-bold">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" /> Auto 30s
+            <span className="w-2 h-2 bg-green-400 rounded-none animate-pulse" /> Auto 30s
             <button onClick={() => refetch()} disabled={isFetching} className="ml-1 hover:text-white transition-colors disabled:opacity-50">
               <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
             </button>
@@ -886,10 +886,10 @@ const AdminWithdrawalPage = () => {
             <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{statusFilter ? `Request ${statusFilter}` : 'Semua Request'}</p>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">{pagination.total || 0} total</p>
           </div>
-          <span className="px-4 py-2 bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-full text-[10px] font-black uppercase tracking-widest">Super Admin Only</span>
+          <span className="px-4 py-2 bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-none text-[10px] font-black uppercase tracking-widest">Super Admin Only</span>
         </div>
         {isLoading
-          ? <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />Memuat data...</div>
+          ? <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />Memuat data...</div>
           : withdrawals.length === 0
             ? <div className="py-16 text-center text-slate-400"><p className="text-4xl mb-3">📭</p><p className="font-black text-slate-500">Tidak ada request</p></div>
             : (
@@ -908,7 +908,7 @@ const AdminWithdrawalPage = () => {
                         <td className="px-6 py-5"><p className="font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.paymentMethod || 'BANK'}</p></td>
                         <td className="px-6 py-5"><p className="font-mono font-bold text-slate-700 dark:text-slate-200 text-sm">{wd.accountNumber}</p></td>
                         <td className="px-6 py-5">
-                          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black ${wd.status === 'COMPLETED' ? 'bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400' : wd.status === 'FAILED' ? 'bg-red-100 dark:bg-red-950/40 text-red-500 dark:text-red-400' : 'bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400'}`}>{wd.status}</span>
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${wd.status === 'COMPLETED' ? 'bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400' : wd.status === 'FAILED' ? 'bg-red-100 dark:bg-red-950/40 text-red-500 dark:text-red-400' : 'bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400'}`}>{wd.status}</span>
                         </td>
                         <td className="px-6 py-5"><p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{formatDate(wd.createdAt)}</p></td>
                         <td className="px-6 py-5">
@@ -1162,13 +1162,13 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed w-[100%] right-0 inset-0 z-[999999999] bg-black flex flex-col">
           <div className="flex items-center justify-between px-6 py-4 bg-black/80 backdrop-blur-sm border-b border-white/10 flex-shrink-0">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse" />
+              <span className="w-2.5 h-2.5 bg-red-500 rounded-none animate-pulse" />
               <span className="text-white font-black text-sm tracking-wide">LIVE PREVIEW</span>
               <span className="px-2 py-0.5 bg-red-600 text-white text-[10px] font-black rounded-none tracking-widest">OBS SIMULATION</span>
             </div>
             <div className="flex items-center gap-2">
               <button onClick={triggerDemo} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-xs transition-all">
-                <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" /> Simulasi Donasi
+                <span className="w-1.5 h-1.5 bg-red-400 rounded-none animate-pulse" /> Simulasi Donasi
               </button>
               <button onClick={() => handleFullScreen()} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-none font-black text-xs transition-all border border-white/10">
                 ✕ Tutup
@@ -1200,7 +1200,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
           <span style={{ fontSize: 80, fontWeight: 800, color: 'rgba(255,255,255,0.04)', letterSpacing: -3, userSelect: 'none' }}>LIVE</span>
         </div>
         <div className="absolute top-0 left-0 right-0 flex items-center gap-2 px-3 py-2" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 100%)' }}>
-          <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center text-white text-[8px] font-black flex-shrink-0">YT</div>
+          <div className="w-5 h-5 rounded-none bg-red-600 flex items-center justify-center text-white text-[8px] font-black flex-shrink-0">YT</div>
           <span className="bg-red-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded-none tracking-wide">LIVE</span>
           <span className="text-white text-[9px] font-medium opacity-80 flex-1 truncate">Ngoding Bareng | Demo</span>
         </div>
@@ -1213,7 +1213,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             )}
           </AnimatePresence>
         </div>
-        <div className="absolute top-2 right-3"><span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse block" /></div>
+        <div className="absolute top-2 right-3"><span className="w-1.5 h-1.5 bg-red-500 rounded-none animate-pulse block" /></div>
       </div>
       <div className="flex items-center justify-between text-[10px] text-slate-400 font-bold px-1 flex-wrap gap-1">
         <span>Lebar: <span className="text-indigo-600">{maxW}px</span></span>
@@ -1222,7 +1222,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
       </div>
       <button onClick={triggerDemo}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-none bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 text-indigo-600 dark:text-indigo-400 font-black text-sm border-2 border-indigo-100 dark:border-indigo-900 transition-all flex items-center justify-center gap-2">
-        <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" /> Simulasi Donasi Masuk
+        <span className="w-2 h-2 bg-red-500 rounded-none animate-pulse" /> Simulasi Donasi Masuk
       </button>
       <button onClick={() => handleFullScreen()}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-none bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 text-white font-black text-sm transition-all flex items-center justify-center gap-2 border border-slate-700">
@@ -1385,7 +1385,7 @@ const HistoryPage = () => {
             </div>
 
             <div className="ml-auto flex items-center gap-2 text-xs text-green-500 font-bold">
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span className="w-2 h-2 bg-green-400 rounded-none animate-pulse" />
               Auto 15s
               <button onClick={() => refetch()} disabled={isFetching} className="ml-1 text-slate-400 hover:text-indigo-600">
                 <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
@@ -1401,7 +1401,7 @@ const HistoryPage = () => {
             <>
               {isLoading ? (
                 <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
-                  <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />
                   Memuat riwayat...
                 </div>
               ) : (
@@ -1452,7 +1452,7 @@ const HistoryPage = () => {
                               )}
                             </td>
                             <td className="px-6 md:px-8 py-5 text-center">
-                              <span className={`px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest ${
+                              <span className={`px-3 py-1.5 rounded-none text-[10px] font-black tracking-widest ${
                                 item.status === 'PAID' ? 'bg-green-100 dark:bg-green-950/40 text-green-600' :
                                 item.status === 'EXPIRED' ? 'bg-red-100 dark:bg-red-950/40 text-red-400' :
                                 'bg-amber-100 dark:bg-amber-950/40 text-amber-600'
@@ -1525,7 +1525,7 @@ const HistoryPage = () => {
                         </p>
                       </td>
                       <td className="px-6 md:px-8 py-5">
-                        <span className={`px-3 py-1.5 rounded-full text-[10px] font-black ${
+                        <span className={`px-3 py-1.5 rounded-none text-[10px] font-black ${
                           item.status === 'PAID' ? 'bg-green-100 text-green-600 dark:bg-green-950/40 dark:text-green-400' : 
                           'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400'
                         }`}>
@@ -1583,7 +1583,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
   ];
 
   const renderUsers = (users, isLoading, showFollowBtn = true) => {
-    if (isLoading) return <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />Memuat...</div>;
+    if (isLoading) return <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />Memuat...</div>;
     if (!users?.length) return <div className="text-center py-20 text-slate-400"><p className="text-4xl mb-3">👥</p><p className="font-black text-slate-500">Belum ada streamer</p></div>;
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1637,13 +1637,13 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
       )}
 
       <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-none p-4 md:p-6 text-white relative overflow-hidden">
-        <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
+        <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-none" />
         <div className="relative z-10">
           <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">Streamer Network</p>
           <h2 className="text-3xl font-black tracking-tight">Community.</h2>
           <p className="text-indigo-200 text-sm font-medium mt-1">Temukan & ikuti sesama streamer</p>
         </div>
-        <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
+        <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-10px] md:right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
         <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
       </div>
 
@@ -1652,14 +1652,14 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
           <button key={t.id} onClick={() => setSubTab(t.id)}
             className={`w-full cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-none font-black text-sm transition-all ${subTab === t.id ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:brightness-[80%]'}`}>
             {t.label}
-            {/* {t.count !== undefined && <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${subTab === t.id ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-700'}`}>{t.count}</span>} */}
+            {/* {t.count !== undefined && <span className={`ml-2 px-2 py-0.5 rounded-none text-[10px] ${subTab === t.id ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-700'}`}>{t.count}</span>} */}
           </button>
         ))}
         {subTab === 'discover' && (
           <div className="flex gap-3">
             <input value={searchInput} onChange={e => setSearchInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && setSearch(searchInput)}
               placeholder="Cari username streamer..."
-              className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none px-5 py-3.5 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
+              className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none px-5 py-2 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
             <button onClick={() => setSearch(searchInput)} className="cursor-pointer active:scale-[0.97] px-6 py-3.5 bg-indigo-600 text-white rounded-none font-black text-sm hover:bg-indigo-700 transition-all">Cari</button>
           </div>
         )}
@@ -1905,7 +1905,7 @@ export const DashboardStreamer = () => {
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-      <main className="flex-1 md:w-8xl z-[2] mx-auto w-full relative">
+      <main className="flex-1 mt-22 md:mt-0 md:w-8xl z-[2] mx-auto w-full relative">
         {/* ── TopNavbar: pass showBalance & toggle ── */}
         <TopNavbar user={user} navbar={navbar}
           showBalance={showBalance}
@@ -1916,17 +1916,8 @@ export const DashboardStreamer = () => {
           activeTab={activeTab} setActiveTab={setActiveTab}
         />
 
-        <div className="relative mt-[-14px] px-3 md:px-7 py-0 lg:py-4 w-full">
-          <header className="flex flex-col md:mt-6 lg:flex-row justify-between items-start lg:items-center z-[-1] gap-8 mb-8 relative">
-            <div className="z-10 md:flex flex-col hidden">
-              <h2 className="text-2xl md:text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight leading-none">{TAB_TITLE[activeTab] || activeTab}</h2>
-              <p className="text-slate-400 dark:text-slate-500 font-medium mt-1">Selamat datang kembali, <span className="text-slate-800 dark:text-slate-200 font-bold">@{user.username}</span></p>
-            </div>
-            {/* ── FITUR 1: Saldo dengan eye toggle (di header) ── */}
-            {profileLoading && (
-              <div className="flex items-center gap-2 text-xs text-slate-400 font-bold"><RefreshCw size={14} className="animate-spin" /> Memperbarui data...</div>
-            )}
-          </header>
+        <div className="relative md:mt-[-14px] px-3 md:px-7 lg:py-11 w-full">
+         
 
           <AnimatePresence mode="wait">
 
@@ -1956,8 +1947,8 @@ export const DashboardStreamer = () => {
                             <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">{desc}</p>
                           </div>
                           <button onClick={() => upd(key, !settings[key])}
-                            className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${settings[key] ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
-                            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${settings[key] ? 'translate-x-8' : 'translate-x-1'}`} />
+                            className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer focus:outline-none ${settings[key] ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
+                            <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform duration-300 ${settings[key] ? 'translate-x-8' : 'translate-x-1'}`} />
                           </button>
                         </div>
                       ))}
@@ -2170,7 +2161,7 @@ export const DashboardStreamer = () => {
                   <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
                     <div className="flex justify-between items-center gap-2 mb-5">
                       <span className="text-xl font-black text-slate-900 dark:text-slate-100">Widget URLs untuk OBS</span>
-                      <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-full text-[9px] font-black uppercase tracking-widest">Browser Source</span>
+                      <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-none text-[9px] font-black uppercase tracking-widest">Browser Source</span>
                     </div>
                     {[
                       { label: 'Milestones',  emoji: '🎯', path: 'milestones',  desc: 'Progress bar target donasi', size: '400×280px' },
@@ -2228,7 +2219,7 @@ export const DashboardStreamer = () => {
                     <div className="flex-1 text-center md:text-left space-y-2">
                       <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                         <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2>
-                        <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
+                        <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-none text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
                       </div>
                       {/* ── FITUR 1: saldo dengan eye toggle di profil ── */}
                       {/* <div className="flex items-center gap-3 mt-1">

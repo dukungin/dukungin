@@ -58,7 +58,7 @@
 //     animate={{ opacity: 1, y: 0, scale: 1 }}
 //     exit={{ opacity: 0, y: 8, scale: 0.96 }}
 //     transition={{ duration: 0.25 }}
-//     className={`flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl font-bold text-sm ${
+//     className={`flex items-center gap-3 px-5 py-4 rounded-none shadow-2xl font-bold text-sm ${
 //       type === 'success'
 //         ? 'bg-emerald-600 text-white'
 //         : 'bg-red-600 text-white'
@@ -89,12 +89,12 @@
 //       <button
 //         type="button"
 //         onClick={() => setOpen((p) => !p)}
-//         className="cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-4 rounded-2xl bg-slate-50 border-2 border-slate-100 hover:border-indigo-200 focus:border-indigo-400 outline-none transition-all font-bold text-sm text-slate-700"
+//         className="cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-4 rounded-none bg-slate-50 border-2 border-slate-100 hover:border-indigo-200 focus:border-indigo-400 outline-none transition-all font-bold text-sm text-slate-700"
 //       >
 //         <div className="flex items-center gap-3 min-w-0">
 //           {selected ? (
 //             <>
-//               <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
+//               <div className="w-8 h-8 rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
 //                 {selected.username?.charAt(0).toUpperCase()}
 //               </div>
 //               <span className="truncate">@{selected.username}</span>
@@ -121,7 +121,7 @@
 //             animate={{ opacity: 1, y: 0 }}
 //             exit={{ opacity: 0, y: -8 }}
 //             transition={{ duration: 0.18 }}
-//             className="absolute z-50 top-full mt-2 left-0 right-0 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto"
+//             className="absolute z-50 top-full mt-2 left-0 right-0 bg-white border border-slate-200 rounded-none shadow-2xl overflow-hidden max-h-60 overflow-y-auto"
 //           >
 //             {streamers.length === 0 ? (
 //               <div className="px-4 py-6 text-center text-sm text-slate-400 font-medium">
@@ -137,7 +137,7 @@
 //                     s._id === value ? 'bg-indigo-50' : ''
 //                   }`}
 //                 >
-//                   <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
+//                   <div className="w-8 h-8 rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
 //                     {s.username?.charAt(0).toUpperCase()}
 //                   </div>
 //                   <div className="min-w-0">
@@ -178,7 +178,7 @@
 //       )}
 //       <p className="text-[10px] text-slate-300 mt-0.5 font-mono">{entry.time}</p>
 //     </div>
-//     <span className={`text-[10px] font-black px-2 py-0.5 rounded-lg flex-shrink-0 ${
+//     <span className={`text-[10px] font-black px-2 py-0.5 rounded-none flex-shrink-0 ${
 //       entry.status === 'ok'
 //         ? 'bg-emerald-50 text-emerald-600'
 //         : 'bg-red-50 text-red-500'
@@ -330,7 +330,7 @@
 //           initial={{ opacity: 0, y: 20 }}
 //           animate={{ opacity: 1, y: 0 }}
 //           transition={{ delay: 0.05 }}
-//           className="lg:col-span-3 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-7 space-y-6"
+//           className="lg:col-span-3 bg-white rounded-none border border-slate-100 shadow-xl shadow-slate-100/50 p-7 space-y-6"
 //         >
 //           {/* Streamer Target */}
 //           <div>
@@ -354,7 +354,7 @@
 //               type="text"
 //               value={form.donorName}
 //               onChange={(e) => setForm({ ...form, donorName: e.target.value })}
-//               className="w-full p-4 rounded-2xl bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 focus:bg-white outline-none font-bold text-sm text-slate-700 transition-all"
+//               className="w-full p-4 rounded-none bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 focus:bg-white outline-none font-bold text-sm text-slate-700 transition-all"
 //               placeholder="Nama yang muncul di overlay..."
 //             />
 //           </div>
@@ -370,7 +370,7 @@
 //                   key={p.value}
 //                   type="button"
 //                   onClick={() => setForm({ ...form, amount: p.value })}
-//                   className={`cursor-pointer active:scale-[0.96] py-2.5 rounded-xl font-black text-sm transition-all border-2 ${
+//                   className={`cursor-pointer active:scale-[0.96] py-2.5 rounded-none font-black text-sm transition-all border-2 ${
 //                     form.amount === p.value
 //                       ? 'bg-indigo-600 border-indigo-600 text-white'
 //                       : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-indigo-200 hover:text-indigo-600'
@@ -386,7 +386,7 @@
 //                 type="number"
 //                 value={form.amount || ''}
 //                 onChange={(e) => setForm({ ...form, amount: Number(e.target.value) })}
-//                 className="w-full p-4 pl-12 rounded-2xl font-black text-slate-800 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 focus:bg-white outline-none transition-all"
+//                 className="w-full p-4 pl-12 rounded-none font-black text-slate-800 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 focus:bg-white outline-none transition-all"
 //                 placeholder="Custom nominal..."
 //               />
 //             </div>
@@ -403,7 +403,7 @@
 //                   key={msg}
 //                   type="button"
 //                   onClick={() => setForm({ ...form, message: msg })}
-//                   className="cursor-pointer px-3 py-1 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-200 rounded-xl text-[10px] font-bold text-slate-500 hover:text-indigo-600 transition-all"
+//                   className="cursor-pointer px-3 py-1 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-200 rounded-none text-[10px] font-bold text-slate-500 hover:text-indigo-600 transition-all"
 //                 >
 //                   {msg}
 //                 </button>
@@ -412,13 +412,13 @@
 //             <textarea
 //               value={form.message}
 //               onChange={(e) => setForm({ ...form, message: e.target.value })}
-//               className="w-full p-4 rounded-2xl bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 focus:bg-white outline-none min-h-[80px] font-medium text-sm text-slate-700 transition-all resize-none"
+//               className="w-full p-4 rounded-none bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 focus:bg-white outline-none min-h-[80px] font-medium text-sm text-slate-700 transition-all resize-none"
 //               placeholder="Isi pesan overlay (opsional)..."
 //             />
 //           </div>
 
 //           {/* Media (Optional) */}
-//           <div className="rounded-2xl border-2 border-dashed border-slate-200 p-5 space-y-4">
+//           <div className="rounded-none border-2 border-dashed border-slate-200 p-5 space-y-4">
 //             <div className="flex items-center gap-2">
 //               <Video size={14} className="text-slate-400" />
 //               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -432,7 +432,7 @@
 //                   key={mt.value}
 //                   type="button"
 //                   onClick={() => setForm({ ...form, mediaType: mt.value })}
-//                   className={`cursor-pointer py-2 rounded-xl font-bold text-xs transition-all border-2 ${
+//                   className={`cursor-pointer py-2 rounded-none font-bold text-xs transition-all border-2 ${
 //                     form.mediaType === mt.value
 //                       ? 'bg-purple-600 border-purple-600 text-white'
 //                       : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-purple-200 hover:text-purple-600'
@@ -447,7 +447,7 @@
 //               type="url"
 //               value={form.mediaUrl}
 //               onChange={(e) => setForm({ ...form, mediaUrl: e.target.value })}
-//               className="w-full p-3.5 rounded-xl bg-white border-2 border-slate-100 focus:border-purple-300 outline-none font-mono text-xs text-slate-700 transition-all placeholder:font-sans placeholder:text-slate-400"
+//               className="w-full p-3.5 rounded-none bg-white border-2 border-slate-100 focus:border-purple-300 outline-none font-mono text-xs text-slate-700 transition-all placeholder:font-sans placeholder:text-slate-400"
 //               placeholder="https://i.imgur.com/... atau https://youtu.be/..."
 //             />
 //           </div>
@@ -459,7 +459,7 @@
 //             type="button"
 //             onClick={handleSend}
 //             disabled={sending || !form.targetUserId || !form.amount}
-//             className="cursor-pointer w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-2xl font-black text-base shadow-xl shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 transition-all"
+//             className="cursor-pointer w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-base shadow-xl shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 transition-all"
 //           >
 //             {sending ? (
 //               <><Loader2 size={18} className="animate-spin" /> Mengirim Alert...</>
@@ -477,7 +477,7 @@
 //             initial={{ opacity: 0, y: 20 }}
 //             animate={{ opacity: 1, y: 0 }}
 //             transition={{ delay: 0.1 }}
-//             className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-6 text-white shadow-xl shadow-indigo-200"
+//             className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-none p-6 text-white shadow-xl shadow-indigo-200"
 //           >
 //             <div className="flex items-center gap-2.5 mb-4">
 //               <Radio size={16} className="text-indigo-200" />
@@ -503,7 +503,7 @@
 //             initial={{ opacity: 0, y: 20 }}
 //             animate={{ opacity: 1, y: 0 }}
 //             transition={{ delay: 0.15 }}
-//             className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 overflow-hidden"
+//             className="bg-white rounded-none border border-slate-100 shadow-xl shadow-slate-100/50 overflow-hidden"
 //           >
 //             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-50">
 //               <p className="text-xs font-black text-slate-600 uppercase tracking-widest">Log Aktivitas</p>
@@ -601,7 +601,7 @@ const Toast = ({ message, type }) => (
     animate={{ opacity: 1, y: 0, scale: 1 }}
     exit={{ opacity: 0, y: 8, scale: 0.96 }}
     transition={{ duration: 0.25 }}
-    className={`flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl font-bold text-sm ${
+    className={`flex items-center gap-3 px-5 py-4 rounded-none shadow-2xl font-bold text-sm ${
       type === 'success' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
     }`}
   >
@@ -628,12 +628,12 @@ const StreamerSelect = ({ streamers, value, onChange, loading }) => {
       <button
         type="button"
         onClick={() => setOpen((p) => !p)}
-        className="cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all font-bold text-sm text-slate-700 dark:text-slate-200"
+        className="cursor-pointer w-full flex items-center justify-between gap-3 px-4 py-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none transition-all font-bold text-sm text-slate-700 dark:text-slate-200"
       >
         <div className="flex items-center gap-3 min-w-0">
           {selected ? (
             <>
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
+              <div className="w-8 h-8 rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
                 {selected.username?.charAt(0).toUpperCase()}
               </div>
               <span className="truncate">@{selected.username}</span>
@@ -657,7 +657,7 @@ const StreamerSelect = ({ streamers, value, onChange, loading }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.18 }}
-            className="absolute z-50 top-full mt-2 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto"
+            className="absolute z-50 top-full mt-2 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none shadow-2xl overflow-hidden max-h-60 overflow-y-auto"
           >
             {streamers.length === 0 ? (
               <div className="px-4 py-6 text-center text-sm text-slate-400 dark:text-slate-500 font-medium">
@@ -673,7 +673,7 @@ const StreamerSelect = ({ streamers, value, onChange, loading }) => {
                     s._id === value ? 'bg-indigo-50 dark:bg-indigo-950/30' : ''
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
+                  <div className="w-8 h-8 rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-black flex-shrink-0">
                     {s.username?.charAt(0).toUpperCase()}
                   </div>
                   <div className="min-w-0">
@@ -708,7 +708,7 @@ const LogEntry = ({ entry }) => (
       )}
       <p className="text-[10px] text-slate-300 dark:text-slate-600 mt-0.5 font-mono">{entry.time}</p>
     </div>
-    <span className={`text-[10px] font-black px-2 py-0.5 rounded-lg flex-shrink-0 ${
+    <span className={`text-[10px] font-black px-2 py-0.5 rounded-none flex-shrink-0 ${
       entry.status === 'ok'
         ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400'
         : 'bg-red-50 dark:bg-red-950/40 text-red-500 dark:text-red-400'
@@ -826,7 +826,7 @@ const GhostAlertPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-7 space-y-6"
+          className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-none border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-7 space-y-6"
         >
           {/* Streamer Target */}
           <div>
@@ -845,7 +845,7 @@ const GhostAlertPage = () => {
               type="text"
               value={form.donorName}
               onChange={(e) => setForm({ ...form, donorName: e.target.value })}
-              className="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-600 focus:bg-white dark:focus:bg-slate-800 outline-none font-bold text-sm text-slate-700 dark:text-slate-200 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+              className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-600 focus:bg-white dark:focus:bg-slate-800 outline-none font-bold text-sm text-slate-700 dark:text-slate-200 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
               placeholder="Nama yang muncul di overlay..."
             />
           </div>
@@ -861,7 +861,7 @@ const GhostAlertPage = () => {
                   key={p.value}
                   type="button"
                   onClick={() => setForm({ ...form, amount: p.value })}
-                  className={`cursor-pointer active:scale-[0.96] py-2.5 rounded-xl font-black text-sm transition-all border-2 ${
+                  className={`cursor-pointer active:scale-[0.96] py-2.5 rounded-none font-black text-sm transition-all border-2 ${
                     form.amount === p.value
                       ? 'bg-indigo-600 border-indigo-600 text-white'
                       : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-indigo-200 dark:hover:border-indigo-700 hover:text-indigo-600 dark:hover:text-indigo-400'
@@ -877,7 +877,7 @@ const GhostAlertPage = () => {
                 type="number"
                 value={form.amount || ''}
                 onChange={(e) => setForm({ ...form, amount: Number(e.target.value) })}
-                className="w-full p-4 pl-12 rounded-2xl font-black text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-600 focus:bg-white dark:focus:bg-slate-800 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                className="w-full p-4 pl-12 rounded-none font-black text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-600 focus:bg-white dark:focus:bg-slate-800 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 placeholder="Custom nominal..."
               />
             </div>
@@ -894,7 +894,7 @@ const GhostAlertPage = () => {
                   key={msg}
                   type="button"
                   onClick={() => setForm({ ...form, message: msg })}
-                  className="cursor-pointer px-3 py-1 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 rounded-xl text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
+                  className="cursor-pointer px-3 py-1 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 rounded-none text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
                 >
                   {msg}
                 </button>
@@ -903,13 +903,13 @@ const GhostAlertPage = () => {
             <textarea
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
-              className="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-600 focus:bg-white dark:focus:bg-slate-800 outline-none min-h-[80px] font-medium text-sm text-slate-700 dark:text-slate-200 transition-all resize-none placeholder:text-slate-400 dark:placeholder:text-slate-600"
+              className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-600 focus:bg-white dark:focus:bg-slate-800 outline-none min-h-[80px] font-medium text-sm text-slate-700 dark:text-slate-200 transition-all resize-none placeholder:text-slate-400 dark:placeholder:text-slate-600"
               placeholder="Isi pesan overlay (opsional)..."
             />
           </div>
 
           {/* Media (Optional) */}
-          <div className="rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 p-5 space-y-4">
+          <div className="rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 p-5 space-y-4">
             <div className="flex items-center gap-2">
               <Video size={14} className="text-slate-400 dark:text-slate-500" />
               <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
@@ -923,7 +923,7 @@ const GhostAlertPage = () => {
                   key={mt.value}
                   type="button"
                   onClick={() => setForm({ ...form, mediaType: mt.value })}
-                  className={`cursor-pointer py-2 rounded-xl font-bold text-xs transition-all border-2 ${
+                  className={`cursor-pointer py-2 rounded-none font-bold text-xs transition-all border-2 ${
                     form.mediaType === mt.value
                       ? 'bg-purple-600 border-purple-600 text-white'
                       : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-purple-200 dark:hover:border-purple-700 hover:text-purple-600 dark:hover:text-purple-400'
@@ -938,7 +938,7 @@ const GhostAlertPage = () => {
               type="url"
               value={form.mediaUrl}
               onChange={(e) => setForm({ ...form, mediaUrl: e.target.value })}
-              className="w-full p-3.5 rounded-xl bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-purple-300 dark:focus:border-purple-600 outline-none font-mono text-xs text-slate-700 dark:text-slate-300 transition-all placeholder:font-sans placeholder:text-slate-400 dark:placeholder:text-slate-600"
+              className="w-full p-3.5 rounded-none bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-purple-300 dark:focus:border-purple-600 outline-none font-mono text-xs text-slate-700 dark:text-slate-300 transition-all placeholder:font-sans placeholder:text-slate-400 dark:placeholder:text-slate-600"
               placeholder="https://i.imgur.com/... atau https://youtu.be/..."
             />
           </div>
@@ -950,7 +950,7 @@ const GhostAlertPage = () => {
             type="button"
             onClick={handleSend}
             disabled={sending || !form.targetUserId || !form.amount}
-            className="cursor-pointer w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-2xl font-black text-base shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 transition-all"
+            className="cursor-pointer w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-base shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 transition-all"
           >
             {sending ? (
               <><Loader2 size={18} className="animate-spin" /> Mengirim Alert...</>
@@ -968,7 +968,7 @@ const GhostAlertPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-6 text-white shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30"
+            className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-none p-6 text-white shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30"
           >
             <div className="flex items-center gap-2.5 mb-4">
               <Radio size={16} className="text-indigo-200" />
@@ -994,7 +994,7 @@ const GhostAlertPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none overflow-hidden"
+            className="bg-white dark:bg-slate-900 rounded-none border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none overflow-hidden"
           >
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-50 dark:border-slate-800">
               <p className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">Log Aktivitas</p>

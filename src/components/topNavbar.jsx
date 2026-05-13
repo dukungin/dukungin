@@ -64,9 +64,9 @@ const ThemeToggle = ({ theme, onToggle }) => {
       {/* Stars (dark mode) */}
       {isDark && (
         <>
-          <span className="absolute top-1.5 right-3 w-0.5 h-0.5 bg-white rounded-full opacity-80" />
-          <span className="absolute top-3 right-5 w-1 h-1 bg-white rounded-full opacity-60" />
-          <span className="absolute bottom-2 right-2 w-0.5 h-0.5 bg-white rounded-full opacity-70" />
+          <span className="absolute top-1.5 right-3 w-0.5 h-0.5 bg-white rounded-none opacity-80" />
+          <span className="absolute top-3 right-5 w-1 h-1 bg-white rounded-none opacity-60" />
+          <span className="absolute bottom-2 right-2 w-0.5 h-0.5 bg-white rounded-none opacity-70" />
         </>
       )}
 
@@ -146,13 +146,13 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
 
   return (
     <>
-      <div className={`sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white/80 dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between gap-4`}>
+      <div className={`hidden md:sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white/80 dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between gap-4`}>
 
         {/* Kiri: Breadcrumb */}
         <div className="flex items-center gap-1.5 min-w-0">
-          <span className="text-md font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap">Dashboard</span>
+          <span className="text-md font-bold text-slate-400 dark:text-slate-500 whitespace-nowrap">Dashboard</span>
           <ChevronRight size={16} className="text-slate-400 dark:text-slate-600 flex-shrink-0" />
-          <span className="text-md font-medium text-slate-700 dark:text-slate-200 truncate">
+          <span className="text-md font-bold text-slate-700 dark:text-slate-200 truncate">
             {TAB_LABELS[activeTab] || activeTab}
           </span>
         </div>
@@ -163,7 +163,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           {/* Saldo */}
           <div className="hidden sm:flex items-center h-[40px] gap-2 rounded-none px-3.5 py-2 border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60">
             <Wallet size={18} className="text-indigo-400" />
-            <span className="font-medium text-indigo-600 dark:text-indigo-400 text-md tracking-wide">
+            <span className="font-bold text-indigo-600 dark:text-indigo-400 text-md tracking-wide">
               {showBalance 
                 ? `Rp ${parseFloat(user.balance).toLocaleString('id-ID')}` 
                 : "Rp *********"
@@ -180,7 +180,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           {/* Bantuan */}
           <button
             onClick={() => setActiveTab('contact')}
-            className={`cursor-pointer h-[40px] active:scale-[0.97] flex items-center gap-2 px-3.5 rounded-none border font-medium text-md transition-all ${
+            className={`cursor-pointer h-[40px] active:scale-[0.97] flex items-center gap-2 px-3.5 rounded-none border font-bold text-md transition-all ${
               activeTab === 'contact'
                 ? 'bg-slate-800 dark:bg-slate-700 text-white border-transparent'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
@@ -192,7 +192,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           {/* Komunitas */}
           <button
             onClick={() => setActiveTab('community')}
-            className="cursor-pointer hover:brightness-90 h-[38px] active:scale-[0.97] relative flex items-center gap-2 px-3.5 py-3 rounded-none font-medium text-md overflow-hidden"
+            className="cursor-pointer hover:brightness-90 h-[38px] active:scale-[0.97] relative flex items-center gap-2 px-3.5 py-3 rounded-none font-bold text-md overflow-hidden"
             style={{
               background: 'linear-gradient(90deg, #0f0c29, #302b63, #24243e, #0f0c29)',
               backgroundSize: '300% 100%',
@@ -217,12 +217,12 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
               onClick={() => setShowLogout(v => !v)}
               className="cursor-pointer h-[38.4px] flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none px-1.5 py-3 transition-all active:scale-[0.97]"
             >
-              <div className="w-8 h-8 rounded-none bg-indigo-600 flex items-center justify-center text-white font-medium text-md flex-shrink-0">
+              <div className="w-8 h-8 rounded-none bg-indigo-600 flex items-center justify-center text-white font-bold text-md flex-shrink-0">
                 {user.username.charAt(0).toUpperCase()}
               </div>
               <div className="text-left hidden sm:block">
-                <p className="font-medium text-slate-800 dark:text-slate-200 text-md leading-tight">@{user.username}</p>
-                {/* <p className="text-[11px] text-slate-400 font-medium truncate max-w-[120px]">{user.email}</p> */}
+                <p className="font-bold text-slate-800 dark:text-slate-200 text-md leading-tight">@{user.username}</p>
+                {/* <p className="text-[11px] text-slate-400 font-bold truncate max-w-[120px]">{user.email}</p> */}
               </div>
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400 ml-0.5">
                 <path d="M6 9l6 6 6-6" />
@@ -243,14 +243,14 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                     {/* Saldo mobile */}
                     <div className="sm:hidden px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center gap-2">
                       <Wallet size={13} className="text-indigo-400" />
-                      <span className="font-medium text-indigo-600 dark:text-indigo-400 text-sm">
+                      <span className="font-bold text-indigo-600 dark:text-indigo-400 text-sm">
                         Rp {parseFloat(user.balance).toLocaleString('id-ID')}
                       </span>
                     </div>
 
                     {/* Theme toggle in dropdown (mobile-friendly label) */}
                     <div className="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
-                      <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                      <span className="text-sm text-slate-500 dark:text-slate-400 font-bold">
                         {theme === 'dark' ? 'Mode Gelap' : 'Mode Terang'}
                       </span>
                       <ThemeToggle theme={theme} onToggle={toggle} />
@@ -259,9 +259,9 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                     <div className="p-1 space-y-1">
                       <button
                         onClick={onProfile}
-                        className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium rounded-none text-sm transition-all active:scale-[0.97]"
+                        className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold rounded-none text-sm transition-all active:scale-[0.97]"
                       >
-                        <div className="w-5 h-5 rounded-none bg-indigo-600 flex items-center justify-center text-white font-medium text-[10px]">
+                        <div className="w-5 h-5 rounded-none bg-indigo-600 flex items-center justify-center text-white font-bold text-[10px]">
                           {user.username.charAt(0).toUpperCase()}
                         </div>
                         My Profile
@@ -269,7 +269,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                       <div className="w-[92%] mx-auto h-[0.5px] bg-slate-100 dark:bg-slate-800" />
                       <button
                         onClick={() => { setShowLogout(false); setShowLogoutConfirm(true); }}
-                        className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium rounded-none text-sm transition-all active:scale-[0.97]"
+                        className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 font-bold rounded-none text-sm transition-all active:scale-[0.97]"
                       >
                         <LogOut size={15} />
                         Logout
@@ -300,21 +300,21 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-none p-10 z-[9999] shadow-2xl text-center"
             >
-              <div className="w-20 h-20 mx-auto mb-6 bg-red-100 dark:bg-red-950/40 text-red-600 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 mx-auto mb-6 bg-red-100 dark:bg-red-950/40 text-red-600 rounded-none flex items-center justify-center">
                 <AlertCircle size={40} />
               </div>
-              <h3 className="text-2xl font-medium text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Keluar</h3>
-              <p className="text-slate-500 dark:text-slate-400 font-medium mb-8">Apakah kamu yakin ingin mengakhiri sesi ini?</p>
+              <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Keluar</h3>
+              <p className="text-slate-500 dark:text-slate-400 font-bold mb-8">Apakah kamu yakin ingin mengakhiri sesi ini?</p>
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleLogout}
-                  className="cursor-pointer active:scale-[0.97] w-full py-4 bg-red-600 text-white rounded-none font-medium text-md shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
+                  className="cursor-pointer active:scale-[0.97] w-full py-4 bg-red-600 text-white rounded-none font-bold text-md shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
                 >
                   Ya, Logout
                 </button>
                 <button
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="cursor-pointer active:scale-[0.97] w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-medium text-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                  className="cursor-pointer active:scale-[0.97] w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-bold text-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
                 >
                   Batal
                 </button>

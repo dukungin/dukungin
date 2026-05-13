@@ -166,7 +166,7 @@
 //             transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
 //             className="fixed inset-0 z-[101] flex items-center justify-center px-4 pointer-events-none"
 //           >
-//             <div className="w-full max-w-sm bg-white rounded-xl shadow-2xl shadow-indigo-200/50 border border-indigo-100 overflow-hidden pointer-events-auto">
+//             <div className="w-full max-w-sm bg-white rounded-none shadow-2xl shadow-indigo-200/50 border border-indigo-100 overflow-hidden pointer-events-auto">
 //               {/* Header gradient stripe */}
 //               <div className="h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500" />
 
@@ -185,19 +185,19 @@
 //                   </div>
 //                   <button
 //                     onClick={onClose}
-//                     className="w-8 h-8 rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-500 text-slate-400 flex items-center justify-center transition-all"
+//                     className="w-8 h-8 rounded-none bg-slate-100 hover:bg-red-50 hover:text-red-500 text-slate-400 flex items-center justify-center transition-all"
 //                   >
 //                     <X size={15} />
 //                   </button>
 //                 </div>
 
 //                 {/* Tab switcher */}
-//                 <div className="flex bg-slate-100 rounded-xl p-1 gap-1">
+//                 <div className="flex bg-slate-100 rounded-none p-1 gap-1">
 //                   {['login', 'register'].map((t) => (
 //                     <button
 //                       key={t}
 //                       onClick={() => { setTab(t); setError(''); setSuccess(''); }}
-//                       className={`flex-1 py-2 rounded-xl font-black text-sm transition-all ${
+//                       className={`flex-1 py-2 rounded-none font-black text-sm transition-all ${
 //                         tab === t
 //                           ? 'bg-white text-indigo-700 shadow-sm'
 //                           : 'text-slate-400 hover:text-slate-600'
@@ -213,7 +213,7 @@
 //                   {error && (
 //                     <motion.div
 //                       initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-//                       className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-xs font-bold text-red-600"
+//                       className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-100 rounded-none text-xs font-bold text-red-600"
 //                     >
 //                       <X size={13} /> {error}
 //                     </motion.div>
@@ -221,7 +221,7 @@
 //                   {success && (
 //                     <motion.div
 //                       initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-//                       className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-100 rounded-xl text-xs font-bold text-green-700"
+//                       className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-100 rounded-none text-xs font-bold text-green-700"
 //                     >
 //                       ✅ {success}
 //                     </motion.div>
@@ -245,7 +245,7 @@
 //                           value={loginForm.email}
 //                           onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
 //                           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-//                           className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-xl text-sm font-bold text-slate-700 outline-none transition-all"
+//                           className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-none text-sm font-bold text-slate-700 outline-none transition-all"
 //                         />
 //                       </div>
 //                       {/* Password */}
@@ -257,7 +257,7 @@
 //                           value={loginForm.password}
 //                           onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
 //                           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-//                           className="w-full pl-10 pr-10 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-xl text-sm font-bold text-slate-700 outline-none transition-all"
+//                           className="w-full pl-10 pr-10 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-none text-sm font-bold text-slate-700 outline-none transition-all"
 //                         />
 //                         <button
 //                           onClick={() => setShowPass(!showPass)}
@@ -270,7 +270,7 @@
 //                         whileTap={{ scale: 0.97 }}
 //                         onClick={handleLogin}
 //                         disabled={loading}
-//                         className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm shadow-lg shadow-indigo-200 disabled:opacity-60 flex items-center justify-center gap-2 transition-all hover:brightness-110"
+//                         className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-sm shadow-lg shadow-indigo-200 disabled:opacity-60 flex items-center justify-center gap-2 transition-all hover:brightness-110"
 //                       >
 //                         {loading ? <><Loader2 size={15} className="animate-spin" /> Masuk...</> : '→ Masuk Sekarang'}
 //                       </motion.button>
@@ -289,7 +289,7 @@
 //                           placeholder="Username"
 //                           value={registerForm.username}
 //                           onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
-//                           className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-xl text-sm font-bold text-slate-700 outline-none transition-all"
+//                           className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-none text-sm font-bold text-slate-700 outline-none transition-all"
 //                         />
 //                       </div>
 //                       {/* Email */}
@@ -300,7 +300,7 @@
 //                           placeholder="Email kamu"
 //                           value={registerForm.email}
 //                           onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
-//                           className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-xl text-sm font-bold text-slate-700 outline-none transition-all"
+//                           className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-none text-sm font-bold text-slate-700 outline-none transition-all"
 //                         />
 //                       </div>
 //                       {/* Password */}
@@ -311,7 +311,7 @@
 //                           placeholder="Password (min. 6 karakter)"
 //                           value={registerForm.password}
 //                           onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-//                           className="w-full pl-10 pr-10 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-xl text-sm font-bold text-slate-700 outline-none transition-all"
+//                           className="w-full pl-10 pr-10 py-3.5 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 rounded-none text-sm font-bold text-slate-700 outline-none transition-all"
 //                         />
 //                         <button
 //                           onClick={() => setShowPass(!showPass)}
@@ -324,7 +324,7 @@
 //                         whileTap={{ scale: 0.97 }}
 //                         onClick={handleRegister}
 //                         disabled={loading}
-//                         className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm shadow-lg shadow-indigo-200 disabled:opacity-60 flex items-center justify-center gap-2 transition-all hover:brightness-110"
+//                         className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-sm shadow-lg shadow-indigo-200 disabled:opacity-60 flex items-center justify-center gap-2 transition-all hover:brightness-110"
 //                       >
 //                         {loading ? <><Loader2 size={15} className="animate-spin" /> Mendaftar...</> : '🎉 Buat Akun Gratis'}
 //                       </motion.button>
@@ -370,7 +370,7 @@
 //       <div className="max-w-xl mx-auto flex items-center justify-between">
 //         {/* Logo */}
 //         <Link to="/" className="flex items-center gap-2">
-//           <div className="w-9 h-9 bg-pink-200 rounded-md p-1.5 flex items-center justify-center">
+//           <div className="w-9 h-9 bg-pink-200 rounded-none p-1.5 flex items-center justify-center">
 //             <img src="/jellyfish.png" alt="icon" />
 //           </div>
 //           <span className="font-black text-sm text-slate-800 tracking-tight">TapTipTup</span>
@@ -379,17 +379,17 @@
 //         {/* Right side */}
 //         <div className="flex items-center gap-2">
 //           {/* === TOGGLE THEME === */}
-//           <button onClick={toggleTheme} className="h-[40px] w-[40px] flex items-center justify-center rounded-xl border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+//           <button onClick={toggleTheme} className="h-[40px] w-[40px] flex items-center justify-center rounded-none border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
 //             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
 //           </button>
 //           {isLoggedIn ? (
 //             <div className="relative" ref={dropRef}>
 //               <button
 //                 onClick={() => setDropdownOpen((v) => !v)}
-//                 className="flex items-center gap-2 px-2 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer"
+//                 className="flex items-center gap-2 px-2 py-2 bg-slate-100 hover:bg-slate-200 rounded-none transition-all cursor-pointer"
 //               >
 //                 {/* Avatar inisial */}
-//                 <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-full flex items-center justify-center text-white font-black text-xs flex-shrink-0">
+//                 <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-none flex items-center justify-center text-white font-black text-xs flex-shrink-0">
 //                   {displayName.charAt(0).toUpperCase()}
 //                 </div>
 //                 <span className="font-black text-sm text-slate-700 hidden sm:block max-w-[130px] truncate">
@@ -408,11 +408,11 @@
 //                     animate={{ opacity: 1, y: 0, scale: 1 }}
 //                     exit={{ opacity: 0, y: -8, scale: 0.95 }}
 //                     transition={{ duration: 0.15 }}
-//                     className="absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl shadow-slate-200/80 border border-slate-100 overflow-hidden"
+//                     className="absolute right-0 mt-2 w-60 bg-white rounded-none shadow-xl shadow-slate-200/80 border border-slate-100 overflow-hidden"
 //                   >
 //                     {/* Info akun */}
 //                     <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-3">
-//                       <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white font-black text-sm flex-shrink-0">
+//                       <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-none flex items-center justify-center text-white font-black text-sm flex-shrink-0">
 //                         {displayName.charAt(0).toUpperCase()}
 //                       </div>
 //                       <div className="min-w-0">
@@ -424,20 +424,20 @@
 //                     <div className="p-1.5 space-y-0.5">
 //                       <Link
 //                         to="/dashboard"
-//                         className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-all text-sm font-bold text-slate-700"
+//                         className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 rounded-none transition-all text-sm font-bold text-slate-700"
 //                         onClick={() => setDropdownOpen(false)}
 //                       >
-//                         <div className="w-7 h-7 bg-indigo-50 rounded-lg flex items-center justify-center flex-shrink-0">
+//                         <div className="w-7 h-7 bg-indigo-50 rounded-none flex items-center justify-center flex-shrink-0">
 //                           <User size={13} className="text-indigo-500" />
 //                         </div>
 //                         Dashboard Saya
 //                       </Link>
 //                       <Link
 //                         to="/dashboard?tab=myDonations"   // ← INI YANG DIUBAH
-//                         className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 rounded-xl transition-all text-sm font-bold text-slate-700"
+//                         className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 rounded-none transition-all text-sm font-bold text-slate-700"
 //                         onClick={() => setDropdownOpen(false)}
 //                       >
-//                         <div className="w-7 h-7 bg-pink-50 rounded-lg flex items-center justify-center flex-shrink-0">
+//                         <div className="w-7 h-7 bg-pink-50 rounded-none flex items-center justify-center flex-shrink-0">
 //                           <Heart size={13} className="text-pink-500" />
 //                         </div>
 //                         Riwayat Berdonasi Saya
@@ -447,9 +447,9 @@
 //                     <div className="p-1.5 border-t border-slate-100">
 //                       <button
 //                         onClick={() => { setDropdownOpen(false); onLogout(); }}
-//                         className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 rounded-xl transition-all text-sm font-bold text-red-500 cursor-pointer"
+//                         className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 rounded-none transition-all text-sm font-bold text-red-500 cursor-pointer"
 //                       >
-//                         <div className="w-7 h-7 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+//                         <div className="w-7 h-7 bg-red-50 rounded-none flex items-center justify-center flex-shrink-0">
 //                           <LogOut size={13} className="text-red-400" />
 //                         </div>
 //                         Keluar
@@ -469,7 +469,7 @@
 //               </button>
 //               <button
 //                 onClick={() => onOpenAuth('register')}
-//                 className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm shadow-md shadow-indigo-200 hover:brightness-110 transition-all cursor-pointer"
+//                 className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-sm shadow-md shadow-indigo-200 hover:brightness-110 transition-all cursor-pointer"
 //               >
 //                 Daftar
 //               </button>
@@ -513,11 +513,11 @@
 //       transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
 //       className="overflow-hidden"
 //     >
-//       <div className="rounded-xl border-2 border-indigo-200 bg-indigo-50/60 p-5 space-y-4">
+//       <div className="rounded-none border-2 border-indigo-200 bg-indigo-50/60 p-5 space-y-4">
 //         {/* Badge unlock */}
 //         <div className="flex items-center justify-between">
 //           <div className="flex items-center gap-2.5">
-//             <div className="w-7 h-7 rounded-xl bg-indigo-600 flex items-center justify-center text-white flex-shrink-0">
+//             <div className="w-7 h-7 rounded-none bg-indigo-600 flex items-center justify-center text-white flex-shrink-0">
 //               {allowVideo && allowImage ? (
 //                 <span className="flex items-center gap-0.5">
 //                   <ImageIcon size={9} />
@@ -541,7 +541,7 @@
 //           {mediaUrl && (
 //             <button
 //               onClick={() => setMediaUrl('')}
-//               className="w-6 h-6 rounded-full bg-indigo-100 hover:bg-red-100 hover:text-red-500 text-indigo-400 flex items-center justify-center transition-all"
+//               className="w-6 h-6 rounded-none bg-indigo-100 hover:bg-red-100 hover:text-red-500 text-indigo-400 flex items-center justify-center transition-all"
 //             >
 //               <X size={12} />
 //             </button>
@@ -551,12 +551,12 @@
 //         {/* Tipe media yang diizinkan */}
 //         <div className="flex items-center gap-2">
 //           {allowImage && (
-//             <span className="flex items-center gap-1 px-2 py-1 bg-white border border-indigo-100 rounded-lg text-[10px] font-bold text-indigo-600">
+//             <span className="flex items-center gap-1 px-2 py-1 bg-white border border-indigo-100 rounded-none text-[10px] font-bold text-indigo-600">
 //               <ImageIcon size={10} /> Gambar / GIF
 //             </span>
 //           )}
 //           {allowVideo && (
-//             <span className="flex items-center gap-1 px-2 py-1 bg-white border border-indigo-100 rounded-lg text-[10px] font-bold text-purple-600">
+//             <span className="flex items-center gap-1 px-2 py-1 bg-white border border-indigo-100 rounded-none text-[10px] font-bold text-purple-600">
 //               <Video size={10} /> Video + YouTube
 //             </span>
 //           )}
@@ -571,7 +571,7 @@
 //             type="url"
 //             value={mediaUrl}
 //             onChange={(e) => setMediaUrl(e.target.value)}
-//             className="w-full p-4 rounded-xl bg-white border-2 border-indigo-100 focus:border-indigo-400 outline-none font-mono text-xs text-slate-700 font-bold transition-all placeholder:font-sans placeholder:text-slate-400"
+//             className="w-full p-4 rounded-none bg-white border-2 border-indigo-100 focus:border-indigo-400 outline-none font-mono text-xs text-slate-700 font-bold transition-all placeholder:font-sans placeholder:text-slate-400"
 //             placeholder={placeholderText}
 //           />
 //           <p className="text-[10px] text-slate-400 font-medium ml-1">
@@ -587,7 +587,7 @@
 //               animate={{ opacity: 1, scale: 1 }}
 //               exit={{ opacity: 0, scale: 0.96 }}
 //               transition={{ duration: 0.25 }}
-//               className="rounded-xl overflow-hidden border border-indigo-100 bg-slate-900 relative"
+//               className="rounded-none overflow-hidden border border-indigo-100 bg-slate-900 relative"
 //               style={{ maxHeight: 200 }}
 //             >
 //               {mediaType === 'youtube' ? (
@@ -631,7 +631,7 @@
 //             <motion.div
 //               initial={{ opacity: 0 }}
 //               animate={{ opacity: 1 }}
-//               className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-xs text-red-500 font-bold flex items-center gap-2"
+//               className="rounded-none border border-red-100 bg-red-50 px-4 py-3 text-xs text-red-500 font-bold flex items-center gap-2"
 //             >
 //               <X size={14} /> URL tidak valid atau media tidak dapat dimuat.
 //             </motion.div>
@@ -866,10 +866,10 @@
 //           <motion.div
 //             initial={{ opacity: 0, y: -20 }}
 //             animate={{ opacity: 1, y: 0 }}
-//             className="bg-white p-8 rounded-xl shadow-xl shadow-indigo-100/50 text-center border border-indigo-100 relative overflow-hidden"
+//             className="bg-white p-8 rounded-none shadow-xl shadow-indigo-100/50 text-center border border-indigo-100 relative overflow-hidden"
 //           >
 //             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500 rounded-t-3xl" />
-//             <div className="w-20 h-20 mx-auto rounded-[1.5rem] bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-3xl font-black shadow-lg mb-4">
+//             <div className="w-20 h-20 mx-auto rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-3xl font-black shadow-lg mb-4">
 //               {streamer.username?.charAt(0).toUpperCase()}
 //             </div>
 //             <h1 className="text-2xl font-black text-slate-800">@{streamer.username}</h1>
@@ -877,7 +877,7 @@
 
 //             {/* Login status badge */}
 //             {isLoggedIn ? (
-//               <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full text-[10px] font-black text-green-700">
+//               <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 border border-green-200 rounded-none text-[10px] font-black text-green-700">
 //                 ✓ Donasi akan tercatat di riwayat akun kamu
 //               </div>
 //             ) : (
@@ -907,7 +907,7 @@
 //             initial={{ opacity: 0, y: 20 }}
 //             animate={{ opacity: 1, y: 0 }}
 //             transition={{ delay: 0.1 }}
-//             className="bg-white p-7 rounded-xl shadow-xl shadow-indigo-100/50 border border-indigo-100 space-y-5"
+//             className="bg-white p-7 rounded-none shadow-xl shadow-indigo-100/50 border border-indigo-100 space-y-5"
 //           >
 //             {/* Quick Amounts */}
 //             {quickAmounts.length > 0 && (
@@ -920,7 +920,7 @@
 //                     <button
 //                       key={val}
 //                       onClick={() => setForm({ ...form, amount: val })}
-//                       className={`py-4 rounded-xl font-black text-sm transition-all border-2 active:scale-95 ${
+//                       className={`py-4 rounded-none font-black text-sm transition-all border-2 active:scale-95 ${
 //                         form.amount === val
 //                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg'
 //                           : 'bg-white border-slate-200 hover:border-indigo-300 hover:text-indigo-600'
@@ -946,7 +946,7 @@
 //                   type="number"
 //                   value={form.amount || ''}
 //                   onChange={(e) => setForm({ ...form, amount: Number(e.target.value) })}
-//                   className="w-full p-4 pl-12 rounded-xl font-black text-slate-800 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 focus:bg-white outline-none transition-all"
+//                   className="w-full p-4 pl-12 rounded-none font-black text-slate-800 bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 focus:bg-white outline-none transition-all"
 //                   placeholder="Nominal custom..."
 //                 />
 //               </div>
@@ -963,7 +963,7 @@
 //                     return (
 //                       <div
 //                         key={i}
-//                         className={`flex items-center gap-2 text-[10px] font-bold px-2 py-1.5 rounded-lg ${
+//                         className={`flex items-center gap-2 text-[10px] font-bold px-2 py-1.5 rounded-none ${
 //                           reached ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-50 text-slate-400'
 //                         }`}
 //                       >
@@ -993,7 +993,7 @@
 //               <textarea
 //                 value={form.message}
 //                 onChange={(e) => setForm({ ...form, message: e.target.value })}
-//                 className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 min-h-[90px] outline-none transition-all resize-none"
+//                 className="w-full p-4 rounded-none bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 min-h-[90px] outline-none transition-all resize-none"
 //                 placeholder="Semangat terus bang! 🔥"
 //               />
 //             </div>
@@ -1020,7 +1020,7 @@
 //                   disabled={form.isAnonymous || isLoggedIn}
 //                   value={form.isAnonymous ? '' : form.donorName}
 //                   onChange={(e) => setForm({ ...form, donorName: e.target.value })}
-//                   className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 disabled:opacity-40 outline-none transition-all"
+//                   className="w-full p-4 rounded-none bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 disabled:opacity-40 outline-none transition-all"
 //                   placeholder="Nama kamu"
 //                 />
 //                 {isLoggedIn && !form.isAnonymous && (
@@ -1038,7 +1038,7 @@
 //                   disabled={isLoggedIn}
 //                   value={form.email}
 //                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-//                   className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 disabled:opacity-40 outline-none transition-all"
+//                   className="w-full p-4 rounded-none bg-slate-50 border-2 border-slate-100 focus:border-indigo-300 disabled:opacity-40 outline-none transition-all"
 //                   placeholder="email@kamu.com"
 //                 />
 //               </div>
@@ -1048,12 +1048,12 @@
 //             <label className="flex items-center gap-3 text-sm font-bold text-slate-600 cursor-pointer select-none">
 //               <div
 //                 onClick={() => setForm({ ...form, isAnonymous: !form.isAnonymous })}
-//                 className={`w-10 h-6 rounded-full relative flex-shrink-0 transition-all cursor-pointer ${
+//                 className={`w-10 h-6 rounded-none relative flex-shrink-0 transition-all cursor-pointer ${
 //                   form.isAnonymous ? 'bg-indigo-600' : 'bg-slate-200'
 //                 }`}
 //               >
 //                 <div
-//                   className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${
+//                   className={`absolute top-1 w-4 h-4 bg-white rounded-none shadow transition-all ${
 //                     form.isAnonymous ? 'left-5' : 'left-1'
 //                   }`}
 //                 />
@@ -1070,7 +1070,7 @@
 //                   exit={{ opacity: 0, height: 0 }}
 //                   className="overflow-hidden"
 //                 >
-//                   <div className="flex items-center justify-between px-4 py-3 bg-indigo-50 border border-indigo-100 rounded-xl">
+//                   <div className="flex items-center justify-between px-4 py-3 bg-indigo-50 border border-indigo-100 rounded-none">
 //                     <div>
 //                       <p className="text-xs font-black text-indigo-700">
 //                         💡 Donasi kamu tidak akan tercatat
@@ -1082,13 +1082,13 @@
 //                     <div className="flex items-center gap-2 flex-shrink-0 ml-3">
 //                       <button
 //                         onClick={() => openAuth('login')}
-//                         className="px-3 py-1.5 text-[10px] font-black text-indigo-600 bg-white border border-indigo-200 rounded-xl hover:bg-indigo-100 transition-all cursor-pointer"
+//                         className="px-3 py-1.5 text-[10px] font-black text-indigo-600 bg-white border border-indigo-200 rounded-none hover:bg-indigo-100 transition-all cursor-pointer"
 //                       >
 //                         Masuk
 //                       </button>
 //                       <button
 //                         onClick={() => openAuth('register')}
-//                         className="px-3 py-1.5 text-[10px] font-black text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-all cursor-pointer"
+//                         className="px-3 py-1.5 text-[10px] font-black text-white bg-indigo-600 rounded-none hover:bg-indigo-700 transition-all cursor-pointer"
 //                       >
 //                         Daftar
 //                       </button>
@@ -1106,7 +1106,7 @@
 //               whileTap={{ scale: 0.97 }}
 //               onClick={handleDonate}
 //               disabled={loading || !form.amount}
-//               className="cursor-pointer w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-lg shadow-xl shadow-indigo-200/50 disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+//               className="cursor-pointer w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-lg shadow-xl shadow-indigo-200/50 disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
 //             >
 //               {loading ? (
 //                 <>
@@ -1297,7 +1297,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
             transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
             className="fixed inset-0 z-[101] flex items-center justify-center px-4 pointer-events-none"
           >
-            <div className="relative overflow-hidden w-full md:max-w-md max-w-lg bg-white dark:bg-slate-900 rounded-xl shadow-2xl shadow-indigo-200/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800 overflow-hidden pointer-events-auto">
+            <div className="relative overflow-hidden w-full md:max-w-md max-w-lg bg-white dark:bg-slate-900 rounded-none shadow-2xl shadow-indigo-200/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800 overflow-hidden pointer-events-auto">
               {/* Header gradient stripe */}
               <div className="relative h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500" />
 
@@ -1327,7 +1327,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                   {error && (
                     <motion.div
                       initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                      className="flex items-center gap-2 px-4 py-3 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/50 rounded-xl text-xs font-bold text-red-600 dark:text-red-400"
+                      className="flex items-center gap-2 px-4 py-3 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/50 rounded-none text-xs font-bold text-red-600 dark:text-red-400"
                     >
                       <X size={13} /> {error}
                     </motion.div>
@@ -1335,7 +1335,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                   {success && (
                     <motion.div
                       initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                      className="flex items-center gap-2 px-4 py-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/50 rounded-xl text-xs font-bold text-green-700 dark:text-green-400"
+                      className="flex items-center gap-2 px-4 py-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/50 rounded-none text-xs font-bold text-green-700 dark:text-green-400"
                     >
                       ✅ {success}
                     </motion.div>
@@ -1359,7 +1359,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                           value={loginForm.email}
                           onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
                           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-xl text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
+                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
                         />
                       </div>
                       {/* Password */}
@@ -1371,7 +1371,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                           value={loginForm.password}
                           onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-                          className="w-full pl-10 pr-10 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-xl text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
+                          className="w-full pl-10 pr-10 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
                         />
                         <button
                           onClick={() => setShowPass(!showPass)}
@@ -1384,7 +1384,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                         whileTap={{ scale: 0.97 }}
                         onClick={handleLogin}
                         disabled={loading}
-                        className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm cursor-pointer active:scale-[1] disabled:opacity-60 flex items-center justify-center gap-2 transition-all hover:brightness-85"
+                        className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-sm cursor-pointer active:scale-[1] disabled:opacity-60 flex items-center justify-center gap-2 transition-all hover:brightness-85"
                       >
                         {loading ? <><Loader2 size={15} className="animate-spin" /> Masuk...</> : '→ Masuk Sekarang'}
                       </motion.button>
@@ -1403,7 +1403,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                           placeholder="Username"
                           value={registerForm.username}
                           onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
-                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-xl text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
+                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
                         />
                       </div>
                       {/* Email */}
@@ -1414,7 +1414,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                           placeholder="Email kamu"
                           value={registerForm.email}
                           onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
-                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-xl text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
+                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
                         />
                       </div>
                       {/* Password */}
@@ -1425,7 +1425,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                           placeholder="Password (min. 6 karakter)"
                           value={registerForm.password}
                           onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-                          className="w-full pl-10 pr-10 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-xl text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
+                          className="w-full pl-10 pr-10 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all"
                         />
                         <button
                           onClick={() => setShowPass(!showPass)}
@@ -1438,7 +1438,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                         whileTap={{ scale: 0.97 }}
                         onClick={handleRegister}
                         disabled={loading}
-                        className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm shadow-lg shadow-indigo-200 disabled:opacity-60 flex items-center justify-center gap-2 transition-all hover:brightness-110"
+                        className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-sm shadow-lg shadow-indigo-200 disabled:opacity-60 flex items-center justify-center gap-2 transition-all hover:brightness-110"
                       >
                         {loading ? <><Loader2 size={15} className="animate-spin" /> Mendaftar...</> : '🎉 Buat Akun Gratis'}
                       </motion.button>
@@ -1483,7 +1483,7 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
       <div className="max-w-xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 bg-pink-200 rounded-md p-1.5 flex items-center justify-center">
+          <div className="w-9 h-9 bg-pink-200 rounded-none p-1.5 flex items-center justify-center">
             <img src="/jellyfish.png" alt="icon" />
           </div>
           <span className="font-black text-sm text-slate-800 dark:text-white tracking-tight">TapTipTup</span>
@@ -1494,7 +1494,7 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
           {/* === TOGGLE THEME === */}
           <button 
             onClick={toggleTheme} 
-            className="cursor-pointer active:scale-[0.97] h-[40px] w-[40px] flex items-center justify-center rounded-md border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-50 transition-all shadow-sm"
+            className="cursor-pointer active:scale-[0.97] h-[40px] w-[40px] flex items-center justify-center rounded-none border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-50 transition-all shadow-sm"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -1503,10 +1503,10 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
             <div className="relative" ref={dropRef}>
               <button
                 onClick={() => setDropdownOpen((v) => !v)}
-                className="flex items-center gap-2 px-2 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all cursor-pointer border border-slate-200 dark:border-slate-700"
+                className="flex items-center gap-2 px-2 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none transition-all cursor-pointer border border-slate-200 dark:border-slate-700"
               >
                 {/* Avatar inisial */}
-                <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-full flex items-center justify-center text-white font-black text-xs flex-shrink-0">
+                <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-none flex items-center justify-center text-white font-black text-xs flex-shrink-0">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
                 <span className="font-black text-sm text-slate-700 dark:text-white hidden sm:block max-w-[130px] truncate">
@@ -1525,11 +1525,11 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -8, scale: 0.95 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-60 bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/80 dark:shadow-slate-800/80 border border-slate-100 dark:border-slate-800 overflow-hidden"
+                    className="absolute right-0 mt-2 w-60 bg-white dark:bg-slate-900 rounded-none shadow-xl shadow-slate-200/80 dark:shadow-slate-800/80 border border-slate-100 dark:border-slate-800 overflow-hidden"
                   >
                     {/* Info akun */}
                     <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
-                      <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center text-white font-black text-sm flex-shrink-0">
+                      <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-none flex items-center justify-center text-white font-black text-sm flex-shrink-0">
                         {displayName.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0">
@@ -1541,20 +1541,20 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
                     <div className="p-1.5 space-y-0.5">
                       <Link
                         to="/dashboard"
-                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all text-sm font-bold text-slate-700 dark:text-slate-300"
+                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-none transition-all text-sm font-bold text-slate-700 dark:text-slate-300"
                         onClick={() => setDropdownOpen(false)}
                       >
-                        <div className="w-7 h-7 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-7 h-7 bg-indigo-50 dark:bg-indigo-900/30 rounded-none flex items-center justify-center flex-shrink-0">
                           <User size={13} className="text-indigo-500" />
                         </div>
                         Dashboard Saya
                       </Link>
                       <Link
                         to="/dashboard?tab=myDonations"
-                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all text-sm font-bold text-slate-700 dark:text-slate-300"
+                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-none transition-all text-sm font-bold text-slate-700 dark:text-slate-300"
                         onClick={() => setDropdownOpen(false)}
                       >
-                        <div className="w-7 h-7 bg-pink-50 dark:bg-pink-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-7 h-7 bg-pink-50 dark:bg-pink-900/30 rounded-none flex items-center justify-center flex-shrink-0">
                           <Heart size={13} className="text-pink-500" />
                         </div>
                         Riwayat Berdonasi Saya
@@ -1564,9 +1564,9 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
                     <div className="p-1.5 border-t border-slate-100 dark:border-slate-800">
                       <button
                         onClick={() => { setDropdownOpen(false); onLogout(); }}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all text-sm font-bold text-red-500 dark:text-red-400 cursor-pointer"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-none transition-all text-sm font-bold text-red-500 dark:text-red-400 cursor-pointer"
                       >
-                        <div className="w-7 h-7 bg-red-50 dark:bg-red-900/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-7 h-7 bg-red-50 dark:bg-red-900/20 rounded-none flex items-center justify-center flex-shrink-0">
                           <LogOut size={13} className="text-red-400" />
                         </div>
                         Keluar
@@ -1580,7 +1580,7 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onOpenAuth('login')}
-                className="px-4 py-2 bg-gradient-to-r active:scale-[0.98] from-indigo-600 to-violet-600 text-white rounded-md font-black text-sm hover:brightness-110 transition-all cursor-pointer"
+                className="px-4 py-2 bg-gradient-to-r active:scale-[0.98] from-indigo-600 to-violet-600 text-white rounded-none font-black text-sm hover:brightness-110 transition-all cursor-pointer"
               >
                 Masuk
               </button>
@@ -1624,11 +1624,11 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
       transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
       className="overflow-hidden"
     >
-      <div className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50/60 dark:bg-indigo-900/30 p-5 space-y-4">
+      <div className="rounded-none border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50/60 dark:bg-indigo-900/30 p-5 space-y-4">
         {/* Badge unlock */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-xl bg-indigo-600 flex items-center justify-center text-white flex-shrink-0">
+            <div className="w-7 h-7 rounded-none bg-indigo-600 flex items-center justify-center text-white flex-shrink-0">
               {allowVideo && allowImage ? (
                 <span className="flex items-center gap-0.5">
                   <ImageIcon size={9} />
@@ -1652,7 +1652,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
           {mediaUrl && (
             <button
               onClick={() => setMediaUrl('')}
-              className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 hover:bg-red-100 dark:hover:bg-red-900 text-indigo-400 dark:text-indigo-500 flex items-center justify-center transition-all hover:text-red-500 dark:hover:text-red-400"
+              className="w-6 h-6 rounded-none bg-indigo-100 dark:bg-indigo-900 hover:bg-red-100 dark:hover:bg-red-900 text-indigo-400 dark:text-indigo-500 flex items-center justify-center transition-all hover:text-red-500 dark:hover:text-red-400"
             >
               <X size={12} />
             </button>
@@ -1662,12 +1662,12 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
         {/* Tipe media yang diizinkan */}
         <div className="flex items-center gap-2">
           {allowImage && (
-            <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-indigo-800 rounded-lg text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-indigo-800 rounded-none text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
               <ImageIcon size={10} /> Gambar / GIF
             </span>
           )}
           {allowVideo && (
-            <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-purple-800 rounded-lg text-[10px] font-bold text-purple-600 dark:text-purple-400">
+            <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-purple-800 rounded-none text-[10px] font-bold text-purple-600 dark:text-purple-400">
               <Video size={10} /> Video + YouTube
             </span>
           )}
@@ -1682,7 +1682,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
             type="url"
             value={mediaUrl}
             onChange={(e) => setMediaUrl(e.target.value)}
-            className="w-full p-4 rounded-xl bg-white dark:bg-slate-800 border-2 border-indigo-100 dark:border-indigo-800 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            className="w-full p-4 rounded-none bg-white dark:bg-slate-800 border-2 border-indigo-100 dark:border-indigo-800 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400 dark:placeholder:text-slate-500"
             placeholder={placeholderText}
           />
           <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium ml-1">
@@ -1698,7 +1698,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.25 }}
-              className="rounded-xl overflow-hidden border border-indigo-100 dark:border-indigo-800 bg-slate-900 relative"
+              className="rounded-none overflow-hidden border border-indigo-100 dark:border-indigo-800 bg-slate-900 relative"
               style={{ maxHeight: 200 }}
             >
               {mediaType === 'youtube' ? (
@@ -1742,7 +1742,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="rounded-xl border border-red-100 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-xs text-red-500 dark:text-red-400 font-bold flex items-center gap-2"
+              className="rounded-none border border-red-100 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-xs text-red-500 dark:text-red-400 font-bold flex items-center gap-2"
             >
               <X size={14} /> URL tidak valid atau media tidak dapat dimuat.
             </motion.div>
@@ -1984,10 +1984,10 @@ const SupporterPage = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-slate-900 p-8 rounded-xl shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 text-center border border-indigo-100 dark:border-slate-800 relative overflow-hidden"
+            className="bg-white dark:bg-slate-900 p-8 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 text-center border border-indigo-100 dark:border-slate-800 relative overflow-hidden"
           >
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500 rounded-t-3xl" />
-            <div className="w-20 h-20 mx-auto rounded-[1.5rem] bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-3xl font-black shadow-lg mb-4">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500" />
+            <div className="w-20 mt-2 h-20 mx-auto rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-3xl font-black shadow-lg mb-4">
               {streamer.username?.charAt(0).toUpperCase()}
             </div>
             <h1 className="text-2xl font-black text-slate-800 dark:text-white">@{streamer.username}</h1>
@@ -1995,7 +1995,7 @@ const SupporterPage = () => {
 
             {/* Login status badge */}
             {isLoggedIn ? (
-              <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-full text-[10px] font-black text-green-700 dark:text-green-400">
+              <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-none text-[10px] font-black text-green-700 dark:text-green-400">
                 ✓ Donasi akan tercatat di riwayat akun kamu
               </div>
             ) : (
@@ -2018,7 +2018,7 @@ const SupporterPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-slate-900 p-7 rounded-xl shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800 space-y-5"
+            className="bg-white dark:bg-slate-900 p-7 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800 space-y-5"
           >
             {/* Quick Amounts */}
             {quickAmounts.length > 0 && (
@@ -2031,7 +2031,7 @@ const SupporterPage = () => {
                     <button
                       key={val}
                       onClick={() => setForm({ ...form, amount: val })}
-                      className={`py-4 rounded-xl font-black text-sm transition-all border-2 active:scale-95 ${
+                      className={`py-4 rounded-none font-black text-sm transition-all border-2 active:scale-95 ${
                         form.amount === val
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg'
                           : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-300'
@@ -2057,7 +2057,7 @@ const SupporterPage = () => {
                   type="number"
                   value={form.amount || ''}
                   onChange={(e) => setForm({ ...form, amount: Number(e.target.value) })}
-                  className="w-full p-4 pl-12 rounded-xl font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-700 outline-none transition-all"
+                  className="w-full p-4 pl-12 rounded-none font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-700 outline-none transition-all"
                   placeholder="Nominal custom..."
                 />
               </div>
@@ -2074,7 +2074,7 @@ const SupporterPage = () => {
                     return (
                       <div
                         key={i}
-                        className={`flex items-center gap-2 text-[10px] font-bold px-2 py-1.5 rounded-lg ${
+                        className={`flex items-center gap-2 text-[10px] font-bold px-2 py-1.5 rounded-none ${
                           reached 
                             ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' 
                             : 'bg-slate-50 dark:bg-slate-800/50 text-slate-400 dark:text-slate-500'
@@ -2106,7 +2106,7 @@ const SupporterPage = () => {
               <textarea
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
-                className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 min-h-[90px] outline-none transition-all resize-none text-slate-700 dark:text-white dark:placeholder:text-slate-500"
+                className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 min-h-[90px] outline-none transition-all resize-none text-slate-700 dark:text-white dark:placeholder:text-slate-500"
                 placeholder="Semangat terus bang! 🔥"
               />
             </div>
@@ -2133,7 +2133,7 @@ const SupporterPage = () => {
                   disabled={form.isAnonymous || isLoggedIn}
                   value={form.isAnonymous ? '' : form.donorName}
                   onChange={(e) => setForm({ ...form, donorName: e.target.value })}
-                  className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
+                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
                   placeholder="Nama kamu"
                 />
                 {isLoggedIn && !form.isAnonymous && (
@@ -2151,7 +2151,7 @@ const SupporterPage = () => {
                   disabled={isLoggedIn}
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
+                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
                   placeholder="email@kamu.com"
                 />
               </div>
@@ -2161,12 +2161,12 @@ const SupporterPage = () => {
             <label className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">
               <div
                 onClick={() => setForm({ ...form, isAnonymous: !form.isAnonymous })}
-                className={`w-10 h-6 rounded-full relative flex-shrink-0 transition-all cursor-pointer ${
+                className={`w-10 h-6 rounded-none relative flex-shrink-0 transition-all cursor-pointer ${
                   form.isAnonymous ? 'bg-indigo-600' : 'bg-slate-200 dark:bg-slate-700'
                 }`}
               >
                 <div
-                  className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${
+                  className={`absolute top-1 w-4 h-4 bg-white rounded-none shadow transition-all ${
                     form.isAnonymous ? 'left-5' : 'left-1'
                   }`}
                 />
@@ -2183,7 +2183,7 @@ const SupporterPage = () => {
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="flex items-center justify-between px-4 py-3 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-xl">
+                  <div className="flex items-center justify-between px-4 py-3 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-none">
                     <div>
                       <p className="text-xs font-black text-indigo-700 dark:text-indigo-400">
                         Donasi kamu tidak akan tercatat
@@ -2195,13 +2195,13 @@ const SupporterPage = () => {
                     <div className="flex items-center gap-2 flex-shrink-0 ml-3">
                       <button
                         onClick={() => openAuth('login')}
-                        className="px-3 py-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-700 rounded-md hover:bg-indigo-50 dark:hover:bg-slate-100 transition-all cursor-pointer"
+                        className="px-3 py-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-700 rounded-none hover:bg-indigo-50 dark:hover:bg-slate-100 transition-all cursor-pointer"
                       >
                         Masuk
                       </button>
                       <button
                         onClick={() => openAuth('register')}
-                        className="px-3 py-1.5 text-[10px] font-black text-white bg-indigo-600 dark:bg-indigo-600 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-700 transition-all cursor-pointer"
+                        className="px-3 py-1.5 text-[10px] font-black text-white bg-indigo-600 dark:bg-indigo-600 rounded-none hover:bg-indigo-700 dark:hover:bg-indigo-700 transition-all cursor-pointer"
                       >
                         Daftar
                       </button>
@@ -2219,7 +2219,7 @@ const SupporterPage = () => {
               whileTap={{ scale: 0.97 }}
               onClick={handleDonate}
               disabled={loading || !form.amount}
-              className="cursor-pointer w-full py-3 bg-gradient-to-r from-blue-700 to-blue-700 text-white rounded-xl font-black text-lg disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+              className="cursor-pointer w-full py-3 bg-gradient-to-r from-blue-700 to-blue-700 text-white rounded-none font-black text-lg disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
             >
               {loading ? (
                 <>

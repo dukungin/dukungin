@@ -177,7 +177,7 @@ const DonationPending = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.8 + i * 0.12 }}
-                    className={`flex items-center gap-3 rounded-2xl p-4 border-2 transition-all ${
+                    className={`flex items-center gap-3 rounded-none p-4 border-2 transition-all ${
                       step.done
                         ? 'bg-green-50 border-green-100'
                         : i === 1
@@ -233,7 +233,7 @@ const DonationPending = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.1 }}
-              className="bg-blue-50 rounded-2xl p-4 border border-blue-100"
+              className="bg-blue-50 rounded-none p-4 border border-blue-100"
             >
               <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">
                 ℹ️ Informasi
@@ -257,7 +257,7 @@ const DonationPending = () => {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleReopenPayment}
                   disabled={reopening}
-                  className="cursor-pointer w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-indigo-600 text-white font-black text-sm hover:bg-indigo-700 transition-all disabled:opacity-60 shadow-lg shadow-indigo-200"
+                  className="cursor-pointer w-full flex items-center justify-center gap-2 py-4 rounded-none bg-indigo-600 text-white font-black text-sm hover:bg-indigo-700 transition-all disabled:opacity-60 shadow-lg shadow-indigo-200"
                 >
                   {reopening ? (
                     <>
@@ -288,7 +288,7 @@ const DonationPending = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => navigate(`/donate/${username}`)}
-                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-2xl bg-amber-500 text-white font-bold text-sm hover:bg-amber-400 transition-all"
+                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none bg-amber-500 text-white font-bold text-sm hover:bg-amber-400 transition-all"
               >
                 <RefreshCcw size={16} />
                 Donasi Baru
@@ -297,7 +297,7 @@ const DonationPending = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => navigate(username ? `/donate/${username}` : '/')}
-                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all"
+                className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all"
               >
                 <Home size={16} />
                 {username ? `@${username}` : 'Beranda'}
