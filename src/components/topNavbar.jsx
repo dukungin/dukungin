@@ -292,7 +292,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowLogoutConfirm(false)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+              className="absolute inset-0 bg-white/60 backdrop-blur-md"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -310,7 +310,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                   onClick={handleLogout}
                   className="cursor-pointer active:scale-[0.97] w-full py-4 bg-red-600 text-white rounded-none font-bold text-md shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
                 >
-                  Ya, Logout
+                  Ya, Keluar
                 </button>
                 <button
                   onClick={() => setShowLogoutConfirm(false)}

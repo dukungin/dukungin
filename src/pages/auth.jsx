@@ -47,15 +47,6 @@ const BgCanvas = () => (
   </div>
 );
 
-const Orbs = () => (
-  <>
-    <motion.div animate={{ y:[0,-14,0], rotate:[0,8,0] }} transition={{ duration:6, repeat:Infinity, ease:'easeInOut' }}
-      style={{ position:'absolute', top:'12%', right:'8%', width:110, height:110, background:'rgba(255,255,255,0.07)', borderRadius:'0', border:'1px solid rgba(255,255,255,0.14)' }} />
-    <motion.div animate={{ y:[0,10,0], rotate:[0,-5,0] }} transition={{ duration:8, repeat:Infinity, ease:'easeInOut', delay:1.5 }}
-      style={{ position:'absolute', bottom:'18%', left:'6%', width:72, height:72, background:'rgba(255,255,255,0.05)', borderRadius:'0', border:'1px solid rgba(255,255,255,0.10)' }} />
-  </>
-);
-
 // ─── Notification Modal ────────────────────────────────────────────────────────
 const NotifModal = ({ notification, onClose }) => (
   <AnimatePresence>
@@ -256,10 +247,9 @@ const Auth = () => {
           padding:'48px 44px', overflow:'hidden',
         }}>
           <BgCanvas />
-          <Orbs />
 
           <div style={{ position:'relative', zIndex:10 }}>
-            <div className='md:mb-[48px] mb-0' style={{ display:'inline-flex', alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:0, padding:'8px 16px' }}>
+            <div className='md:mb-[48px] mb-0 inline-flex' style={{ alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:0, padding:'8px 16px' }}>
               <div style={{ width:26, height:26, background:'white', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <span style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>S</span>
               </div>
