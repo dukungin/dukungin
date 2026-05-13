@@ -654,7 +654,7 @@ const SOUND_PRESETS = [
   { label: 'Cash 💰',     url: 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3' },
   { label: 'Chime ✨',    url: 'https://assets.mixkit.co/active_storage/sfx/2867/2867-preview.mp3' },
   { label: 'Alert 🚨',    url: 'https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3' },
-  { label: 'Kururing 📢', url: `${APP_URL}/kukuring.mpeg` },
+  { label: 'Kururing 📢', url: `${APP_URL}/kururing.mpeg` },
   { label: 'Kaching 💸',  url: `${APP_URL}/kaching.mpeg` },
   { label: 'Tada 🎉',     url: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3' },
   { label: 'Gold 🪙',     url: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3' },
