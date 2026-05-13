@@ -50,6 +50,7 @@ import Badge from '../components/badge';
 // ─── API ──────────────────────────────────────────────────────────────────────
 
 const fetchProfile    = async () => (await api.get('/api/overlay/settings')).data;
+const fetchBadges = async () => (await api.get('/api/midtrans/badges')).data;
 const fetchHistory    = async ({ page = 1, limit = 50, status = '' } = {}) => {
   const params = new URLSearchParams({ page, limit });
   if (status) params.set('status', status);

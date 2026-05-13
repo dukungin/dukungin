@@ -1861,6 +1861,23 @@ const SupporterPage = () => {
       .catch(() => {});
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    if (!isLoggedIn || !authPayload?.id) return;
+    
+    const fetchUserBadges = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/midtrans/badges`, { 
+          headers: authHeader() 
+        });
+        setBadges(res.data.badges || { streamer: {}, donor: {} });
+      } catch (err) {
+        console.log('Failed to fetch badges:', err);
+      }
+    };
+
+    fetchUserBadges();
+  }, [isLoggedIn, authPayload?.id]);
+
   const mediaTriggers =
     streamer?.overlaySetting?.mediaTriggers || streamer?.OverlaySetting?.mediaTriggers || [];
   const eligibleTrigger = getEligibleTrigger(mediaTriggers, form.amount);
