@@ -579,7 +579,7 @@ const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
                 <p className="text-2xl mb-2">🚫</p>
                 <p className="font-black text-sm">Belum ada kata terlarang</p>
               </div>
-            : <div className="flex flex-wrap gap-2">
+            : <div className="flex flex-col md:flex-wrap gap-2">
                 {words.map(word => (
                   <span key={word} className="md:w-max w-full flex justify-center md:justify-start items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-none text-sm font-black border border-red-100 dark:border-red-900">
                     {word}
