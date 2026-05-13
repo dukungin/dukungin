@@ -146,7 +146,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
 
   return (
     <>
-      <div className={`hidden md:sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white/80 dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between gap-4`}>
+      <div className={`hidden md:flex sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white/80 dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between gap-4`}>
 
         {/* Kiri: Breadcrumb */}
         <div className="flex items-center gap-1.5 min-w-0">

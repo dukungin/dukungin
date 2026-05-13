@@ -126,12 +126,6 @@ export const ContactPage = () => {
 
           <div className="px-4 md:px-8 pt-8 pb-6 border-b border-slate-50 dark:border-slate-800">
             <div className="flex items-start gap-5">
-              <div
-                className="w-16 h-16 rounded-none flex items-center justify-center text-white font-black text-xl flex-shrink-0"
-                style={{ background: 'linear-gradient(135deg, #302b63, #6366f1)' }}
-              >
-                {DEVELOPER.avatar}
-              </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">{DEVELOPER.name}</h3>
@@ -140,7 +134,7 @@ export const ContactPage = () => {
                   </span>
                 </div>
                 <p className="text-xs font-bold text-indigo-500 dark:text-indigo-400 mt-0.5">{DEVELOPER.role}</p>
-                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-2 leading-relaxed max-w-lg">{DEVELOPER.bio}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-2 leading-relaxed max-w-full">{DEVELOPER.bio}</p>
               </div>
             </div>
           </div>
