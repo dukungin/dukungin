@@ -1135,6 +1135,7 @@ import { ImageIcon, Loader2, Video, X, LogOut, User, ChevronDown, Heart, Eye, Ey
 import { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
+import Badge from '../components/badge';
 
 // ============================================================
 // DETEKSI ENVIRONMENT
