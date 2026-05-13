@@ -291,7 +291,7 @@ const MediaShareOverlay = () => {
                   Rp {Number(alert.amount).toLocaleString('id-ID')}
                 </div>
                 {alert.message && (
-                  <div style={{ fontSize: 20, color: fg, opacity: 0.7, marginTop: 5, fontStyle: 'italic', lineHeight: 1.4 }}>
+                  <div style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, fontStyle: 'italic', lineHeight: 1.4 }}>
                     "{alert.message}"
                   </div>
                 )}
