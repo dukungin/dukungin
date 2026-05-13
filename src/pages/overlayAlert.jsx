@@ -232,24 +232,24 @@ const OverlayAlert = () => {
                 {renderIcon(customIcon, 30)}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{
+                <div className='font-bold' style={{
                   fontSize: 20, fontWeight: 800, opacity: 0.65,
                   textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4,
                   color: fg,
                 }}>
                   Donasi Masuk
                 </div>
-                <div style={{ fontSize: 20, fontWeight: 700, color: fg, opacity: 0.8, marginBottom: 2 }}>
+                <div className='font-bold' style={{ fontSize: 20, fontWeight: 700, color: fg, opacity: 0.8, marginBottom: 2 }}>
                   @{alert.donorName}
                 </div>
-                <div style={{
+                <div className='font-bold' style={{
                   fontSize: 22, fontWeight: 900, color: highlight,
                   letterSpacing: '-0.3px', lineHeight: 1,
                 }}>
                   Rp {Number(alert.amount).toLocaleString('id-ID')}
                 </div>
                 {alert.message && (
-                  <div style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4 }}>
+                  <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4 }}>
                     "{alert.message}"
                   </div>
                 )}
