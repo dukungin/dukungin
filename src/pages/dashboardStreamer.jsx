@@ -2164,8 +2164,8 @@ export const DashboardStreamer = () => {
                     <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 mb-8">
                       <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">URL MEDIASHARE - OBS</label>
                       <div className="flex gap-3">
-                        <input readOnly value={`${window.location.origin}/widget/${user.overlayToken}/media`} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none overflow-hidden text-ellipsis" />
-                        <button onClick={() => copyToClipboard(`${window.location.origin}/widget/${user.overlayToken}/media`)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
+                        <input readOnly value={`${window.location.origin}/widget/${user.overlayToken}/mediashare`} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none overflow-hidden text-ellipsis" />
+                        <button onClick={() => copyToClipboard(`${window.location.origin}/widget/${user.overlayToken}/mediashare`)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
                       </div>
                     </div>
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}

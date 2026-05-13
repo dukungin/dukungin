@@ -77,7 +77,7 @@ function App() {
 
           {/* Overlay OBS */}
           <Route path="/overlay/:token" element={<OverlayAlert />} />
-          <Route path="/overlay/:token/media" element={<MediaShareOverlay />} />
+          <Route path="/overlay/:token/mediashare" element={<MediaShareOverlay />} />
 
           {/* Fallback — 404 redirect ke landing */}
           <Route path="*" element={<Navigate to="/" replace />} />
