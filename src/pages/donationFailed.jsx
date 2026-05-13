@@ -111,8 +111,8 @@ const DonationFailed = () => {
             {/* Actions */}
             <div className="grid grid-cols-2 gap-3 pt-2">
               <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1 }}
+                whileTap={{ scale: 0.99 }}
                 onClick={handleRetry}
                 className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none bg-red-500 text-white font-bold text-sm hover:bg-red-600 transition-all"
               >
@@ -120,8 +120,8 @@ const DonationFailed = () => {
                 Coba Lagi
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1 }}
+                whileTap={{ scale: 0.99 }}
                 onClick={handleHome}
                 className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all"
               >

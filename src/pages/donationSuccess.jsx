@@ -139,8 +139,8 @@ const DonationSuccess = () => {
             {/* Actions */}
             <div className="grid grid-cols-2 gap-3 pt-2">
               <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1 }}
+                whileTap={{ scale: 0.99 }}
                 onClick={handleShare}
                 className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none border-2 border-indigo-200 text-indigo-600 font-bold text-sm hover:bg-indigo-50 transition-all"
               >
@@ -148,8 +148,8 @@ const DonationSuccess = () => {
                 Bagikan
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1 }}
+                whileTap={{ scale: 0.99 }}
                 onClick={handleBack}
                 className="cursor-pointer flex items-center justify-center gap-2 py-3 rounded-none bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-all"
               >
