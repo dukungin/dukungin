@@ -188,40 +188,8 @@ const OverlayAlert = () => {
 
   // ── Media — semua borderRadius: 0 ───────────────────────────────────────────
   const renderMedia = () => {
-    if (!alert?.mediaUrl) return null;
-    const t = detectMediaType(alert.mediaUrl, alert.mediaType);
-
-    if (t === 'youtube') {
-      return (
-        <div style={{ width: '100%', aspectRatio: '16/9', borderRadius: 0, overflow: 'hidden', marginBottom: 12, background: '#000' }}>
-          <iframe
-            src={getYouTubeEmbedUrl(alert.mediaUrl)}
-            width="100%" height="100%"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            style={{ display: 'block', border: 'none', width: '100%', height: '100%' }}
-          />
-        </div>
-      );
-    }
-
-    if (t === 'video') {
-      return (
-        <div style={{ width: '100%', aspectRatio: '16/9', borderRadius: 0, overflow: 'hidden', marginBottom: 12, background: '#000' }}>
-          <video src={alert.mediaUrl} autoPlay loop
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        </div>
-      );
-    }
-
-    return (
-      <div style={{ width: '100%', borderRadius: 0, overflow: 'hidden', marginBottom: 12 }}>
-        <img src={alert.mediaUrl} alt="media"
-          style={{ width: '100%', display: 'block', objectFit: 'cover', maxHeight: '220px' }} />
-      </div>
-    );
-  };
+    return null
+  }
 
   const renderTimestamp = () => {
     if (!showTs || !alert?.receivedAt) return null;
