@@ -1587,66 +1587,121 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
     { id: 'following', label: 'Following',  count: followingData?.pagination?.total },
   ];
 
+    const UserBadges = ({ userId, showOnlyActive = true }) => {
+    const { data: userBadges, isLoading } = useQuery({
+      queryKey: ['userBadges', userId],
+      queryFn: () => api.get(`/api/midtrans/badges/public/${userId}`).then(r => r.data),
+      staleTime: 5 * 60 * 1000,
+      enabled: !!userId,
+    });
+
+    // Skeleton
+    if (isLoading) {
+      return (
+        <div className="flex gap-1.5">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="w-12 h-5 bg-slate-200 dark:bg-slate-700 animate-pulse rounded" />
+          ))}
+        </div>
+      );
+    }
+
+    const streamerBadges = userBadges?.badges?.streamer || {};
+
+    // Hanya active badges
+    const activeBadges = Object.entries(streamerBadges)
+      .filter(([_, active]) => active)
+      .map(([name]) => name);
+
+    // Jika kosong, tampilkan kosong (tidak perlu text)
+    if (activeBadges.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="flex gap-1.5 h-full">
+        {activeBadges.map(name => (
+          <Badge 
+            key={name}
+            type="streamer" 
+            name={name} 
+            active={true} 
+          />
+        ))}
+      </div>
+    );
+  };
+
   const { data: badgesData } = useQuery({
     queryKey: ['userBadges'],
     queryFn: fetchBadges,
     staleTime: 5 * 60 * 1000, // 5 menit
   });
 
-
+  console.log('data badges:', badgesData)
   const renderUsers = (users, isLoading, showFollowBtn = true) => {
     if (isLoading) return <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />Memuat...</div>;
     if (!users?.length) return <div className="text-center py-20 text-slate-400"><p className="text-4xl mb-3">👥</p><p className="font-black text-slate-500">Belum ada streamer</p></div>;
     
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {users.map(u => {
-          // Ambil badges user ini
-          const userBadges = badgesData?.[u._id] || {};
-          
-          return (
-            <div key={u._id} className="bg-white dark:bg-slate-900 rounded-none p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-none bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                  {u.username.charAt(0).toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-black text-slate-800 dark:text-slate-100 truncate">@{u.username}</p>
-                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{u.email}</p>
-                </div>
+        {users.map(u => (
+          <div key={u._id} className="bg-white dark:bg-slate-900 rounded-none p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4 hover:shadow-md hover:border-slate-200 dark:hover:border-slate-700 transition-all">
+            
+            {/* Avatar & Info */}
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-none bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0 shadow-lg">
+                {u.username.charAt(0).toUpperCase()}
               </div>
-              
-              {/* ── BADGES di Community ── */}
-              {userBadges.streamer && Object.keys(userBadges.streamer).some(k => userBadges.streamer[k]) && (
-                <div className="flex flex-wrap gap-1.5">
-                  {Object.entries(userBadges.streamer).map(([name, active]) => 
-                    active && <Badge key={name} type="streamer" name={name} active />
-                  )}
-                </div>
-              )}
-              
-              {u.followersCount !== undefined && (
-                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">
-                  <span className="text-indigo-600 dark:text-indigo-400 font-black">{u.followersCount}</span> followers
-                </p>
-              )}
-              
-              {/* Action buttons */}
-              <div className="flex gap-2">
-                <button onClick={() => setViewingProfile(u.username)}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 transition-all cursor-pointer active:scale-[0.97]">
-                  <User size={12} /> Profil
-                </button>
-                {showFollowBtn && u._id !== currentUserId && (
-                  <button onClick={() => toggleMutation.mutate(u._id)} disabled={toggleMutation.isPending}
-                    className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none font-black text-xs transition-all disabled:opacity-60 cursor-pointer active:scale-[0.97] ${u.isFollowing ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-500' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
-                    {toggleMutation.isPending ? '...' : u.isFollowing ? 'Unfollow' : '+ Follow'}
-                  </button>
-                )}
+              <div className="flex-1 min-w-0">
+                <p className="font-black text-slate-800 dark:text-slate-100 truncate">@{u.username}</p>
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{u.email}</p>
               </div>
             </div>
-          );
-        })}
+            
+            {/* ✅ BADGES */}
+            <div className="flex flex-wrap gap-1.5 p-1 h-[44px] bg-slate-50/50 dark:bg-slate-800/50 rounded-none border border-slate-100/50 dark:border-slate-700/50 min-h-[32px]">
+              <UserBadges userId={u._id} showOnlyActive={true} />
+            </div>
+            
+            {/* Followers - FIX SYNTAX */}
+            {u.followersCount !== undefined && (
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">
+                <span className="text-indigo-600 dark:text-indigo-400 font-black">{u.followersCount}</span> followers
+              </p>
+            )}
+            
+            {/* ✅ ACTION BUTTONS - LENGKAP */}
+            <div className="flex gap-2 mt-auto">
+              {/* Profil Button */}
+              <button 
+                onClick={() => setViewingProfile(u.username)}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 transition-all cursor-pointer active:scale-[0.97]"
+              >
+                <User size={12} /> Profil
+              </button>
+              
+              {/* ✅ FOLLOW BUTTON - LENGKAP */}
+              {showFollowBtn && u._id !== currentUserId && (
+                <button 
+                  onClick={() => toggleMutation.mutate(u._id)} 
+                  disabled={toggleMutation.isPending}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none font-black text-xs transition-all disabled:opacity-60 cursor-pointer active:scale-[0.97] ${
+                    u.isFollowing 
+                      ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-500 border border-slate-200 dark:border-slate-700' 
+                      : 'bg-indigo-600 text-white hover:bg-indigo-700 border border-indigo-600 shadow-sm'
+                  }`}
+                >
+                  {toggleMutation.isPending ? (
+                    <RefreshCw className="w-3 h-3 animate-spin" />
+                  ) : (
+                    u.isFollowing ? 'Unfollow' : '+ Follow'
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     );
   };
@@ -2255,7 +2310,7 @@ export const DashboardStreamer = () => {
             )}
 
             {activeTab === 'profile' && (
-              <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6 pb-6">
+              <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-3 pb-6">
                 
                 {/* ── Header dengan Badges ── */}
                 <div className="bg-indigo-600 rounded-none px-6 py-6 text-white relative overflow-hidden">
@@ -2269,32 +2324,49 @@ export const DashboardStreamer = () => {
                         <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-none text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
                       </div>
                       
-                      {/* ✅ IMPORT & GUNAKAN Badge.jsx */}
-                      {profileData?.user?.donationMilestones && (
-                        <div className="flex flex-wrap gap-1.5 justify-center md:justify-start mt-2">
-                          {profileData.user.donationMilestones['10k'] && (
-                            <Badge milestoneType="donationMilestones" name="10k" active />
-                          )}
-                          {profileData.user.donationMilestones['50k'] && (
-                            <Badge milestoneType="donationMilestones" name="50k" active />
-                          )}
-                          {profileData.user.donationMilestones['100k'] && (
-                            <Badge milestoneType="donationMilestones" name="100k" active />
-                          )}
-                          {profileData.user.donationMilestones['500k'] && (
-                            <Badge milestoneType="donationMilestones" name="500k" active />
-                          )}
-                          {profileData.user.donationMilestones['1jt'] && (
-                            <Badge milestoneType="donationMilestones" name="1jt" active />
-                          )}
-                        </div>
-                      )}
-                      
                       <p className="text-slate-200 font-medium text-sm">{user.email}</p>
                     </div>
                   </div>
                   <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
                   <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
+                </div>
+                
+                {/* ✅ SHOW ALL BADGES - Active & Locked */}
+                <div className="flex w-full flex-wrap gap-1.5 justify-center md:justify-start bg-gradient-to-r from-slate-50/50 to-indigo-50/30 dark:from-slate-900/50 dark:to-indigo-900/20 p-3 py-2 border border-slate-100/20 dark:border-slate-700/50 backdrop-blur-sm rounded-xl shadow-sm">
+                  {/* 10K */}
+                  <Badge 
+                    type="streamer" 
+                    name="10k" 
+                    active={profileData.user.donationMilestones?.['10k'] || false} 
+                  />
+                  
+                  {/* 50K */}
+                  <Badge 
+                    type="streamer" 
+                    name="50k" 
+                    active={profileData.user.donationMilestones?.['50k'] || false} 
+                  />
+                  
+                  {/* 100K */}
+                  <Badge 
+                    type="streamer" 
+                    name="100k" 
+                    active={profileData.user.donationMilestones?.['100k'] || false} 
+                  />
+                  
+                  {/* 500K */}
+                  <Badge 
+                    type="streamer" 
+                    name="500k" 
+                    active={profileData.user.donationMilestones?.['500k'] || false} 
+                  />
+                  
+                  {/* 1JT */}
+                  <Badge 
+                    type="streamer" 
+                    name="1jt" 
+                    active={profileData.user.donationMilestones?.['1jt'] || false} 
+                  />
                 </div>
 
                 {/* Profil Publik */}

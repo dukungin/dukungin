@@ -1504,7 +1504,7 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
             <div className="relative" ref={dropRef}>
               <button
                 onClick={() => setDropdownOpen((v) => !v)}
-                className="flex items-center gap-2 px-2 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none transition-all cursor-pointer border border-slate-200 dark:border-slate-700"
+                className="flex items-center gap-2 px-2 h-[40px] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none transition-all cursor-pointer border border-slate-200 dark:border-slate-700"
               >
                 {/* Avatar inisial */}
                 <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-none flex items-center justify-center text-white font-black text-xs flex-shrink-0">
@@ -2009,20 +2009,6 @@ const SupporterPage = () => {
         toggleTheme={toggleTheme}
       />
 
-       {isLoggedIn && Object.keys(badges.streamer || {}).length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5 justify-center">
-          {badges.streamer['10k'] && <Badge type="streamer" name="10k" active />}
-          {badges.streamer['50k'] && <Badge type="streamer" name="50k" active />}
-          {badges.streamer['100k'] && <Badge type="streamer" name="100k" active />}
-          {badges.streamer['500k'] && <Badge type="streamer" name="500k" active />}
-          {badges.streamer['1jt'] && <Badge type="streamer" name="1jt" active />}
-          
-          {/* Donor badges juga */}
-          {badges.donor['1x'] && <Badge type="donor" name="1x" active />}
-          {badges.donor['5x'] && <Badge type="donor" name="5x" active />}
-          {badges.donor['10k'] && <Badge type="donor" name="10k" active />}
-        </div>
-      )}
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex justify-center items-start md:items-center p-4 md:p-6 font-sans pt-20 md:pt-24">
         <div className="w-full max-w-xl space-y-5 py-4 md:py-0">
@@ -2030,7 +2016,7 @@ const SupporterPage = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-slate-900 p-8 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 text-center border border-indigo-100 dark:border-slate-800 relative overflow-hidden"
+            className="bg-white dark:bg-slate-900 px-8 pt-8 pb-6 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 text-center border border-indigo-100 dark:border-slate-800 relative overflow-hidden"
           >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500" />
             <div className="w-20 mt-2 h-20 mx-auto rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-3xl font-black shadow-lg mb-4">
@@ -2052,9 +2038,25 @@ const SupporterPage = () => {
                 <button
                   onClick={() => openAuth('login')}
                   className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
-                >
+                  >
                   Masuk dulu
                 </button>
+              </div>
+            )}
+            {isLoggedIn && (
+              <div className="w-max flex flex-wrap gap-1.5 justify-center h-max mx-auto text-center mt-6">
+                {/* Streamer Badges */}
+                {badges.streamer?.['10k'] && <Badge type="streamer" name="10k" active />}
+                {badges.streamer?.['50k'] && <Badge type="streamer" name="50k" active />}
+                {badges.streamer?.['100k'] && <Badge type="streamer" name="100k" active />}
+                {badges.streamer?.['500k'] && <Badge type="streamer" name="500k" active />}
+                {badges.streamer?.['1jt'] && <Badge type="streamer" name="1jt" active />}
+                
+                {/* Donor Badges */}
+                {badges.donor?.['1x'] && <Badge type="donor" name="1x" active />}
+                {badges.donor?.['5x'] && <Badge type="donor" name="5x" active />}
+                {badges.donor?.['10k'] && <Badge type="donor" name="10k" active />}
+                {badges.donor?.['50k'] && <Badge type="donor" name="50k" active />}
               </div>
             )}
           </motion.div>
