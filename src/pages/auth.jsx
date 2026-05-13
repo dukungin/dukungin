@@ -36,8 +36,8 @@ const getTheme = (dark) => ({
 // ─── Left panel BG (always dark) ──────────────────────────────────────────────
 const BgCanvas = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <div style={{ position:'absolute', top:'-80px', left:'-60px', width:'420px', height:'420px', borderRadius:'50%', background:'radial-gradient(circle, rgba(99,102,241,0.28) 0%, transparent 70%)' }} />
-    <div style={{ position:'absolute', bottom:'-100px', right:'-80px', width:'360px', height:'360px', borderRadius:'50%', background:'radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)' }} />
+    <div style={{ position:'absolute', top:'-80px', left:'-60px', width:'420px', height:'420px', borderRadius:'0%', background:'radial-gradient(circle, rgba(99,102,241,0.28) 0%, transparent 70%)' }} />
+    <div style={{ position:'absolute', bottom:'-100px', right:'-80px', width:'360px', height:'360px', borderRadius:'0%', background:'radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)' }} />
     <svg width="100%" height="100%" style={{ opacity:0.06 }}>
       <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
         <circle cx="1.5" cy="1.5" r="1.5" fill="white" />
@@ -50,9 +50,9 @@ const BgCanvas = () => (
 const Orbs = () => (
   <>
     <motion.div animate={{ y:[0,-14,0], rotate:[0,8,0] }} transition={{ duration:6, repeat:Infinity, ease:'easeInOut' }}
-      style={{ position:'absolute', top:'12%', right:'8%', width:110, height:110, background:'rgba(255,255,255,0.07)', borderRadius:'38% 62% 55% 45% / 48% 40% 60% 52%', border:'1px solid rgba(255,255,255,0.14)' }} />
+      style={{ position:'absolute', top:'12%', right:'8%', width:110, height:110, background:'rgba(255,255,255,0.07)', borderRadius:'0', border:'1px solid rgba(255,255,255,0.14)' }} />
     <motion.div animate={{ y:[0,10,0], rotate:[0,-5,0] }} transition={{ duration:8, repeat:Infinity, ease:'easeInOut', delay:1.5 }}
-      style={{ position:'absolute', bottom:'18%', left:'6%', width:72, height:72, background:'rgba(255,255,255,0.05)', borderRadius:'60% 40% 35% 65% / 50% 60% 40% 50%', border:'1px solid rgba(255,255,255,0.10)' }} />
+      style={{ position:'absolute', bottom:'18%', left:'6%', width:72, height:72, background:'rgba(255,255,255,0.05)', borderRadius:'0', border:'1px solid rgba(255,255,255,0.10)' }} />
   </>
 );
 
@@ -68,15 +68,15 @@ const NotifModal = ({ notification, onClose }) => (
           initial={{ opacity:0, scale:0.88, y:28 }} animate={{ opacity:1, scale:1, y:0 }} exit={{ opacity:0, scale:0.88, y:28 }}
           transition={{ type:'spring', stiffness:340, damping:30 }}
           style={{ position:'fixed', zIndex:101, transform:'translate(-50%,-50%)', width:'92vw', maxWidth:400 }}>
-          <div style={{ background:'rgba(255,255,255,0.97)', borderRadius:28, padding:'36px 32px', boxShadow:'0 32px 80px rgba(0,0,0,0.22)', textAlign:'center' }}>
+          <div style={{ background:'rgba(255,255,255,0.97)', borderRadius:0, padding:'36px 32px', boxShadow:'0 32px 80px rgba(0,0,0,0.22)', textAlign:'center' }}>
             <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', stiffness:400, damping:20, delay:0.1 }}
-              style={{ width:68, height:68, borderRadius:20, margin:'0 auto 20px', display:'flex', alignItems:'center', justifyContent:'center', background: notification.type==='success' ? '#ecfdf5' : '#fff1f2', color: notification.type==='success' ? '#059669' : '#e11d48' }}>
+              style={{ width:68, height:68, borderRadius:0, margin:'0 auto 20px', display:'flex', alignItems:'center', justifyContent:'center', background: notification.type==='success' ? '#ecfdf5' : '#fff1f2', color: notification.type==='success' ? '#059669' : '#e11d48' }}>
               {notification.type==='success' ? <CheckCircle2 size={34}/> : <AlertCircle size={34}/>}
             </motion.div>
             <h3 style={{ fontSize:20, fontWeight:900, color:'#1e1b4b', marginBottom:8 }}>{notification.title}</h3>
             <p style={{ fontSize:14, color:'#64748b', lineHeight:1.6, marginBottom:24 }}>{notification.message}</p>
             <button onClick={onClose}
-              style={{ width:'100%', padding:'14px 0', borderRadius:16, fontWeight:900, fontSize:14, border:'none', cursor:'pointer', background: notification.type==='success' ? '#4f46e5' : '#e11d48', color:'white', transition:'opacity 0.2s' }}
+              style={{ width:'100%', padding:'14px 0', borderRadius:0, fontWeight:900, fontSize:14, border:'none', cursor:'pointer', background: notification.type==='success' ? '#4f46e5' : '#e11d48', color:'white', transition:'opacity 0.2s' }}
               onMouseEnter={e => e.target.style.opacity='0.88'} onMouseLeave={e => e.target.style.opacity='1'}>
               {notification.type==='success' ? 'Lanjutkan →' : 'Coba Lagi'}
             </button>
@@ -109,7 +109,7 @@ const AuthInput = ({ icon, type='text', value, onChange, placeholder, T }) => {
           width:'100%', boxSizing:'border-box',
           background: focused ? T.inputBgFocus : T.inputBg,
           border: `1.5px solid ${focused ? T.inputBorderFocus : T.inputBorder}`,
-          borderRadius:14, padding:'15px 48px',
+          borderRadius:0, padding:'15px 48px',
           color: T.inputText, fontSize:15, fontWeight:600,
           outline:'none', transition:'all 0.2s',
         }}
@@ -128,7 +128,7 @@ const AuthInput = ({ icon, type='text', value, onChange, placeholder, T }) => {
 // ─── Left panel sub-components ─────────────────────────────────────────────────
 const Pill = ({ label }) => (
   <div style={{ display:'flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:999, padding:'6px 14px' }}>
-    <div style={{ width:6, height:6, borderRadius:'50%', background:'#34d399', flexShrink:0 }} />
+    <div style={{ width:6, height:6, borderRadius:'0%', background:'#34d399', flexShrink:0 }} />
     <span style={{ color:'rgba(255,255,255,0.85)', fontSize:12, fontWeight:700, whiteSpace:'nowrap' }}>{label}</span>
   </div>
 );
@@ -258,7 +258,7 @@ const Auth = () => {
           <Orbs />
 
           <div style={{ position:'relative', zIndex:10 }}>
-            <div className='md:mb-[48px] mb-0' style={{ display:'inline-flex', alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:14, padding:'8px 16px' }}>
+            <div className='md:mb-[48px] mb-0' style={{ display:'inline-flex', alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:0, padding:'8px 16px' }}>
               <div style={{ width:26, height:26, background:'white', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <span style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>S</span>
               </div>
@@ -269,9 +269,9 @@ const Auth = () => {
               <motion.img className='md:block hidden' src="/jellyfish.png" alt=""
                 animate={{ y:[0,-10,0] }} transition={{ duration:4, repeat:Infinity, ease:'easeInOut' }}
                 style={{ width:'18%', userSelect:'none', pointerEvents:'none' }} />
-              <motion.img className='md:block hidden' src="/jellyfish.png" alt=""
+              <motion.img className='md:block md:opacity-[0.45] opacity-[0.20]' src="/jellyfish.png" alt=""
                 animate={{ y:[0,8,0], rotate:[-45,-38,-45] }} transition={{ duration:5.5, repeat:Infinity, ease:'easeInOut', delay:0.8 }}
-                style={{ position:'absolute', top:-60, right:-30, width:'44%', opacity:0.45, transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} />
+                style={{ position:'absolute', top:-60, right:-30, width:'44%', transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} />
             </div>
 
             <h1 style={{ fontSize:'clamp(28px,3.2vw,40px)', fontWeight:900, color:'white', lineHeight:1.20, letterSpacing:'-0.02em', marginBottom:14 }}>
@@ -332,9 +332,9 @@ const Auth = () => {
                   <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
                     <AuthInput icon={<Mail size={18}/>} placeholder="Email kamu" value={emailReset} onChange={setEmailReset} T={T} />
                     <button onClick={handleForgotPassword} disabled={loading} className="submit-btn"
-                      style={{ width:'100%', padding:'15px 0', borderRadius:14, fontWeight:900, fontSize:14, border:'none', cursor:'pointer', background:'linear-gradient(135deg, #4f46e5, #7c3aed)', color:'white', opacity: loading ? 0.6 : 1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 8px 32px rgba(79,70,229,0.35)', transition:'all 0.2s' }}>
+                      style={{ width:'100%', padding:'15px 0', borderRadius:0, fontWeight:900, fontSize:14, border:'none', cursor:'pointer', background:'linear-gradient(135deg, #4f46e5, #7c3aed)', color:'white', opacity: loading ? 0.6 : 1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 8px 32px rgba(79,70,229,0.35)', transition:'all 0.2s' }}>
                       {loading
-                        ? <div style={{ width:16, height:16, border:'3px solid rgba(255,255,255,0.3)', borderTopColor:'white', borderRadius:'50%', animation:'spin 0.7s linear infinite' }} />
+                        ? <div style={{ width:16, height:16, border:'3px solid rgba(255,255,255,0.3)', borderTopColor:'white', borderRadius:'0%', animation:'spin 0.7s linear infinite' }} />
                         : 'Kirim Link Reset →'}
                     </button>
                   </div>
@@ -357,13 +357,13 @@ const Auth = () => {
                   </div>
 
                   {/* Tab switcher */}
-                  <div style={{ display:'flex', background: T.tabBg, border:`1px solid ${T.tabBorder}`, borderRadius:14, padding:4, marginBottom:28, transition:'all 0.35s' }}>
-                    {['Login','Daftar'].map((label, i) => (
-                      <button key={label} className="tab-btn" onClick={() => setIsLogin(i === 0)}
-                        style={{ flex:1, padding:'10px 0', borderRadius:11, fontWeight:800, fontSize:14, border:'none', cursor:'pointer',
+                  <div className='gap-2.5' style={{ display:'flex', background: T.tabBg, border:`1px solid ${T.tabBorder}`, borderRadius:0, padding:6, marginBottom:28, transition:'all 0.35s' }}>
+                    {['Masuk','Daftar'].map((label, i) => (
+                      <button key={label} className="tab-btn border border-slate-300" onClick={() => setIsLogin(i === 0)}
+                        style={{ flex:1, padding:'10px 0', borderRadius:0, fontWeight:800, fontSize:14, cursor:'pointer',
                           background: isTabActive(i) ? 'linear-gradient(135deg, #4f46e5, #7c3aed)' : 'transparent',
                           color: isTabActive(i) ? 'white' : T.tabInactive,
-                          boxShadow: isTabActive(i) ? '0 4px 16px rgba(79,70,229,0.3)' : 'none',
+                          // boxShadow: isTabActive(i) ? '0 4px 16px rgba(79,70,229,0.3)' : 'none',
                         }}>
                         {label}
                       </button>
@@ -395,9 +395,9 @@ const Auth = () => {
                     )}
 
                     <button type="submit" disabled={loading} className="submit-btn"
-                      style={{ width:'100%', padding:'15px 0', borderRadius:14, fontWeight:900, fontSize:15, border:'none', cursor:'pointer', background:'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', color:'white', opacity: loading ? 0.65 : 1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 8px 32px rgba(79,70,229,0.4)', transition:'all 0.2s' }}>
+                      style={{ width:'100%', padding:'15px 0', borderRadius:0, fontWeight:900, fontSize:15, border:'none', cursor:'pointer', background:'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', color:'white', opacity: loading ? 0.65 : 1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, boxShadow:'0 8px 32px rgba(79,70,229,0.4)', transition:'all 0.2s' }}>
                       {loading
-                        ? <div style={{ width:18, height:18, border:'3px solid rgba(255,255,255,0.3)', borderTopColor:'white', borderRadius:'50%', animation:'spin 0.7s linear infinite' }} />
+                        ? <div style={{ width:18, height:18, border:'3px solid rgba(255,255,255,0.3)', borderTopColor:'white', borderRadius:'0%', animation:'spin 0.7s linear infinite' }} />
                         : <>{isLogin ? 'Login Dashboard' : 'Daftar Sekarang'}<ArrowRight size={16}/></>
                       }
                     </button>
@@ -415,7 +415,7 @@ const Auth = () => {
                       style={{ background:'none', border:'none', cursor:'pointer', color: T.switchLink, fontWeight:800, fontSize:14, transition:'color 0.2s' }}
                       onMouseEnter={e => e.currentTarget.style.color='#7c3aed'}
                       onMouseLeave={e => e.currentTarget.style.color=T.switchLink}>
-                      {isLogin ? 'Daftar Gratis' : 'Login'}
+                      {isLogin ? 'Daftar Gratis' : 'Masuk'}
                     </button>
                   </p>
                 </motion.div>

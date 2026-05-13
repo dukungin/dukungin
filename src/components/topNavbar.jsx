@@ -47,11 +47,11 @@ const ThemeToggle = ({ theme, onToggle }) => {
     <button
       onClick={onToggle}
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="cursor-pointer relative h-[38px] w-[70px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center px-1 transition-all active:scale-[0.97] hover:brightness-95 overflow-hidden"
+      className="cursor-pointer relative h-[38px] w-[70px] rounded-none border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center px-1 transition-all active:scale-[0.97] hover:brightness-95 overflow-hidden"
     >
       {/* Track */}
       <motion.div
-        className="absolute inset-0 rounded-xl"
+        className="absolute inset-0 rounded-none"
         style={{
           background: isDark
             ? 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)'
@@ -81,7 +81,7 @@ const ThemeToggle = ({ theme, onToggle }) => {
 
       {/* Thumb */}
       <motion.div
-        className="relative z-10 w-7 h-7 rounded-lg shadow-sm flex items-center justify-center"
+        className="relative z-10 w-7 h-7 rounded-none shadow-sm flex items-center justify-center"
         animate={{ x: isDark ? 30 : 0 }}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
         style={{
@@ -161,7 +161,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
         <div className="flex items-center gap-2.5 flex-shrink-0">
 
           {/* Saldo */}
-          <div className="hidden sm:flex items-center h-[40px] gap-2 rounded-xl px-3.5 py-2 border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60">
+          <div className="hidden sm:flex items-center h-[40px] gap-2 rounded-none px-3.5 py-2 border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60">
             <Wallet size={18} className="text-indigo-400" />
             <span className="font-medium text-indigo-600 dark:text-indigo-400 text-md tracking-wide">
               {showBalance 
@@ -169,7 +169,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                 : "Rp *********"
               }
             </span>
-             <button onClick={() => handleShowBalance()} className="cursor-pointer p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-indigo-600 transition-all hover:bg-indigo-50 dark:hover:bg-indigo-950/40">
+             <button onClick={() => handleShowBalance()} className="cursor-pointer p-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-indigo-600 transition-all hover:bg-indigo-50 dark:hover:bg-indigo-950/40">
               {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
@@ -180,7 +180,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           {/* Bantuan */}
           <button
             onClick={() => setActiveTab('contact')}
-            className={`cursor-pointer h-[40px] active:scale-[0.97] flex items-center gap-2 px-3.5 rounded-xl border font-medium text-md transition-all ${
+            className={`cursor-pointer h-[40px] active:scale-[0.97] flex items-center gap-2 px-3.5 rounded-none border font-medium text-md transition-all ${
               activeTab === 'contact'
                 ? 'bg-slate-800 dark:bg-slate-700 text-white border-transparent'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
@@ -192,7 +192,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           {/* Komunitas */}
           <button
             onClick={() => setActiveTab('community')}
-            className="cursor-pointer hover:brightness-90 h-[38px] active:scale-[0.97] relative flex items-center gap-2 px-3.5 py-3 rounded-xl font-medium text-md overflow-hidden"
+            className="cursor-pointer hover:brightness-90 h-[38px] active:scale-[0.97] relative flex items-center gap-2 px-3.5 py-3 rounded-none font-medium text-md overflow-hidden"
             style={{
               background: 'linear-gradient(90deg, #0f0c29, #302b63, #24243e, #0f0c29)',
               backgroundSize: '300% 100%',
@@ -215,9 +215,9 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           <div className="relative">
             <button
               onClick={() => setShowLogout(v => !v)}
-              className="cursor-pointer h-[38.4px] flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl px-1.5 py-3 transition-all active:scale-[0.97]"
+              className="cursor-pointer h-[38.4px] flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none px-1.5 py-3 transition-all active:scale-[0.97]"
             >
-              <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-medium text-md flex-shrink-0">
+              <div className="w-8 h-8 rounded-none bg-indigo-600 flex items-center justify-center text-white font-medium text-md flex-shrink-0">
                 {user.username.charAt(0).toUpperCase()}
               </div>
               <div className="text-left hidden sm:block">
@@ -238,7 +238,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -8, scale: 0.95 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden z-20"
+                    className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-900 rounded-none shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden z-20"
                   >
                     {/* Saldo mobile */}
                     <div className="sm:hidden px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center gap-2">
@@ -259,9 +259,9 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                     <div className="p-1 space-y-1">
                       <button
                         onClick={onProfile}
-                        className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium rounded-xl text-sm transition-all active:scale-[0.97]"
+                        className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium rounded-none text-sm transition-all active:scale-[0.97]"
                       >
-                        <div className="w-5 h-5 rounded-md bg-indigo-600 flex items-center justify-center text-white font-medium text-[10px]">
+                        <div className="w-5 h-5 rounded-none bg-indigo-600 flex items-center justify-center text-white font-medium text-[10px]">
                           {user.username.charAt(0).toUpperCase()}
                         </div>
                         My Profile
@@ -269,7 +269,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                       <div className="w-[92%] mx-auto h-[0.5px] bg-slate-100 dark:bg-slate-800" />
                       <button
                         onClick={() => { setShowLogout(false); setShowLogoutConfirm(true); }}
-                        className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium rounded-xl text-sm transition-all active:scale-[0.97]"
+                        className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium rounded-none text-sm transition-all active:scale-[0.97]"
                       >
                         <LogOut size={15} />
                         Logout
@@ -298,7 +298,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 z-[9999] shadow-2xl text-center"
+              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-none p-10 z-[9999] shadow-2xl text-center"
             >
               <div className="w-20 h-20 mx-auto mb-6 bg-red-100 dark:bg-red-950/40 text-red-600 rounded-full flex items-center justify-center">
                 <AlertCircle size={40} />
@@ -308,13 +308,13 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleLogout}
-                  className="cursor-pointer active:scale-[0.97] w-full py-4 bg-red-600 text-white rounded-2xl font-medium text-md shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
+                  className="cursor-pointer active:scale-[0.97] w-full py-4 bg-red-600 text-white rounded-none font-medium text-md shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
                 >
                   Ya, Logout
                 </button>
                 <button
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="cursor-pointer active:scale-[0.97] w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-medium text-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                  className="cursor-pointer active:scale-[0.97] w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-medium text-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
                 >
                   Batal
                 </button>

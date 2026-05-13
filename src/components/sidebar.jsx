@@ -72,7 +72,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-xl p-10 z-[9999] shadow-2xl text-center overflow-hidden border border-slate-100 dark:border-slate-800"
+              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-none p-10 z-[9999] shadow-2xl text-center overflow-hidden border border-slate-100 dark:border-slate-800"
             >
               <div className="w-20 h-20 mx-auto mb-6 bg-red-100 dark:bg-red-950/40 text-red-600 rounded-full flex items-center justify-center">
                 <AlertCircle size={40} />
@@ -84,13 +84,13 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleLogout}
-                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
+                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-none font-black text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
                 >
                   Ya, Keluar
                 </button>
                 <button
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-black text-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-black text-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
                 >
                   Batal
                 </button>
@@ -114,7 +114,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         {/* Logo */}
         <div className="flex items-center justify-between mb-8 md:mb-11">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg">
+            <div className="w-10 h-10 bg-red-200 rounded-none flex items-center justify-center text-white font-black text-xl italic shadow-lg">
               <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
             </div>
             <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">TapTipTup</h1>
@@ -140,7 +140,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab(item.id);
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer active:scale-[0.99] w-full flex items-center gap-4 px-4 p-3 rounded-xl font-black transition-all text-sm ${
+              className={`cursor-pointer active:scale-[0.99] w-full flex items-center gap-4 px-4 p-3 rounded-none font-black transition-all text-sm ${
                 activeTab === item.id
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 dark:shadow-indigo-900/30'
                   : 'text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
@@ -159,7 +159,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab('admin');
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer mb-2 w-full flex items-center gap-4 p-4 rounded-2xl font-black transition-all text-sm ${
+              className={`cursor-pointer mb-2 w-full flex items-center gap-4 p-4 rounded-none font-black transition-all text-sm ${
                 activeTab === 'admin'
                   ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 dark:shadow-indigo-900/30'
                   : 'text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
@@ -174,7 +174,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
         {/* Logout button (mobile only) */}
         <button
           onClick={() => setShowLogoutConfirm(true)}
-          className="md:hidden flex items-center gap-4 p-4 bg-red-100 dark:bg-red-950/40 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/60 rounded-2xl cursor-pointer active:scale-[0.98] font-black transition-all mt-4"
+          className="md:hidden flex items-center gap-4 p-4 bg-red-100 dark:bg-red-950/40 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/60 rounded-none cursor-pointer active:scale-[0.98] font-black transition-all mt-4"
         >
           <LogOut size={18} />
           <span className="text-sm ml-[3px]">Keluar</span>

@@ -162,7 +162,7 @@ const SectionHeader = ({ icon, title, color }) => (
   <div className="flex items-center gap-4">
     {
       icon && (
-        <div className={`${color} p-3 rounded-xl text-white shadow-lg`}>{icon ? icon : null}</div>
+        <div className={`${color} p-3 rounded-none text-white shadow-lg`}>{icon ? icon : null}</div>
       )
     }
     <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">{title}</h3>
@@ -173,7 +173,7 @@ const InputField = ({ label, ...props }) => (
   <div className="w-full">
     <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">{label}</label>
     <input
-      className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl p-3 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all font-bold text-sm text-slate-900 dark:text-slate-100 shadow-sm"
+      className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none p-3 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none transition-all font-bold text-sm text-slate-900 dark:text-slate-100 shadow-sm"
       {...props}
       onChange={e => props.onChange?.(e.target.value)}
     />
@@ -194,18 +194,18 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
       <SectionHeader icon={<Plus size={20} />} title="Quick Nominal" color="bg-emerald-500" />
       <p className="text-xs text-slate-400 mt-2 mb-4">Nominal cepat yang muncul di halaman donasi</p>
 
       <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
         {amounts.map((amt, i) => (
-          <div key={i} className="w-[100%] flex gap-3 items-center bg-slate-50 dark:bg-slate-800 p-3 rounded-xl">
+          <div key={i} className="w-[100%] flex gap-3 items-center bg-slate-50 dark:bg-slate-800 p-3 rounded-none">
             <input
               type="number"
               value={amt}
               onChange={e => update(i, e.target.value)}
-              className="flex-1 p-3 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold"
+              className="flex-1 p-3 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold"
             />
             <button onClick={() => remove(i)} className="text-red-500 hover:text-red-600">
               <Trash2 size={18} />
@@ -214,14 +214,14 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
         ))}
       </div>
 
-      <button onClick={add} className="cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full mt-4 py-3 border-2 border-dashed border-emerald-300 text-emerald-600 rounded-xl font-black hover:bg-emerald-20">
+      <button onClick={add} className="cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full mt-4 py-3 border-2 border-dashed border-emerald-300 text-emerald-600 rounded-none font-black hover:bg-emerald-20">
         + Tambah Nominal
       </button>
 
       <button
         onClick={() => saveSettingsMutation.mutate(settings)}
         disabled={saveSettingsMutation.isPending}
-        className="mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-4 bg-emerald-600 text-white rounded-xl font-black"
+        className="mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-4 bg-emerald-600 text-white rounded-none font-black"
       >
         Simpan Quick Nominal
       </button>
@@ -266,9 +266,9 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
       <div className="flex items-center gap-4">
-        <div className="bg-rose-500 p-3 rounded-xl text-white shadow-lg">
+        <div className="bg-rose-500 p-3 rounded-none text-white shadow-lg">
           <Zap size={20} />
         </div>
         <div>
@@ -281,18 +281,18 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
         <div className="flex flex-col gap-1">
           <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nama Donor</label>
           <input value={customName} onChange={e => setCustomName(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
             placeholder="TestDonor" />
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nominal (Rp)</label>
           <input type="number" value={customAmount} onChange={e => setCustomAmount(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all" />
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all" />
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Pesan</label>
           <input value={customMsg} onChange={e => setCustomMsg(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
             placeholder="Pesan test..." />
         </div>
       </div>
@@ -301,7 +301,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
       <div className="flex flex-wrap gap-2">
         {[10000, 50000, 100000, 500000, 1000000].map(v => (
           <button key={v} onClick={() => setCustomAmount(v)}
-            className={`cursor-pointer active:scale-[0.97] px-3 py-1.5 rounded-xl text-xs font-black transition-all border-2 ${
+            className={`cursor-pointer active:scale-[0.97] px-3 py-1.5 rounded-none text-xs font-black transition-all border-2 ${
               Number(customAmount) === v
                 ? 'bg-rose-500 border-rose-500 text-white'
                 : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-rose-300'
@@ -312,7 +312,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
       </div>
 
       <button onClick={sendTest} disabled={isSending || !overlayToken}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-rose-200 dark:shadow-rose-900/30">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-rose-200 dark:shadow-rose-900/30">
         {isSending ? (
           <><RefreshCw size={18} className="animate-spin" /> Mengirim...</>
         ) : (
@@ -322,7 +322,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
 
       {lastSent && (
         <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-xl px-4 py-3 border border-emerald-100 dark:border-emerald-900">
+          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900">
           <CheckCircle2 size={14} /> Test terakhir dikirim: {lastSent.toLocaleTimeString('id-ID')}
         </motion.div>
       )}
@@ -356,11 +356,11 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
           className="fixed inset-0 bg-black/70 backdrop-blur-md z-[300] flex items-center justify-center p-4"
           onClick={onClose}>
           <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-            className="bg-white dark:bg-slate-900 rounded-3xl p-8 text-center max-w-sm w-full"
+            className="bg-white dark:bg-slate-900 rounded-none p-8 text-center max-w-sm w-full"
             onClick={e => e.stopPropagation()}>
             <p className="text-red-500 text-4xl mb-4">⚠️</p>
             <p className="font-black text-xl">Gagal memuat profil</p>
-            <button onClick={onClose} className="mt-6 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold">
+            <button onClick={onClose} className="mt-6 px-6 py-3 bg-slate-900 text-white rounded-none font-bold">
               Tutup
             </button>
           </motion.div>
@@ -378,7 +378,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
       >
         <motion.div 
           initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }}
-          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900 rounded-xl h-[70vh] pb-4 md:max-h-[90vh] overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
+          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900 rounded-none h-[70vh] pb-4 md:max-h-[90vh] overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
           onClick={e => e.stopPropagation()}
         >
           
@@ -395,8 +395,8 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
             {/* SISI KIRI: Profil & Info Dasar (Sticky-like di Desktop) */}
             <div className="md:w-[40%] p-6 md:p-8 md:border-r border-slate-50 dark:border-slate-800/50 flex flex-col justify-between">
               <div className="relative mt-0 md:mt-0 mb-4">
-                <div className="bg-white dark:bg-slate-900 rounded-xl ml-[-5px] mb-4 shadow-xl inline-block">
-                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black text-indigo-600 border-4 border-white dark:border-slate-900 overflow-hidden">
+                <div className="bg-white dark:bg-slate-900 rounded-none ml-[-5px] mb-4 shadow-xl inline-block">
+                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black text-indigo-600 border-4 border-white dark:border-slate-900 overflow-hidden">
                     {streamer?.avatar ? (
                       <img src={streamer.avatar} alt={username} className="w-full h-full object-cover" />
                     ) : (
@@ -417,11 +417,11 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
                 <div className="flex flex-col mt-auto space-y-1 gap-2 mt-4">
                   <button
                     onClick={copy}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-none font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
                   >
                     {copied ? <><CheckCircle2 size={16} /> Tersalin!</> : <><Copy size={16} /> Salin Link Profile</>}
                   </button>
-                  <button className="w-full py-3 bg-indigo-600 text-white rounded-xl font-black text-sm shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                  <button className="w-full py-3 bg-indigo-600 text-white rounded-none font-black text-sm shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
                     <Heart size={16} /> Follow
                   </button>
                 </div>
@@ -441,11 +441,11 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                <div className="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
                   <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{streamer?.followersCount ?? 0}</p>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Followers</p>
                 </div>
-                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
+                <div className="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
                   <p className="text-2xl font-black text-purple-600 dark:text-purple-400">{streamer?.supportersCount ?? 0}</p>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Supporters</p>
                 </div>
@@ -458,25 +458,25 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
                 <div className="flex flex-wrap gap-2">
                   {streamer.instagram && (
                     <a href={`https://instagram.com/${streamer.instagram.replace('@','')}`} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-pink-50 dark:bg-pink-600 text-white rounded-xl text-sm font-medium hover:bg-pink-700 active:scale-[0.98]">
+                      className="flex items-center gap-2 px-4 py-2 bg-pink-50 dark:bg-pink-600 text-white rounded-none text-sm font-medium hover:bg-pink-700 active:scale-[0.98]">
                       📷 Instagram
                     </a>
                   )}
                   {streamer.facebook && (
                     <a href={streamer.facebook.startsWith('http') ? streamer.facebook : `https://facebook.com/${streamer.facebook}`} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 active:scale-[0.98]">
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-600 text-white rounded-none text-sm font-medium hover:bg-blue-700 active:scale-[0.98]">
                       👍 Facebook
                     </a>
                   )}
                   {streamer.youtube && (
                     <a href={streamer.youtube} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 active:scale-[0.98]">
+                      className="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-600 text-white rounded-none text-sm font-medium hover:bg-red-700 active:scale-[0.98]">
                       ▶ YouTube
                     </a>
                   )}
                   {streamer.twitter && (
                     <a href={`https://twitter.com/${streamer.twitter.replace('@','')}`} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 active:scale-[0.98]">
+                      className="flex items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-emerald-600 text-white rounded-none text-sm font-medium hover:bg-emerald-700 active:scale-[0.98]">
                       𝕏 Twitter
                     </a>
                   )}
@@ -487,7 +487,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
               {/* Donation & Copy Link */}
               <div className="pt-2 space-y-3">
                 <a href={donateUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm shadow-xl shadow-indigo-100 dark:shadow-indigo-900/20 hover:brightness-110 transition-all active:scale-[0.98]">
+                  className="flex items-center justify-center gap-3 w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-sm shadow-xl shadow-indigo-100 dark:shadow-indigo-900/20 hover:brightness-110 transition-all active:scale-[0.98]">
                   <Heart size={16} fill="white" /> Dukung @{username}
                 </a>
               </div>
@@ -536,7 +536,7 @@ const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
       <SectionHeader icon={<ShieldCheck size={20} />} title="Filter Kata Terlarang" color="bg-red-500" />
       <div className="space-y-3">
         <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Aksi saat kata terlarang terdeteksi</label>
@@ -544,7 +544,7 @@ const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
           {ACTION_OPTIONS.map(opt => (
             <button key={opt.id}
               onClick={() => { setLocalAction(opt.id); saveMutation.mutate({ words, action: opt.id, replacement: localReplacement }); }}
-              className={`cursor-pointer active:scale-[0.99] text-left p-4 rounded-xl border-2 transition-all space-y-1.5 ${localAction === opt.id ? opt.active + ' shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600'}`}>
+              className={`cursor-pointer active:scale-[0.99] text-left p-4 rounded-none border-2 transition-all space-y-1.5 ${localAction === opt.id ? opt.active + ' shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600'}`}>
               <div className="flex items-center gap-2">
                 <span className="text-xl">{opt.emoji}</span>
                 <span className="font-black text-sm text-slate-700 dark:text-slate-200">{opt.title}</span>
@@ -556,7 +556,7 @@ const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
         {localAction === 'replace' && (
           <input value={localReplacement} onChange={e => setLocalReplacement(e.target.value)} onBlur={() => save({ replacement: localReplacement })}
             placeholder="contoh: [dihapus], ❤️, [sensor]"
-            className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl px-5 py-3 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
+            className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none px-5 py-3 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
         )}
       </div>
       <div className="border-t border-slate-100 dark:border-slate-800" />
@@ -565,20 +565,20 @@ const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
         <div className="md:flex gap-3 md:space-y-0 space-y-2">
           <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && add()}
             placeholder="Ketik kata lalu tekan Enter..."
-            className="w-full flex-1 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl px-5 py-3 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-red-400 transition-all" />
-          <button onClick={add} className="md:w-max w-full cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-black text-sm transition-all flex items-center gap-2">
+            className="w-full flex-1 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none px-5 py-3 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-red-400 transition-all" />
+          <button onClick={add} className="md:w-max w-full cursor-pointer active:scale-[0.97] px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-none font-black text-sm transition-all flex items-center gap-2">
             <Plus size={16} /> Tambah
           </button>
         </div>
         {isLoading ? <div className="text-slate-400 text-sm font-bold animate-pulse">Memuat...</div>
           : words.length === 0
-            ? <div className="rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 py-8 text-center text-slate-400">
+            ? <div className="rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 py-8 text-center text-slate-400">
                 <p className="text-2xl mb-2">🚫</p>
                 <p className="font-black text-sm">Belum ada kata terlarang</p>
               </div>
             : <div className="flex flex-wrap gap-2">
                 {words.map(word => (
-                  <span key={word} className="md:w-max w-[48.9%] flex justify-center md:justify-start items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-xl text-sm font-black border border-red-100 dark:border-red-900">
+                  <span key={word} className="md:w-max w-[48.9%] flex justify-center md:justify-start items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-none text-sm font-black border border-red-100 dark:border-red-900">
                     {word}
                     <button onClick={() => remove(word)} className="cursor-pointer hover:text-red-800 dark:hover:text-red-300 transition-colors"><Trash2 size={12} /></button>
                   </span>
@@ -586,7 +586,7 @@ const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
               </div>
         }
         <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-xl font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
           <Save size={20} />
           {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}
         </button>
@@ -615,37 +615,37 @@ const MilestonesEditor = () => {
   const upd    = (i, key, val) => setLocal(list.map((m, idx) => idx === i ? { ...m, [key]: val } : m));
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-6">
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-6">
       <SectionHeader icon={<TrendingUp size={20} />} title="Milestones" color="bg-green-500" />
       <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Tampilkan progress target donasi di halaman publik kamu.</p>
       {isLoading ? <div className="text-slate-400 text-sm font-bold animate-pulse">Memuat...</div> : (
         <div className="space-y-3">
           {list.length === 0 && (
-            <div className="rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 py-8 text-center text-slate-400">
+            <div className="rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 py-8 text-center text-slate-400">
               <p className="text-2xl mb-2">🎯</p><p className="font-black text-sm">Belum ada milestone</p>
             </div>
           )}
           {list.map((m, i) => (
-            <div key={i} className="flex gap-3 items-end bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+            <div key={i} className="flex gap-3 items-end bg-slate-50 dark:bg-slate-800 rounded-none p-4 border border-slate-100 dark:border-slate-700">
               <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
                 {[['Judul Milestone', 'title', m.title, 'text', 'contoh: Beli mic baru!'], ['Target (Rp)', 'targetAmount', m.targetAmount, 'number', '']].map(([lbl, key, val, type, ph]) => (
                   <div key={key} className="flex flex-col gap-1">
                     <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
                     <input type={type} value={val} placeholder={ph}
                       onChange={e => upd(i, key, type === 'number' ? Number(e.target.value) : e.target.value)}
-                      className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-green-400" />
+                      className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-green-400" />
                   </div>
                 ))}
               </div>
               <button onClick={() => remove(i)} className="cursor-pointer active:scale-[0.97] text-red-400 hover:text-red-600 p-2 flex-shrink-0"><Trash2 size={16} /></button>
             </div>
           ))}
-          <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-green-200 dark:border-green-900 text-green-600 dark:text-green-400 rounded-xl font-black text-sm hover:border-green-400 hover:bg-green-50 dark:hover:bg-green-950/30 transition-all flex items-center justify-center gap-2">
+          <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-green-200 dark:border-green-900 text-green-600 dark:text-green-400 rounded-none font-black text-sm hover:border-green-400 hover:bg-green-50 dark:hover:bg-green-950/30 transition-all flex items-center justify-center gap-2">
             <Plus size={16} /> Tambah Milestone
           </button>
           {list.length > 0 && (
             <button onClick={() => mutation.mutate(list)} disabled={mutation.isPending}
-              className="cursor-pointer active:scale-[0.97] w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+              className="cursor-pointer active:scale-[0.97] w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
               <Save size={16} /> {mutation.isPending ? 'Menyimpan...' : 'Simpan Milestones'}
             </button>
           )}
@@ -689,7 +689,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
       <div className="flex gap-2">
         {[{ id: 'preset', label: '🎵 Pilih Preset' }, { id: 'custom', label: '🔗 URL Custom' }].map(m => (
           <button key={m.id} onClick={() => setMode(m.id)}
-            className={`cursor-pointer active:scale-[0.97] px-4 py-2 rounded-xl font-black text-xs transition-all ${mode === m.id ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
+            className={`cursor-pointer active:scale-[0.97] px-4 py-2 rounded-none font-black text-xs transition-all ${mode === m.id ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
             {m.label}
           </button>
         ))}
@@ -697,12 +697,12 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
       {mode === 'preset' && (
         <div className="grid grid-cols-3 gap-2">
           <button onClick={() => onChange('')}
-            className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-black text-xs transition-all ${!value ? 'border-slate-600 bg-slate-800 text-white shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-400'}`}>
+            className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${!value ? 'border-slate-600 bg-slate-800 text-white shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-400'}`}>
             <span className="text-lg">🔇</span><span>Tanpa Suara</span>
           </button>
           {SOUND_PRESETS.map(preset => (
             <button key={preset.url} onClick={() => { onChange(preset.url); playPreview(preset.url); }}
-              className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-black text-xs transition-all ${value === preset.url ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
+              className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${value === preset.url ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
               <span className="text-lg">{preset.label.split(' ')[1]}</span>
               <span>{preset.label.split(' ')[0]}</span>
               <span onClick={e => { e.stopPropagation(); playPreview(preset.url); }} className="text-[9px] font-medium text-slate-400 hover:text-indigo-600 transition-colors">▶ preview</span>
@@ -712,11 +712,11 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
       )}
       {mode === 'custom' && (
         <input value={value || ''} onChange={e => onChange(e.target.value)} placeholder="https://... .mp3"
-          className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
+          className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
       )}
       {value && (
-        <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
-          <button onClick={() => playPreview(value)} className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center text-white text-xs hover:bg-indigo-700 transition-all flex-shrink-0">▶</button>
+        <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-none p-3 border border-slate-100 dark:border-slate-700">
+          <button onClick={() => playPreview(value)} className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-indigo-600 rounded-none flex items-center justify-center text-white text-xs hover:bg-indigo-700 transition-all flex-shrink-0">▶</button>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-black text-slate-500 dark:text-slate-400">{SOUND_PRESETS.find(p => p.url === value)?.label || 'Custom Sound'}</p>
             <p className="text-[9px] text-slate-300 dark:text-slate-600 font-mono truncate">{value}</p>
@@ -736,7 +736,7 @@ const SoundTiersEditor = ({ tiers = [], onChange, saveSettingsMutation, settings
   return (
     <div className="space-y-3">
       {tiers.map((t, i) => (
-        <div key={i} className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 space-y-4">
+        <div key={i} className="bg-slate-50 dark:bg-slate-800 rounded-none p-4 border border-slate-100 dark:border-slate-700 space-y-4">
           <div className="flex items-center justify-between">
             <span className="font-black text-slate-600 dark:text-slate-300 text-sm">{t.label || `Tier Suara ${i + 1}`}</span>
             <button onClick={() => remove(i)} className="cursor-pointer text-red-400 hover:text-red-600 p-1"><Trash2 size={15} /></button>
@@ -746,23 +746,23 @@ const SoundTiersEditor = ({ tiers = [], onChange, saveSettingsMutation, settings
               <div key={key} className="flex flex-col gap-1">
                 <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
                 <input type="number" value={val} placeholder={key === 'maxAmount' ? '∞' : ''} onChange={e => upd(i, key, e.target.value)}
-                  className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400" />
+                  className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400" />
               </div>
             ))}
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Label (opsional)</label>
             <input value={t.label} placeholder="contoh: Sultan Alert Sound" onChange={e => upd(i, 'label', e.target.value)}
-              className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400" />
+              className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400" />
           </div>
           <SoundPicker value={t.soundUrl} onChange={v => upd(i, 'soundUrl', v)} />
         </div>
       ))}
-      <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 dark:border-indigo-900 text-indigo-500 dark:text-indigo-400 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all flex items-center justify-center gap-2">
+      <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 dark:border-indigo-900 text-indigo-500 dark:text-indigo-400 rounded-none font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Suara per Nominal
       </button>
       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-xl font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
         <Save size={20} />
         {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Audio Terbaru'}
       </button>
@@ -777,22 +777,22 @@ const QrCodeCard = ({ username }) => {
   const [copied, setCopied] = useState(false);
   const copy = () => { navigator.clipboard.writeText(donateUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); };
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
       {/* <SectionHeader title="QR Code Donasi" color="bg-slate-800" /> */}
       <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Tampilkan QR ini di stream / sosmed. Scan langsung ke halaman donasi kamu.</p>
       <div className="flex flex-col items-start gap-4">
-        <div className="p-4 bg-white rounded-xl border-4 border-slate-900 shadow-xl inline-block">
+        <div className="p-4 bg-white rounded-none border-4 border-slate-900 shadow-xl inline-block">
           <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(donateUrl)}&color=0f172a&bgcolor=ffffff&format=svg&margin=0`} alt="QR Code" width={200} height={200} />
         </div>
         <p className="font-black text-slate-700 dark:text-slate-300 text-sm">{donateUrl}</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <button onClick={copy} className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-xl font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>
+        <button onClick={copy} className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-none font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>
           {copied ? <><CheckCircle2 size={16} /> Tersalin!</> : <><Copy size={16} /> Salin URL</>}
         </button>
         <a href={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(donateUrl)}&color=0f172a&format=png`}
           download={`qr-donasi-${username}.png`} target="_blank" rel="noreferrer"
-          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-xl font-black text-sm bg-slate-900 dark:bg-slate-700 text-white hover:bg-slate-800 dark:hover:bg-slate-600 transition-all">
+          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-none font-black text-sm bg-slate-900 dark:bg-slate-700 text-white hover:bg-slate-800 dark:hover:bg-slate-600 transition-all">
           ↓ Download QR
         </a>
       </div>
@@ -807,16 +807,16 @@ const LeaderboardCard = ({ stats }) => {
   if (!topDonors.length) return null;
   const medals = ['🥇', '🥈', '🥉'];
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl pb-1.5 shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 rounded-none pb-1.5 shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
       <div className="px-6 py-5 dark:border-slate-800 flex items-center gap-3">
-        <div className="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center text-lg">🏆</div>
+        <div className="w-9 h-9 bg-amber-500 rounded-none flex items-center justify-center text-lg">🏆</div>
         <div><p className="font-black text-slate-800 dark:text-slate-100">Leaderboard Donor</p><p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Semua waktu</p></div>
       </div>
       <div className="py-0 px-4 space-y-3">
         {topDonors.slice(0, 3).map((donor, i) => (
           <motion.div key={donor.name} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}
             className={`flex items-center gap-4 p-4 dark:border-slate-100/10 border-t border-slate-200 dark:text-white text-black`}>
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg flex-shrink-0 ${i < 3 ? 'bg-white/20' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
+            <div className={`w-10 h-10 rounded-none flex items-center justify-center font-black text-lg flex-shrink-0 ${i < 3 ? 'bg-white/20' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
               {i < 3 ? medals[i] : `#${i + 1}`}
             </div>
             <div className="flex-1 min-w-0">
@@ -858,7 +858,7 @@ const AdminWithdrawalPage = () => {
 
   return (
     <div className="w-full space-y-5 pb-6">
-      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
+      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-none p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Super Admin</p>
@@ -875,12 +875,12 @@ const AdminWithdrawalPage = () => {
       <div className="flex gap-2 flex-wrap">
         {[{ val: 'PENDING', label: '⏳ Pending' }, { val: 'COMPLETED', label: '✅ Selesai' }, { val: 'FAILED', label: '❌ Ditolak' }, { val: '', label: '📋 Semua' }].map(f => (
           <button key={f.val} onClick={() => setStatusFilter(f.val)}
-            className={`cursor-pointer active:scale-[0.98] px-4 py-2 rounded-xl font-black text-sm transition-all ${statusFilter === f.val ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700'}`}>
+            className={`cursor-pointer active:scale-[0.98] px-4 py-2 rounded-none font-black text-sm transition-all ${statusFilter === f.val ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700'}`}>
             {f.label}
           </button>
         ))}
       </div>
-      <div className="bg-white dark:bg-slate-900 w-full rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 w-full rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
           <div>
             <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{statusFilter ? `Request ${statusFilter}` : 'Semua Request'}</p>
@@ -914,8 +914,8 @@ const AdminWithdrawalPage = () => {
                         <td className="px-6 py-5">
                           {wd.status === 'PENDING' && (
                             <div className="flex gap-2">
-                              <button onClick={() => { setSelectedId(wd._id); setShowApproveModal(true); }} className="cursor-pointer px-2.5 py-2 bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-lg text-sm font-black hover:bg-green-200 transition-all flex items-center"><Check size={18} /></button>
-                              <button onClick={() => { setSelectedId(wd._id); setRejectNote(''); setShowRejectModal(true); }} className="cursor-pointer px-2.5 py-2 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-lg text-sm font-black hover:bg-red-100 transition-all"><X size={18} /></button>
+                              <button onClick={() => { setSelectedId(wd._id); setShowApproveModal(true); }} className="cursor-pointer px-2.5 py-2 bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-none text-sm font-black hover:bg-green-200 transition-all flex items-center"><Check size={18} /></button>
+                              <button onClick={() => { setSelectedId(wd._id); setRejectNote(''); setShowRejectModal(true); }} className="cursor-pointer px-2.5 py-2 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-none text-sm font-black hover:bg-red-100 transition-all"><X size={18} /></button>
                             </div>
                           )}
                         </td>
@@ -926,13 +926,13 @@ const AdminWithdrawalPage = () => {
                 <AnimatePresence>
                   {showApproveModal && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowApproveModal(false)}>
-                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 text-center border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
-                        <div className="w-20 h-20 mx-auto mb-6 bg-green-100 dark:bg-green-950/40 rounded-xl flex items-center justify-center text-5xl">✅</div>
+                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-none max-w-md w-full p-8 text-center border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+                        <div className="w-20 h-20 mx-auto mb-6 bg-green-100 dark:bg-green-950/40 rounded-none flex items-center justify-center text-5xl">✅</div>
                         <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Approve</h3>
                         <p className="text-slate-600 dark:text-slate-400 mb-8">Apakah Anda yakin sudah mentransfer dana ke streamer ini?</p>
                         <div className="flex gap-3">
-                          <button onClick={() => setShowApproveModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-xl">Batal</button>
-                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-green-600 hover:bg-green-700 text-white font-black rounded-xl transition-all disabled:opacity-70">
+                          <button onClick={() => setShowApproveModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-none">Batal</button>
+                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-green-600 hover:bg-green-700 text-white font-black rounded-none transition-all disabled:opacity-70">
                             {updateMutation.isPending ? 'Memproses...' : 'Ya, Sudah Transfer'}
                           </button>
                         </div>
@@ -943,13 +943,13 @@ const AdminWithdrawalPage = () => {
                 <AnimatePresence>
                   {showRejectModal && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowRejectModal(false)}>
-                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-8 border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-none max-w-md w-full p-8 border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
                         <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2 text-center">Tolak Penarikan</h3>
                         <p className="text-slate-600 dark:text-slate-400 text-center mb-6">Berikan alasan penolakan (opsional)</p>
-                        <textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Contoh: Rekening tidak valid..." className="w-full h-32 p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-xl focus:border-red-400 outline-none resize-y font-medium" />
+                        <textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Contoh: Rekening tidak valid..." className="w-full h-32 p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-none focus:border-red-400 outline-none resize-y font-medium" />
                         <div className="flex gap-3 mt-6">
-                          <button onClick={() => setShowRejectModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-xl">Batal</button>
-                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'FAILED', note: rejectNote || 'Ditolak oleh admin' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-red-600 hover:bg-red-700 text-white font-black rounded-xl transition-all disabled:opacity-70">
+                          <button onClick={() => setShowRejectModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-none">Batal</button>
+                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'FAILED', note: rejectNote || 'Ditolak oleh admin' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-red-600 hover:bg-red-700 text-white font-black rounded-none transition-all disabled:opacity-70">
                             {updateMutation.isPending ? 'Memproses...' : 'Konfirmasi Tolak'}
                           </button>
                         </div>
@@ -974,24 +974,24 @@ const DurationTiersEditor = ({ tiers, onChange, saveSettingsMutation, settings }
   return (
     <div className="space-y-3">
       {tiers.map((tier, i) => (
-        <div key={i} className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700">
+        <div key={i} className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-none p-4 border border-slate-100 dark:border-slate-700">
           <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
             {[['Min (Rp)', 'minAmount', tier.minAmount], ['Max (Rp, kosong=∞)', 'maxAmount', tier.maxAmount ?? ''], ['Durasi (detik)', 'duration', tier.duration]].map(([lbl, key, val]) => (
               <div key={key} className="flex flex-col gap-1">
                 <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
                 <input type="number" value={val} placeholder={key === 'maxAmount' ? '∞' : ''} onChange={e => updateTier(i, key, e.target.value)}
-                  className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400" />
+                  className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400" />
               </div>
             ))}
           </div>
           <button onClick={() => removeTier(i)} className="cursor-pointer active:scale-[0.97] text-red-400 hover:text-red-600 transition-colors flex-shrink-0 p-1"><Trash2 size={16} /></button>
         </div>
       ))}
-      <button onClick={addTier} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 dark:border-indigo-900 text-indigo-500 dark:text-indigo-400 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all flex items-center justify-center gap-2">
+      <button onClick={addTier} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 dark:border-indigo-900 text-indigo-500 dark:text-indigo-400 rounded-none font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Ketentuan Durasi
       </button>
       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-xl font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
         <Save size={20} />
         {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Durasi Terbaru'}
       </button>
@@ -1013,13 +1013,13 @@ const MediaTriggersEditor = ({ triggers, onChange, saveSettingsMutation, setting
   return (
     <div className="space-y-4">
       {triggers.length === 0 && (
-        <div className="rounded-xl bg-slate-50 dark:bg-slate-800 border border-dashed border-slate-200 dark:border-slate-700 px-5 py-6 text-center">
-          <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center mx-auto mb-3"><ImageIcon size={18} className="text-slate-400" /></div>
+        <div className="rounded-none bg-slate-50 dark:bg-slate-800 border border-dashed border-slate-200 dark:border-slate-700 px-5 py-6 text-center">
+          <div className="w-10 h-10 rounded-none bg-slate-100 dark:bg-slate-700 flex items-center justify-center mx-auto mb-3"><ImageIcon size={18} className="text-slate-400" /></div>
           <p className="text-sm font-black text-slate-500 dark:text-slate-400">Belum ada ketentuan media</p>
         </div>
       )}
       {triggers.map((t, i) => (
-        <div key={i} className="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 border border-slate-100 dark:border-slate-700 space-y-5">
+        <div key={i} className="bg-slate-50 dark:bg-slate-800 rounded-none p-5 border border-slate-100 dark:border-slate-700 space-y-5">
           <div className="flex items-center justify-between">
             <span className="font-black text-slate-700 dark:text-slate-200 text-sm">{t.label || `Media Alert ${i + 1}`}</span>
             <button onClick={() => remove(i)} className="cursor-pointer active:scale-[0.97] text-red-400 hover:text-red-600 transition-colors p-1"><Trash2 size={15} /></button>
@@ -1029,14 +1029,14 @@ const MediaTriggersEditor = ({ triggers, onChange, saveSettingsMutation, setting
               <div key={key} className="flex flex-col gap-1.5">
                 <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
                 <input type={type} value={val} placeholder={ph} onChange={e => update(i, key, type === 'number' ? Number(e.target.value) : e.target.value)}
-                  className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
+                  className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
               </div>
             ))}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             {mediaTypeOptions.map(opt => (
               <button key={opt.value} onClick={() => update(i, 'mediaType', opt.value)}
-                className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border-2 font-black text-xs transition-all ${t.mediaType === opt.value ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300' : 'border-slate-100 dark:border-slate-700 text-slate-400 hover:border-slate-300 hover:bg-white dark:hover:bg-slate-700'}`}>
+                className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 py-3 px-2 rounded-none border-2 font-black text-xs transition-all ${t.mediaType === opt.value ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300' : 'border-slate-100 dark:border-slate-700 text-slate-400 hover:border-slate-300 hover:bg-white dark:hover:bg-slate-700'}`}>
                 {opt.icon}<span>{opt.label}</span>
                 <span className="text-[9px] font-medium text-slate-300 dark:text-slate-500">{opt.desc}</span>
               </button>
@@ -1044,11 +1044,11 @@ const MediaTriggersEditor = ({ triggers, onChange, saveSettingsMutation, setting
           </div>
         </div>
       ))}
-      <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 dark:border-indigo-900 text-indigo-500 dark:text-indigo-400 rounded-xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all flex items-center justify-center gap-2">
+      <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-indigo-200 dark:border-indigo-900 text-indigo-500 dark:text-indigo-400 rounded-none font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all flex items-center justify-center gap-2">
         <Plus size={16} /> Tambah Ketentuan Media Alert
       </button>
       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-xl font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
         <Save size={20} />
         {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Izin Media'}
       </button>
@@ -1164,13 +1164,13 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse" />
               <span className="text-white font-black text-sm tracking-wide">LIVE PREVIEW</span>
-              <span className="px-2 py-0.5 bg-red-600 text-white text-[10px] font-black rounded-md tracking-widest">OBS SIMULATION</span>
+              <span className="px-2 py-0.5 bg-red-600 text-white text-[10px] font-black rounded-none tracking-widest">OBS SIMULATION</span>
             </div>
             <div className="flex items-center gap-2">
-              <button onClick={triggerDemo} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-xs transition-all">
+              <button onClick={triggerDemo} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-xs transition-all">
                 <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" /> Simulasi Donasi
               </button>
-              <button onClick={() => handleFullScreen()} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-black text-xs transition-all border border-white/10">
+              <button onClick={() => handleFullScreen()} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-none font-black text-xs transition-all border border-white/10">
                 ✕ Tutup
               </button>
             </div>
@@ -1195,13 +1195,13 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   return (
     <div className="sticky top-12 space-y-3">
       <FullscreenPreview />
-      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-xl shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
+      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-none shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
         <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(155deg,#1a1a2e 0%,#0d0d1a 60%,#12121f 100%)' }}>
           <span style={{ fontSize: 80, fontWeight: 800, color: 'rgba(255,255,255,0.04)', letterSpacing: -3, userSelect: 'none' }}>LIVE</span>
         </div>
         <div className="absolute top-0 left-0 right-0 flex items-center gap-2 px-3 py-2" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 100%)' }}>
           <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center text-white text-[8px] font-black flex-shrink-0">YT</div>
-          <span className="bg-red-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded-sm tracking-wide">LIVE</span>
+          <span className="bg-red-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded-none tracking-wide">LIVE</span>
           <span className="text-white text-[9px] font-medium opacity-80 flex-1 truncate">Ngoding Bareng | Demo</span>
         </div>
         <div className="absolute inset-0 pointer-events-none">
@@ -1221,11 +1221,11 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         <span>Durasi demo: <span className="text-indigo-600">{currentDonor ? dur : '-'}s</span></span>
       </div>
       <button onClick={triggerDemo}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 text-indigo-600 dark:text-indigo-400 font-black text-sm border-2 border-indigo-100 dark:border-indigo-900 transition-all flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-none bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 text-indigo-600 dark:text-indigo-400 font-black text-sm border-2 border-indigo-100 dark:border-indigo-900 transition-all flex items-center justify-center gap-2">
         <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" /> Simulasi Donasi Masuk
       </button>
       <button onClick={() => handleFullScreen()}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-xl bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 text-white font-black text-sm transition-all flex items-center justify-center gap-2 border border-slate-700">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-none bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 text-white font-black text-sm transition-all flex items-center justify-center gap-2 border border-slate-700">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
         </svg>
@@ -1293,7 +1293,7 @@ const HistoryPage = () => {
           { label: 'Hari Ini', value: statsLoading ? '...' : maskAmount(stats?.today?.total || 0), sub: `${stats?.today?.count || 0} donasi`, color: 'bg-purple-500', icon: '⚡' },
           { label: 'Top Donatur', value: statsLoading ? '...' : (stats?.topDonors?.[0]?.name || '-'), sub: stats?.topDonors?.[0] ? maskAmount(stats.topDonors[0].totalAmount) : 'Belum ada', color: 'bg-amber-500', icon: '🏆' },
         ].map((card) => (
-          <div key={card.label} className={`${card.color} rounded-xl p-6 text-white relative overflow-hidden`}>
+          <div key={card.label} className={`${card.color} rounded-none p-6 text-white relative overflow-hidden`}>
             <div className="absolute top-3 right-4 text-2xl opacity-20">{card.icon}</div>
             <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">{card.label}</p>
             <p className="text-xl font-black leading-tight">{card.value}</p>
@@ -1304,7 +1304,7 @@ const HistoryPage = () => {
 
       {stats && <LeaderboardCard stats={stats} />}
 
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 md:px-10 py-5 border-b border-slate-100 dark:border-slate-800 gap-4">
           <div>
@@ -1343,7 +1343,7 @@ const HistoryPage = () => {
             <div className="flex gap-1.5">
               <button
                 onClick={() => setShowAmounts(v => !v)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black transition-all border-2 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black transition-all border-2 ${
                   showAmounts ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 text-slate-400'
                 }`}
               >
@@ -1351,7 +1351,7 @@ const HistoryPage = () => {
               </button>
               <button
                 onClick={() => setShowEmails(v => !v)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black transition-all border-2 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black transition-all border-2 ${
                   showEmails ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 text-slate-400'
                 }`}
               >
@@ -1373,7 +1373,7 @@ const HistoryPage = () => {
                     setStatusFilter(f.val);
                     setPage(1);
                   }}
-                  className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${
+                  className={`px-3 py-1.5 rounded-none text-[10px] font-black transition-all ${
                     statusFilter === f.val
                       ? 'bg-indigo-600 text-white'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200'
@@ -1476,7 +1476,7 @@ const HistoryPage = () => {
                       <button
                         onClick={() => setPage(p => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 disabled:opacity-40"
+                        className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 disabled:opacity-40"
                       >
                         ← Sebelumnya
                       </button>
@@ -1486,7 +1486,7 @@ const HistoryPage = () => {
                       <button
                         onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
                         disabled={page === pagination.totalPages}
-                        className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 disabled:opacity-40"
+                        className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 disabled:opacity-40"
                       >
                         Berikutnya →
                       </button>
@@ -1588,9 +1588,9 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map(u => (
-          <div key={u._id} className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4">
+          <div key={u._id} className="bg-white dark:bg-slate-900 rounded-none p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
+              <div className="w-12 h-12 rounded-none bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0">
                 {u.username.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
@@ -1607,13 +1607,13 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
             <div className="flex gap-2">
               {/* Lihat Profil — selalu tampil */}
               <button onClick={() => setViewingProfile(u.username)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 transition-all cursor-pointer active:scale-[0.97]">
+                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 transition-all cursor-pointer active:scale-[0.97]">
                 <User size={12} /> Profil
               </button>
               {/* Follow/Unfollow — hanya kalau bukan diri sendiri */}
               {showFollowBtn && u._id !== currentUserId && (
                 <button onClick={() => toggleMutation.mutate(u._id)} disabled={toggleMutation.isPending}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl font-black text-xs transition-all disabled:opacity-60 cursor-pointer active:scale-[0.97] ${u.isFollowing ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-500' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-none font-black text-xs transition-all disabled:opacity-60 cursor-pointer active:scale-[0.97] ${u.isFollowing ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-500' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
                   {toggleMutation.isPending ? '...' : u.isFollowing ? 'Unfollow' : '+ Follow'}
                 </button>
               )}
@@ -1636,7 +1636,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
         />
       )}
 
-      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl p-4 md:p-6 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-none p-4 md:p-6 text-white relative overflow-hidden">
         <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
         <div className="relative z-10">
           <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">Streamer Network</p>
@@ -1650,7 +1650,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
       <div className="gap-3 grid grid-cols-3 md:grid-cols-5">
         {subTabs.map(t => (
           <button key={t.id} onClick={() => setSubTab(t.id)}
-            className={`w-full cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-xl font-black text-sm transition-all ${subTab === t.id ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:brightness-[80%]'}`}>
+            className={`w-full cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-none font-black text-sm transition-all ${subTab === t.id ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:brightness-[80%]'}`}>
             {t.label}
             {/* {t.count !== undefined && <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${subTab === t.id ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-700'}`}>{t.count}</span>} */}
           </button>
@@ -1659,8 +1659,8 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
           <div className="flex gap-3">
             <input value={searchInput} onChange={e => setSearchInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && setSearch(searchInput)}
               placeholder="Cari username streamer..."
-              className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl px-5 py-3.5 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
-            <button onClick={() => setSearch(searchInput)} className="cursor-pointer active:scale-[0.97] px-6 py-3.5 bg-indigo-600 text-white rounded-xl font-black text-sm hover:bg-indigo-700 transition-all">Cari</button>
+              className="flex-1 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none px-5 py-3.5 font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-400 transition-all" />
+            <button onClick={() => setSearch(searchInput)} className="cursor-pointer active:scale-[0.97] px-6 py-3.5 bg-indigo-600 text-white rounded-none font-black text-sm hover:bg-indigo-700 transition-all">Cari</button>
           </div>
         )}
       </div>
@@ -1817,14 +1817,14 @@ export const DashboardStreamer = () => {
       <AnimatePresence>
         {showCopyModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowCopyModal(false)}>
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-3xl md:max-w-sm max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-none md:max-w-sm max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
               <div className="p-4 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 mt-1 md:mt-2 bg-green-100 dark:bg-green-950/40 rounded-xl flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-6 mt-1 md:mt-2 bg-green-100 dark:bg-green-950/40 rounded-none flex items-center justify-center">
                   <CheckCircle2 size={40} className="text-green-600 dark:text-green-400" />
                 </div>
                 <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">URL Tersalin!</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-6">Widget <span className="font-bold text-indigo-600 dark:text-indigo-400">{copiedLabel}</span> berhasil disalin.</p>
-                <button onClick={() => setShowCopyModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white font-black rounded-xl transition-all active:scale-[0.99]">OK, Mengerti</button>
+                <button onClick={() => setShowCopyModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white font-black rounded-none transition-all active:scale-[0.99]">OK, Mengerti</button>
               </div>
             </motion.div>
           </motion.div>
@@ -1835,14 +1835,14 @@ export const DashboardStreamer = () => {
       <AnimatePresence>
         {showFollowModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowFollowModal(false)}>
-            <motion.div initial={{ scale: 0.88, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.88, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+            <motion.div initial={{ scale: 0.88, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.88, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-none max-w-sm w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
               <div className="p-8 text-center">
-                <div className={`w-20 h-20 mx-auto mb-6 rounded-xl flex items-center justify-center text-5xl ${followAction.type === 'follow' ? 'bg-green-100 dark:bg-green-950/40' : 'bg-orange-100 dark:bg-orange-950/40'}`}>
+                <div className={`w-20 h-20 mx-auto mb-6 rounded-none flex items-center justify-center text-5xl ${followAction.type === 'follow' ? 'bg-green-100 dark:bg-green-950/40' : 'bg-orange-100 dark:bg-orange-950/40'}`}>
                   {followAction.type === 'follow' ? '🤝' : '👋'}
                 </div>
                 <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-1">{followAction.type === 'follow' ? 'Berhasil Follow!' : 'Berhasil Unfollow'}</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-8">Kamu {followAction.type === 'follow' ? 'sekarang mengikuti' : 'tidak lagi mengikuti'} <span className="font-bold text-indigo-600 dark:text-indigo-400">@{followAction.username}</span></p>
-                <button onClick={() => setShowFollowModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white font-black rounded-xl transition-all active:scale-[0.97]">OK, Mengerti</button>
+                <button onClick={() => setShowFollowModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white font-black rounded-none transition-all active:scale-[0.97]">OK, Mengerti</button>
               </div>
             </motion.div>
           </motion.div>
@@ -1853,7 +1853,7 @@ export const DashboardStreamer = () => {
       <AnimatePresence>
         {showToast && (
           <motion.div initial={{ y: -50, opacity: 0 }} animate={{ y: 20, opacity: 1 }} exit={{ y: -50, opacity: 0 }}
-            className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white px-8 py-4 rounded-[2rem] shadow-2xl flex items-center gap-3 font-bold border border-white/10 backdrop-blur-md">
+            className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white px-8 py-4 rounded-none shadow-2xl flex items-center gap-3 font-bold border border-white/10 backdrop-blur-md">
             <CheckCircle2 size={18} className="text-green-500" /> Pengaturan Tersimpan!
           </motion.div>
         )}
@@ -1864,10 +1864,10 @@ export const DashboardStreamer = () => {
         <AnimatePresence>
           {donationToasts.map(toast => (
             <motion.div key={toast.id} initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 100, opacity: 0 }}
-              className="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-2xl border border-slate-100 dark:border-slate-700 flex items-start gap-4">
+              className="bg-white dark:bg-slate-800 rounded-none p-5 shadow-2xl border border-slate-100 dark:border-slate-700 flex items-start gap-4">
               {toast.isWithdrawal
-                ? <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white text-xl flex-shrink-0 ${toast.status === 'COMPLETED' ? 'bg-green-500' : 'bg-red-500'}`}>{toast.status === 'COMPLETED' ? '✓' : '✕'}</div>
-                : <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">{renderIconPreview(settings.customIcon, 24)}</div>
+                ? <div className={`w-12 h-12 rounded-none flex items-center justify-center text-white text-xl flex-shrink-0 ${toast.status === 'COMPLETED' ? 'bg-green-500' : 'bg-red-500'}`}>{toast.status === 'COMPLETED' ? '✓' : '✕'}</div>
+                : <div className="w-12 h-12 bg-indigo-600 rounded-none flex items-center justify-center flex-shrink-0">{renderIconPreview(settings.customIcon, 24)}</div>
               }
               <div className="flex-1 min-w-0">
                 <span className={`text-[10px] font-black uppercase tracking-widest ${toast.isWithdrawal ? (toast.status === 'COMPLETED' ? 'text-green-600 dark:text-green-400' : 'text-red-500') : 'text-indigo-600 dark:text-indigo-400'}`}>
@@ -1884,20 +1884,20 @@ export const DashboardStreamer = () => {
       {/* ── Mobile Navbar ── */}
       <div className="lg:hidden fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 z-50 px-3 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 p-2 bg-red-200 rounded-lg flex items-center justify-center"><img src="/jellyfish.png" alt="icon" /></div>
+          <div className="w-10 h-10 p-2 bg-red-200 rounded-none flex items-center justify-center"><img src="/jellyfish.png" alt="icon" /></div>
           <span className="font-black text-lg tracking-tight text-slate-800 dark:text-slate-100">TTT</span>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={toggle} className="h-[40px] cursor-pointer active:scale-[0.97] flex items-center gap-2 px-3 rounded-lg border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700">
+          <button onClick={toggle} className="h-[40px] cursor-pointer active:scale-[0.97] flex items-center gap-2 px-3 rounded-none border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700">
             {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
           </button>
-          <button onClick={() => setActiveTab('contact')} className={`h-[40px] cursor-pointer active:scale-[0.97] flex items-center gap-2 px-3 rounded-lg border shadow-none font-medium text-md transition-all ${activeTab === 'contact' ? 'bg-slate-800 dark:bg-slate-700 text-white border-transparent' : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700'}`}>
+          <button onClick={() => setActiveTab('contact')} className={`h-[40px] cursor-pointer active:scale-[0.97] flex items-center gap-2 px-3 rounded-none border shadow-none font-medium text-md transition-all ${activeTab === 'contact' ? 'bg-slate-800 dark:bg-slate-700 text-white border-transparent' : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700'}`}>
             <HeadphonesIcon size={14} />
           </button>
-          <button onClick={() => setActiveTab('community')} className="h-[40px] cursor-pointer hover:brightness-90 active:scale-[0.97] relative flex items-center gap-2 px-3 py-3 rounded-lg font-medium text-md overflow-hidden" style={{ background: 'linear-gradient(90deg, #0f0c29, #302b63, #24243e, #0f0c29)', backgroundSize: '300% 100%', animation: 'rainbowSlide 3s ease-in-out infinite' }}>
+          <button onClick={() => setActiveTab('community')} className="h-[40px] cursor-pointer hover:brightness-90 active:scale-[0.97] relative flex items-center gap-2 px-3 py-3 rounded-none font-medium text-md overflow-hidden" style={{ background: 'linear-gradient(90deg, #0f0c29, #302b63, #24243e, #0f0c29)', backgroundSize: '300% 100%', animation: 'rainbowSlide 3s ease-in-out infinite' }}>
             <Users size={16} className="relative z-10 text-white" />
           </button>
-          <button onClick={() => setIsSidebarOpen(true)} className="h-[40px] cursor-pointer active:scale-[0.97] p-2 bg-white dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
+          <button onClick={() => setIsSidebarOpen(true)} className="h-[40px] cursor-pointer active:scale-[0.97] p-2 bg-white dark:bg-slate-800 rounded-none text-slate-600 dark:text-slate-400">
             <Menu size={24} />
           </button>
         </div>
@@ -1942,7 +1942,7 @@ export const DashboardStreamer = () => {
 
                   
                   {/* ── Konfigurasi Alert ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <SectionHeader icon={<Settings size={20} />} title="Konfigurasi Alert" color="bg-indigo-500" />
                     <div className="mt-8 space-y-6">
                       {/* Toggles */}
@@ -1950,7 +1950,7 @@ export const DashboardStreamer = () => {
                         { key: 'overlayEnabled', label: 'Aktifkan Overlay OBS',  desc: 'Alert tidak akan muncul di OBS sama sekali' },
                         { key: 'showTimestamp',  label: 'Tampilkan Jam Donasi',  desc: 'Waktu kapan donasi diterima overlay' },
                       ].map(({ key, label, desc }) => (
-                        <div key={key} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700">
+                        <div key={key} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-100 dark:border-slate-700">
                           <div>
                             <p className="font-black text-slate-700 dark:text-slate-200 text-sm">{label}</p>
                             <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">{desc}</p>
@@ -1963,7 +1963,7 @@ export const DashboardStreamer = () => {
                       ))}
 
                       {/* Donate URL */}
-                      <div className="bg-slate-100 dark:bg-slate-800 p-5 rounded-xl border border-slate-100/10 mb-2">
+                      <div className="bg-slate-100 dark:bg-slate-800 p-5 rounded-none border border-slate-100/10 mb-2">
                         <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">DONATE URL</label>
                         <div className="flex gap-3">
                           <input readOnly value={`https://taptiptup.vercel.app/donate/${user.username}`} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none overflow-hidden text-ellipsis" />
@@ -1977,7 +1977,7 @@ export const DashboardStreamer = () => {
                         <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
                           {ICON_PRESETS.map(({ emoji, label }) => (
                             <button key={emoji} onClick={() => upd('customIcon', emoji === '💜' ? '' : emoji)} title={label}
-                              className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 text-lg transition-all cursor-pointer active:scale-[0.95] ${
+                              className={`flex flex-col items-center gap-1 p-3 rounded-none border-2 text-lg transition-all cursor-pointer active:scale-[0.95] ${
                                 (settings.customIcon || '💜') === emoji || (!settings.customIcon && emoji === '💜')
                                   ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40'
                                   : 'border-slate-100 dark:border-slate-700 hover:border-slate-300 bg-slate-50 dark:bg-slate-800'
@@ -1998,14 +1998,14 @@ export const DashboardStreamer = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                           {['modern', 'classic', 'minimal'].map(t => (
                             <button key={t} onClick={() => upd('theme', t)}
-                              className={`cursor-pointer active:scale-[0.97] py-4 rounded-xl border-2 transition-all font-black text-sm capitalize ${settings.theme === t ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 shadow-md' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'}`}>{t}</button>
+                              className={`cursor-pointer active:scale-[0.97] py-4 rounded-none border-2 transition-all font-black text-sm capitalize ${settings.theme === t ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 shadow-md' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'}`}>{t}</button>
                           ))}
                         </div>
                       </div>
                       <div className="md:col-span-2">
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
                         <select value={settings.overlayPosition || 'bottom-right'} onChange={e => upd('overlayPosition', e.target.value)}
-                          className="w-full px-5 py-3 mt-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
+                          className="w-full px-5 py-3 mt-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
                           <option value="top-left">Kiri Atas</option><option value="top-right">Kanan Atas</option>
                           <option value="bottom-left">Kiri Bawah</option><option value="bottom-right">Kanan Bawah</option>
                           <option value="top-center">Tengah Atas</option><option value="bottom-center">Tengah Bawah</option>
@@ -2014,7 +2014,7 @@ export const DashboardStreamer = () => {
                       {/* <div className="flex flex-col gap-3">
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Animasi Masuk</label>
                         <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
-                          className="w-full p-5 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
+                          className="w-full p-5 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
                           <option value="bounce">Bounce</option><option value="slide-left">Slide Kiri</option>
                           <option value="slide-right">Slide Kanan</option><option value="fade">Fade</option>
                         </select>
@@ -2047,9 +2047,9 @@ export const DashboardStreamer = () => {
                                 type="color"
                                 value={val}
                                 onChange={e => upd(key, e.target.value)}  // ← e.target.value bukan e
-                                className="w-12 h-12.5 rounded-xl cursor-pointer bg-transparent border-0 p-0"
+                                className="w-12 h-12.5 rounded-none cursor-pointer bg-transparent border-0 p-0"
                               />
-                              <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-sm min-w-[40px] text-right">
+                              <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-none min-w-[40px] text-right">
                                 {val}
                               </span>
                               <div
@@ -2074,9 +2074,9 @@ export const DashboardStreamer = () => {
                               const alpha = settings.borderColor?.slice(7, 9) || '26';
                               upd('borderColor', `${e.target.value}${alpha}`);  // ← e.target.value
                             }}
-                            className="w-12 h-12.5 rounded-xl cursor-pointer bg-transparent border-0 p-0"
+                            className="w-12 h-12.5 rounded-none cursor-pointer bg-transparent border-0 p-0"
                           />
-                          <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-sm min-w-[40px] text-right">
+                          <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-none min-w-[40px] text-right">
                             {settings.borderColor?.slice(0, 7) || '#ffffff'}
                           </span>
                           <div
@@ -2106,7 +2106,7 @@ export const DashboardStreamer = () => {
                     </div> */}
 
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-xl font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2 mt-8">
+                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2 mt-8">
                       <Save size={20} />{saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}
                     </button>
                   </div>
@@ -2127,20 +2127,20 @@ export const DashboardStreamer = () => {
                   />
 
                   {/* ── Durasi ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
                     <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p>
                     <DurationTiersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
                   </div>
 
                   {/* ── Media ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
+                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
                     <SectionHeader icon={<ImageIcon size={20} />} title="Izinkan Donor Kirim Media" color="bg-purple-500" />
                     <MediaTriggersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} triggers={settings.mediaTriggers || []} onChange={v => upd('mediaTriggers', v)} />
                   </div>
 
                   {/* ── Sound ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <SectionHeader icon={<span className="text-lg">🔊</span>} title="Custom Suara per Nominal" color="bg-violet-500" />
                     <div className="mb-6 mt-5">
                       <SoundPicker label="Suara Default (semua donasi)" value={settings.soundUrl || ''} onChange={v => upd('soundUrl', v)} />
@@ -2152,8 +2152,8 @@ export const DashboardStreamer = () => {
                   <MilestonesEditor />
 
                   {/* ── OBS URL ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
-                    <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 mb-8">
+                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+                    <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 mb-8">
                       <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">OBS URL</label>
                       <div className="flex gap-3">
                         <input readOnly value={user.overlayUrl} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none overflow-hidden text-ellipsis" />
@@ -2161,13 +2161,13 @@ export const DashboardStreamer = () => {
                       </div>
                     </div>
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-xl font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
                       <Save size={20} />{saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                     </button>
                   </div>
 
                   {/* ── Widget URLs ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
+                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
                     <div className="flex justify-between items-center gap-2 mb-5">
                       <span className="text-xl font-black text-slate-900 dark:text-slate-100">Widget URLs untuk OBS</span>
                       <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-full text-[9px] font-black uppercase tracking-widest">Browser Source</span>
@@ -2181,8 +2181,8 @@ export const DashboardStreamer = () => {
                     ].map(({ label, emoji, path, desc, size }) => {
                       const widgetUrl = `${window.location.origin}/widget/${user.overlayToken}/${path}`;
                       return (
-                        <div key={path} className="flex items-center gap-4 bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-                          <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center text-xl flex-shrink-0">{emoji}</div>
+                        <div key={path} className="flex items-center gap-4 bg-white dark:bg-slate-800 rounded-none p-4 border border-slate-200 dark:border-slate-700">
+                          <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-none flex items-center justify-center text-xl flex-shrink-0">{emoji}</div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-0.5">
                               <span className="font-black text-slate-700 dark:text-slate-200 text-sm">{label}</span>
@@ -2191,7 +2191,7 @@ export const DashboardStreamer = () => {
                             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{desc}</p>
                             <p className="text-[10px] font-mono text-indigo-500 dark:text-indigo-400 truncate mt-0.5">{widgetUrl}</p>
                           </div>
-                          <button onClick={() => copyToClipboard(widgetUrl, label)} className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-indigo-100 dark:hover:bg-indigo-950/40 hover:text-indigo-600 text-slate-500 rounded-xl transition-all flex-shrink-0">
+                          <button onClick={() => copyToClipboard(widgetUrl, label)} className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-indigo-100 dark:hover:bg-indigo-950/40 hover:text-indigo-600 text-slate-500 rounded-none transition-all flex-shrink-0">
                             <Copy size={15} />
                           </button>
                         </div>
@@ -2220,9 +2220,9 @@ export const DashboardStreamer = () => {
 
             {activeTab === 'profile' && (
               <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-6 pb-6">
-                <div className="bg-indigo-600 rounded-xl px-6 py-6 text-white relative overflow-hidden">
+                <div className="bg-indigo-600 rounded-none px-6 py-6 text-white relative overflow-hidden">
                   <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                    <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center text-5xl font-black text-slate-900 shadow-xl">
+                    <div className="w-16 h-16 bg-white rounded-none flex items-center justify-center text-5xl font-black text-slate-900 shadow-xl">
                       {user.username.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1 text-center md:text-left space-y-2">
@@ -2235,7 +2235,7 @@ export const DashboardStreamer = () => {
                         <p className={`font-black text-lg transition-all ${showBalance ? 'text-white' : 'text-white/30 select-none tracking-widest'}`}>
                           {displayBalance}
                         </p>
-                        <button onClick={() => setShowBalance(v => !v)} className="cursor-pointer p-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-all">
+                        <button onClick={() => setShowBalance(v => !v)} className="cursor-pointer p-1.5 rounded-none bg-white/20 hover:bg-white/30 text-white transition-all">
                           {showBalance ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
                       </div> */}
@@ -2246,7 +2246,7 @@ export const DashboardStreamer = () => {
                   <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
                 </div>
                 {/* Profil Publik */}
-                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
+                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
                   <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-indigo-500" />
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
@@ -2256,9 +2256,9 @@ export const DashboardStreamer = () => {
                       </label>
                       <div className="flex gap-2">
                         <input readOnly value={`${window.location.origin}/donate/${user.username}`} 
-                          className="flex-1 bg-indigo-50 dark:bg-indigo-950/40 border-2 border-indigo-100 dark:border-indigo-900 rounded-xl p-5 font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none" />
+                          className="flex-1 bg-indigo-50 dark:bg-indigo-950/40 border-2 border-indigo-100 dark:border-indigo-900 rounded-none p-5 font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none" />
                         <button onClick={() => copyToClipboard(`${window.location.origin}/donate/${user.username}`)} 
-                          className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-6 rounded-xl transition-all flex items-center justify-center active:scale-95">
+                          className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-6 rounded-none transition-all flex items-center justify-center active:scale-95">
                           <Copy size={20} />
                         </button>
                       </div>
@@ -2277,7 +2277,7 @@ export const DashboardStreamer = () => {
                       <textarea 
                         value={profileForm.bio} 
                         onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))}
-                        className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-xl font-bold outline-none focus:border-indigo-500 h-32 transition-all" 
+                        className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-none font-bold outline-none focus:border-indigo-500 h-32 transition-all" 
                         placeholder="Ceritakan tentang kontenmu..." 
                       />
                     </div>
@@ -2317,7 +2317,7 @@ export const DashboardStreamer = () => {
                       <button 
                         onClick={() => updateProfileMutation.mutate(profileForm)} 
                         disabled={updateProfileMutation.isPending}
-                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                       >
                         <Save size={20} />
                         {updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
@@ -2348,7 +2348,7 @@ export const DashboardStreamer = () => {
 
             {activeTab === 'poll' && (
               <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
+                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
                   <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
                   <PollManager overlayToken={user.overlayToken} />
                 </div>
@@ -2359,7 +2359,7 @@ export const DashboardStreamer = () => {
 
             {activeTab === 'subathon' && (
               <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
+                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
                   <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" />
                   <SubathonManager overlayToken={user.overlayToken} />
                 </div>
@@ -2368,7 +2368,7 @@ export const DashboardStreamer = () => {
 
             {activeTab === 'leaderboard' && (
               <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
+                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
                   <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
                   <LeaderboardSettings overlayToken={user?.overlayToken} />
                 </div>
