@@ -9,6 +9,7 @@ import {
   Timer,
   TrendingUp,
   Trophy,
+  User,
   Vote,
   Wallet,
   X,
@@ -42,9 +43,11 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
   const menuItems = [
     { id: 'settings',    label: 'Editor Overlay',   icon: <Layout size={20} /> },
     { id: 'history',     label: 'Riwayat Donasi',   icon: <History size={20} /> },
-    { id: 'myDonations', label: 'Berdonasi',   icon: <Heart size={20} /> },   
+    { id: 'myDonations', label: 'Berdonasi',        icon: <Heart size={20} /> },   
     { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },
     { id: 'poll',        label: 'Poll & Voting',    icon: <Vote size={20} /> },
+    // Tambahkan property 'mobileOnly' pada profile
+    { id: 'profile',     label: 'Profile Saya',     icon: <User size={20} />, mobileOnly: true },
     { id: 'subathon',    label: 'Subathon',         icon: <Timer size={20} /> },
     { id: 'milestones',  label: 'Milestones',       icon: <TrendingUp size={20} /> },
     { id: 'leaderboard', label: 'Leaderboard',      icon: <Trophy size={20} /> },
@@ -140,7 +143,9 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab(item.id);
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer active:scale-[0.99] w-full flex items-center gap-4 px-4 p-3 rounded-none font-black transition-all text-sm ${
+              className={`cursor-pointer active:scale-[0.99] w-full flex items-center gap-4 px-4 p-3 rounded-none font-black transition-all text-sm 
+                ${item.mobileOnly ? 'lg:hidden' : ''} // <--- Tambahkan Baris Ini
+                ${
                 activeTab === item.id
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 dark:shadow-indigo-900/30'
                   : 'text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'

@@ -1801,6 +1801,13 @@ export const DashboardStreamer = () => {
     setLocalSettings(s => ({ ...s, [key]: val }));
   };
 
+  const copyToClipboard = (text, label = 'URL') => {
+    navigator.clipboard.writeText(text);
+    setCopiedUrl(text);
+    setCopiedLabel(label);
+    setShowCopyModal(true);
+  };
+
   const TAB_TITLE = {
     settings: 'Dashboard', history: 'Riwayat', wallet: 'Wallet', community: 'Community',
     myDonations: 'Riwayat Berdonasi',     
@@ -1814,7 +1821,7 @@ export const DashboardStreamer = () => {
     : 'Rp ••••••';
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-6 text-slate-900 dark:text-slate-100">
+    <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
 
       {/* ── Modal Copy URL ── */}
       <AnimatePresence>
