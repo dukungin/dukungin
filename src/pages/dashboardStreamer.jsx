@@ -1121,7 +1121,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
       <div>
         {theme === 'modern' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px' }}>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>
+            <div style={{ width: 34, height: 34, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>
               {renderIconPreview(settings.customIcon, 16)}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -1153,7 +1153,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
       </div>
     );
     return (
-      <div style={{ backgroundColor: theme === 'minimal' ? 'transparent' : bg, color: fg, maxWidth: `${maxW}px`, width: '100%', borderRadius: theme === 'modern' ? 14 : theme === 'classic' ? 4 : 0, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.45)', border: theme === 'minimal' ? `2px solid ${bg}` : `2px solid ${settings.borderColor || 'rgba(255,255,255,0.15)'}` }}>
+      <div style={{ backgroundColor: theme === 'minimal' ? 'transparent' : bg, color: fg, maxWidth: `${maxW}px`, width: '100%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.45)', border: theme === 'minimal' ? `2px solid ${bg}` : `2px solid ${settings.borderColor || 'rgba(255,255,255,0.15)'}` }}>
         {inner}
       </div>
     );
