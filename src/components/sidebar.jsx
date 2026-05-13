@@ -140,7 +140,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab(item.id);
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer w-full flex items-center gap-4 px-4 p-3 rounded-2xl font-black transition-all text-sm ${
+              className={`cursor-pointer active:scale-[0.99] w-full flex items-center gap-4 px-4 p-3 rounded-xl font-black transition-all text-sm ${
                 activeTab === item.id
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 dark:shadow-indigo-900/30'
                   : 'text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'

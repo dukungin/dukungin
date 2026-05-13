@@ -333,8 +333,10 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
     queryFn: () => fetchPublicProfile(username),
     enabled: !!username,
   });
-
+  
   const donateUrl = `${window.location.origin}/donate/${username}`;
+  const [copied, setCopied] = useState(false);
+  const copy = () => { navigator.clipboard.writeText(donateUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); };
 
   if (error) {
     return (
@@ -365,7 +367,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
       >
         <motion.div 
           initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }}
-          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900 rounded-xl h-max pb-4 md:max-h-[90vh] overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
+          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900 rounded-xl h-[84vh] pb-4 md:max-h-[90vh] overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
           onClick={e => e.stopPropagation()}
         >
           
@@ -402,11 +404,14 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
 
               <div className="space-y-2">
                 <div className="flex flex-col mt-auto space-y-1 gap-2 mt-4">
-                  <button className="w-full py-4 bg-indigo-600 text-white rounded-xl font-black text-sm shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
-                    <Heart size={16} /> Follow
+                  <button
+                    onClick={copy}
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
+                  >
+                    {copied ? <><CheckCircle2 size={16} /> Tersalin!</> : <><Copy size={16} /> Salin Link Profile</>}
                   </button>
-                  <button className="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
-                    <MessageSquare size={16} /> Kirim Pesan
+                  <button className="w-full py-3 bg-indigo-600 text-white rounded-xl font-black text-sm shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                    <Heart size={16} /> Follow
                   </button>
                 </div>
               </div>
@@ -471,18 +476,9 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
               {/* Donation & Copy Link */}
               <div className="pt-2 space-y-3">
                 <a href={donateUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-md shadow-xl shadow-indigo-100 dark:shadow-indigo-900/20 hover:brightness-110 transition-all active:scale-[0.98]">
-                  <Heart size={20} fill="white" /> Dukung @{username}
+                  className="flex items-center justify-center gap-3 w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm shadow-xl shadow-indigo-100 dark:shadow-indigo-900/20 hover:brightness-110 transition-all active:scale-[0.98]">
+                  <Heart size={16} fill="white" /> Dukung @{username}
                 </a>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(donateUrl);
-                    alert('Link profil berhasil disalin!');
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
-                >
-                  <Copy size={14} /> Salin Link Profil
-                </button>
               </div>
             </div>
 
