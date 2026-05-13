@@ -103,6 +103,7 @@ const DEFAULT_SETTINGS = {
 
 const ICON_PRESETS = [
   { emoji: '💜', label: 'Default' }, { emoji: '❤️',  label: 'Merah'  },
+  { emoji: '🐧', label: 'Penguin' }, { emoji: '❤️',  label: 'Merah'  },
   { emoji: '🔥',  label: 'Api'    }, { emoji: '⭐',  label: 'Bintang'},
   { emoji: '🎮',  label: 'Gamer'  }, { emoji: '🎵',  label: 'Musik'  },
   { emoji: '🐉',  label: 'Naga'   }, { emoji: '💰',  label: 'Duit'   },
