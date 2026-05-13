@@ -43,6 +43,7 @@ import GhostAlertPage from './ghotAlert';
 import { ContactPage } from './support';
 import { WithdrawPage } from './withdrawPage';
 import MyDonationsHistory from './MyDonationsHistory';
+import { useSearchParams } from 'react-router-dom';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -1228,42 +1229,62 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
 };
 
 // ─── FITUR BARU 1: HistoryPage dengan Eye Toggle ──────────────────────────────
-
 const HistoryPage = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
-  // ── Eye toggles ──
-  const [showAmounts, setShowAmounts]  = useState(true);
-  const [showEmails, setShowEmails]    = useState(false);
+  const [historyTab, setHistoryTab] = useState('received'); // 'received' | 'sent'
 
+  // Eye toggles (hanya relevan untuk tab received)
+  const [showAmounts, setShowAmounts] = useState(true);
+  const [showEmails, setShowEmails] = useState(false);
+
+  // Fetch Sent Donations
+  const fetchSentDonations = async ({ page = 1 } = {}) => {
+    const params = new URLSearchParams({ page, limit: 20 });
+    return (await axios.get(`${BASE_URL}/api/donations/sent?${params}`, { headers: authHeader() })).data;
+  };
+
+  const { data: sentData, isLoading: sentLoading } = useQuery({
+    queryKey: ['sentDonations', page],
+    queryFn: () => fetchSentDonations({ page }),
+    enabled: historyTab === 'sent',
+    keepPreviousData: true,
+    refetchInterval: 30000,
+  });
+
+  // Fetch Received Donations
   const { data, isLoading, refetch, isFetching } = useQuery({
     queryKey: ['donationHistory', page, statusFilter],
     queryFn: () => fetchHistory({ page, limit: 20, status: statusFilter }),
+    enabled: historyTab === 'received',
     keepPreviousData: true,
     refetchInterval: 15000,
   });
+
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['donationStats'],
     queryFn: fetchStats,
     refetchInterval: 30000,
   });
 
-  const donations  = data?.donations  || [];
+  const donations = data?.donations || [];
   const pagination = data?.pagination || {};
 
-  // Masked amount
-  const maskAmount = (amount) => showAmounts ? `Rp ${Number(amount).toLocaleString('id-ID')}` : 'Rp ••••••';
-  const maskEmail  = (email)  => showEmails  ? (email || '-')                                  : '••••@•••';
+  const maskAmount = (amount) => 
+    showAmounts ? `Rp ${Number(amount).toLocaleString('id-ID')}` : 'Rp ••••••';
+
+  const maskEmail = (email) => 
+    showEmails ? (email || '-') : '••••@•••';
 
   return (
     <div className="space-y-6 pb-6">
-      {/* Stats cards */}
+      {/* Stats Cards - hanya untuk received */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Semua Waktu', value: statsLoading ? '...' : maskAmount(stats?.allTime?.total || 0),  sub: `${stats?.allTime?.count || 0} donasi`,   color: 'bg-indigo-600', icon: '💜' },
-          { label: 'Bulan Ini',         value: statsLoading ? '...' : maskAmount(stats?.thisMonth?.total || 0), sub: `${stats?.thisMonth?.count || 0} donasi`, color: 'bg-violet-500', icon: '📅' },
-          { label: 'Hari Ini',          value: statsLoading ? '...' : maskAmount(stats?.today?.total || 0),     sub: `${stats?.today?.count || 0} donasi`,    color: 'bg-purple-500', icon: '⚡' },
-          { label: 'Top Donatur',       value: statsLoading ? '...' : (stats?.topDonors?.[0]?.name || '-'),    sub: stats?.topDonors?.[0] ? maskAmount(stats.topDonors[0].totalAmount) : 'Belum ada', color: 'bg-amber-500', icon: '🏆' },
+          { label: 'Total Semua Waktu', value: statsLoading ? '...' : maskAmount(stats?.allTime?.total || 0), sub: `${stats?.allTime?.count || 0} donasi`, color: 'bg-indigo-600', icon: '💜' },
+          { label: 'Bulan Ini', value: statsLoading ? '...' : maskAmount(stats?.thisMonth?.total || 0), sub: `${stats?.thisMonth?.count || 0} donasi`, color: 'bg-violet-500', icon: '📅' },
+          { label: 'Hari Ini', value: statsLoading ? '...' : maskAmount(stats?.today?.total || 0), sub: `${stats?.today?.count || 0} donasi`, color: 'bg-purple-500', icon: '⚡' },
+          { label: 'Top Donatur', value: statsLoading ? '...' : (stats?.topDonors?.[0]?.name || '-'), sub: stats?.topDonors?.[0] ? maskAmount(stats.topDonors[0].totalAmount) : 'Belum ada', color: 'bg-amber-500', icon: '🏆' },
         ].map((card) => (
           <div key={card.label} className={`${card.color} rounded-xl p-6 text-white relative overflow-hidden`}>
             <div className="absolute top-3 right-4 text-2xl opacity-20">{card.icon}</div>
@@ -1277,102 +1298,243 @@ const HistoryPage = () => {
       {stats && <LeaderboardCard stats={stats} />}
 
       <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
-        {/* Header + toggle buttons */}
+        {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 md:px-10 py-5 border-b border-slate-100 dark:border-slate-800 gap-4">
           <div>
             <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Riwayat Donasi</p>
-            {pagination.total > 0 && <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">Total {pagination.total} donasi</p>}
           </div>
-          <div className="flex items-center gap-3 flex-wrap">
-            {/* ── Eye toggle buttons ── */}
+
+          {/* Tab Switch */}
+          <div className="flex gap-2">
+            {[
+              { id: 'received', label: '📥 Donasi Diterima' },
+              { id: 'sent', label: '📤 Donasi Terkirim' },
+            ].map((t) => (
+              <button
+                key={t.id}
+                onClick={() => {
+                  setHistoryTab(t.id);
+                  setPage(1);
+                  setStatusFilter(''); // reset filter saat ganti tab
+                }}
+                className={`px-5 py-2.5 rounded-2xl font-black text-sm transition-all ${
+                  historyTab === t.id
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:border-indigo-200'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Controls hanya untuk Received */}
+        {historyTab === 'received' && (
+          <div className="px-6 md:px-10 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-3">
+            {/* Eye Toggles */}
             <div className="flex gap-1.5">
-              <button onClick={() => setShowAmounts(v => !v)} title={showAmounts ? 'Sembunyikan nominal' : 'Tampilkan nominal'}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black transition-all border-2 ${showAmounts ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-400 hover:border-indigo-300'}`}>
+              <button
+                onClick={() => setShowAmounts(v => !v)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black transition-all border-2 ${
+                  showAmounts ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 text-slate-400'
+                }`}
+              >
                 {showAmounts ? <Eye size={12} /> : <EyeOff size={12} />} Nominal
               </button>
-              <button onClick={() => setShowEmails(v => !v)} title={showEmails ? 'Sembunyikan email' : 'Tampilkan email'}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black transition-all border-2 ${showEmails ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-400 hover:border-indigo-300'}`}>
+              <button
+                onClick={() => setShowEmails(v => !v)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black transition-all border-2 ${
+                  showEmails ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 text-slate-400'
+                }`}
+              >
                 {showEmails ? <Eye size={12} /> : <EyeOff size={12} />} Email
               </button>
             </div>
+
+            {/* Status Filter */}
             <div className="flex gap-1">
-              {[{ val: '', label: 'Semua' }, { val: 'PAID', label: 'PAID' }, { val: 'PENDING', label: 'Pending' }, { val: 'EXPIRED', label: 'Expired' }].map(f => (
-                <button key={f.val} onClick={() => { setStatusFilter(f.val); setPage(1); }}
-                  className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${statusFilter === f.val ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
+              {[
+                { val: '', label: 'Semua' },
+                { val: 'PAID', label: 'PAID' },
+                { val: 'PENDING', label: 'Pending' },
+                { val: 'EXPIRED', label: 'Expired' },
+              ].map((f) => (
+                <button
+                  key={f.val}
+                  onClick={() => {
+                    setStatusFilter(f.val);
+                    setPage(1);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${
+                    statusFilter === f.val
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200'
+                  }`}
+                >
                   {f.label}
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-2 text-xs text-green-500 font-bold">
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" /> Auto 15s
-              <button onClick={() => refetch()} disabled={isFetching} className="ml-1 text-slate-400 hover:text-indigo-600 transition-colors disabled:opacity-50">
+
+            <div className="ml-auto flex items-center gap-2 text-xs text-green-500 font-bold">
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              Auto 15s
+              <button onClick={() => refetch()} disabled={isFetching} className="ml-1 text-slate-400 hover:text-indigo-600">
                 <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
               </button>
             </div>
           </div>
-        </div>
+        )}
 
-        {isLoading
-          ? <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />Memuat riwayat...</div>
-          : (
+        {/* Table Content */}
+        <div className="overflow-x-auto">
+          {historyTab === 'received' ? (
+            /* ==================== RECEIVED TABLE ==================== */
             <>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left min-w-[700px]">
-                  <thead>
-                    <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                      {['Donatur', 'Jumlah', 'Pesan', 'Media', 'Status', 'Waktu'].map((h, i) => (
-                        <th key={h} className={`px-6 md:px-8 py-6 ${i === 4 ? 'text-center' : ''}`}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
-                    {donations.length === 0
-                      ? <tr><td colSpan={6} className="text-center py-16 text-slate-400 font-bold">Belum ada donasi masuk</td></tr>
-                      : donations.map((item) => (
-                        <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
-                          <td className="px-6 md:px-8 py-5">
-                            <p className="font-black text-slate-700 dark:text-slate-200 text-sm">{item.donorName || 'Anonim'}</p>
-                            {/* ── Email dengan mask ── */}
-                            <p className={`text-[10px] font-mono mt-0.5 transition-all ${showEmails ? 'text-slate-400 dark:text-slate-500' : 'text-slate-200 dark:text-slate-700 select-none'}`}>
-                              {maskEmail(item.donorEmail)}
-                            </p>
+              {isLoading ? (
+                <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
+                  <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
+                  Memuat riwayat...
+                </div>
+              ) : (
+                <>
+                  <table className="w-full text-left min-w-[700px]">
+                    <thead>
+                      <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                        {['Donatur', 'Jumlah', 'Pesan', 'Media', 'Status', 'Waktu'].map((h, i) => (
+                          <th key={h} className={`px-6 md:px-8 py-6 ${i === 4 ? 'text-center' : ''}`}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
+                      {donations.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="text-center py-16 text-slate-400 font-bold">
+                            Belum ada donasi masuk
                           </td>
-                          {/* ── Amount dengan mask ── */}
-                          <td className="px-6 md:px-8 py-5">
-                            <p className={`font-black transition-all ${showAmounts ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-300 dark:text-slate-700 select-none tracking-widest'}`}>
-                              {maskAmount(item.amount)}
-                            </p>
-                          </td>
-                          <td className="px-6 md:px-8 py-5 max-w-[200px]">
-                            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic truncate">
-                              {item.message ? `"${item.message}"` : <span className="text-slate-300 dark:text-slate-600 not-italic font-normal">-</span>}
-                            </p>
-                          </td>
-                          <td className="px-6 md:px-8 py-5">
-                            {item.mediaUrl
-                              ? <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] font-black text-purple-600 dark:text-purple-400 hover:text-purple-800 transition-colors">
+                        </tr>
+                      ) : (
+                        donations.map((item) => (
+                          <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
+                            <td className="px-6 md:px-8 py-5">
+                              <p className="font-black text-slate-700 dark:text-slate-200 text-sm">
+                                {item.donorName || 'Anonim'}
+                              </p>
+                              <p className={`text-[10px] font-mono mt-0.5 transition-all ${showEmails ? 'text-slate-400' : 'text-slate-200 dark:text-slate-700 select-none'}`}>
+                                {maskEmail(item.donorEmail)}
+                              </p>
+                            </td>
+                            <td className="px-6 md:px-8 py-5">
+                              <p className={`font-black transition-all ${showAmounts ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-300 dark:text-slate-700 select-none tracking-widest'}`}>
+                                {maskAmount(item.amount)}
+                              </p>
+                            </td>
+                            <td className="px-6 md:px-8 py-5 max-w-[200px]">
+                              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic truncate">
+                                {item.message ? `"${item.message}"` : <span className="text-slate-300 dark:text-slate-600 not-italic font-normal">-</span>}
+                              </p>
+                            </td>
+                            <td className="px-6 md:px-8 py-5">
+                              {item.mediaUrl ? (
+                                <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] font-black text-purple-600 hover:text-purple-800">
                                   {item.mediaType === 'video' ? <Video size={12} /> : <ImageIcon size={12} />} Lihat
                                 </a>
-                              : <span className="text-slate-300 dark:text-slate-600 text-xs">-</span>}
-                          </td>
-                          <td className="px-6 md:px-8 py-5 text-center">
-                            <span className={`px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest ${item.status === 'PAID' ? 'bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400' : item.status === 'EXPIRED' ? 'bg-red-100 dark:bg-red-950/40 text-red-400' : 'bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400'}`}>{item.status}</span>
-                          </td>
-                          <td className="px-6 md:px-8 py-5"><p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{formatDate(item.createdAt)}</p></td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
-              {pagination.totalPages > 1 && (
-                <div className="flex items-center justify-between px-8 py-4 border-t border-slate-100 dark:border-slate-800">
-                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">← Sebelumnya</button>
-                  <span className="text-xs font-bold text-slate-400">Halaman <span className="text-indigo-600 font-black">{page}</span> dari {pagination.totalPages}</span>
-                  <button onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))} disabled={page === pagination.totalPages} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">Berikutnya →</button>
-                </div>
+                              ) : (
+                                <span className="text-slate-300 dark:text-slate-600 text-xs">-</span>
+                              )}
+                            </td>
+                            <td className="px-6 md:px-8 py-5 text-center">
+                              <span className={`px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest ${
+                                item.status === 'PAID' ? 'bg-green-100 dark:bg-green-950/40 text-green-600' :
+                                item.status === 'EXPIRED' ? 'bg-red-100 dark:bg-red-950/40 text-red-400' :
+                                'bg-amber-100 dark:bg-amber-950/40 text-amber-600'
+                              }`}>
+                                {item.status}
+                              </span>
+                            </td>
+                            <td className="px-6 md:px-8 py-5">
+                              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">
+                                {formatDate(item.createdAt)}
+                              </p>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+
+                  {pagination.totalPages > 1 && (
+                    <div className="flex items-center justify-between px-8 py-4 border-t border-slate-100 dark:border-slate-800">
+                      <button
+                        onClick={() => setPage(p => Math.max(1, p - 1))}
+                        disabled={page === 1}
+                        className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 disabled:opacity-40"
+                      >
+                        ← Sebelumnya
+                      </button>
+                      <span className="text-xs font-bold text-slate-400">
+                        Halaman <span className="text-indigo-600">{page}</span> dari {pagination.totalPages}
+                      </span>
+                      <button
+                        onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
+                        disabled={page === pagination.totalPages}
+                        className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 disabled:opacity-40"
+                      >
+                        Berikutnya →
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </>
+          ) : (
+            /* ==================== SENT TABLE ==================== */
+            <table className="w-full text-left min-w-[600px]">
+              <thead>
+                <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                  {['Kepada', 'Jumlah', 'Pesan', 'Status', 'Waktu'].map(h => (
+                    <th key={h} className="px-6 md:px-8 py-6">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
+                {sentLoading ? (
+                  <tr><td colSpan={5} className="text-center py-20">Memuat donasi terkirim...</td></tr>
+                ) : (sentData?.donations || []).length === 0 ? (
+                  <tr><td colSpan={5} className="text-center py-16 text-slate-400 font-bold">Belum ada donasi terkirim</td></tr>
+                ) : (
+                  (sentData?.donations || []).map((item) => (
+                    <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
+                      <td className="px-6 md:px-8 py-5">
+                        <p className="font-black text-slate-700 dark:text-slate-200">@{item.userId?.username || item.username || '-'}</p>
+                      </td>
+                      <td className="px-6 md:px-8 py-5 font-black text-indigo-600">
+                        Rp {Number(item.amount).toLocaleString('id-ID')}
+                      </td>
+                      <td className="px-6 md:px-8 py-5 max-w-[250px]">
+                        <p className="text-slate-500 dark:text-slate-400 text-sm italic truncate">
+                          {item.message || '-'}
+                        </p>
+                      </td>
+                      <td className="px-6 md:px-8 py-5">
+                        <span className={`px-3 py-1.5 rounded-full text-[10px] font-black ${
+                          item.status === 'PAID' ? 'bg-green-100 text-green-600 dark:bg-green-950/40 dark:text-green-400' : 
+                          'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400'
+                        }`}>
+                          {item.status}
+                        </span>
+                      </td>
+                      <td className="px-6 md:px-8 py-5 text-[10px] text-slate-400 dark:text-slate-500">
+                        {formatDate(item.createdAt)}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           )}
+        </div>
       </div>
     </div>
   );
@@ -1508,6 +1670,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
 
 export const DashboardStreamer = () => {
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab]         = useState('settings');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showToast, setShowToast]         = useState(false);
@@ -1542,6 +1705,13 @@ export const DashboardStreamer = () => {
       setLocalSettings({ ...DEFAULT_SETTINGS, ...s });
     }
   }, [profileData]);
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab');
+    if (tabFromUrl && ['settings','history','wallet','community','myDonations','profile','poll','subathon','milestones','leaderboard','contact','ghostAlert','admin'].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
 
   const isSuperAdmin = useMemo(() => {
     const payload = getTokenPayload();
