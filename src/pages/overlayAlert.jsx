@@ -235,21 +235,21 @@ const OverlayAlert = () => {
                 <div className='font-bold' style={{
                   fontSize: 20, fontWeight: 800, opacity: 0.65,
                   textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4,
-                  color: fg,
+                  color: fg, fontWeight: 'bold'
                 }}>
                   Donasi Masuk
                 </div>
-                <div className='font-bold' style={{ fontSize: 20, fontWeight: 700, color: fg, opacity: 0.8, marginBottom: 2 }}>
+                <div className='font-bold' style={{ fontSize: 20, fontWeight: 700, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 'bold' }}>
                   @{alert.donorName}
                 </div>
                 <div className='font-bold' style={{
                   fontSize: 22, fontWeight: 900, color: highlight,
-                  letterSpacing: '-0.3px', lineHeight: 1,
+                  letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 'bold'
                 }}>
                   Rp {Number(alert.amount).toLocaleString('id-ID')}
                 </div>
                 {alert.message && (
-                  <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4 }}>
+                  <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4, fontWeight: 'bold' }}>
                     "{alert.message}"
                   </div>
                 )}
