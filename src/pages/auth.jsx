@@ -23,7 +23,7 @@ const getTheme = (dark) => ({
   heading:          dark ? '#ffffff'                       : '#1e1b4b',
   subtext:          dark ? '#475569'                       : '#64748b',
   label:            dark ? '#818cf8'                       : '#4f46e5',
-  inputText:        dark ? '#ffffff'                       : '#1e1b4b',
+  inputText:        dark ? '#1e1b4b'                       : '#1e1b4b',
   inputPlaceholder: dark ? 'rgba(255,255,255,0.28)'        : 'rgba(100,90,200,0.35)',
   iconDefault:      dark ? '#94a3b8'                       : '#94a3b8',
   switchText:       dark ? '#475569'                       : '#64748b',
@@ -110,11 +110,11 @@ const AuthInput = ({ icon, type='text', value, onChange, placeholder, T }) => {
           background: focused ? T.inputBgFocus : T.inputBg,
           border: `1.5px solid ${focused ? T.inputBorderFocus : T.inputBorder}`,
           borderRadius:0, padding:'15px 48px',
-          // color: T.inputText, 
+          color: T.inputText, 
           fontSize:15, fontWeight:600,
           outline:'none', transition:'all 0.2s',
         }}
-        className="auth-input-field dark:text-slate-900 text-white placeholder:text-slate-300"
+        className="auth-input-field"
       />
       {isPassword && (
         <button type="button" onClick={() => setShowPassword(v => !v)}
