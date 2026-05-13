@@ -1618,7 +1618,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
   };
 
   return (
-    <div className="space-y-3 pb-6">
+    <div className="space-y-3 pb-6 min-h-[90vh]">
       {/* Profile modal */}
       {viewingProfile && (
         <StreamerProfileModal
