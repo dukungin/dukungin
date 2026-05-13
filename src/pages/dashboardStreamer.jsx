@@ -1127,9 +1127,9 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
               {renderIconPreview(settings.customIcon, 16)}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 9, fontWeight: 700, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Donasi Masuk!</div>
-              <div style={{ fontSize: 13, fontWeight: 800, lineHeight: 1.2 }}>@{currentDonor.name} · Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
-              <div style={{ fontSize: 9, opacity: 0.7, fontStyle: 'italic', marginTop: 2 }}>"{currentDonor.msg}"</div>
+              <div style={{ fontSize: 17, fontWeight: 700, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Donasi Masuk!</div>
+              <div style={{ fontSize: 18, fontWeight: 800, lineHeight: 1.2 }}>@{currentDonor.name} · Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
+              <div style={{ fontSize: 17, opacity: 0.7, marginTop: 2 }}>"{currentDonor.msg}"</div>
               {settings.showTimestamp !== false && (
                 <div style={{ fontSize: 8, opacity: 0.5, fontFamily: 'monospace', marginTop: 3 }}>🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</div>
               )}
@@ -1138,7 +1138,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         )}
         {theme === 'classic' && (
           <div style={{ padding: '10px 14px', border: '2px solid rgba(255,255,255,0.25)' }}>
-            <div style={{ fontSize: 9, fontWeight: 700, opacity: 0.6, textTransform: 'uppercase' }}>Donasi Masuk!</div>
+            <div style={{ fontSize: 9, fontWeight: 700, opacity: 0.6, textTransform: 'uppercase' }}>Dukungan Masuk!</div>
             <div style={{ fontSize: 15, fontWeight: 800 }}>@{currentDonor.name}</div>
             <div style={{ fontSize: 12, fontWeight: 700 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
             <div style={{ fontSize: 9, opacity: 0.6, fontStyle: 'italic', marginTop: 2 }}>"{currentDonor.msg}"</div>
@@ -2135,7 +2135,7 @@ export const DashboardStreamer = () => {
                                 </span>
                               </div>
                               <div
-                                className="flex-1 ml-[2px] md:ml-0 h-11 border border-slate-200 dark:border-slate-700"
+                                className="ml-[2px] md:ml-0 w-full h-11 border border-slate-200 dark:border-slate-700"
                                 style={{ backgroundColor: val }}
                               />
                             </div>
@@ -2148,7 +2148,7 @@ export const DashboardStreamer = () => {
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                           Warna Border
                         </label>
-                        <div className="md:flex items-center gap-2">
+                        <div className="md:flex w-full items-center gap-2">
                           <div className='w-full flex items-center gap-1'>
                             <input
                               type="color"
@@ -2164,7 +2164,7 @@ export const DashboardStreamer = () => {
                             </span>
                           </div>
                           <div
-                            className="flex-1 ml-[2px] md:ml-0 h-11 border border-slate-200 dark:border-slate-700"
+                            className="ml-[2px] w-full md:ml-0 h-11 border border-slate-200 dark:border-slate-700"
                             style={{ backgroundColor: settings.borderColor?.slice(0, 7) || '#ffffff' }}
                           />
                         </div>

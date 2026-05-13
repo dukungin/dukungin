@@ -194,7 +194,7 @@ const OverlayAlert = () => {
   const renderTimestamp = () => {
     if (!showTs || !alert?.receivedAt) return null;
     return (
-      <div style={{ fontSize: 9, opacity: 0.55, fontFamily: 'monospace', letterSpacing: '0.04em', marginTop: 4 }}>
+      <div style={{ fontSize: 14, opacity: 0.55, fontFamily: 'monospace', letterSpacing: '0.04em', marginTop: 4 }}>
         🕐 {formatTimestamp(alert.receivedAt)}
       </div>
     );
@@ -239,17 +239,17 @@ const OverlayAlert = () => {
                 }}>
                   Donasi Masuk
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: fg, opacity: 0.8, marginBottom: 2 }}>
+                <div style={{ fontSize: 18, fontWeight: 700, color: fg, opacity: 0.8, marginBottom: 2 }}>
                   @{alert.donorName}
                 </div>
                 <div style={{
-                  fontSize: 20, fontWeight: 900, color: highlight,
+                  fontSize: 18, fontWeight: 900, color: highlight,
                   letterSpacing: '-0.3px', lineHeight: 1,
                 }}>
                   Rp {Number(alert.amount).toLocaleString('id-ID')}
                 </div>
                 {alert.message && (
-                  <div style={{ fontSize: 11, color: fg, opacity: 0.7, marginTop: 5, fontStyle: 'italic', lineHeight: 1.4 }}>
+                  <div style={{ fontSize: 18, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4 }}>
                     "{alert.message}"
                   </div>
                 )}
