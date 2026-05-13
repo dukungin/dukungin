@@ -294,9 +294,9 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
           <h2 style={{ color: C.muted, fontSize: 13, transition: "color 0.4s" }}>MADE WITH ❤️ FROM INDONESIA</h2>
         </div>
 
-        <span className="md:flex hidden" style={{ color: C.line2 }}>|</span>
+        <span className="md:flex hidden mx-[1px]" style={{ color: C.line2 }}>|</span>
 
-        <div className="flex items-center gap-5 md:gap-0">
+        <div className="flex items-center gap-5 md:gap-4">
           {/* Theme Toggle */}
           <ThemeToggle isDark={isDark} onToggle={onToggleTheme} C={C} />
 

@@ -1297,9 +1297,9 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
             transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
             className="fixed inset-0 z-[101] flex items-center justify-center px-4 pointer-events-none"
           >
-            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-xl shadow-2xl shadow-indigo-200/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800 overflow-hidden pointer-events-auto">
+            <div className="relative overflow-hidden w-full md:max-w-md max-w-lg bg-white dark:bg-slate-900 rounded-xl shadow-2xl shadow-indigo-200/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800 overflow-hidden pointer-events-auto">
               {/* Header gradient stripe */}
-              <div className="h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500" />
+              <div className="relative h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500" />
 
               <div className="p-7 space-y-5">
                 {/* Close + Title */}
@@ -1316,7 +1316,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                   </div>
                   <button
                     onClick={onClose}
-                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 text-slate-400 dark:text-slate-500 flex items-center justify-center transition-all"
+                    className="absolute top-0 right-0 cursor-pointer active:scale-[0.98] hover:brightness-90 w-10 h-10 bg-red-200 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 text-red-700 dark:text-slate-500 flex items-center justify-center transition-all"
                   >
                     <X size={15} />
                   </button>
@@ -2195,13 +2195,13 @@ const SupporterPage = () => {
                     <div className="flex items-center gap-2 flex-shrink-0 ml-3">
                       <button
                         onClick={() => openAuth('login')}
-                        className="px-3 py-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-700 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900 transition-all cursor-pointer"
+                        className="px-3 py-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-700 rounded-md hover:bg-indigo-50 dark:hover:bg-slate-100 transition-all cursor-pointer"
                       >
                         Masuk
                       </button>
                       <button
                         onClick={() => openAuth('register')}
-                        className="px-3 py-1.5 text-[10px] font-black text-white bg-indigo-600 dark:bg-indigo-600 rounded-xl hover:bg-indigo-700 dark:hover:bg-indigo-700 transition-all cursor-pointer"
+                        className="px-3 py-1.5 text-[10px] font-black text-white bg-indigo-600 dark:bg-indigo-600 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-700 transition-all cursor-pointer"
                       >
                         Daftar
                       </button>
@@ -2219,7 +2219,7 @@ const SupporterPage = () => {
               whileTap={{ scale: 0.97 }}
               onClick={handleDonate}
               disabled={loading || !form.amount}
-              className="cursor-pointer w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-lg shadow-xl shadow-indigo-200/50 disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+              className="cursor-pointer w-full py-3 bg-gradient-to-r from-blue-700 to-blue-700 text-white rounded-xl font-black text-lg disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
             >
               {loading ? (
                 <>
