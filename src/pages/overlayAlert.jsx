@@ -40,6 +40,20 @@ const renderIcon = (customIcon, size = 20) => {
   return customIcon;
 };
 
+// const getAlertDuration = (config, amount) => {
+//   if (!config) return 8000;
+//   const tiers = config.durationTiers || [];
+//   if (tiers.length > 0) {
+//     const sorted = [...tiers].sort((a, b) => b.minAmount - a.minAmount);
+//     for (const tier of sorted) {
+//       const inRange = amount >= tier.minAmount &&
+//         (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);
+//       if (inRange) return tier.duration * 1000;
+//     }
+//   }
+//   return (config.baseDuration || 8) * 1000;
+// };
+
 const getAlertDuration = (config, amount) => {
   if (!config) return 8000;
   const tiers = config.durationTiers || [];
@@ -47,7 +61,7 @@ const getAlertDuration = (config, amount) => {
     const sorted = [...tiers].sort((a, b) => b.minAmount - a.minAmount);
     for (const tier of sorted) {
       const inRange = amount >= tier.minAmount &&
-        (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);
+        (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);  // ✅ Fixed
       if (inRange) return tier.duration * 1000;
     }
   }
@@ -212,110 +226,330 @@ const OverlayAlert = () => {
   );
 
   // ── Render per tema — semua borderRadius: 0 ──────────────────────────────────
+  // const renderInner = () => {
+
+  //   // MODERN
+  //   if (theme === 'modern') {
+  //     return (
+  //       <>
+  //         <div style={{ padding: '16px 18px 12px' }}>
+  //           {/* {renderMedia()} */}
+  //           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+  //             <div style={{
+  //               width: 44, height: 44,
+  //               borderRadius: 0,                              // ← no radius
+  //               background: 'rgba(255,255,255,0.12)',
+  //               border: `1px solid rgba(255,255,255,0.15)`,
+  //               display: 'flex', alignItems: 'center', justifyContent: 'center',
+  //               fontSize: 22, flexShrink: 0,
+  //             }}>
+  //               {renderIcon(customIcon, 30)}
+  //             </div>
+  //             <div style={{ flex: 1, minWidth: 0 }}>
+  //               <div className='font-bold' style={{
+  //                 fontSize: 24, fontWeight: 800, opacity: 0.65,
+  //                 textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4,
+  //                 color: fg, fontWeight: 900
+  //               }}>
+  //                 Dukungan Masuk
+  //               </div>
+  //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
+  //                 @{alert.donorName}
+  //               </div>
+  //               <div className='font-bold' style={{
+  //                 fontSize: 22, fontWeight: 900, color: highlight,
+  //                 letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 900
+  //               }}>
+  //                 Rp {Number(alert.amount).toLocaleString('id-ID')}
+  //               </div>
+  //               {alert.message && (
+  //                 <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4, fontWeight: 900 }}>
+  //                   {alert.message}
+  //                 </div>
+  //               )}
+  //               {renderTimestamp()}
+  //             </div>
+  //           </div>
+  //         </div>
+  //         {renderProgressBar()}
+  //       </>
+  //     );
+  //   }
+
+  //   // CLASSIC
+  //   if (theme === 'classic') {
+  //     return (
+  //       <>
+  //         <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
+  //           {/* {renderMedia()} */}
+  //           <div style={{
+  //             fontSize: 22, fontWeight: 900, opacity: 0.6,
+  //             textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8,
+  //             color: fg, display: 'flex', alignItems: 'center', gap: 6,
+  //           }}>
+  //             <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
+  //             Dukungan Masuk!
+  //           </div>
+  //           <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
+  //             Rp {Number(alert.amount).toLocaleString('id-ID')}
+  //           </div>
+  //           <div style={{ color: fg, fontSize: 22, fontWeight: 900, marginTop: 3 }}>
+  //             @{alert.donorName}
+  //           </div>
+  //           {alert.message && (
+  //             <div style={{ color: fg, fontSize: 22, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
+  //               {alert.message}
+  //             </div>
+  //           )}
+  //           {renderTimestamp()}
+  //         </div>
+  //         {renderProgressBar()}
+  //       </>
+  //     );
+  //   }
+
+  //   // MINIMAL
+  //   return (
+  //     <>
+  //       <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
+  //         {/* {renderMedia()} */}
+  //         <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
+  //           Rp {Number(alert.amount).toLocaleString('id-ID')}
+  //         </div>
+  //         <div style={{ color: fg, fontSize: 22, fontWeight: 600, marginTop: 4 }}>
+  //           @{alert.donorName}
+  //         </div>
+  //         {alert.message && (
+  //           <div style={{ color: fg, fontSize: 22, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
+  //             {alert.message}
+  //           </div>
+  //         )}
+  //         {renderTimestamp()}
+  //       </div>
+  //       {renderProgressBar()}
+  //     </>
+  //   );
+  // };
+  
   const renderInner = () => {
-
-    // MODERN
-    if (theme === 'modern') {
-      return (
-        <>
-          <div style={{ padding: '16px 18px 12px' }}>
-            {/* {renderMedia()} */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{
-                width: 44, height: 44,
-                borderRadius: 0,                              // ← no radius
-                background: 'rgba(255,255,255,0.12)',
-                border: `1px solid rgba(255,255,255,0.15)`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 22, flexShrink: 0,
-              }}>
-                {renderIcon(customIcon, 30)}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className='font-bold' style={{
-                  fontSize: 24, fontWeight: 800, opacity: 0.65,
-                  textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4,
-                  color: fg, fontWeight: 900
-                }}>
-                  Dukungan Masuk
-                </div>
-                <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
-                  @{alert.donorName}
-                </div>
-                <div className='font-bold' style={{
-                  fontSize: 22, fontWeight: 900, color: highlight,
-                  letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 900
-                }}>
-                  Rp {Number(alert.amount).toLocaleString('id-ID')}
-                </div>
-                {alert.message && (
-                  <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4, fontWeight: 900 }}>
-                    {alert.message}
-                  </div>
-                )}
-                {renderTimestamp()}
-              </div>
-            </div>
-          </div>
-          {renderProgressBar()}
-        </>
-      );
-    }
-
-    // CLASSIC
-    if (theme === 'classic') {
-      return (
-        <>
-          <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
-            {/* {renderMedia()} */}
-            <div style={{
-              fontSize: 22, fontWeight: 900, opacity: 0.6,
-              textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8,
-              color: fg, display: 'flex', alignItems: 'center', gap: 6,
-            }}>
-              <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
-              Dukungan Masuk!
-            </div>
-            <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
-              Rp {Number(alert.amount).toLocaleString('id-ID')}
-            </div>
-            <div style={{ color: fg, fontSize: 22, fontWeight: 900, marginTop: 3 }}>
-              @{alert.donorName}
-            </div>
-            {alert.message && (
-              <div style={{ color: fg, fontSize: 22, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
-                {alert.message}
-              </div>
-            )}
-            {renderTimestamp()}
-          </div>
-          {renderProgressBar()}
-        </>
-      );
-    }
-
-    // MINIMAL
+  // ── FLAT MODERN (Default) ──────────────────────────────────────────────────
+  if (theme === 'modern') {
     return (
       <>
-        <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
-          {/* {renderMedia()} */}
-          <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
-            Rp {Number(alert.amount).toLocaleString('id-ID')}
+        <div style={{ padding: '20px 24px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+            {/* Icon Circle */}
+            <div style={{
+              width: 52, height: 52,
+              borderRadius: 0,
+              background: `linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))`,
+              backdropFilter: 'blur(10px)',
+              border: `1px solid rgba(255,255,255,0.1)`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 24, flexShrink: 0,
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+            }}>
+              {renderIcon(customIcon, 32)}
+            </div>
+            
+            <div style={{ flex: 1, minWidth: 0 }}>
+              {/* Header */}
+              <div style={{
+                fontSize: 22,  // ✅ 22px
+                fontWeight: 700,
+                color: fg,
+                opacity: 0.85,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                marginBottom: 8,
+                fontFamily: 'system-ui, sans-serif',
+              }}>
+                Dukungan Masuk
+              </div>
+              
+              {/* Nama Donatur */}
+              <div style={{
+                fontSize: 22,  // ✅ 22px
+                fontWeight: 700,
+                color: fg,
+                opacity: 0.95,
+                marginBottom: 4,
+                lineHeight: 1.3,
+                fontFamily: 'system-ui, sans-serif',
+              }}>
+                Dukungan dari @{alert.donorName}
+              </div>
+              
+              {/* Nominal */}
+              <div style={{
+                fontSize: 22,  // ✅ 22px
+                fontWeight: 900,
+                color: highlight,
+                letterSpacing: '-0.02em',
+                lineHeight: 1.1,
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+              }}>
+                Rp {Number(alert.amount).toLocaleString('id-ID')}
+              </div>
+              
+              {/* Pesan */}
+              {alert.message && (
+                <div style={{
+                  fontSize: 22,  // ✅ 22px
+                  fontWeight: 500,
+                  color: fg,
+                  opacity: 0.8,
+                  marginTop: 12,
+                  lineHeight: 1.4,
+                  fontStyle: 'normal',
+                  fontFamily: 'system-ui, sans-serif',
+                }}>
+                  "{alert.message}"
+                </div>
+              )}
+              
+              {renderTimestamp()}
+            </div>
           </div>
-          <div style={{ color: fg, fontSize: 22, fontWeight: 600, marginTop: 4 }}>
-            @{alert.donorName}
+        </div>
+        {renderProgressBar()}
+      </>
+    );
+  }
+
+  // ── CLASSIC FLAT ───────────────────────────────────────────────────────────
+  if (theme === 'classic') {
+    return (
+      <>
+        <div style={{ 
+          padding: '24px 28px 20px',
+          borderLeft: `4px solid ${highlight}`,
+          background: `linear-gradient(90deg, rgba(255,255,255,0.06), transparent)`,
+        }}>
+          {/* Icon + Header */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12,
+          }}>
+            <div style={{
+              width: 48, height: 48,
+              borderRadius: 0,
+              background: `rgba(255,255,255,0.1)`,
+              border: `1px solid rgba(255,255,255,0.15)`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 22,
+            }}>
+              {renderIcon(customIcon, 28)}
+            </div>
+            <div style={{
+              fontSize: 22,  // ✅ 22px
+              fontWeight: 700,
+              color: fg,
+              opacity: 0.7,
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+            }}>
+              Dukungan Masuk
+            </div>
           </div>
+          
+          {/* Nama + Nominal */}
+          <div style={{
+            display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 8,
+          }}>
+            <div style={{
+              fontSize: 22,  // ✅ 22px
+              fontWeight: 700,
+              color: fg,
+              opacity: 0.9,
+              fontFamily: 'system-ui, sans-serif',
+            }}>
+              dari @{alert.donorName}
+            </div>
+            <div style={{
+              fontSize: 22,  // ✅ 22px
+              fontWeight: 900,
+              color: highlight,
+              letterSpacing: '-0.02em',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+            }}>
+              Rp {Number(alert.amount).toLocaleString('id-ID')}
+            </div>
+          </div>
+          
+          {/* Pesan */}
           {alert.message && (
-            <div style={{ color: fg, fontSize: 22, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
+            <div style={{
+              fontSize: 22,  // ✅ 22px
+              fontWeight: 500,
+              color: fg,
+              opacity: 0.75,
+              lineHeight: 1.4,
+              fontFamily: 'system-ui, sans-serif',
+            }}>
               {alert.message}
             </div>
           )}
+          
           {renderTimestamp()}
         </div>
         {renderProgressBar()}
       </>
     );
-  };
+  }
+
+  // ── MINIMAL FLAT ───────────────────────────────────────────────────────────
+  return (
+    <>
+      <div style={{ 
+        padding: '20px 24px 16px',
+        borderTop: `3px solid ${highlight}`,
+        background: `rgba(255,255,255,0.03)`,
+      }}>
+        {/* Nominal Besar */}
+        <div style={{
+          fontSize: 22,  // ✅ 22px
+          fontWeight: 900,
+          color: highlight,
+          letterSpacing: '-0.02em',
+          lineHeight: 1,
+          marginBottom: 8,
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+        }}>
+          Rp {Number(alert.amount).toLocaleString('id-ID')}
+        </div>
+        
+        {/* Nama Donatur */}
+        <div style={{
+          fontSize: 22,  // ✅ 22px
+          fontWeight: 700,
+          color: fg,
+          opacity: 0.9,
+          marginBottom: 4,
+          fontFamily: 'system-ui, sans-serif',
+        }}>
+          Dukungan dari @{alert.donorName}
+        </div>
+        
+        {/* Pesan */}
+        {alert.message && (
+          <div style={{
+            fontSize: 22,  // ✅ 22px
+            fontWeight: 500,
+            color: fg,
+            opacity: 0.75,
+            lineHeight: 1.4,
+            fontFamily: 'system-ui, sans-serif',
+          }}>
+            {alert.message}
+          </div>
+        )}
+        
+        {renderTimestamp()}
+      </div>
+      {renderProgressBar()}
+    </>
+  );
+};
 
   return (
     <div style={{
