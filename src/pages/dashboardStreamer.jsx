@@ -1127,9 +1127,9 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
               {renderIconPreview(settings.customIcon, 16)}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 17, fontWeight: 700, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Donasi Masuk!</div>
-              <div style={{ fontSize: 18, fontWeight: 800, lineHeight: 1.2 }}>@{currentDonor.name} · Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
-              <div style={{ fontSize: 17, opacity: 0.7, marginTop: 2 }}>"{currentDonor.msg}"</div>
+              <div style={{ fontSize: 20, fontWeight: 700, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Donasi Masuk!</div>
+              <div style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.2 }}>@{currentDonor.name} · Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
+              <div style={{ fontSize: 20, opacity: 0.7, marginTop: 2 }}>"{currentDonor.msg}"</div>
               {settings.showTimestamp !== false && (
                 <div style={{ fontSize: 8, opacity: 0.5, fontFamily: 'monospace', marginTop: 3 }}>🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</div>
               )}
