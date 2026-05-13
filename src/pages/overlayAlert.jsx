@@ -251,7 +251,7 @@ const OverlayAlert = () => {
   //                 textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4,
   //                 color: fg, fontWeight: 900
   //               }}>
-  //                 Dukungan Masuk
+  //                 Hai Streamer
   //               </div>
   //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
   //                 @{alert.donorName}
@@ -288,7 +288,7 @@ const OverlayAlert = () => {
   //             color: fg, display: 'flex', alignItems: 'center', gap: 6,
   //           }}>
   //             <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
-  //             Dukungan Masuk!
+  //             Hai Streamer!
   //           </div>
   //           <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
   //             Rp {Number(alert.amount).toLocaleString('id-ID')}
@@ -364,7 +364,7 @@ const OverlayAlert = () => {
                 marginBottom: 8,
                 fontFamily: 'system-ui, sans-serif',
               }}>
-                Dukungan Masuk
+                Hai Streamer
               </div>
               
               {/* Nama Donatur */}
@@ -448,7 +448,7 @@ const OverlayAlert = () => {
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
             }}>
-              Dukungan Masuk
+              Hai Streamer
             </div>
           </div>
           
