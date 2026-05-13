@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap'); */
 @custom-variant dark (&:where(.dark, .dark *));
 
 ::-webkit-scrollbar {
@@ -10,9 +10,9 @@
     padding-right: 3px;
 }
 
-* {
+/* * {
     font-family: "Bebas Neue", sans-serif;
-}
+} */
 
 ::-webkit-scrollbar-thumb {
     background-color: rgb(221, 221, 221);
