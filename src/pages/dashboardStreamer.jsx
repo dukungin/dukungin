@@ -1618,7 +1618,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
   };
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-3 pb-6">
       {/* Profile modal */}
       {viewingProfile && (
         <StreamerProfileModal
@@ -1645,7 +1645,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
           <button key={t.id} onClick={() => setSubTab(t.id)}
             className={`w-full cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-xl font-black text-sm transition-all ${subTab === t.id ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:brightness-[80%]'}`}>
             {t.label}
-            {t.count !== undefined && <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${subTab === t.id ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-700'}`}>{t.count}</span>}
+            {/* {t.count !== undefined && <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${subTab === t.id ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-700'}`}>{t.count}</span>} */}
           </button>
         ))}
         {subTab === 'discover' && (
@@ -1968,7 +1968,7 @@ export const DashboardStreamer = () => {
                             <button key={emoji} onClick={() => upd('customIcon', emoji === '💜' ? '' : emoji)} title={label}
                               className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 text-lg transition-all cursor-pointer active:scale-[0.95] ${
                                 (settings.customIcon || '💜') === emoji || (!settings.customIcon && emoji === '💜')
-                                  ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 shadow-md shadow-indigo-100'
+                                  ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40'
                                   : 'border-slate-100 dark:border-slate-700 hover:border-slate-300 bg-slate-50 dark:bg-slate-800'
                               }`}>
                               <span>{emoji}</span>
@@ -2055,7 +2055,7 @@ export const DashboardStreamer = () => {
                           />
                           <div className="flex-1">
                             <div 
-                              className="w-full h-8.5 top-[1px]"
+                              className="w-full h-9.5 top-[1px]"
                               style={{ backgroundColor: settings.highlightColor || '#a5b4fc' }}
                             />
                           </div>

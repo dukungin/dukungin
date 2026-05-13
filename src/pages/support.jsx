@@ -81,7 +81,7 @@ export const ContactPage = () => {
 
       {/* Hero — gradient stays dark by design */}
       <motion.div
-        className="relative overflow-hidden rounded-3xl mx-0 mb-8 px-8 py-12"
+        className="relative overflow-hidden rounded-3xl mx-0 mb-8 px-4 md:px-8 py-12"
         style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}
       >
         <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full border border-white/5" />
@@ -96,7 +96,7 @@ export const ContactPage = () => {
             <span className="text-white/50 text-xs font-black uppercase tracking-widest">Bantuan & Kontak</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-3">
-            Ada yang bisa ManMinMun bantu 🥸 ?
+            Apa yang perlu Kami bantu 🥸 ?
           </h1>
           <p className="text-white/50 text-sm font-medium leading-relaxed">
             Tim kami siap membantu kamu. Hubungi developer atau admin platform melalui kanal yang tersedia di bawah.
@@ -104,7 +104,7 @@ export const ContactPage = () => {
           <img src="/jellyfish.png" alt="icon" className="w-[16%] opacity-90 z-[1] absolute top-[10%] right-[-60px] -rotate-40" />
         </div>
 
-        <div className="relative z-10 grid grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">
           {[
             { val: '1x24 Jam', label: 'Avg. Response'     },
             { val: '98%',      label: 'Resolved Tickets'  },
@@ -124,7 +124,7 @@ export const ContactPage = () => {
         {/* ── Developer Section ── */}
         <motion.div {...fadeUp(0.05)} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 overflow-hidden">
 
-          <div className="px-8 pt-8 pb-6 border-b border-slate-50 dark:border-slate-800">
+          <div className="px-4 md:px-8 pt-8 pb-6 border-b border-slate-50 dark:border-slate-800">
             <div className="flex items-start gap-5">
               <div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-black text-xl flex-shrink-0"
@@ -135,7 +135,7 @@ export const ContactPage = () => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">{DEVELOPER.name}</h3>
-                  <span className="px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-full text-[10px] font-black uppercase tracking-widest">
+                  <span className="md:px-2.5 py-1 md:bg-indigo-50 dark:md:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 md:rounded-full text-[10px] font-black uppercase tracking-widest">
                     Developer
                   </span>
                 </div>
@@ -145,7 +145,7 @@ export const ContactPage = () => {
             </div>
           </div>
 
-          <div className="px-8 py-7 space-y-7">
+          <div className="px-4 md:px-8 py-7 space-y-7">
 
             <div>
               <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Kontak Langsung</p>
@@ -182,7 +182,7 @@ export const ContactPage = () => {
         {/* ── Platform Section ── */}
         <motion.div {...fadeUp(0.1)} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 overflow-hidden">
 
-          <div className="px-8 pt-8 pb-6 border-b border-slate-50 dark:border-slate-800">
+          <div className="px-4 md:px-8 pt-8 pb-6 border-b border-slate-50 dark:border-slate-800">
             <div className="flex items-start gap-5">
               <div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
@@ -196,7 +196,7 @@ export const ContactPage = () => {
                   <span className="px-2.5 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-full text-[10px] font-black uppercase tracking-widest">
                     Platform
                   </span>
-                  <span className="px-2.5 py-1 bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                  <span className="md:px-2.5 py-1 md:bg-green-50 dark:md:bg-green-950/40 text-green-600 dark:text-green-400 rounded-full text-[10px] font-black uppercase tracking-widest hidden md:flex items-center gap-1">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                     Online
                   </span>
@@ -206,7 +206,7 @@ export const ContactPage = () => {
             </div>
           </div>
 
-          <div className="px-8 py-7 space-y-7">
+          <div className="px-4 md:px-8 py-7 space-y-7">
 
             <div>
               <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Kontak Support</p>
@@ -239,7 +239,7 @@ export const ContactPage = () => {
         </motion.div>
 
         {/* ── FAQ Quick ── */}
-        <motion.div {...fadeUp(0.15)} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 px-8 py-7">
+        <motion.div {...fadeUp(0.15)} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 px-4 md:px-8 py-7">
           <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-5">Pertanyaan Umum</p>
           <div className="space-y-3">
             {[
@@ -260,7 +260,7 @@ export const ContactPage = () => {
         {/* ── Bottom CTA — gradient stays dark by design ── */}
         <motion.div
           {...fadeUp(0.2)}
-          className="rounded-3xl px-8 py-8 text-center"
+          className="rounded-3xl px-6 md:px-8 py-8 text-center"
           style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 100%)' }}
         >
           <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-4">
@@ -272,7 +272,7 @@ export const ContactPage = () => {
             href={`https://wa.me/${PLATFORM.whatsapp.replace(/\D/g, '')}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-white text-slate-800 rounded-2xl font-black text-sm hover:bg-slate-100 active:scale-[0.97] transition-all"
+            className="md:inline-flex w-full md:w-max flex justify-center items-center gap-2.5 px-6 py-3.5 bg-white text-slate-800 rounded-2xl font-black text-sm hover:bg-slate-100 active:scale-[0.97] transition-all"
           >
             <MessageCircle size={16} className="text-green-500" />
             Chat WhatsApp Admin

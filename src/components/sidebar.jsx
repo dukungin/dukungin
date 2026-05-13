@@ -42,7 +42,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
   const menuItems = [
     { id: 'settings',    label: 'Editor Overlay',   icon: <Layout size={20} /> },
     { id: 'history',     label: 'Riwayat Donasi',   icon: <History size={20} /> },
-    { id: 'myDonations', label: 'Riwayat Berdonasi',   icon: <Heart size={20} /> },   
+    { id: 'myDonations', label: 'Berdonasi',   icon: <Heart size={20} /> },   
     { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },
     { id: 'poll',        label: 'Poll & Voting',    icon: <Vote size={20} /> },
     { id: 'subathon',    label: 'Subathon',         icon: <Timer size={20} /> },
