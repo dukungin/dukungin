@@ -2079,7 +2079,7 @@ const SupporterPage = () => {
                     <button
                       key={val}
                       onClick={() => setForm({ ...form, amount: val })}
-                      className={`py-4 rounded-none font-black text-sm transition-all border-2 active:scale-95 ${
+                      className={`cursor-pointer py-4 rounded-none font-black text-sm transition-all border-2 active:scale-[0.99] ${
                         form.amount === val
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg'
                           : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-300'
