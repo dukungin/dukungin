@@ -33,7 +33,7 @@ import {
   X,
   Zap
 } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { io } from 'socket.io-client';
 import Sidebar from '../components/sidebar';
 import { LeaderboardSettings, MilestonesManager, PollManager, SubathonManager } from '../components/streamerExtras';
@@ -46,6 +46,7 @@ import { WithdrawPage } from './withdrawPage';
 import MyDonationsHistory from './MyDonationsHistory';
 import { useSearchParams } from 'react-router-dom';
 import Badge from '../components/badge';
+import React from 'react';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -1899,6 +1900,106 @@ export const DashboardStreamer = () => {
     ? `Rp ${Number(user.balance).toLocaleString('id-ID')}`
     : 'Rp ••••••';
 
+    const isValidHex = (v) =>
+  /^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(v);
+
+  const normalizeToPickerHex = (v) => {
+    if (!v) return '#000000';
+    // 3-digit → 6-digit
+    if (/^#[0-9a-fA-F]{3}$/.test(v))
+      return '#' + [...v.slice(1)].map(c => c + c).join('');
+    // ambil 7 karakter pertama saja (strip alpha jika ada)
+    return v.slice(0, 7);
+  };
+
+  const ColorInput = React.memo(({ label, value, onChange, allowAlpha = false }) => {
+    const [raw, setRaw] = useState(value);
+
+    // ✅ useCallback untuk stabilkan fungsi
+    const handleTextChange = useCallback((e) => {
+      const v = e.target.value;
+      setRaw(v);
+      const clean = allowAlpha ? v : v.slice(0, 7);
+      onChange(clean);
+    }, [onChange, allowAlpha]);
+
+    const handleTextBlur = useCallback(() => {
+      if (!isValidHex(raw)) {
+        setRaw(value);
+        onChange(value);
+      }
+    }, [raw, value, onChange]);
+
+    const handlePickerChange = useCallback((e) => {
+      const picked = e.target.value;
+      if (allowAlpha) {
+        const alpha = isValidHex(value) && value.length === 9 ? value.slice(7, 9) : '';
+        const next = picked + alpha;
+        setRaw(next);
+        onChange(next);
+      } else {
+        setRaw(picked);
+        onChange(picked);
+      }
+    }, [value, onChange, allowAlpha]);
+
+    // ✅ useMemo untuk stabilkan computed values
+    const pickerHex = useMemo(() => 
+      normalizeToPickerHex(isValidHex(raw) ? raw : value), 
+      [raw, value]
+    );
+    
+    const previewColor = useMemo(() => 
+      isValidHex(raw) ? raw : value, 
+      [raw, value]
+    );
+
+    // ✅ Sinkron raw dengan value dari parent
+    useEffect(() => {
+      setRaw(value);
+    }, [value]);
+
+    return (
+      <div className="flex flex-col gap-2">
+        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+          {label}
+        </label>
+        <div className="flex items-center gap-2">
+          {/* Picker */}
+          <div className="w-10 h-10 flex-shrink-0 rounded-none overflow-hidden border border-slate-300 dark:border-slate-600 cursor-pointer relative">
+            <input
+              type="color"
+              value={pickerHex}
+              onChange={handlePickerChange}
+              className="absolute inset-0 w-[200%] h-[200%] translate-x-[-25%] translate-y-[-25%] border-0 p-0 cursor-pointer"
+            />
+          </div>
+
+          {/* Text input */}
+          <input
+            type="text"
+            value={raw}
+            onChange={handleTextChange}
+            onBlur={handleTextBlur}
+            spellCheck={false}
+            placeholder={allowAlpha ? '#rrggbbaa' : '#rrggbb'}
+            maxLength={allowAlpha ? 9 : 7}
+            className="w-28 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none px-3 py-2 font-mono text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all"
+          />
+
+          {/* Preview bar */}
+          <div
+            className="flex-1 h-10 rounded-none border border-slate-200 dark:border-slate-700"
+            style={{ backgroundColor: previewColor }}
+            title={previewColor}
+          />
+        </div>
+      </div>
+    );
+  });
+
+ColorInput.displayName = 'ColorInput';
+
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
 
@@ -2109,7 +2210,6 @@ export const DashboardStreamer = () => {
                     </div>
 
                     {/* ── Warna Alert dengan Preview ── */}
-                    {/* ── Warna Alert ── */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
                       {[
                         { key: 'primaryColor',   label: 'Background Alert',  fallback: '#6366f1' },
@@ -2118,77 +2218,23 @@ export const DashboardStreamer = () => {
                       ].map(({ key, label, fallback }) => {
                         const val = settings[key] || fallback;
                         return (
-                          <div key={key} className="flex flex-col gap-2">
-                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                              {label}
-                            </label>
-                            <div className="md:flex items-center gap-2">
-                              <div className='w-full flex items-center gap-1'>
-                                <input
-                                  type="color"
-                                  value={val}
-                                  onChange={e => upd(key, e.target.value)}  // ← e.target.value bukan e
-                                  className="w-12 h-12.5 rounded-none cursor-pointer bg-transparent border-0 p-0"
-                                />
-                                <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-none min-w-[40px] text-right">
-                                  {val}
-                                </span>
-                              </div>
-                              <div
-                                className="ml-[2px] md:ml-0 w-full h-11 border border-slate-200 dark:border-slate-700"
-                                style={{ backgroundColor: val }}
-                              />
-                            </div>
-                          </div>
+                          <ColorInput
+                            key={key}
+                            label={label}
+                            value={val}
+                            onChange={v => upd(key, v)}
+                          />
                         );
                       })}
 
                       {/* Border — punya alpha component */}
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                          Warna Border
-                        </label>
-                        <div className="md:flex w-full items-center gap-2">
-                          <div className='w-full flex items-center gap-1'>
-                            <input
-                              type="color"
-                              value={settings.borderColor?.slice(0, 7) || '#ffffff'}
-                              onChange={e => {
-                                const alpha = settings.borderColor?.slice(7, 9) || '26';
-                                upd('borderColor', `${e.target.value}${alpha}`);  // ← e.target.value
-                              }}
-                              className="w-12 h-12.5 rounded-none cursor-pointer bg-transparent border-0 p-0"
-                            />
-                            <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-none min-w-[40px] text-right">
-                              {settings.borderColor?.slice(0, 7) || '#ffffff'}
-                            </span>
-                          </div>
-                          <div
-                            className="ml-[2px] w-full md:ml-0 h-11 border border-slate-200 dark:border-slate-700"
-                            style={{ backgroundColor: settings.borderColor?.slice(0, 7) || '#ffffff' }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    {/* <div className="flex items-center justify-between gap-3">
-                      <input
-                        type="range"
-                        min={0}
-                        max={255}
-                        step={1}
-                        value={parseInt(settings.borderColor?.slice(7, 9) || '26', 16)}
-                        onChange={e => {
-                          const hex   = settings.borderColor?.slice(0, 7) || '#ffffff';
-                          const alpha = Number(e.target.value).toString(16).padStart(2, '0');
-                          <span className="text-[10px] font-black text-indigo-600 w-[32px] text-right">
-                            {Math.round(parseInt(settings.borderColor?.slice(7, 9) || '26', 16) / 255 * 100)}%
-                          </span>
-                          upd('borderColor', `${hex}${alpha}`);
-                        }}
-                        className="flex-1 accent-indigo-600"
+                      <ColorInput
+                        label="Warna Border"
+                        value={settings.borderColor || '#ffffff26'}
+                        onChange={v => upd('borderColor', v)}
+                        allowAlpha
                       />
-                    </div> */}
-
+                    </div>
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
                       className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2 mt-8">
                       <Save size={20} />{saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}

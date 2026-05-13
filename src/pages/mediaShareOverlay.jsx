@@ -278,7 +278,7 @@ const MediaShareOverlay = () => {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 22, flexShrink: 0,
               }}>
-                {renderIcon(customIcon, 24)}
+                {renderIcon(customIcon, 30)}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 20, fontWeight: 800, opacity: 0.65, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4, color: fg }}>
