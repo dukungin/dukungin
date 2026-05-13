@@ -24,7 +24,7 @@ const getTheme = (dark) => ({
   subtext:          dark ? '#475569'                       : '#64748b',
   label:            dark ? '#818cf8'                       : '#4f46e5',
   inputText:        dark ? '#1e1b4b'                       : '#1e1b4b',
-  inputPlaceholder: dark ? 'rgba(255,255,255,0.28)'        : 'rgba(100,90,200,0.35)',
+  inputPlaceholder: '94a3b8',
   iconDefault:      dark ? '#94a3b8'                       : '#94a3b8',
   switchText:       dark ? '#475569'                       : '#64748b',
   switchLink:       dark ? '#818cf8'                       : '#4f46e5',
@@ -224,7 +224,7 @@ const Auth = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
         .auth-root * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
-        .auth-input-field::placeholder { color: ${T.inputPlaceholder}; font-weight: 400; }
+        .auth-input-field::placeholder { color: #94a3b8 !important; font-weight: 400; }
         .tab-btn { transition: all 0.22s cubic-bezier(.4,0,.2,1); }
         .tab-btn:active { transform: scale(0.97); }
         .submit-btn:active { transform: scale(0.97) !important; }
