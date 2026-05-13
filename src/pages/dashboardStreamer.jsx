@@ -2354,7 +2354,7 @@ export const DashboardStreamer = () => {
             {activeTab === 'subathon' && (
               <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
-                  <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" />
+                  {/* <SectionHeader icon={<Timer size={20} />} title="Subathon Timer" color="bg-indigo-500" /> */}
                   <SubathonManager overlayToken={user.overlayToken} />
                 </div>
               </motion.div>
@@ -2363,7 +2363,7 @@ export const DashboardStreamer = () => {
             {activeTab === 'leaderboard' && (
               <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
-                  <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" />
+                  {/* <SectionHeader icon={<Trophy size={20} />} title="Pengaturan Leaderboard" color="bg-amber-500" /> */}
                   <LeaderboardSettings overlayToken={user?.overlayToken} />
                 </div>
               </motion.div>
