@@ -2155,10 +2155,17 @@ export const DashboardStreamer = () => {
                   {/* ── OBS URL ── */}
                   <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 mb-8">
-                      <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">OBS URL</label>
+                      <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">URL ALERT - OBS</label>
                       <div className="flex gap-3">
                         <input readOnly value={user.overlayUrl} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none overflow-hidden text-ellipsis" />
                         <button onClick={() => copyToClipboard(user.overlayUrl)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
+                      </div>
+                    </div>
+                    <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 mb-8">
+                      <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">URL MEDIASHARE - OBS</label>
+                      <div className="flex gap-3">
+                        <input readOnly value={`${window.location.origin}/widget/${user.overlayToken}/media`} className="flex-1 bg-transparent font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold outline-none overflow-hidden text-ellipsis" />
+                        <button onClick={() => copyToClipboard(`${window.location.origin}/widget/${user.overlayToken}/media`)} className="text-slate-400 hover:text-indigo-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
                       </div>
                     </div>
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
@@ -2179,8 +2186,6 @@ export const DashboardStreamer = () => {
                       { label: 'QR Code',      emoji: '◼',  path: 'qrcode',      desc: 'QR scan ke halaman donasi',          size: '280×320px' },
                       { label: 'Poll',         emoji: '🗳️', path: 'poll',        desc: 'Voting poll live',                   size: '420×300px' },
                       { label: 'Subathon',     emoji: '⏱',  path: 'subathon',    desc: 'Timer subathon',                     size: '360×180px' },
-                      // ← BARU: pakai customUrl karena URL-nya /overlay/:token/media, bukan /widget/
-                      { label: 'Media Share', emoji: '🎬', path: null, customUrl: `${window.location.origin}/overlay/${user.overlayToken}/media`, desc: 'Alert + preview gambar/video donor', size: '480×320px' },
                       ].map(({ label, emoji, path, customUrl, desc, size }) => {
                         const widgetUrl = customUrl ?? `${window.location.origin}/widget/${user.overlayToken}/${path}`;
                       return (
