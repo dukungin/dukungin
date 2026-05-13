@@ -15,6 +15,7 @@ import {
   Menu,
   MessageSquare,
   Moon,
+  PanelLeft,
   Plus,
   RefreshCw,
   Save,
@@ -54,7 +55,16 @@ const fetchHistory    = async ({ page = 1, limit = 50, status = '' } = {}) => {
   return (await api.get(`/api/donations/history?${params}`)).data;
 };
 const fetchStats      = async () => (await api.get('/api/donations/stats')).data;
-const saveSettings    = async (s) => (await api.put('/api/overlay/settings', s)).data;
+// Ganti fungsi saveSettings di atas
+const saveSettings = async (s) => {
+  // Sanitize: pastikan tidak ada DOM element / React fiber di dalam object
+  const clean = JSON.parse(JSON.stringify(s, (key, val) => {
+    // Buang apapun yang bukan primitive / array / plain object
+    if (val instanceof HTMLElement || val instanceof Element) return undefined;
+    return val;
+  }));
+  return (await api.put('/api/overlay/settings', clean)).data;
+};
 const updateProfile   = async (d) => (await api.put('/api/auth/profile', d)).data;
 const changePassword  = async (d) => (await api.put('/api/auth/change-password', d)).data;
 const fetchBannedWords = async () => (await api.get('/api/banned-words')).data;
@@ -103,7 +113,7 @@ const DEFAULT_SETTINGS = {
 
 const ICON_PRESETS = [
   { emoji: '💜', label: 'Default' }, { emoji: '❤️',  label: 'Merah'  },
-  { emoji: '🐧', label: 'Penguin' }, { emoji: '❤️',  label: 'Merah'  },
+  { emoji: '🐧', label: 'Penguin' },
   { emoji: '🔥',  label: 'Api'    }, { emoji: '⭐',  label: 'Bintang'},
   { emoji: '🎮',  label: 'Gamer'  }, { emoji: '🎵',  label: 'Musik'  },
   { emoji: '🐉',  label: 'Naga'   }, { emoji: '💰',  label: 'Duit'   },
@@ -1151,12 +1161,12 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
       {isFullscreen && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed w-[100%] right-0 inset-0 z-[999999999] bg-black flex flex-col">
           <div className="flex items-center justify-between px-6 py-4 bg-black/80 backdrop-blur-sm border-b border-white/10 flex-shrink-0">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse" />
               <span className="text-white font-black text-sm tracking-wide">LIVE PREVIEW</span>
               <span className="px-2 py-0.5 bg-red-600 text-white text-[10px] font-black rounded-md tracking-widest">OBS SIMULATION</span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <button onClick={triggerDemo} className="cursor-pointer active:scale-[0.97] flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-xs transition-all">
                 <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" /> Simulasi Donasi
               </button>
@@ -1718,7 +1728,10 @@ export const DashboardStreamer = () => {
   const saveSettingsMutation = useMutation({
     mutationFn: saveSettings,
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['profile'] }); setShowToast(true); setTimeout(() => setShowToast(false), 3000); },
-    onError: (err) => alert(err.response?.data?.message || 'Gagal menyimpan pengaturan'),
+    onError: (err) => {
+      console.log('err', err)
+      alert(err.response?.data?.message || 'Gagal menyimpan pengaturan')
+    },
   });
 
   const updateProfileMutation = useMutation({
@@ -1776,12 +1789,13 @@ export const DashboardStreamer = () => {
   }, [user.overlayToken]);
 
   const settings = localSettings || DEFAULT_SETTINGS;
-  const upd = (key, val) => setLocalSettings(s => ({ ...s, [key]: val }));
-  const copyToClipboard = (text, label = 'URL') => {
-    navigator.clipboard.writeText(text);
-    setCopiedUrl(text);
-    setCopiedLabel(label);
-    setShowCopyModal(true);
+  const upd = (key, val) => {
+    // Jika yang masuk adalah Event (dari input onChange yang lupa e.target.value)
+    if (val && typeof val === 'object' && 'target' in val && 'nativeEvent' in val) {
+      console.warn(`[upd] key="${key}" menerima Event bukan value — fix onChange di sini`);
+      return;
+    }
+    setLocalSettings(s => ({ ...s, [key]: val }));
   };
 
   const TAB_TITLE = {
@@ -1988,23 +2002,23 @@ export const DashboardStreamer = () => {
                           ))}
                         </div>
                       </div>
-                      <div className="flex flex-col gap-3">
+                      <div className="md:col-span-2">
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
                         <select value={settings.overlayPosition || 'bottom-right'} onChange={e => upd('overlayPosition', e.target.value)}
-                          className="w-full p-5 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
+                          className="w-full px-5 py-3 mt-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
                           <option value="top-left">Kiri Atas</option><option value="top-right">Kanan Atas</option>
                           <option value="bottom-left">Kiri Bawah</option><option value="bottom-right">Kanan Bawah</option>
                           <option value="top-center">Tengah Atas</option><option value="bottom-center">Tengah Bawah</option>
                         </select>
                       </div>
-                      <div className="flex flex-col gap-3">
+                      {/* <div className="flex flex-col gap-3">
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Animasi Masuk</label>
                         <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
                           className="w-full p-5 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
                           <option value="bounce">Bounce</option><option value="slide-left">Slide Kiri</option>
                           <option value="slide-right">Slide Kanan</option><option value="fade">Fade</option>
                         </select>
-                      </div>
+                      </div> */}
                       <div className="md:col-span-2">
                         <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
                           Lebar Maks Overlay OBS <span className="text-indigo-500 normal-case font-bold ml-1">({settings.maxWidth || 280}px)</span>
@@ -2015,96 +2029,81 @@ export const DashboardStreamer = () => {
                     </div>
 
                     {/* ── Warna Alert dengan Preview ── */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-8">
-                      
-                      {/* Background Alert */}
-                      <div>
-                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
-                          Background Alert
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <input 
-                            type="color" 
-                            value={settings.primaryColor} 
-                            onChange={v => upd('primaryColor', v)} 
-                            className="w-12 h-11 rounded-xl cursor-pointer"
-                          />
-                          <div className="flex-1">
-                            <div 
-                              className="w-full h-8.5 top-[1px]"
-                              style={{ backgroundColor: settings.primaryColor }}
-                            />
+                    {/* ── Warna Alert ── */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+                      {[
+                        { key: 'primaryColor',   label: 'Background Alert',  fallback: '#6366f1' },
+                        { key: 'highlightColor', label: 'Highlight Nominal', fallback: '#a5b4fc' },
+                        { key: 'textColor',      label: 'Warna Teks',        fallback: '#ffffff' },
+                      ].map(({ key, label, fallback }) => {
+                        const val = settings[key] || fallback;
+                        return (
+                          <div key={key} className="flex flex-col gap-2">
+                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                              {label}
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="color"
+                                value={val}
+                                onChange={e => upd(key, e.target.value)}  // ← e.target.value bukan e
+                                className="w-12 h-12.5 rounded-xl cursor-pointer bg-transparent border-0 p-0"
+                              />
+                              <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-sm min-w-[40px] text-right">
+                                {val}
+                              </span>
+                              <div
+                                className="flex-1 h-11 border border-slate-200 dark:border-slate-700"
+                                style={{ backgroundColor: val }}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        );
+                      })}
 
-                      {/* Highlight Nominal */}
-                      <div>
-                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
-                          Highlight Nominal (Rp)
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <input 
-                            type="color" 
-                            value={settings.highlightColor || '#a5b4fc'} 
-                            onChange={v => upd('highlightColor', v)} 
-                            className="w-12 h-11 rounded-xl cursor-pointer"
-                          />
-                          <div className="flex-1">
-                            <div 
-                              className="w-full h-9.5 top-[1px]"
-                              style={{ backgroundColor: settings.highlightColor || '#a5b4fc' }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Warna Teks */}
-                      <div>
-                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
-                          Warna Teks Utama
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <input 
-                            type="color" 
-                            value={settings.textColor} 
-                            onChange={v => upd('textColor', v)} 
-                            className="w-12 h-11 rounded-xl cursor-pointer"
-                          />
-                          <div className="flex-1">
-                            <div 
-                              className="w-full h-8.5 top-[1px]"
-                              style={{ backgroundColor: settings.textColor }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Warna Border */}
-                      <div>
-                        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
+                      {/* Border — punya alpha component */}
+                      <div className="flex flex-col gap-2">
+                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                           Warna Border
                         </label>
-                        <div className="flex items-center gap-3">
-                          <input 
-                            type="color" 
-                            value={settings.borderColor?.slice(0, 7) || '#ffffff'} 
-                            onChange={v => {
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={settings.borderColor?.slice(0, 7) || '#ffffff'}
+                            onChange={e => {
                               const alpha = settings.borderColor?.slice(7, 9) || '26';
-                              upd('borderColor', `${v}${alpha}`);
-                            }} 
-                            className="w-12 h-11 rounded-xl cursor-pointer"
+                              upd('borderColor', `${e.target.value}${alpha}`);  // ← e.target.value
+                            }}
+                            className="w-12 h-12.5 rounded-xl cursor-pointer bg-transparent border-0 p-0"
                           />
-                          <div className="flex-1">
-                            <div 
-                              className="w-full h-8.5 top-[1px]"
-                              style={{ backgroundColor: settings.borderColor?.slice(0, 7) || '#ffffff' }}
-                            />
-                          </div>
+                          <span className="text-[10px] font-mono text-slate-100 mr-[2px] dark:text-slate-500 border border-slate-700 px-1 rounded-sm min-w-[40px] text-right">
+                            {settings.borderColor?.slice(0, 7) || '#ffffff'}
+                          </span>
+                          <div
+                            className="flex-1 h-11 border border-slate-200 dark:border-slate-700"
+                            style={{ backgroundColor: settings.borderColor?.slice(0, 7) || '#ffffff' }}
+                          />
                         </div>
                       </div>
-
                     </div>
+                    {/* <div className="flex items-center justify-between gap-3">
+                      <input
+                        type="range"
+                        min={0}
+                        max={255}
+                        step={1}
+                        value={parseInt(settings.borderColor?.slice(7, 9) || '26', 16)}
+                        onChange={e => {
+                          const hex   = settings.borderColor?.slice(0, 7) || '#ffffff';
+                          const alpha = Number(e.target.value).toString(16).padStart(2, '0');
+                          <span className="text-[10px] font-black text-indigo-600 w-[32px] text-right">
+                            {Math.round(parseInt(settings.borderColor?.slice(7, 9) || '26', 16) / 255 * 100)}%
+                          </span>
+                          upd('borderColor', `${hex}${alpha}`);
+                        }}
+                        className="flex-1 accent-indigo-600"
+                      />
+                    </div> */}
 
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
                       className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-xl font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2 mt-8">
