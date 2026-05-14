@@ -2209,14 +2209,24 @@ export const DashboardStreamer = () => {
   }, [user.overlayToken]);
 
   const settings = localSettings || DEFAULT_SETTINGS;
-  const upd = (key, val) => {
+
+  const upd = useCallback((key, val) => {
     // Jika yang masuk adalah Event (dari input onChange yang lupa e.target.value)
     if (val && typeof val === 'object' && 'target' in val && 'nativeEvent' in val) {
       console.warn(`[upd] key="${key}" menerima Event bukan value — fix onChange di sini`);
       return;
     }
+    
+    // ✅ DEBOUNCE UNTUK COLOR CHANGES
+    if (key.includes('Color')) {
+      const timeoutId = setTimeout(() => {
+        setLocalSettings(s => ({ ...s, [key]: val }));
+      }, 100);
+      return () => clearTimeout(timeoutId);
+    }
+    
     setLocalSettings(s => ({ ...s, [key]: val }));
-  };
+  }, []);
 
   const copyToClipboard = (text, label = 'URL') => {
     navigator.clipboard.writeText(text);
@@ -2236,9 +2246,10 @@ export const DashboardStreamer = () => {
   const displayBalance = showBalance
     ? `Rp ${Number(user.balance).toLocaleString('id-ID')}`
     : 'Rp ••••••';
-
-    const isValidHex = (v) =>
-  /^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(v);
+  
+  // ✅ TAMBAHKAN INI sebelum ColorInput component
+  const isValidHex = (v) =>
+    /^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(v);
 
   const normalizeToPickerHex = (v) => {
     if (!v) return '#000000';
@@ -2249,93 +2260,128 @@ export const DashboardStreamer = () => {
     return v.slice(0, 7);
   };
 
-  const ColorInput = React.memo(({ label, value, onChange, allowAlpha = false }) => {
-    const [raw, setRaw] = useState(value);
+  const ColorInput = React.memo(({ label, value, onChange, allowAlpha = false, id }) => {
+  const inputId = id || `color-${label.replace(/\s+/g, '-').toLowerCase()}`;
+  const [raw, setRaw] = useState(value);
 
-    // ✅ useCallback untuk stabilkan fungsi
-    const handleTextChange = useCallback((e) => {
-      const v = e.target.value;
-      setRaw(v);
-      const clean = allowAlpha ? v : v.slice(0, 7);
-      onChange(clean);
-    }, [onChange, allowAlpha]);
+  const handleTextChange = useCallback((e) => {
+    const v = e.target.value;
+    setRaw(v);
+    const clean = allowAlpha ? v : v.slice(0, 7);
+    const timeoutId = setTimeout(() => onChange(clean), 300);
+    return () => clearTimeout(timeoutId);
+  }, [onChange, allowAlpha]);
 
-    const handleTextBlur = useCallback(() => {
-      if (!isValidHex(raw)) {
-        setRaw(value);
-        onChange(value);
-      }
-    }, [raw, value, onChange]);
-
-    const handlePickerChange = useCallback((e) => {
-      const picked = e.target.value;
-      if (allowAlpha) {
-        const alpha = isValidHex(value) && value.length === 9 ? value.slice(7, 9) : '';
-        const next = picked + alpha;
-        setRaw(next);
-        onChange(next);
-      } else {
-        setRaw(picked);
-        onChange(picked);
-      }
-    }, [value, onChange, allowAlpha]);
-
-    // ✅ useMemo untuk stabilkan computed values
-    const pickerHex = useMemo(() => 
-      normalizeToPickerHex(isValidHex(raw) ? raw : value), 
-      [raw, value]
-    );
-    
-    const previewColor = useMemo(() => 
-      isValidHex(raw) ? raw : value, 
-      [raw, value]
-    );
-
-    // ✅ Sinkron raw dengan value dari parent
-    useEffect(() => {
+  const handleTextBlur = useCallback(() => {
+    if (!isValidHex(raw)) {
       setRaw(value);
-    }, [value]);
+      onChange(value);
+    }
+  }, [raw, value, onChange]);
 
-    return (
-      <div className="flex flex-col gap-2">
-        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-          {label}
-        </label>
-        <div className="flex items-center gap-2">
-          {/* Picker */}
-          <div className="w-10 h-10 flex-shrink-0 rounded-none overflow-hidden border border-slate-300 dark:border-slate-600 cursor-pointer relative">
-            <input
-              type="color"
-              value={pickerHex}
-              onChange={handlePickerChange}
-              className="absolute inset-0 w-[200%] h-[200%] translate-x-[-25%] translate-y-[-25%] border-0 p-0 cursor-pointer"
-            />
-          </div>
+  const handlePickerChange = useCallback((e) => {
+    const picked = e.target.value;
+    if (allowAlpha) {
+      const alpha = isValidHex(value) && value.length === 9 ? value.slice(7, 9) : '';
+      const next = picked + alpha;
+      setRaw(next);
+      onChange(next);
+    } else {
+      setRaw(picked);
+      onChange(picked);
+    }
+  }, [value, onChange, allowAlpha]);
 
-          {/* Text input */}
+  const pickerHex = useMemo(() => 
+    normalizeToPickerHex(isValidHex(raw) ? raw : value), 
+    [raw, value]
+  );
+  
+  const previewColor = useMemo(() => 
+    isValidHex(raw) ? raw : value, 
+    [raw, value]
+  );
+
+  useEffect(() => {
+    setRaw(value);
+  }, [value]);
+
+  return (
+    <div className="flex flex-col gap-2">
+      {/* ✅ LABEL DENGAN FOR */}
+      <label 
+        htmlFor={inputId}
+        className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest"
+      >
+        {label}
+      </label>
+      
+      <div className="flex items-center gap-2">
+        {/* ✅ COLOR PICKER - Punya id & name */}
+        <div className="w-10 h-10 flex-shrink-0 rounded-none overflow-hidden border border-slate-300 dark:border-slate-600 relative group">
           <input
-            type="text"
-            value={raw}
-            onChange={handleTextChange}
-            onBlur={handleTextBlur}
-            spellCheck={false}
-            placeholder={allowAlpha ? '#rrggbbaa' : '#rrggbb'}
-            maxLength={allowAlpha ? 9 : 7}
-            className="w-28 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none px-3 py-2 font-mono text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all"
+            id={`${inputId}-picker`}
+            name={`${inputId}-picker`}
+            type="color"
+            value={pickerHex}
+            onChange={handlePickerChange}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer peer z-10"
+            style={{ 
+              width: '100%', 
+              height: '100%', 
+              padding: 0, 
+              border: 0,
+              backgroundColor: 'transparent'
+            }}
+            aria-label={`${label} picker`}
+            title="Klik untuk pilih warna"
           />
-
-          {/* Preview bar */}
-          <div
-            className="flex-1 h-10 rounded-none border border-slate-200 dark:border-slate-700"
-            style={{ backgroundColor: previewColor }}
-            title={previewColor}
+          <div 
+            className="absolute inset-0 w-full h-full border-2 border-transparent group-hover:border-indigo-400 transition-all"
+            style={{ backgroundColor: pickerHex }}
+            aria-hidden="true"
           />
         </div>
+
+        {/* ✅ TEXT INPUT - Punya id & name */}
+        <input
+          id={inputId}
+          name={inputId}
+          type="text"
+          value={raw}
+          onChange={handleTextChange}
+          onBlur={handleTextBlur}
+          spellCheck={false}
+          placeholder={allowAlpha ? '#rrggbbaa' : '#rrggbb'}
+          maxLength={allowAlpha ? 9 : 7}
+          className="w-28 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none px-3 py-2 font-mono text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 transition-all"
+          aria-label={`${label} hex value`}
+        />
+
+        {/* Preview Bar - Bukan input, tidak perlu id */}
+        <div
+          className="flex-1 h-10 rounded-none border border-slate-200 dark:border-slate-700 cursor-pointer hover:shadow-md hover:border-indigo-300 transition-all"
+          style={{ backgroundColor: previewColor }}
+          title={previewColor}
+          aria-hidden="true"
+          role="img"
+          aria-label={`Preview ${previewColor}`}
+        />
       </div>
-    );
+      
+      {/* HEX Value Display */}
+      <div 
+        className="text-[10px] font-mono text-slate-500 dark:text-slate-400 truncate bg-slate-50/50 dark:bg-slate-800/50 px-2 py-1 rounded"
+        aria-live="polite"
+        aria-label={`Current color: ${previewColor}`}
+      >
+        {previewColor}
+      </div>
+    </div>
+  );
   });
 
-ColorInput.displayName = 'ColorInput';
+  ColorInput.displayName = 'ColorInput';
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
@@ -2557,6 +2603,7 @@ ColorInput.displayName = 'ColorInput';
                         return (
                           <ColorInput
                             key={key}
+                            id={`color-${key}`}  // ✅ Tambah ID unik
                             label={label}
                             value={val}
                             onChange={v => upd(key, v)}
@@ -2566,10 +2613,11 @@ ColorInput.displayName = 'ColorInput';
 
                       {/* Border — punya alpha component */}
                       <ColorInput
+                        id="color-borderColor"  // ✅ Tambah ID unik
                         label="Warna Border"
                         value={settings.borderColor || '#ffffff26'}
                         onChange={v => upd('borderColor', v)}
-                        allowAlpha
+                        allowAlpha={true}
                       />
                     </div>
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}

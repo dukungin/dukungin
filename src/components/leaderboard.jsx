@@ -71,7 +71,7 @@ const LeaderboardWidget = () => {
       <div
         key={animKey}
         style={{
-          background: 'rgba(15, 15, 25, 0.92)',
+          background: 'rgba(15, 15, 25, 1)',
           borderRadius: 20,
           overflow: 'hidden',
           border: '1.5px solid rgba(255,255,255,0.08)',
@@ -88,18 +88,18 @@ const LeaderboardWidget = () => {
         }}>
           <span style={{ fontSize: 16 }}>🏆</span>
           <span style={{
-            fontSize: 10,
+            fontSize: 20,
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.12em',
-            color: 'rgba(255,255,255,0.5)',
+            color: 'rgba(255,255,255,1)',
           }}>
-            Top Donor
+            Leaderboard
           </span>
           <span style={{
             marginLeft: 'auto',
-            fontSize: 9,
-            color: 'rgba(255,255,255,0.25)',
+            fontSize: 20,
+            color: 'rgba(255,255,255,1)',
             fontWeight: 600,
           }}>
             {displayDonors.length} orang
@@ -126,13 +126,13 @@ const LeaderboardWidget = () => {
                 width: 28,
                 height: 28,
                 borderRadius: 8,
-                background: i < 3 ? `${RANK_COLORS[i]}22` : 'rgba(255,255,255,0.05)',
+                background: i < 3 ? `${RANK_COLORS[i]}22` : 'rgba(255,255,255,1)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: i < 3 ? 14 : 11,
                 fontWeight: 800,
-                color: i < 3 ? RANK_COLORS[i] : 'rgba(255,255,255,0.3)',
+                color: i < 3 ? RANK_COLORS[i] : 'rgba(255,255,255,1)',
                 flexShrink: 0,
               }}>
                 {i < 3 ? MEDALS[i] : `#${i + 1}`}
@@ -141,9 +141,9 @@ const LeaderboardWidget = () => {
               {/* Name */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{
-                  fontSize: 12,
+                  fontSize: 20,
                   fontWeight: 700,
-                  color: i < 3 ? '#ffffff' : 'rgba(255,255,255,0.65)',
+                  color: i < 3 ? '#ffffff' : 'rgba(255,255,255,1)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -152,7 +152,7 @@ const LeaderboardWidget = () => {
                   {donor.name}
                 </p>
                 <p style={{
-                  fontSize: 9,
+                  fontSize: 20,
                   color: 'rgba(255,255,255,0.25)',
                   fontWeight: 600,
                   margin: 0,
@@ -164,7 +164,7 @@ const LeaderboardWidget = () => {
               {/* Amount */}
               {showAmount && (
                 <span style={{
-                  fontSize: 12,
+                  fontSize: 20,
                   fontWeight: 900,
                   color: i < 3 ? RANK_COLORS[i] : 'rgba(255,255,255,0.4)',
                   flexShrink: 0,
