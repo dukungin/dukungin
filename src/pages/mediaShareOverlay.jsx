@@ -6,8 +6,7 @@ import axios from 'axios';
 
 const API_URL = 'https://server-dukungin-production.up.railway.app';
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
+// ── Helpers (sama persis) ────────────────────────────────────────────────────
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
   const watchMatch  = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
@@ -44,21 +43,6 @@ const renderIcon = (customIcon, size = 20) => {
   return customIcon;
 };
 
-// const getAlertDuration = (config, amount) => {
-//   if (!config) return 8000;
-//   const tiers = config.durationTiers || [];
-//   if (tiers.length > 0) {
-//     const sorted = [...tiers].sort((a, b) => b.minAmount - a.minAmount);
-//     for (const tier of sorted) {
-//       const inRange =
-//         amount >= tier.minAmount &&
-//         (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);
-//       if (inRange) return tier.duration * 1000;
-//     }
-//   }
-//   return (config.baseDuration || 8) * 1000;
-// };
-
 const getAlertDuration = (config, amount) => {
   if (!config) return 8000;
   const tiers = config.durationTiers || [];
@@ -66,15 +50,14 @@ const getAlertDuration = (config, amount) => {
     const sorted = [...tiers].sort((a, b) => b.minAmount - a.minAmount);
     for (const tier of sorted) {
       const inRange = amount >= tier.minAmount &&
-        (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);  // ✅ Fixed
+        (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);
       if (inRange) return tier.duration * 1000;
     }
   }
   return (config.baseDuration || 8) * 1000;
 };
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
+// ── MediaShareOverlay Component ───────────────────────────────────────────────
 const MediaShareOverlay = () => {
   const { token } = useParams();
 
@@ -96,7 +79,7 @@ const MediaShareOverlay = () => {
       .catch(() => console.error('[MediaShare] Invalid token'));
   }, [token]);
 
-  // ── Socket ────────────────────────────────────────────────────────────────
+  // ── Socket (FIXED - join kedua room) ────────────────────────────────────────
   useEffect(() => {
     if (!token) return;
 
@@ -108,12 +91,14 @@ const MediaShareOverlay = () => {
       timeout: 10000,
     });
 
-    socket.emit('join-room', token);                    // Untuk config/settings
-    socket.emit('join-room', `${token}-mediashare`); 
+    // ✅ JOIN KEDUA ROOM
+    socket.emit('join-room', token);
+    socket.emit('join-room', `${token}-mediashare`);
+    
+    console.log(`[MediaShare] 🎬 Joined: ${token}, ${token}-mediashare`);
 
-    // ← Hanya listen 'new-media-donation', bukan 'new-donation'
-    // Event ini hanya di-emit backend kalau donasi punya mediaUrl
     socket.on('new-media-donation', (data) => {
+      console.log('[MediaShare] 🎬 RECEIVED:', data.donorName);
       if (configRef.current?.overlayEnabled === false) return;
 
       const donationWithTime = {
@@ -124,8 +109,6 @@ const MediaShareOverlay = () => {
       setAlert(donationWithTime);
       setProgress(100);
 
-      // Sound — MediaShareOverlay punya sound sendiri (tidak duplikat dengan OverlayAlert)
-      // karena event-nya berbeda. Uncomment kalau mau ada sound di sini juga:
       const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
       if (soundToPlay && audioRef.current) {
         audioRef.current.src = soundToPlay;
@@ -133,13 +116,12 @@ const MediaShareOverlay = () => {
       }
 
       const duration = getAlertDuration(configRef.current, data.amount);
-
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
-      if (dismissTimerRef.current)     clearTimeout(dismissTimerRef.current);
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
 
       const startTime = Date.now();
       progressIntervalRef.current = setInterval(() => {
-        const elapsed   = Date.now() - startTime;
+        const elapsed = Date.now() - startTime;
         const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
         setProgress(remaining);
         if (remaining <= 0) clearInterval(progressIntervalRef.current);
@@ -158,17 +140,16 @@ const MediaShareOverlay = () => {
         setAlert(null);
         setProgress(100);
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
-        if (dismissTimerRef.current)     clearTimeout(dismissTimerRef.current);
+        if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
       }
     });
 
     return () => {
       socket.off('new-media-donation');
       socket.off('settings-updated');
-      socket.off('reconnect');
       socket.disconnect();
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
-      if (dismissTimerRef.current)     clearTimeout(dismissTimerRef.current);
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
     };
   }, [token]);
 
@@ -177,18 +158,17 @@ const MediaShareOverlay = () => {
     return <div style={{ width: '100vw', height: '100vh', background: 'transparent' }} />;
   }
 
-  // ── Styling ───────────────────────────────────────────────────────────────
+  // ── Styling (SAMA PERSIS OverlayAlert) ──────────────────────────────────────
   const bg          = config.primaryColor   || '#6366f1';
   const fg          = config.textColor      || '#ffffff';
   const borderColor = config.borderColor    || 'rgba(255,255,255,0.15)';
   const theme       = config.theme          || 'modern';
   const highlight   = config.highlightColor || '#a5b4fc';
   const animation   = config.animation      || 'bounce';
-  const maxW        = Math.max(config.maxWidth || 340, 400);
+  const maxW        = config.maxWidth       || 340;
   const customIcon  = config.customIcon     || '';
   const showTs      = config.showTimestamp  !== false;
 
-  // ── Animasi ───────────────────────────────────────────────────────────────
   const animVariants = {
     bounce: {
       initial: { scale: 0.5, opacity: 0, y: 40 },
@@ -213,47 +193,43 @@ const MediaShareOverlay = () => {
   };
   const anim = animVariants[animation] || animVariants.bounce;
 
-  // ── Render helpers ────────────────────────────────────────────────────────
-
+  // ── RENDER MEDIA (BARU - di atas content) ───────────────────────────────────
   const renderMedia = () => {
     if (!alert?.mediaUrl) return null;
     const t = detectMediaType(alert.mediaUrl, alert.mediaType);
 
-    if (t === 'youtube') {
-      return (
-        <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', marginBottom: 12, background: '#000' }}>
+    return (
+      <div style={{ 
+        width: '100%', 
+        aspectRatio: '16/9', 
+        overflow: 'hidden', 
+        background: '#000',
+        borderBottom: '1px solid rgba(255,255,255,0.05)'
+      }}>
+        {t === 'youtube' && (
           <iframe
             src={getYouTubeEmbedUrl(alert.mediaUrl)}
             width="100%" height="100%"
             frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
-            style={{ display: 'block', border: 'none', width: '100%', height: '100%' }}
+            style={{ display: 'block', border: 'none' }}
           />
-        </div>
-      );
-    }
-
-    if (t === 'video') {
-      return (
-        <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', marginBottom: 12, background: '#000' }}>
+        )}
+        {t === 'video' && (
           <video
             src={alert.mediaUrl}
-            autoPlay
-            loop
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            autoPlay loop muted
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
-        </div>
-      );
-    }
-
-    return (
-      <div style={{ width: '100%', overflow: 'hidden', marginBottom: 12 }}>
-        <img
-          src={alert.mediaUrl}
-          alt="media"
-          style={{ width: '100%', display: 'block', objectFit: 'cover', maxHeight: 220 }}
-        />
+        )}
+        {t === 'image' && (
+          <img
+            src={alert.mediaUrl}
+            alt="media"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        )}
       </div>
     );
   };
@@ -261,255 +237,158 @@ const MediaShareOverlay = () => {
   const renderTimestamp = () => {
     if (!showTs || !alert?.receivedAt) return null;
     return (
-      <div style={{ fontSize: 14, opacity: 0.55, fontFamily: 'monospace', letterSpacing: '0.04em', marginTop: 4 }}>
+      <div style={{ fontSize: 26, color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace' }}>
         🕐 {formatTimestamp(alert.receivedAt)}
       </div>
     );
   };
 
-  const renderProgressBar = () => (
-    <div style={{ height: 3, background: 'rgba(255,255,255,0.15)' }}>
-      <div style={{
-        height: '100%',
-        width: `${progress}%`,
-        background: highlight,
-        transition: 'width 50ms linear',
-      }} />
-    </div>
-  );
+  // ── RENDER INNER (SAMA PERSIS OverlayAlert + Media Share label) ─────────────
+  const renderInner = () => {
+    // ── MODERN (SAMA PERSIS + Media Share badge) ───────────────────────────────
+    if (theme === 'modern') {
+      return (
+        <>
+          {renderMedia()} {/* ✅ MEDIA DI ATAS */}
 
-  // const renderInner = () => {
-  //   if (theme === 'modern') {
-  //     return (
-  //       <>
-  //         <div style={{ padding: '16px 18px 12px' }}>
-  //           {renderMedia()}
-  //           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-  //             <div style={{
-  //               width: 44, height: 44, borderRadius: 0,
-  //               background: 'rgba(255,255,255,0.12)',
-  //               border: '1px solid rgba(255,255,255,0.15)',
-  //               display: 'flex', alignItems: 'center', justifyContent: 'center',
-  //               fontSize: 22, flexShrink: 0, fontWeight: 900
-  //             }}>
-  //               {renderIcon(customIcon, 30)}
-  //             </div>
-  //             <div style={{ flex: 1, minWidth: 0 }}>
-  //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, opacity: 0.65, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4, color: fg, fontWeight: 900 }}>
-  //                 🎬 Media Share
-  //               </div>
-  //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
-  //                 @{alert.donorName}
-  //               </div>
-  //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: highlight, letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 900 }}>
-  //                 Rp {Number(alert.amount).toLocaleString('id-ID')}
-  //               </div>
-  //               {alert.message && (
-  //                 <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, fontStyle: 'italic', lineHeight: 1.4, fontWeight: 900 }}>
-  //                   {alert.message}
-  //                 </div>
-  //               )}
-  //               {renderTimestamp()}
-  //             </div>
-  //           </div>
-  //         </div>
-  //         {renderProgressBar()}
-  //       </>
-  //     );
-  //   }
-
-  //   if (theme === 'classic') {
-  //     return (
-  //       <>
-  //         <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
-  //           {renderMedia()}
-  //           <div style={{ fontSize: 9, fontWeight: 900, opacity: 0.6, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, color: fg, display: 'flex', alignItems: 'center', gap: 6 }}>
-  //             <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
-  //             🎬 Media Share!
-  //           </div>
-  //           <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
-  //             Rp {Number(alert.amount).toLocaleString('id-ID')}
-  //           </div>
-  //           <div style={{ color: fg, fontSize: 22, fontWeight: 900, marginTop: 3 }}>
-  //             @{alert.donorName}
-  //           </div>
-  //           {alert.message && (
-  //             <div style={{ color: fg, fontSize: 22, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
-  //               {alert.message}
-  //             </div>
-  //           )}
-  //           {renderTimestamp()}
-  //         </div>
-  //         {renderProgressBar()}
-  //       </>
-  //     );
-  //   }
-
-  //   // MINIMAL
-  //   return (
-  //     <>
-  //       <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
-  //         {renderMedia()}
-  //         <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
-  //           Rp {Number(alert.amount).toLocaleString('id-ID')}
-  //         </div>
-  //         <div style={{ color: fg, fontSize: 22, fontWeight: 600, marginTop: 4 }}>
-  //           @{alert.donorName}
-  //         </div>
-  //         {alert.message && (
-  //           <div style={{ color: fg, fontSize: 22, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
-  //             {alert.message}
-  //           </div>
-  //         )}
-  //         {renderTimestamp()}
-  //       </div>
-  //       {renderProgressBar()}
-  //     </>
-  //   );
-  // };
-
-  
-const renderInner = () => {
-  if (theme === 'modern') {
-    return (
-      <>
-        <div style={{ padding: '16px 18px 12px' }}>
-          {renderMedia()}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ height: 4, background: highlight }} />
+          <div style={{ padding: '14px 16px 0px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
             <div style={{
-              width: 44, height: 44, borderRadius: 0,
-              background: 'rgba(255,255,255,0.12)',
-              border: '1px solid rgba(255,255,255,0.15)',
+              width: 42, height: 42,
+              background: 'rgba(0,0,0,0.2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 22, flexShrink: 0,
+              fontSize: 20, flexShrink: 0,
+              marginTop: 7
             }}>
-              {renderIcon(customIcon, 30)}
+              {renderIcon(customIcon, 22)}
             </div>
+
             <div style={{ flex: 1, minWidth: 0 }}>
-              {/* ✅ 22px SEMUA */}
-              <div style={{ 
-                fontSize: 22, fontWeight: 700, opacity: 0.65, 
-                textTransform: 'uppercase', letterSpacing: '0.1em', 
-                marginBottom: 4, color: fg,
-                fontFamily: 'system-ui, sans-serif',
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 5,
+                background: 'rgba(0,0,0,0.25)',
+                padding: '2px 8px',
+                fontSize: 26, fontWeight: 900, color: highlight,
+                textTransform: 'uppercase', letterSpacing: '0.12em',
+                marginBottom: 6,
               }}>
+                <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%' }} />
                 🎬 Media Share
               </div>
-              <div style={{ 
-                fontSize: 22, fontWeight: 700, color: fg, opacity: 0.8, 
-                marginBottom: 2, fontFamily: 'system-ui, sans-serif',
-              }}>
+
+              <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
                 @{alert.donorName}
               </div>
-              <div style={{ 
-                fontSize: 22, fontWeight: 900, color: highlight, 
-                letterSpacing: '-0.02em', lineHeight: 1,
-                fontFamily: 'system-ui, -apple-system, sans-serif',
-              }}>
+              <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </div>
               {alert.message && (
-                <div style={{ 
-                  fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, 
-                  lineHeight: 1.4, fontFamily: 'system-ui, sans-serif',
-                }}>
-                  {alert.message}
+                <div style={{ fontSize: 26, color: fg, lineHeight: 1.4 }}>
+                  "{alert.message}"
                 </div>
               )}
-              {renderTimestamp()}
             </div>
           </div>
-        </div>
-        {renderProgressBar()}
-      </>
-    );
-  }
 
-  if (theme === 'classic') {
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '8px 16px 10px',
+            background: 'rgba(0,0,0,0.2)',
+            marginTop: 10,
+          }}>
+            {renderTimestamp()}
+            <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.15)', marginLeft: 12 }}>
+              <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    // ── CLASSIC (SAMA PERSIS + Media Share header) ─────────────────────────────
+    if (theme === 'classic') {
+      return (
+        <>
+          {renderMedia()} {/* ✅ MEDIA DI ATAS */}
+
+          <div style={{
+            background: 'rgba(0,0,0,0.3)',
+            padding: '9px 14px',
+            display: 'flex', alignItems: 'center', gap: 9,
+            borderBottom: '1px solid rgba(255,255,255,0.1)',
+          }}>
+            <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIcon(customIcon, 18)}</span>
+            <span style={{ fontSize: 26, fontWeight: 900, color: highlight, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              🎬 Media Share!
+            </span>
+          </div>
+          
+          <div style={{ padding: '12px 14px 10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+              <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>@{alert.donorName}</div>
+              <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px' }}>
+                Rp {Number(alert.amount).toLocaleString('id-ID')}
+              </div>
+            </div>
+            {alert.message && (
+              <div style={{
+                fontSize: 26, color: fg,
+                lineHeight: 1.4, padding: '6px 10px',
+                background: 'rgba(0,0,0,0.2)',
+                borderLeft: `2px solid ${highlight}`,
+              }}>
+                {alert.message}
+              </div>
+            )}
+            {renderTimestamp()}
+            <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
+              <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    // ── MINIMAL (SAMA PERSIS + Media Share label) ──────────────────────────────
     return (
       <>
-        <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
-          {renderMedia()}
-          <div style={{ 
-            fontSize: 22, fontWeight: 700, opacity: 0.6, 
-            textTransform: 'uppercase', letterSpacing: '0.08em', 
-            marginBottom: 8, color: fg, display: 'flex', 
-            alignItems: 'center', gap: 6,
-            fontFamily: 'system-ui, sans-serif',
-          }}>
-            <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
-            🎬 Media Share!
+        {renderMedia()} {/* ✅ MEDIA DI ATAS */}
+
+        <div style={{ padding: '14px 16px 12px' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
+            <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-1px', lineHeight: 1 }}>
+              Rp {Number(alert.amount).toLocaleString('id-ID')}
+            </div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              🎬 Media
+            </div>
           </div>
-          <div style={{ 
-            color: highlight, fontSize: 22, fontWeight: 900, 
-            letterSpacing: '-0.02em', lineHeight: 1,
-            fontFamily: 'system-ui, sans-serif',
-          }}>
-            Rp {Number(alert.amount).toLocaleString('id-ID')}
-          </div>
-          <div style={{ 
-            color: fg, fontSize: 22, fontWeight: 700, marginTop: 3,
-            fontFamily: 'system-ui, sans-serif',
-          }}>
+
+          <div style={{ fontSize: 26, fontWeight: 900, color: fg, marginBottom: 3 }}>
             @{alert.donorName}
           </div>
+
           {alert.message && (
-            <div style={{ 
-              color: fg, fontSize: 22, opacity: 0.75, marginTop: 6,
-              fontFamily: 'system-ui, sans-serif',
-            }}>
-              {alert.message}
+            <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
+              "{alert.message}"
             </div>
           )}
+
           {renderTimestamp()}
+
+          <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 10 }}>
+            <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+          </div>
         </div>
-        {renderProgressBar()}
       </>
     );
-  }
-
-  // MINIMAL
-  return (
-    <>
-      <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
-        {renderMedia()}
-        <div style={{ 
-          color: highlight, fontSize: 22, fontWeight: 900, 
-          letterSpacing: '-0.02em', lineHeight: 1,
-          fontFamily: 'system-ui, sans-serif',
-        }}>
-          Rp {Number(alert.amount).toLocaleString('id-ID')}
-        </div>
-        <div style={{ 
-          color: fg, fontSize: 22, fontWeight: 700, marginTop: 4,
-          fontFamily: 'system-ui, sans-serif',
-        }}>
-          @{alert.donorName}
-        </div>
-        {alert.message && (
-          <div style={{ 
-            color: fg, fontSize: 22, opacity: 0.7, marginTop: 4,
-            fontFamily: 'system-ui, sans-serif',
-          }}>
-            {alert.message}
-          </div>
-        )}
-        {renderTimestamp()}
-      </div>
-      {renderProgressBar()}
-    </>
-  );
-};
+  };
 
   return (
     <div style={{
-      width: '100vw',
-      height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'transparent',
-      overflow: 'hidden',
+      width: '100vw', height: '100vh',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'transparent', overflow: 'hidden',
     }}>
       <audio ref={audioRef} />
       <AnimatePresence>
@@ -520,11 +399,11 @@ const renderInner = () => {
             animate={anim.animate}
             exit={anim.exit}
             style={{
-              backgroundColor: theme === 'minimal' ? 'transparent' : bg,
+              backgroundColor: bg,
               color: fg,
               width: `${maxW}px`,
               borderRadius: 0,
-              border: theme === 'minimal' ? `2px solid ${highlight}` : `1px solid ${borderColor}`,
+              border: `1px solid ${borderColor}`,
               boxShadow: '0 16px 40px rgba(0,0,0,0.55)',
               overflow: 'hidden',
               fontFamily: "'Inter', -apple-system, 'Segoe UI', sans-serif",
