@@ -340,6 +340,168 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
   );
 };
 
+const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
+  const [isSending, setIsSending] = useState(false);
+  const [lastSent, setLastSent] = useState(null);
+  const [customName, setCustomName] = useState('TestDonor');
+  const [mediaUrl, setMediaUrl] = useState('https://picsum.photos/400/300');
+  const [mediaType, setMediaType] = useState('image');
+
+  const sendTestMedia = async () => {
+    if (!overlayToken || !mediaUrl) return;
+    setIsSending(true);
+
+    try {
+      await api.post('/api/midtrans/test-mediashare/send', {
+        targetUsername: user.username,
+        donorName: customName,
+        mediaUrl,
+        mediaType,
+      });
+
+      setLastSent(new Date());
+    } catch (err) {
+      console.log('err', err);
+      alert(err.response?.data?.message || 'Gagal mengirim test mediashare');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const PRESET_MEDIA = [
+    { 
+      url: 'https://picsum.photos/400/300', 
+      type: 'image',
+      label: 'Random Image',
+      thumb: 'https://picsum.photos/80/60?random=1'
+    },
+    { 
+      url: 'https://picsum.photos/400/300?random=2', 
+      type: 'image', 
+      label: 'Image 2',
+      thumb: 'https://picsum.photos/80/60?random=2'
+    },
+    { 
+      url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4', 
+      type: 'video',
+      label: 'Sample Video',
+      thumb: 'https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg'
+    },
+    { 
+      url: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif', 
+      type: 'image',
+      label: 'GIF Animasi',
+      thumb: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy-preview.webp'
+    },
+  ];
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
+      <div className="flex items-center gap-4">
+        <div className="bg-purple-500 p-3 rounded-none text-white shadow-lg">
+          <ImageIcon size={20} />
+        </div>
+        <div>
+          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Instant Test MediaShare</h3>
+          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">Test kirim gambar/video langsung ke OBS MediaShare widget</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nama Donor</label>
+          <input 
+            value={customName} 
+            onChange={e => setCustomName(e.target.value)}
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-purple-400 transition-all"
+            placeholder="TestDonor" 
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Media URL</label>
+          <input 
+            value={mediaUrl} 
+            onChange={e => setMediaUrl(e.target.value)}
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-purple-400 transition-all"
+            placeholder="https://example.com/image.jpg" 
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Tipe Media</label>
+          <select 
+            value={mediaType} 
+            onChange={e => setMediaType(e.target.value)}
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-purple-400 transition-all"
+          >
+            <option value="image">🖼️ Gambar (jpg, png, gif)</option>
+            <option value="video">▶ Video (mp4, webm)</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Quick Preset Media */}
+      <div>
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Quick Test Media</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {PRESET_MEDIA.map((preset, i) => (
+            <button 
+              key={i}
+              onClick={() => { 
+                setMediaUrl(preset.url); 
+                setMediaType(preset.type);
+              }}
+              className={`group relative cursor-pointer active:scale-[0.97] p-2 rounded-none border-2 transition-all overflow-hidden ${
+                mediaUrl === preset.url 
+                  ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/30 shadow-md' 
+                  : 'border-slate-200 dark:border-slate-700 hover:border-purple-300 bg-slate-50 dark:bg-slate-800'
+              }`}
+            >
+              <img 
+                src={preset.thumb} 
+                alt={preset.label}
+                className="w-full h-16 md:h-20 object-cover rounded"
+              />
+              <p className="absolute bottom-1 right-1 bg-black/80 text-white text-[9px] px-1 rounded font-bold opacity-0 group-hover:opacity-100 transition-all">
+                {preset.type === 'video' ? 'VID' : 'IMG'}
+              </p>
+              <p className="text-[9px] font-bold text-center mt-1 truncate leading-tight">{preset.label}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <button 
+        onClick={sendTestMedia} 
+        disabled={isSending || !overlayToken || !mediaUrl}
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-purple-500 hover:bg-purple-600 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-purple-200 dark:shadow-purple-900/30"
+      >
+        {isSending ? (
+          <><RefreshCw size={18} className="animate-spin" /> Mengirim...</>
+        ) : (
+          <><ImageIcon size={18} /> Kirim Test ke MediaShare OBS</>
+        )}
+      </button>
+
+      {lastSent && (
+        <motion.div 
+          initial={{ opacity: 0, y: 4 }} 
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900"
+        >
+          <CheckCircle2 size={14} /> MediaShare terakhir: {lastSent.toLocaleTimeString('id-ID')}
+        </motion.div>
+      )}
+
+      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center space-y-1">
+        <p>⚠️ Pastikan OBS MediaShare widget sudah dibuka</p>
+        <p className="text-purple-500 font-bold">URL: {window.location.origin}/overlay/{overlayToken}/mediashare</p>
+      </div>
+    </div>
+  );
+};
+
 // ─── FITUR BARU 3: StreamerProfileModal ───────────────────────────────────────
 // Modal untuk lihat profil publik streamer lain di komunitas
 
@@ -2343,6 +2505,12 @@ ColorInput.displayName = 'ColorInput';
 
                   {/* ── FITUR BARU 4: Instant Test Alert (di atas segalanya) ── */}
                   <InstantTestAlert 
+                    overlayToken={user.overlayToken} 
+                    settings={settings} 
+                    user={user} 
+                  />
+
+                  <InstantTestMediaShare 
                     overlayToken={user.overlayToken} 
                     settings={settings} 
                     user={user} 
