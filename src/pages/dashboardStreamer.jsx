@@ -509,7 +509,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
       <button 
         onClick={sendTestMedia} 
         disabled={isSending || !overlayToken || !formData.mediaUrl}
-        className="w-full py-4 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-600 hover:from-emerald-600 hover:via-blue-600 hover:to-purple-700 text-white rounded-none font-black text-lg shadow-2xl hover:shadow-3xl active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+        className="cursor-pointer hover:brightness-90 w-full py-3 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-600 hover:from-emerald-600 hover:via-blue-600 hover:to-purple-700 text-white rounded-none font-black text-lg shadow-2xl hover:shadow-3xl active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
       >
         {isSending ? (
           <>
@@ -526,28 +526,12 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
         )}
       </button>
 
-      {/* ✅ SUCCESS */}
       {lastSent && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }} 
-          animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center gap-2 p-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-none shadow-2xl font-bold text-sm"
-        >
-          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-          </svg>
-          <div>✅ MediaShare berhasil dikirim!</div>
-          <div className="text-xs opacity-90">{lastSent.toLocaleTimeString('id-ID')}</div>
+        <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900">
+          <CheckCircle2 size={14} /> MediaShare berhasil dikirim: {lastSent.toLocaleTimeString('id-ID')}
         </motion.div>
       )}
-
-      {/* 📺 OBS INSTRUCTIONS */}
-      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold text-center space-y-1 pt-4 border-t border-slate-200 dark:border-slate-700">
-        <div>📺 OBS Browser Source:</div>
-        <div className="bg-slate-100 dark:bg-slate-800 px-3 py-2 rounded text-xs font-mono text-purple-600 font-bold break-all">
-          {window.location.origin}/overlay/{overlayToken}/mediashare
-        </div>
-      </div>
     </div>
   );
 };
