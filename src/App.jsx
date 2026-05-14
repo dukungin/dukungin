@@ -18,6 +18,7 @@ import OverlayAlert from './pages/overlayAlert';
 import PrivacyPolicy from './pages/privacyPolice';
 import ResetPassword from './pages/resetPassword';
 import SupporterPage from './pages/supporterPage';
+import { Toaster } from 'react-hot-toast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +43,19 @@ const PublicOnlyRoute = ({ children }) => {
   return children;
 };
 
+<Toaster
+  position="top-right"
+  toastOptions={{
+    duration: 4000,
+    style: {
+      background: '#fff',
+      color: '#374151',
+      fontWeight: 600,
+      borderRadius: '12px',
+      boxShadow: '0 20px 25px -5px rgba(0, 0,0, 0.1), 0 10px 10px -5px rgba(0, 0,0, 0.04)',
+    },
+  }}
+/>
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

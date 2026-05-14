@@ -1542,6 +1542,7 @@ const HistoryPage = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [historyTab, setHistoryTab] = useState('received'); // 'received' | 'sent'
+  const [replayLoading, setReplayLoading] = useState(new Set()); // Track loading per donation
 
   // Eye toggles (hanya relevan untuk tab received)
   const [showAmounts, setShowAmounts] = useState(true);
@@ -1584,6 +1585,31 @@ const HistoryPage = () => {
 
   const maskEmail = (email) => 
     showEmails ? (email || '-') : '••••@•••';
+
+  const replayDonation = async (donationId) => {
+    setReplayLoading(prev => new Set([...prev, donationId]));
+    
+    try {
+      const response = await api.post(`/api/midtrans/replay-donation/${donationId}`);
+      
+      // ✅ Toast sukses
+      toast.success(
+        `✅ Replay "${response.data.donation.donor}" ${response.data.donation.hasMedia ? '🎬 MediaShare' : '💜 Alert'} (${response.data.donation.duration})`,
+        { duration: 3000, position: 'top-right' }
+      );
+      
+      console.log('✅ Replay success:', response.data);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal replay');
+      console.error('❌ Replay error:', err);
+    } finally {
+      setReplayLoading(prev => {
+        const next = new Set(prev);
+        next.delete(donationId);
+        return next;
+      });
+    }
+  };
 
   return (
     <div className="space-y-6 pb-6">
@@ -1711,8 +1737,8 @@ const HistoryPage = () => {
                   <table className="w-full text-left min-w-[700px]">
                     <thead>
                       <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                        {['Donatur', 'Jumlah', 'Pesan', 'Media', 'Status', 'Waktu'].map((h, i) => (
-                          <th key={h} className={`px-6 md:px-8 py-6 ${i === 4 ? 'text-center' : ''}`}>{h}</th>
+                        {['Donatur', 'Nominal', 'Pesan', 'Media', 'Waktu', 'Replay'].map((h) => (  // ✅ Tambah Replay
+                          <th key={h} className="px-6 md:px-8 py-6">{h}</th>
                         ))}
                       </tr>
                     </thead>
@@ -1743,6 +1769,25 @@ const HistoryPage = () => {
                               <p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic truncate">
                                 {item.message ? `"${item.message}"` : <span className="text-slate-300 dark:text-slate-600 not-italic font-normal">-</span>}
                               </p>
+                            </td>
+                            <td className="px-6 md:px-8 py-5">
+                              <button 
+                                onClick={() => replayDonation(item._id)}
+                                disabled={replayLoading.has(item._id)}
+                                className={`... ${replayLoading.has(item._id) ? 'opacity-70 cursor-not-allowed bg-indigo-400' : ''}`}
+                              >
+                                {replayLoading.has(item._id) ? (
+                                  <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <>
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" />
+                                    </svg>
+                                    Replay
+                                  </>
+                                )}
+                                {replayLoading.has(item._id) ? 'Replay...' : 'Replay'}
+                              </button>
                             </td>
                             <td className="px-6 md:px-8 py-5">
                               {item.mediaUrl ? (
