@@ -108,8 +108,8 @@ const MediaShareOverlay = () => {
       timeout: 10000,
     });
 
-    socket.emit('join-room', token);
-    socket.on('reconnect', () => socket.emit('join-room', token));
+    socket.emit('join-room', token);                    // Untuk config/settings
+    socket.emit('join-room', `${token}-mediashare`); 
 
     // ← Hanya listen 'new-media-donation', bukan 'new-donation'
     // Event ini hanya di-emit backend kalau donasi punya mediaUrl

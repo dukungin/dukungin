@@ -348,21 +348,25 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
   const [mediaType, setMediaType] = useState('image');
 
   const sendTestMedia = async () => {
-    if (!overlayToken || !mediaUrl) return;
     setIsSending(true);
-
     try {
-      await api.post('/api/midtrans/test-mediashare/send', {
+      const response = await api.post('/api/midtrans/test-mediashare/send', {
         targetUsername: user.username,
         donorName: customName,
         mediaUrl,
         mediaType,
       });
-
+      
+      console.log('✅ Test Response:', response.data);
       setLastSent(new Date());
+      
+      // Auto-open MediaShare URL
+      const mediashareUrl = `${window.location.origin}/overlay/${overlayToken}/mediashare`;
+      console.log('🔗 Open this in OBS:', mediashareUrl);
+      
     } catch (err) {
-      console.log('err', err);
-      alert(err.response?.data?.message || 'Gagal mengirim test mediashare');
+      console.error('❌ Test Error:', err.response?.data);
+      alert(err.response?.data?.message || 'Gagal');
     } finally {
       setIsSending(false);
     }
