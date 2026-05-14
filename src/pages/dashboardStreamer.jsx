@@ -878,6 +878,7 @@ const SOUND_PRESETS = [
   { label: 'Jackpot 🎰',  url: 'https://assets.mixkit.co/active_storage/sfx/2017/2017-preview.mp3' },
   { label: 'Bling ✨',    url: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3' },
   { label: 'Payout 💸',   url: 'https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3' },
+  { label: '🔔',   url: `${APP_URL}/bell.mp3` },
 ];
 
 const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
