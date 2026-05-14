@@ -208,7 +208,7 @@ const OverlayAlert = () => {
   const renderTimestamp = () => {
     if (!showTs || !alert?.receivedAt) return null;
     return (
-      <div style={{ fontSize: 14, opacity: 0.55, fontFamily: 'monospace', letterSpacing: '0.04em', marginTop: 4 }}>
+      <div style={{ fontSize: 22, color: fg, fontFamily: 'monospace', letterSpacing: '0.04em', marginTop: 4 }}>
         🕐 {formatTimestamp(alert.receivedAt)}
       </div>
     );
@@ -225,331 +225,150 @@ const OverlayAlert = () => {
     </div>
   );
 
-  // ── Render per tema — semua borderRadius: 0 ──────────────────────────────────
-  // const renderInner = () => {
-
-  //   // MODERN
-  //   if (theme === 'modern') {
-  //     return (
-  //       <>
-  //         <div style={{ padding: '16px 18px 12px' }}>
-  //           {/* {renderMedia()} */}
-  //           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-  //             <div style={{
-  //               width: 44, height: 44,
-  //               borderRadius: 0,                              // ← no radius
-  //               background: 'rgba(255,255,255,0.12)',
-  //               border: `1px solid rgba(255,255,255,0.15)`,
-  //               display: 'flex', alignItems: 'center', justifyContent: 'center',
-  //               fontSize: 22, flexShrink: 0,
-  //             }}>
-  //               {renderIcon(customIcon, 30)}
-  //             </div>
-  //             <div style={{ flex: 1, minWidth: 0 }}>
-  //               <div className='font-bold' style={{
-  //                 fontSize: 24, fontWeight: 800, opacity: 0.65,
-  //                 textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4,
-  //                 color: fg, fontWeight: 900
-  //               }}>
-  //                 Hai Streamer
-  //               </div>
-  //               <div className='font-bold' style={{ fontSize: 22, fontWeight: 900, color: fg, opacity: 0.8, marginBottom: 2, fontWeight: 900 }}>
-  //                 @{alert.donorName}
-  //               </div>
-  //               <div className='font-bold' style={{
-  //                 fontSize: 22, fontWeight: 900, color: highlight,
-  //                 letterSpacing: '-0.3px', lineHeight: 1, fontWeight: 900
-  //               }}>
-  //                 Rp {Number(alert.amount).toLocaleString('id-ID')}
-  //               </div>
-  //               {alert.message && (
-  //                 <div className='font-bold' style={{ fontSize: 22, color: fg, opacity: 0.7, marginTop: 5, lineHeight: 1.4, fontWeight: 900 }}>
-  //                   {alert.message}
-  //                 </div>
-  //               )}
-  //               {renderTimestamp()}
-  //             </div>
-  //           </div>
-  //         </div>
-  //         {renderProgressBar()}
-  //       </>
-  //     );
-  //   }
-
-  //   // CLASSIC
-  //   if (theme === 'classic') {
-  //     return (
-  //       <>
-  //         <div style={{ padding: '18px 22px 14px', borderLeft: `5px solid ${highlight}` }}>
-  //           {/* {renderMedia()} */}
-  //           <div style={{
-  //             fontSize: 22, fontWeight: 900, opacity: 0.6,
-  //             textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8,
-  //             color: fg, display: 'flex', alignItems: 'center', gap: 6,
-  //           }}>
-  //             <span style={{ fontSize: 22 }}>{renderIcon(customIcon, 14)}</span>
-  //             Hai Streamer!
-  //           </div>
-  //           <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
-  //             Rp {Number(alert.amount).toLocaleString('id-ID')}
-  //           </div>
-  //           <div style={{ color: fg, fontSize: 22, fontWeight: 900, marginTop: 3 }}>
-  //             @{alert.donorName}
-  //           </div>
-  //           {alert.message && (
-  //             <div style={{ color: fg, fontSize: 22, opacity: 0.75, marginTop: 6, fontStyle: 'italic' }}>
-  //               {alert.message}
-  //             </div>
-  //           )}
-  //           {renderTimestamp()}
-  //         </div>
-  //         {renderProgressBar()}
-  //       </>
-  //     );
-  //   }
-
-  //   // MINIMAL
-  //   return (
-  //     <>
-  //       <div style={{ padding: '14px 18px 12px', borderLeft: `4px solid ${highlight}` }}>
-  //         {/* {renderMedia()} */}
-  //         <div style={{ color: highlight, fontSize: 22, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1 }}>
-  //           Rp {Number(alert.amount).toLocaleString('id-ID')}
-  //         </div>
-  //         <div style={{ color: fg, fontSize: 22, fontWeight: 600, marginTop: 4 }}>
-  //           @{alert.donorName}
-  //         </div>
-  //         {alert.message && (
-  //           <div style={{ color: fg, fontSize: 22, opacity: 0.7, marginTop: 4, fontStyle: 'italic' }}>
-  //             {alert.message}
-  //           </div>
-  //         )}
-  //         {renderTimestamp()}
-  //       </div>
-  //       {renderProgressBar()}
-  //     </>
-  //   );
-  // };
-  
   const renderInner = () => {
-  // ── FLAT MODERN (Default) ──────────────────────────────────────────────────
-  if (theme === 'modern') {
-    return (
-      <>
-        <div style={{ padding: '20px 24px 16px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-            {/* Icon Circle */}
+
+    // ── MODERN ──────────────────────────────────────────────────────────────────
+    if (theme === 'modern') {
+      return (
+        <>
+          {/* Accent bar atas pakai highlight */}
+          <div style={{ height: 4, background: highlight }} />
+
+          <div style={{ padding: '14px 16px 0px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+            {/* Icon box flat */}
             <div style={{
-              width: 52, height: 52,
-              borderRadius: 0,
-              background: `linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05))`,
-              backdropFilter: 'blur(10px)',
-              border: `1px solid rgba(255,255,255,0.1)`,
+              width: 42, height: 42,
+              background: 'rgba(0,0,0,0.2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 24, flexShrink: 0,
-              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              fontSize: 20, flexShrink: 0,
+              marginTop: 7
             }}>
-              {renderIcon(customIcon, 32)}
+              {renderIcon(customIcon, 22)}
             </div>
-            
+
             <div style={{ flex: 1, minWidth: 0 }}>
-              {/* Header */}
+              {/* Badge pill */}
               <div style={{
-                fontSize: 22,  // ✅ 22px
-                fontWeight: 700,
-                color: fg,
-                opacity: 0.85,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                marginBottom: 8,
-                fontFamily: 'system-ui, sans-serif',
+                display: 'inline-flex', alignItems: 'center', gap: 5,
+                background: 'rgba(0,0,0,0.25)',
+                padding: '2px 8px',
+                fontSize: 26, fontWeight: 900, color: highlight,
+                textTransform: 'uppercase', letterSpacing: '0.12em',
+                marginBottom: 6,
               }}>
-                Hai Streamer
+                <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
+                Donasi Masuk
               </div>
-              
-              {/* Nama Donatur */}
-              <div style={{
-                fontSize: 22,  // ✅ 22px
-                fontWeight: 700,
-                color: fg,
-                opacity: 0.95,
-                marginBottom: 4,
-                lineHeight: 1.3,
-                fontFamily: 'system-ui, sans-serif',
-              }}>
-                Dukungan dari @{alert.donorName}
+
+              <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
+                @{alert.donorName}
               </div>
-              
-              {/* Nominal */}
-              <div style={{
-                fontSize: 22,  // ✅ 22px
-                fontWeight: 900,
-                color: highlight,
-                letterSpacing: '-0.02em',
-                lineHeight: 1.1,
-                fontFamily: 'system-ui, -apple-system, sans-serif',
-              }}>
+              <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </div>
-              
-              {/* Pesan */}
               {alert.message && (
-                <div style={{
-                  fontSize: 22,  // ✅ 22px
-                  fontWeight: 500,
-                  color: fg,
-                  opacity: 0.8,
-                  marginTop: 12,
-                  lineHeight: 1.4,
-                  fontStyle: 'normal',
-                  fontFamily: 'system-ui, sans-serif',
-                }}>
+                <div style={{ fontSize: 26, color: fg, lineHeight: 1.4 }}>
                   "{alert.message}"
                 </div>
               )}
-              
-              {renderTimestamp()}
             </div>
           </div>
-        </div>
-        {renderProgressBar()}
-      </>
-    );
-  }
 
-  // ── CLASSIC FLAT ───────────────────────────────────────────────────────────
-  if (theme === 'classic') {
+          {/* Footer: timestamp kiri + progress bar kanan */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '8px 16px 10px',
+            background: 'rgba(0,0,0,0.2)',
+            marginTop: 10,
+          }}>
+            {showTs && alert?.receivedAt
+              ? <div style={{ fontSize: 26, color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace' }}>
+                  🕐 {formatTimestamp(alert.receivedAt)}
+                </div>
+              : <div />
+            }
+            <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.15)', marginLeft: 12 }}>
+              <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    // ── CLASSIC ──────────────────────────────────────────────────────────────────
+    if (theme === 'classic') {
+      return (
+        <>
+          <div style={{
+            background: 'rgba(0,0,0,0.3)',
+            padding: '9px 14px',
+            display: 'flex', alignItems: 'center', gap: 9,
+            borderBottom: '1px solid rgba(255,255,255,0.1)',
+          }}>
+            <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIcon(customIcon, 18)}</span>
+            <span style={{ fontSize: 26, fontWeight: 900, color: fg, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              Dukungan Masuk!
+            </span>
+          </div>
+          <div style={{ padding: '12px 14px 10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+              <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>@{alert.donorName}</div>
+              <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px' }}>
+                Rp {Number(alert.amount).toLocaleString('id-ID')}
+              </div>
+            </div>
+            {alert.message && (
+              <div style={{
+                fontSize: 26, color: fg,
+                lineHeight: 1.4, padding: '6px 10px',
+                background: 'rgba(0,0,0,0.2)',
+                borderLeft: `2px solid ${highlight}`,
+              }}>
+                {alert.message}
+              </div>
+            )}
+            {renderTimestamp()}
+            <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
+              <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    // ── MINIMAL ──────────────────────────────────────────────────────────────────
     return (
       <>
-        <div style={{ 
-          padding: '24px 28px 20px',
-          borderLeft: `4px solid ${highlight}`,
-          background: `linear-gradient(90deg, rgba(255,255,255,0.06), transparent)`,
-        }}>
-          {/* Icon + Header */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12,
-          }}>
-            <div style={{
-              width: 48, height: 48,
-              borderRadius: 0,
-              background: `rgba(255,255,255,0.1)`,
-              border: `1px solid rgba(255,255,255,0.15)`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 22,
-            }}>
-              {renderIcon(customIcon, 28)}
-            </div>
-            <div style={{
-              fontSize: 22,  // ✅ 22px
-              fontWeight: 700,
-              color: fg,
-              opacity: 0.7,
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-            }}>
-              Hai Streamer
-            </div>
-          </div>
-          
-          {/* Nama + Nominal */}
-          <div style={{
-            display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 8,
-          }}>
-            <div style={{
-              fontSize: 22,  // ✅ 22px
-              fontWeight: 700,
-              color: fg,
-              opacity: 0.9,
-              fontFamily: 'system-ui, sans-serif',
-            }}>
-              dari @{alert.donorName}
-            </div>
-            <div style={{
-              fontSize: 22,  // ✅ 22px
-              fontWeight: 900,
-              color: highlight,
-              letterSpacing: '-0.02em',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
-            }}>
+        <div style={{ padding: '14px 16px 12px' }}>
+          {/* Amount besar + label kanan */}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
+            <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-1px', lineHeight: 1 }}>
               Rp {Number(alert.amount).toLocaleString('id-ID')}
             </div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              Donasi
+            </div>
           </div>
-          
-          {/* Pesan */}
+
+          <div style={{ fontSize: 26, fontWeight: 900, color: fg, marginBottom: 3 }}>
+            @{alert.donorName}
+          </div>
+
           {alert.message && (
-            <div style={{
-              fontSize: 22,  // ✅ 22px
-              fontWeight: 500,
-              color: fg,
-              opacity: 0.75,
-              lineHeight: 1.4,
-              fontFamily: 'system-ui, sans-serif',
-            }}>
-              {alert.message}
+            <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
+              "{alert.message}"
             </div>
           )}
-          
+
           {renderTimestamp()}
+
+          <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 10 }}>
+            <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+          </div>
         </div>
-        {renderProgressBar()}
       </>
     );
-  }
-
-  // ── MINIMAL FLAT ───────────────────────────────────────────────────────────
-  return (
-    <>
-      <div style={{ 
-        padding: '20px 24px 16px',
-        borderTop: `3px solid ${highlight}`,
-        background: `rgba(255,255,255,0.03)`,
-      }}>
-        {/* Nominal Besar */}
-        <div style={{
-          fontSize: 22,  // ✅ 22px
-          fontWeight: 900,
-          color: highlight,
-          letterSpacing: '-0.02em',
-          lineHeight: 1,
-          marginBottom: 8,
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-        }}>
-          Rp {Number(alert.amount).toLocaleString('id-ID')}
-        </div>
-        
-        {/* Nama Donatur */}
-        <div style={{
-          fontSize: 22,  // ✅ 22px
-          fontWeight: 700,
-          color: fg,
-          opacity: 0.9,
-          marginBottom: 4,
-          fontFamily: 'system-ui, sans-serif',
-        }}>
-          Dukungan dari @{alert.donorName}
-        </div>
-        
-        {/* Pesan */}
-        {alert.message && (
-          <div style={{
-            fontSize: 22,  // ✅ 22px
-            fontWeight: 500,
-            color: fg,
-            opacity: 0.75,
-            lineHeight: 1.4,
-            fontFamily: 'system-ui, sans-serif',
-          }}>
-            {alert.message}
-          </div>
-        )}
-        
-        {renderTimestamp()}
-      </div>
-      {renderProgressBar()}
-    </>
-  );
-};
+  };
 
   return (
     <div style={{
@@ -566,11 +385,11 @@ const OverlayAlert = () => {
             animate={anim.animate}
             exit={anim.exit}
             style={{
-              backgroundColor: theme === 'minimal' ? 'transparent' : bg,
+              backgroundColor: bg,
               color: fg,
               width: `${maxW}px`,
               borderRadius: 0,                               // ← no radius di wrapper
-              border: theme === 'minimal' ? `2px solid ${highlight}` : `1px solid ${borderColor}`,
+              border: `1px solid ${borderColor}`,
               boxShadow: '0 16px 40px rgba(0,0,0,0.55)',
               overflow: 'hidden',
               fontFamily: "'Inter', -apple-system, 'Segoe UI', sans-serif",

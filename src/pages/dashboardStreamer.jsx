@@ -1117,47 +1117,147 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   const dur   = currentDonor ? getDuration(settings, currentDonor.amount) : 5;
 
   const handleFullScreen = () => { testFullScreen(); setIsFullscreen(!isFullscreen); };
-
+  
   const renderAlert = () => {
     if (!currentDonor) return null;
-    const inner = (
-      <div>
-        {theme === 'modern' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px' }}>
-            <div style={{ width: 34, height: 34, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>
-              {renderIconPreview(settings.customIcon, 16)}
+
+    const hl = settings.highlightColor || '#a5b4fc';
+    const ts = settings.showTimestamp !== false
+      ? <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace' }}>
+          🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+        </div>
+      : <div />;
+
+    // ── MODERN ────────────────────────────────────────────────────────────────
+    const modernInner = (
+      <>
+        <div style={{ height: 4, background: hl }} />
+        <div style={{ padding: '14px 16px 0px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+          <div style={{
+            width: 42, height: 42,
+            background: 'rgba(0,0,0,0.2)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 20, flexShrink: 0,
+            marginTop: 7
+          }}>
+            {renderIconPreview(settings.customIcon, 22)}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 5,
+              background: 'rgba(0,0,0,0.25)', 
+              padding: '2px 8px',
+              fontSize: 26, fontWeight: 900, color: hl,
+              textTransform: 'uppercase', letterSpacing: '0.12em', 
+              marginBottom: 6,
+            }}>
+              <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
+              Donasi Masuk
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 22, fontWeight: 700, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Donasi Masuk!</div>
-              <div style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.2 }}>@{currentDonor.name} · Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
-              <div style={{ fontSize: 22, opacity: 0.7, marginTop: 2 }}>"{currentDonor.msg}"</div>
-              {settings.showTimestamp !== false && (
-                <div style={{ fontSize: 8, opacity: 0.5, fontFamily: 'monospace', marginTop: 3 }}>🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</div>
-              )}
+            <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
+              @{currentDonor.name}
             </div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
+              Rp {currentDonor.amount.toLocaleString('id-ID')}
+            </div>
+            {currentDonor.msg && (
+              <div style={{ fontSize: 26, color: fg, opacity: 0.8, lineHeight: 1.4 }}>
+                "{currentDonor.msg}"
+              </div>
+            )}
           </div>
-        )}
-        {theme === 'classic' && (
-          <div style={{ padding: '10px 14px', border: '2px solid rgba(255,255,255,0.25)' }}>
-            <div style={{ fontSize: 9, fontWeight: 700, opacity: 0.6, textTransform: 'uppercase' }}>Dukungan Masuk!</div>
-            <div style={{ fontSize: 15, fontWeight: 800 }}>@{currentDonor.name}</div>
-            <div style={{ fontSize: 12, fontWeight: 700 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
-            <div style={{ fontSize: 9, opacity: 0.6, fontStyle: 'italic', marginTop: 2 }}>"{currentDonor.msg}"</div>
+        </div>
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '8px 16px 10px', background: 'rgba(0,0,0,0.2)', marginTop: 10,
+        }}>
+          {ts}
+          <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.15)', marginLeft: 12 }}>
+            <div style={{ height: '100%', width: '60%', background: hl }} />
           </div>
-        )}
-        {theme === 'minimal' && (
-          <div style={{ padding: '8px 12px', borderLeft: '3px solid rgba(255,255,255,0.6)' }}>
-            <div style={{ fontSize: 9, opacity: 0.55, textTransform: 'uppercase' }}>Donasi Masuk</div>
-            <div style={{ fontSize: 16, fontWeight: 700 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
-            <div style={{ fontSize: 10, opacity: 0.8 }}>@{currentDonor.name}</div>
-            <div style={{ fontSize: 9, opacity: 0.55, fontStyle: 'italic', marginTop: 1 }}>"{currentDonor.msg}"</div>
-          </div>
-        )}
-      </div>
+        </div>
+      </>
     );
+
+    // ── CLASSIC ───────────────────────────────────────────────────────────────
+    const classicInner = (
+      <>
+        <div style={{
+          background: 'rgba(0,0,0,0.3)', padding: '9px 14px',
+          display: 'flex', alignItems: 'center', gap: 9,
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+        }}>
+          <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIconPreview(settings.customIcon, 18)}</span>
+          <span style={{ fontSize: 26, fontWeight: 900, color: fg, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            Dukungan Masuk!
+          </span>
+        </div>
+        <div style={{ padding: '12px 14px 10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+            <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>@{currentDonor.name}</div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px' }}>
+              Rp {currentDonor.amount.toLocaleString('id-ID')}
+            </div>
+          </div>
+          {currentDonor.msg && (
+            <div style={{
+              fontSize: 26, color: fg,
+              lineHeight: 1.4, padding: '6px 10px',
+              background: 'rgba(0,0,0,0.2)',
+              borderLeft: `2px solid ${hl}`,
+            }}>
+              {currentDonor.msg}
+            </div>
+          )}
+          {ts}
+          <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
+            <div style={{ height: '100%', width: '45%', background: hl }} />
+          </div>
+        </div>
+      </>
+    );
+
+    // ── MINIMAL ───────────────────────────────────────────────────────────────
+    const minimalInner = (
+      <>
+        <div style={{ padding: '14px 16px 12px' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
+            <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-1px', lineHeight: 1 }}>
+              Rp {currentDonor.amount.toLocaleString('id-ID')}
+            </div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              Donasi
+            </div>
+          </div>
+          <div style={{ fontSize: 26, fontWeight: 900, color: fg, marginBottom: 3 }}>
+            @{currentDonor.name}
+          </div>
+          {currentDonor.msg && (
+            <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
+              "{currentDonor.msg}"
+            </div>
+          )}
+          {ts}
+          <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 10 }}>
+            <div style={{ height: '100%', width: '75%', background: hl }} />
+          </div>
+        </div>
+      </>
+    );
+
+    const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner };
+
     return (
-      <div style={{ backgroundColor: theme === 'minimal' ? 'transparent' : bg, color: fg, maxWidth: `${maxW}px`, width: '100%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.45)', border: theme === 'minimal' ? `2px solid ${bg}` : `2px solid ${settings.borderColor || 'rgba(255,255,255,0.15)'}` }}>
-        {inner}
+      <div style={{
+        backgroundColor: bg,
+        color: fg,
+        maxWidth: `${maxW}px`,
+        width: '100%',
+        overflow: 'hidden',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.45)',
+        border: `1px solid ${settings.borderColor || 'rgba(255,255,255,0.15)'}`,
+      }}>
+        {innerMap[theme] ?? modernInner}
       </div>
     );
   };
@@ -2520,7 +2620,7 @@ ColorInput.displayName = 'ColorInput';
               <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
                   <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
-                  <PollManager overlayToken={user.overlayToken} />
+                  <PollManager overlayToken={user.overlayToken} username={currentUser.username} />
                 </div>
               </motion.div>
             )}

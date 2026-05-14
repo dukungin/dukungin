@@ -10,6 +10,7 @@ import QrCodeWidget from './components/qrCodeWidget';
 import { DashboardStreamer } from './pages/dashboardStreamer';
 import DonationFailed from './pages/donationFailed';
 import DonationPending from './pages/donationPending';
+import PollDonatePage from './pages/pollDonate';
 import DonationSuccess from './pages/donationSuccess';
 import LandingPage from './pages/landingPage'; // ← import landing page
 import MediaShareOverlay from './pages/mediaShareOverlay';
@@ -74,6 +75,7 @@ function App() {
           <Route path="/widget/:token/leaderboard" element={<LeaderboardWidget />} />
           <Route path="/widget/:token/milestones"  element={<MilestonesWidget />} />
           <Route path="/widget/:token/qrcode"      element={<QrCodeWidget />} />
+          <Route path="/poll/:username" element={<PollDonatePage />} />
 
           {/* Overlay OBS */}
           <Route path="/overlay/:token" element={<OverlayAlert />} />

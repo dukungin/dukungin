@@ -50,7 +50,7 @@ const formatSeconds = (s) => {
 
 // ─── PollManager ─────────────────────────────────────────────────────────────
 
-export const PollManager = ({ overlayToken }) => {
+export const PollManager = ({ overlayToken, username }) => {
   const queryClient = useQueryClient();
   const [newQuestion, setNewQuestion] = useState('');
   const [newOptions, setNewOptions] = useState(['', '']);
@@ -270,6 +270,37 @@ export const PollManager = ({ overlayToken }) => {
           </div>
         </div>
       )}
+
+      {overlayToken && (
+        <div className="bg-indigo-50 dark:bg-indigo-950/30 p-4 rounded-none border border-indigo-200 dark:border-indigo-800">
+          <p className="text-[10px] font-black text-indigo-400 dark:text-indigo-500 uppercase tracking-widest mb-1">
+            Link Vote untuk Donor
+          </p>
+          <p className="text-[10px] text-indigo-400 dark:text-indigo-500 font-medium mb-2">
+            Bagikan link ini ke penonton agar bisa vote sambil donasi
+          </p>
+          <div className="flex gap-2">
+            <input
+              readOnly
+              value={`${window.location.origin}/poll/${/* username dari props atau context */ 'USERNAME'}`}
+              className="flex-1 bg-transparent font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold outline-none truncate"
+            />
+            <button
+              onClick={() => {
+                // Ganti USERNAME dengan username streamer yang login
+                // Bisa diambil dari props, context, atau localStorage
+                const pollUrl = `${window.location.origin}/poll/USERNAME`;
+                navigator.clipboard.writeText(pollUrl);
+                // Tambahkan state copied jika mau (opsional)
+              }}
+              className="cursor-pointer active:scale-[0.97] px-3 py-2 rounded-none text-xs font-black bg-indigo-600 hover:bg-indigo-700 text-white transition-all"
+            >
+              Salin
+            </button>
+          </div>
+        </div>
+      )}
+      
 
       {/* Riwayat Poll */}
       {closedPolls.length > 0 && (
