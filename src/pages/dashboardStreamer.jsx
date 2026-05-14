@@ -1666,8 +1666,8 @@ const HistoryPage = () => {
               {[
                 { val: '', label: 'Semua' },
                 { val: 'PAID', label: 'PAID' },
-                { val: 'PENDING', label: 'Pending' },
-                { val: 'EXPIRED', label: 'Expired' },
+                // { val: 'PENDING', label: 'Pending' },
+                // { val: 'EXPIRED', label: 'Expired' },
               ].map((f) => (
                 <button
                   key={f.val}
@@ -1778,7 +1778,7 @@ const HistoryPage = () => {
                       <button
                         onClick={() => setPage(p => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 disabled:opacity-40"
+                        className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-600 cursor-pointer active:scale-[0.98] disabled:opacity-40"
                       >
                         ← Sebelumnya
                       </button>
@@ -1788,7 +1788,7 @@ const HistoryPage = () => {
                       <button
                         onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
                         disabled={page === pagination.totalPages}
-                        className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 disabled:opacity-40"
+                        className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-600 cursor-pointer active:scale-[0.98] disabled:opacity-40"
                       >
                         Berikutnya →
                       </button>
