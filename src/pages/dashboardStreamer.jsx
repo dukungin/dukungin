@@ -578,7 +578,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
       >
         <motion.div 
           initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }}
-          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900 rounded-none h-[70vh] pb-4 md:max-h-[90vh] overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
+          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900 rounded-none h-[70vh] pb-4 md:h-max overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
           onClick={e => e.stopPropagation()}
         >
           
@@ -629,7 +629,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
             </div>
 
             {/* SISI KANAN: Bio, Stats, Socials, & Actions */}
-            <div className="md:w-[60%] p-6 md:p-8 bg-slate-50/50 dark:bg-slate-900/50 space-y-6">
+            <div className="md:w-[60%] p-6 md:p-8 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col justify-end space-y-6">
               
               {/* Bio Section */}
               <div>
@@ -640,7 +640,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-3">
+              {/* <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
                   <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{streamer?.followersCount ?? 0}</p>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Followers</p>
@@ -649,7 +649,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
                   <p className="text-2xl font-black text-purple-600 dark:text-purple-400">{streamer?.supportersCount ?? 0}</p>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Supporters</p>
                 </div>
-              </div>
+              </div> */}
 
               {/* Social Media Grid */}
               { (streamer?.instagram || streamer?.facebook || streamer?.youtube || streamer?.twitter) && (
