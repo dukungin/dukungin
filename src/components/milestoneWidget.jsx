@@ -74,9 +74,9 @@ const MilestonesWidget = () => {
       }}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <span style={{ fontSize: 16 }}>🎯</span>
+          <span style={{ fontSize: 24 }}>🎯</span>
           <span style={{
-            fontSize: 10,
+            fontSize: 24,
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.12em',
@@ -84,7 +84,7 @@ const MilestonesWidget = () => {
           }}>
             Milestones
           </span>
-          <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 800, color: '#10b981' }}>
+          <span style={{ marginLeft: 'auto', fontSize: 24, fontWeight: 800, color: '#10b981' }}>
             Rp {Number(totalDonation).toLocaleString('id-ID')}
           </span>
         </div>
@@ -101,7 +101,7 @@ const MilestonesWidget = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     {achieved
-                      ? <span style={{ fontSize: 12 }}>✅</span>
+                      ? <span style={{ fontSize: 24 }}>✅</span>
                       : <span style={{
                           width: 8, height: 8, borderRadius: '50%',
                           background: '#6366f1',
@@ -110,7 +110,7 @@ const MilestonesWidget = () => {
                         }} />
                     }
                     <span style={{
-                      fontSize: 12,
+                      fontSize: 24,
                       fontWeight: 700,
                       color: achieved ? 'rgba(255,255,255,1)' : '#ffffff',
                       textDecoration: achieved ? 'line-through' : 'none',
@@ -119,7 +119,7 @@ const MilestonesWidget = () => {
                     </span>
                   </div>
                   <span style={{
-                    fontSize: 11,
+                    fontSize: 24,
                     fontWeight: 800,
                     color: achieved ? '#10b981' : 'rgba(255,255,255,0.4)',
                   }}>
@@ -148,7 +148,7 @@ const MilestonesWidget = () => {
                 {/* Target amount */}
                 <div style={{
                   marginTop: 4,
-                  fontSize: 9,
+                  fontSize: 24,
                   color: 'rgba(255,255,255,1)',
                   fontWeight: 600,
                   textAlign: 'right',
