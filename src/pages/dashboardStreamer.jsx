@@ -2177,6 +2177,7 @@ export const DashboardStreamer = () => {
         facebook:  profileData?.user?.facebook  || profileData?.User?.facebook  || '',
         youtube:   profileData?.user?.youtube   || profileData?.User?.youtube   || '',
         twitter:   profileData?.user?.twitter   || profileData?.User?.twitter   || '',
+        currentUser: profileData?.user || profileData?.User || {},
       });
     }
   }, [profileData]);
@@ -2865,7 +2866,7 @@ ColorInput.displayName = 'ColorInput';
               <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
                   <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
-                  <PollManager overlayToken={user.overlayToken} username={currentUser.username} />
+                  <PollManager overlayToken={user.overlayToken} username={user.username} />
                 </div>
               </motion.div>
             )}

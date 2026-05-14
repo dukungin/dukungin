@@ -649,74 +649,45 @@ export const SubathonManager = ({ overlayToken }) => {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700"
+                    className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700"
                   >
-                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                      Tambah/Edit Tier
-                    </p>
-                    
-                    {/* Form tambah tier - **FIX: 4 kolom (Rp + Jam + Menit + Detik)** */}
-                    <div className="grid grid-cols-4 gap-2">
-                      <input
-                        type="number"
-                        value={newTierAmount}
-                        onChange={e => setNewTierAmount(Number(e.target.value))}
-                        placeholder="5000"
-                        className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
-                      />
-                      <input
-                        type="number"
-                        value={newTierHours}
-                        onChange={e => setNewTierHours(Number(e.target.value))}
-                        placeholder="0"
-                        className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
-                        min="0"
-                      />
-                      <input
-                        type="number"
-                        value={newTierMinutes}
-                        onChange={e => setNewTierMinutes(Number(e.target.value))}
-                        placeholder="0"
-                        className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
-                        min="0"
-                      />
-                      <input
-                        type="number"
-                        value={newTierSeconds}
-                        onChange={e => setNewTierSeconds(Number(e.target.value))}
-                        placeholder="30"
-                        className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
-                        min="0"
-                      />
+                    <div className="flex items-center gap-2">
+                      <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex-1">
+                        Tambah Tier Baru
+                      </p>
+                      <button
+                        onClick={() => setShowTiersTable(false)}
+                        className="text-xs font-black text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                      >
+                        Tutup ×
+                      </button>
                     </div>
-                    <div className="flex gap-2 text-[10px] text-slate-400 dark:text-slate-500">
-                      <span>Rp</span><span>Jam</span><span>Menit</span><span>Detik</span>
-                    </div>
-                    
-                    <button
-                      onClick={addTier}
-                      className="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-none font-bold text-xs"
-                    >
-                      Tambah Tier
-                    </button>
 
-                    {/* Daftar tier yang bisa dihapus/edit */}
-                    <div className="max-h-40 overflow-y-auto space-y-2">
-                      {(localTimer.durationTiers || []).map((tier, i) => (
-                        <div key={i} className="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-none">
-                          <span className="flex-1 text-xs font-bold">
-                            Rp {tier.amount.toLocaleString()} → {tier.hours || 0}h {tier.minutes || 0}m {tier.seconds || 0}s
-                          </span>
-                          <button
-                            onClick={() => removeTier(i)}
-                            className="p-1 text-red-500 hover:text-red-700"
-                            title="Hapus tier"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
+                    {/* Form Tambah Tier Baru */}
+                    <TierForm 
+                      onAdd={(newTier) => {
+                        upd('durationTiers', [...(localTimer.durationTiers || []), newTier]);
+                      }}
+                    />
+
+                    {/* Daftar Tier Existing */}
+                    {(localTimer.durationTiers || []).map((tier, i) => (
+                      <TierForm
+                        key={i}
+                        tier={tier}
+                        index={i}
+                        isEditing={true}
+                        onChange={(updatedTier) => {
+                          const tiers = [...(localTimer.durationTiers || [])];
+                          tiers[i] = updatedTier;
+                          upd('durationTiers', tiers);
+                        }}
+                        onRemove={(index) => {
+                          const tiers = localTimer.durationTiers || [];
+                          upd('durationTiers', tiers.filter((_, i) => i !== index));
+                        }}
+                      />
+                    ))}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -904,6 +875,133 @@ export const LeaderboardSettings = ({ overlayToken }) => {
           {saved ? <><CheckCircle2 size={16} /> Tersimpan!</> : saveMutation.isPending ? 'Menyimpan...' : <><Save size={16} /> Simpan Pengaturan Leaderboard</>}
         </button>
       </div>
+    </div>
+  );
+};
+
+// ─── TierForm Component ────────────────────────────────────────────────────────
+const TierForm = ({ 
+  tier, 
+  onChange, 
+  onAdd, 
+  onRemove, 
+  index,
+  isEditing = false 
+}) => {
+  const [amount, setAmount] = useState(tier?.amount || '');
+  const [hours, setHours] = useState(tier?.hours || '');
+  const [minutes, setMinutes] = useState(tier?.minutes || '1');
+  const [seconds, setSeconds] = useState(tier?.seconds || '');
+
+  useEffect(() => {
+    if (tier) {
+      setAmount(tier.amount || '');
+      setHours(tier.hours || '');
+      setMinutes(tier.minutes || '');
+      setSeconds(tier.seconds || '');
+    }
+  }, [tier]);
+
+  const handleChange = (key, value) => {
+    const handlers = {
+      amount: setAmount,
+      hours: setHours,
+      minutes: setMinutes,
+      seconds: setSeconds
+    };
+    handlers[key](value);
+    onChange?.({ ...tier, [key]: value === '' ? null : Number(value) });
+  };
+
+  const handleAdd = () => {
+    if (!amount || Number(amount) <= 0) return;
+    onAdd({ 
+      amount: Number(amount), 
+      hours: Number(hours) || 0, 
+      minutes: Number(minutes) || 0, 
+      seconds: Number(seconds) || 0 
+    });
+    // Reset form
+    setAmount('');
+    setHours('');
+    setMinutes('1');
+    setSeconds('');
+  };
+
+  const totalSec = ((Number(hours) || 0) * 3600) + ((Number(minutes) || 0) * 60) + (Number(seconds) || 0);
+
+  return (
+    <div className="space-y-3">
+      {isEditing && (
+        <div className="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-800/50 rounded-none border">
+          <span className="text-[10px] font-black text-slate-500 dark:text-slate-400">
+            Tier {index + 1} • {formatSeconds(totalSec)}
+          </span>
+          <button
+            onClick={() => onRemove(index)}
+            className="p-1 text-red-500 hover:text-red-700 transition-colors"
+            title="Hapus tier"
+          >
+            <Trash2 size={12} />
+          </button>
+        </div>
+      )}
+
+      <div className="grid grid-cols-4 gap-2">
+        <div className="relative">
+          <input
+            type="number"
+            value={amount}
+            onChange={e => handleChange('amount', e.target.value)}
+            placeholder="5000"
+            className="w-full p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400 focus:outline-none pr-6"
+            min="1"
+          />
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400">Rp</span>
+        </div>
+        <input
+          type="number"
+          value={hours}
+          onChange={e => handleChange('hours', e.target.value)}
+          placeholder="0"
+          className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400 focus:outline-none"
+          min="0"
+        />
+        <input
+          type="number"
+          value={minutes}
+          onChange={e => handleChange('minutes', e.target.value)}
+          placeholder="1"
+          className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400 focus:outline-none"
+          min="0"
+        />
+        <input
+          type="number"
+          value={seconds}
+          onChange={e => handleChange('seconds', e.target.value)}
+          placeholder="30"
+          className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400 focus:outline-none"
+          min="0"
+        />
+      </div>
+      
+      <div className="grid grid-cols-4 gap-2 text-[10px] text-slate-400 dark:text-slate-500">
+        <span>Donasi</span><span>Jam</span><span>Menit</span><span>Detik</span>
+      </div>
+
+      {isEditing ? (
+        <div className="text-xs text-center text-green-600 dark:text-green-400 font-bold bg-green-50 dark:bg-green-950/30 p-2 rounded-none">
+          {formatSeconds(totalSec)}
+        </div>
+      ) : (
+        <button
+          onClick={handleAdd}
+          disabled={!amount || Number(amount) <= 0}
+          className="w-full py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white rounded-none font-bold text-xs disabled:cursor-not-allowed transition-all"
+        >
+          Tambah Tier
+        </button>
+      )}
     </div>
   );
 };
