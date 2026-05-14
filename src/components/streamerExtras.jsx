@@ -451,10 +451,9 @@ export const SubathonManager = ({ overlayToken }) => {
       mode: localTimer.mode,
       initialSeconds: localTimer.initialSeconds,
       autoAddEnabled: localTimer.autoAddEnabled,
-      addSecondsPerAmount: localTimer.addSecondsPerAmount || 60,
-      addPerAmount: localTimer.addPerAmount || 10000,
       maxSeconds: localTimer.maxSeconds,
       title: localTimer.title,
+      durationTiers: localTimer.durationTiers,  // ← INI YANG BARU
     });
   };
 
@@ -656,8 +655,8 @@ export const SubathonManager = ({ overlayToken }) => {
                       Tambah/Edit Tier
                     </p>
                     
-                    {/* Form tambah tier */}
-                    <div className="grid grid-cols-3 gap-2">
+                    {/* Form tambah tier - **FIX: 4 kolom (Rp + Jam + Menit + Detik)** */}
+                    <div className="grid grid-cols-4 gap-2">
                       <input
                         type="number"
                         value={newTierAmount}
@@ -671,22 +670,32 @@ export const SubathonManager = ({ overlayToken }) => {
                         onChange={e => setNewTierHours(Number(e.target.value))}
                         placeholder="0"
                         className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
+                        min="0"
                       />
                       <input
                         type="number"
                         value={newTierMinutes}
                         onChange={e => setNewTierMinutes(Number(e.target.value))}
-                        placeholder="1"
+                        placeholder="0"
                         className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
+                        min="0"
+                      />
+                      <input
+                        type="number"
+                        value={newTierSeconds}
+                        onChange={e => setNewTierSeconds(Number(e.target.value))}
+                        placeholder="30"
+                        className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
+                        min="0"
                       />
                     </div>
                     <div className="flex gap-2 text-[10px] text-slate-400 dark:text-slate-500">
-                      <span>Rp</span><span>Jam</span><span>Menit</span>
+                      <span>Rp</span><span>Jam</span><span>Menit</span><span>Detik</span>
                     </div>
                     
                     <button
                       onClick={addTier}
-                      className="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-none font-black text-xs"
+                      className="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-none font-bold text-xs"
                     >
                       Tambah Tier
                     </button>
@@ -701,6 +710,7 @@ export const SubathonManager = ({ overlayToken }) => {
                           <button
                             onClick={() => removeTier(i)}
                             className="p-1 text-red-500 hover:text-red-700"
+                            title="Hapus tier"
                           >
                             <Trash2 size={12} />
                           </button>
