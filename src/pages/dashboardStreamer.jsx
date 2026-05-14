@@ -228,7 +228,7 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
       <button
         onClick={() => saveSettingsMutation.mutate(settings)}
         disabled={saveSettingsMutation.isPending}
-        className="mt-3 md:mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-3 bg-emerald-600 text-white rounded-none font-black"
+        className="mt-3 md:mt-6 cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full py-3 bg-emerald-600 text-white rounded-none text-sm font-black"
       >
         Simpan Quick Nominal
       </button>
@@ -510,7 +510,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
       <button 
         onClick={sendTestMedia} 
         disabled={isSending || !overlayToken || !formData.mediaUrl}
-        className="cursor-pointer hover:brightness-90 w-full py-3 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-600 hover:from-emerald-600 hover:via-blue-600 hover:to-purple-700 text-white rounded-none font-black text-lg shadow-2xl hover:shadow-3xl active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+        className="cursor-pointer hover:brightness-90 w-full py-3 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-600 hover:from-emerald-600 hover:via-blue-600 hover:to-purple-700 text-white rounded-none font-black text-sm shadow-2xl hover:shadow-3xl active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
       >
         {isSending ? (
           <>
@@ -519,10 +519,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
           </>
         ) : (
           <>
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-            <span>Kirim Test MediaShare Lengkap</span>
+            <><Zap size={18} /> Kirim Test ke OBS Sekarang</>
           </>
         )}
       </button>
