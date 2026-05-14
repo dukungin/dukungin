@@ -343,164 +343,211 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
 const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
   const [isSending, setIsSending] = useState(false);
   const [lastSent, setLastSent] = useState(null);
-  const [customName, setCustomName] = useState('TestDonor');
-  const [mediaUrl, setMediaUrl] = useState('https://picsum.photos/400/300');
-  const [mediaType, setMediaType] = useState('image');
+  const [formData, setFormData] = useState({
+    donorName: 'TestDonor',
+    amount: 25000,
+    message: 'Terima kasih atas dukungannya! 🔥',
+    mediaUrl: 'https://picsum.photos/400/300',
+    mediaType: 'image'
+  });
 
   const sendTestMedia = async () => {
+    if (!overlayToken || !formData.mediaUrl) return;
     setIsSending(true);
+
     try {
       const response = await api.post('/api/midtrans/test-mediashare/send', {
         targetUsername: user.username,
-        donorName: customName,
-        mediaUrl,
-        mediaType,
+        donorName: formData.donorName,
+        amount: formData.amount,
+        message: formData.message || null,
+        mediaUrl: formData.mediaUrl,
+        mediaType: formData.mediaType,
       });
-      
-      console.log('✅ Test Response:', response.data);
+
+      console.log('✅ Sent:', response.data);
       setLastSent(new Date());
-      
-      // Auto-open MediaShare URL
-      const mediashareUrl = `${window.location.origin}/overlay/${overlayToken}/mediashare`;
-      console.log('🔗 Open this in OBS:', mediashareUrl);
-      
     } catch (err) {
-      console.error('❌ Test Error:', err.response?.data);
-      alert(err.response?.data?.message || 'Gagal');
+      console.error('❌ Error:', err.response?.data);
+      alert(err.response?.data?.message || 'Gagal mengirim');
     } finally {
       setIsSending(false);
     }
   };
 
   const PRESET_MEDIA = [
-    { 
-      url: 'https://picsum.photos/400/300', 
-      type: 'image',
-      label: 'Random Image',
-      thumb: 'https://picsum.photos/80/60?random=1'
-    },
-    { 
-      url: 'https://picsum.photos/400/300?random=2', 
-      type: 'image', 
-      label: 'Image 2',
-      thumb: 'https://picsum.photos/80/60?random=2'
-    },
-    { 
-      url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4', 
-      type: 'video',
-      label: 'Sample Video',
-      thumb: 'https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg'
-    },
-    { 
-      url: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif', 
-      type: 'image',
-      label: 'GIF Animasi',
-      thumb: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy-preview.webp'
-    },
+    { url: 'https://picsum.photos/400/300?random=1', type: 'image', label: '🖼️ Random Image', thumb: 'https://picsum.photos/80/60?random=1' },
+    { url: 'https://picsum.photos/400/300?random=2', type: 'image', label: '🖼️ Image 2', thumb: 'https://picsum.photos/80/60?random=2' },
+    { url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4', type: 'video', label: '▶ Video Sample', thumb: 'https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg' },
+    { url: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif', type: 'image', label: '🎬 GIF', thumb: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy-preview.webp' },
+    { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', type: 'video', label: '📺 YouTube', thumb: 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg' },
   ];
 
+  const updateForm = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
-      <div className="flex items-center gap-4">
-        <div className="bg-purple-500 p-3 rounded-none text-white shadow-lg">
-          <ImageIcon size={20} />
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xl border border-slate-100 dark:border-slate-800 space-y-4">
+      <div className="flex items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-700">
+        <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-none text-white shadow-lg">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm3 14H5v-2h2v2zm0-4H5V9h2v6zm4 4H9v-2h2v2zM9 11H9V9h2v2zm4 4h-2v-2h2v2zm0-4h-2V9h2v6z" />
+          </svg>
         </div>
         <div>
-          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Instant Test MediaShare</h3>
-          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">Test kirim gambar/video langsung ke OBS MediaShare widget</p>
+          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+            🎬 Full MediaShare Test
+          </h3>
+          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
+            Test lengkap: media + nama + nominal + pesan
+          </p>
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      {/* 📝 FORM FIELDS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* Donor Name */}
         <div className="flex flex-col gap-1">
-          <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nama Donor</label>
+          <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+            Nama Donor
+          </label>
           <input 
-            value={customName} 
-            onChange={e => setCustomName(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-purple-400 transition-all"
-            placeholder="TestDonor" 
+            value={formData.donorName}
+            onChange={e => updateForm('donorName', e.target.value)}
+            className="p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm focus:border-purple-400 focus:outline-none transition-all"
+            placeholder="@TestDonor"
           />
         </div>
 
+        {/* Amount */}
         <div className="flex flex-col gap-1">
-          <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Media URL</label>
+          <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+            Nominal
+          </label>
           <input 
-            value={mediaUrl} 
-            onChange={e => setMediaUrl(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-purple-400 transition-all"
-            placeholder="https://example.com/image.jpg" 
+            type="number"
+            value={formData.amount}
+            onChange={e => updateForm('amount', Number(e.target.value))}
+            className="p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm focus:border-emerald-400 focus:outline-none transition-all"
+            placeholder="25000"
           />
         </div>
+      </div>
 
-        <div className="flex flex-col gap-1">
-          <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Tipe Media</label>
+      {/* Message */}
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+          Pesan (opsional)
+        </label>
+        <textarea 
+          value={formData.message}
+          onChange={e => updateForm('message', e.target.value)}
+          rows={2}
+          className="p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-medium text-sm resize-none focus:border-blue-400 focus:outline-none transition-all"
+          placeholder="Terima kasih dukungannya!"
+        />
+      </div>
+
+      {/* Media */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex-1">
+            Media URL
+          </label>
           <select 
-            value={mediaType} 
-            onChange={e => setMediaType(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-purple-400 transition-all"
+            value={formData.mediaType} 
+            onChange={e => updateForm('mediaType', e.target.value)}
+            className="px-3 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none text-xs font-bold"
           >
-            <option value="image">🖼️ Gambar (jpg, png, gif)</option>
-            <option value="video">▶ Video (mp4, webm)</option>
+            <option value="image">🖼️ Image/GIF</option>
+            <option value="video">▶ MP4/YouTube</option>
           </select>
         </div>
+        <input 
+          value={formData.mediaUrl}
+          onChange={e => updateForm('mediaUrl', e.target.value)}
+          className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm focus:border-purple-400 focus:outline-none transition-all"
+          placeholder="https://example.com/image.jpg"
+        />
       </div>
 
-      {/* Quick Preset Media */}
-      <div>
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Quick Test Media</p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+      {/* 🎨 PRESET MEDIA */}
+      <div className="pt-2">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 pb-1">
+          Quick Presets
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {PRESET_MEDIA.map((preset, i) => (
             <button 
               key={i}
-              onClick={() => { 
-                setMediaUrl(preset.url); 
-                setMediaType(preset.type);
+              onClick={() => {
+                updateForm('mediaUrl', preset.url);
+                updateForm('mediaType', preset.type);
               }}
-              className={`group relative cursor-pointer active:scale-[0.97] p-2 rounded-none border-2 transition-all overflow-hidden ${
-                mediaUrl === preset.url 
-                  ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/30 shadow-md' 
-                  : 'border-slate-200 dark:border-slate-700 hover:border-purple-300 bg-slate-50 dark:bg-slate-800'
+              className={`group relative p-2 rounded-none border-2 transition-all overflow-hidden hover:shadow-md ${
+                formData.mediaUrl === preset.url 
+                  ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/30 shadow-md ring-2 ring-purple-200' 
+                  : 'border-slate-200 dark:border-slate-700 hover:border-purple-300 bg-slate-50 dark:bg-slate-800/50'
               }`}
             >
-              <img 
-                src={preset.thumb} 
-                alt={preset.label}
-                className="w-full h-16 md:h-20 object-cover rounded"
-              />
-              <p className="absolute bottom-1 right-1 bg-black/80 text-white text-[9px] px-1 rounded font-bold opacity-0 group-hover:opacity-100 transition-all">
-                {preset.type === 'video' ? 'VID' : 'IMG'}
+              <div className="w-full h-16 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded overflow-hidden mb-1">
+                <img 
+                  src={preset.thumb} 
+                  alt={preset.label}
+                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                />
+              </div>
+              <p className="text-[10px] font-bold text-center truncate leading-tight px-1 text-slate-700 dark:text-slate-300">
+                {preset.label}
               </p>
-              <p className="text-[9px] font-bold text-center mt-1 truncate leading-tight">{preset.label}</p>
             </button>
           ))}
         </div>
       </div>
 
+      {/* 🚀 SEND BUTTON */}
       <button 
         onClick={sendTestMedia} 
-        disabled={isSending || !overlayToken || !mediaUrl}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-purple-500 hover:bg-purple-600 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-purple-200 dark:shadow-purple-900/30"
+        disabled={isSending || !overlayToken || !formData.mediaUrl}
+        className="w-full py-4 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-600 hover:from-emerald-600 hover:via-blue-600 hover:to-purple-700 text-white rounded-none font-black text-lg shadow-2xl hover:shadow-3xl active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
       >
         {isSending ? (
-          <><RefreshCw size={18} className="animate-spin" /> Mengirim...</>
+          <>
+            <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span>Mengirim...</span>
+          </>
         ) : (
-          <><ImageIcon size={18} /> Kirim Test ke MediaShare OBS</>
+          <>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+            <span>Kirim Test MediaShare Lengkap</span>
+          </>
         )}
       </button>
 
+      {/* ✅ SUCCESS */}
       {lastSent && (
         <motion.div 
-          initial={{ opacity: 0, y: 4 }} 
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900"
+          initial={{ opacity: 0, scale: 0.95 }} 
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex flex-col items-center gap-2 p-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-none shadow-2xl font-bold text-sm"
         >
-          <CheckCircle2 size={14} /> MediaShare terakhir: {lastSent.toLocaleTimeString('id-ID')}
+          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+          </svg>
+          <div>✅ MediaShare berhasil dikirim!</div>
+          <div className="text-xs opacity-90">{lastSent.toLocaleTimeString('id-ID')}</div>
         </motion.div>
       )}
 
-      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center space-y-1">
-        <p>⚠️ Pastikan OBS MediaShare widget sudah dibuka</p>
-        <p className="text-purple-500 font-bold">URL: {window.location.origin}/overlay/{overlayToken}/mediashare</p>
+      {/* 📺 OBS INSTRUCTIONS */}
+      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold text-center space-y-1 pt-4 border-t border-slate-200 dark:border-slate-700">
+        <div>📺 OBS Browser Source:</div>
+        <div className="bg-slate-100 dark:bg-slate-800 px-3 py-2 rounded text-xs font-mono text-purple-600 font-bold break-all">
+          {window.location.origin}/overlay/{overlayToken}/mediashare
+        </div>
       </div>
     </div>
   );
