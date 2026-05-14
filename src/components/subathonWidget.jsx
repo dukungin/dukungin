@@ -177,6 +177,26 @@ const SubathonWidget = () => {
             </span>
           )}
         </div>
+
+        {timer.autoAddEnabled && timer.durationTiers?.length > 0 && (
+          <div style={{ 
+            fontSize: 9, 
+            color: 'rgba(99, 102, 241, 0.8)', 
+            fontWeight: 700,
+            marginTop: 6,
+            textAlign: 'center',
+            padding: '4px 8px',
+            background: 'rgba(99, 102, 241, 0.1)',
+            borderRadius: 6,
+            border: '1px solid rgba(99, 102, 241, 0.2)'
+          }}>
+            +{formatSeconds(
+              (timer.durationTiers[0].hours*3600) + 
+              (timer.durationTiers[0].minutes*60) + 
+              timer.durationTiers[0].seconds
+            )} / Rp{timer.durationTiers[0].amount?.toLocaleString('id-ID')}
+          </div>
+        )}
       </div>
 
       <style>{`

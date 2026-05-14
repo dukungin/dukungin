@@ -18,6 +18,7 @@ import {
   PanelLeft,
   Plus,
   RefreshCw,
+  ReplyAll,
   Save,
   Settings,
   ShieldCheck,
@@ -1774,24 +1775,21 @@ const HistoryPage = () => {
                               <button 
                                 onClick={() => replayDonation(item._id)}
                                 disabled={replayLoading.has(item._id)}
-                                className={`... ${replayLoading.has(item._id) ? 'opacity-70 cursor-not-allowed bg-indigo-400' : ''}`}
+                                className={`cursor-pointer active:scale-[0.99] hover:brightness-80 flex items-center gap-2 text-sm ${replayLoading.has(item._id) ? 'opacity-70 cursor-not-allowed bg-indigo-400' : ''}`}
                               >
                                 {replayLoading.has(item._id) ? (
                                   <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                 ) : (
                                   <>
-                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                      <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" />
-                                    </svg>
+                                    <Video size={14} />
                                     Replay
                                   </>
                                 )}
-                                {replayLoading.has(item._id) ? 'Replay...' : 'Replay'}
                               </button>
                             </td>
                             <td className="px-6 md:px-8 py-5">
                               {item.mediaUrl ? (
-                                <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] font-black text-purple-600 hover:text-purple-800">
+                                <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-blue-400 hover:text-blue-500">
                                   {item.mediaType === 'video' ? <Video size={12} /> : <ImageIcon size={12} />} Lihat
                                 </a>
                               ) : (

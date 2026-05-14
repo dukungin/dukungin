@@ -346,6 +346,11 @@ export const SubathonManager = ({ overlayToken }) => {
   const [saved, setSaved] = useState(false);
   const [subCopied, setSubCopied] = useState(false);
   const intervalRef = useRef(null);
+  const [showTiersTable, setShowTiersTable] = useState(false);
+  const [newTierAmount, setNewTierAmount] = useState(5000);
+  const [newTierHours, setNewTierHours] = useState(0);
+  const [newTierMinutes, setNewTierMinutes] = useState(1);
+  const [newTierSeconds, setNewTierSeconds] = useState(0);
 
   const { data, isLoading } = useQuery({
     queryKey: ['subathon'],
@@ -360,6 +365,7 @@ export const SubathonManager = ({ overlayToken }) => {
     }
   }, [data]);
 
+  
   useEffect(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (localTimer?.isRunning) {
@@ -387,6 +393,30 @@ export const SubathonManager = ({ overlayToken }) => {
     });
     return () => socket.disconnect();
   }, [overlayToken]);
+  
+  const addTier = () => {
+    if (!newTierAmount || newTierAmount <= 0) return;
+    
+    const totalSec = (newTierHours * 3600) + (newTierMinutes * 60) + newTierSeconds;
+    const newTier = {
+      amount: newTierAmount,
+      hours: newTierHours,
+      minutes: newTierMinutes,
+      seconds: newTierSeconds
+    };
+    
+    upd('durationTiers', [...(localTimer.durationTiers || []), newTier]);
+    // Reset form
+    setNewTierAmount(5000);
+    setNewTierHours(0);
+    setNewTierMinutes(1);
+    setNewTierSeconds(0);
+  };
+
+  const removeTier = (index) => {
+    const tiers = localTimer.durationTiers || [];
+    upd('durationTiers', tiers.filter((_, i) => i !== index));
+  };
 
   const configMutation = useMutation({
     mutationFn: updateSubConfig,
@@ -570,37 +600,116 @@ export const SubathonManager = ({ overlayToken }) => {
           </div>
 
           {localTimer.autoAddEnabled && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-indigo-50 dark:bg-indigo-950/30 p-4 rounded-none border border-indigo-100 dark:border-indigo-900">
-              <div className="w-full space-y-1.5">
-                <label className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">+Detik per Tier</label>
-                <input
-                  type="text" inputMode="numeric"
-                  value={localTimer.addSecondsPerAmount ?? ''}
-                  onChange={e => {
-                    const val = e.target.value.trim();
-                    if (val === '' || /^\d+$/.test(val)) upd('addSecondsPerAmount', val === '' ? '' : Number(val));
-                  }}
-                  placeholder="60"
-                  className="w-full p-3 bg-white dark:bg-slate-800 border-2 border-indigo-100 dark:border-indigo-900 rounded-none font-bold text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-500 transition-all text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600"
-                />
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-black text-slate-700 dark:text-slate-200 text-sm">Kelipatan Durasi Donasi</p>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">
+                    Setiap tier donasi tambah durasi otomatis
+                  </p>
+                </div>
+                {/* Tombol Edit Tabel */}
+                <button
+                  onClick={() => setShowTiersTable(!showTiersTable)}
+                  className="cursor-pointer active:scale-[0.97] px-3 py-1.5 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-none text-xs font-black hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-all">
+                  {showTiersTable ? 'Tutup' : 'Edit'} Tabel
+                </button>
               </div>
-              <div className="w-full space-y-1.5">
-                <label className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Per Rp (1 tier)</label>
-                <input
-                  type="text" inputMode="numeric"
-                  value={localTimer.addPerAmount ?? ''}
-                  onChange={e => {
-                    const val = e.target.value.trim();
-                    if (val === '' || /^\d+$/.test(val)) upd('addPerAmount', val === '' ? '' : Number(val));
-                  }}
-                  placeholder="10000"
-                  className="w-full p-3 bg-white dark:bg-slate-800 border-2 border-indigo-100 dark:border-indigo-900 rounded-none font-bold text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-500 transition-all text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600"
-                />
+
+              {/* **PREVIEW Tabel (selalu tampil)** */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 dark:bg-slate-800/50">
+                      <th className="p-2 text-left font-black text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-slate-700">Tier Donasi</th>
+                      <th className="p-2 text-center font-black text-slate-500 dark:text-slate-400">Durasi Tambahan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(localTimer.durationTiers || []).map((tier, i) => {
+                      const totalSec = (tier.hours * 3600) + (tier.minutes * 60) + tier.seconds;
+                      return (
+                        <tr key={i} className="hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-colors">
+                          <td className="p-2 font-bold text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-slate-700">
+                            Rp {tier.amount.toLocaleString('id-ID')}
+                          </td>
+                          <td className="p-2 text-center font-black text-green-600 dark:text-green-400">
+                            {formatSeconds(totalSec)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
-              <div className="md:col-span-2 text-[11px] text-indigo-600 dark:text-indigo-400 font-bold bg-white dark:bg-slate-800 rounded-none px-3 py-2.5 border border-indigo-100 dark:border-indigo-900">
-                📌 Donasi Rp {(localTimer.addPerAmount || 10000).toLocaleString('id-ID')} → +{localTimer.addSecondsPerAmount || 60} detik<br/>
-                📌 Donasi Rp {((localTimer.addPerAmount || 10000) * 5).toLocaleString('id-ID')} → +{(localTimer.addSecondsPerAmount || 60) * 5} detik
-              </div>
+
+              {/* **EDIT Tabel (toggle)** */}
+              <AnimatePresence>
+                {showTiersTable && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700"
+                  >
+                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                      Tambah/Edit Tier
+                    </p>
+                    
+                    {/* Form tambah tier */}
+                    <div className="grid grid-cols-3 gap-2">
+                      <input
+                        type="number"
+                        value={newTierAmount}
+                        onChange={e => setNewTierAmount(Number(e.target.value))}
+                        placeholder="5000"
+                        className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
+                      />
+                      <input
+                        type="number"
+                        value={newTierHours}
+                        onChange={e => setNewTierHours(Number(e.target.value))}
+                        placeholder="0"
+                        className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
+                      />
+                      <input
+                        type="number"
+                        value={newTierMinutes}
+                        onChange={e => setNewTierMinutes(Number(e.target.value))}
+                        placeholder="1"
+                        className="p-2 bg-white dark:bg-slate-800 border rounded-none font-bold text-xs focus:border-indigo-400"
+                      />
+                    </div>
+                    <div className="flex gap-2 text-[10px] text-slate-400 dark:text-slate-500">
+                      <span>Rp</span><span>Jam</span><span>Menit</span>
+                    </div>
+                    
+                    <button
+                      onClick={addTier}
+                      className="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-none font-black text-xs"
+                    >
+                      Tambah Tier
+                    </button>
+
+                    {/* Daftar tier yang bisa dihapus/edit */}
+                    <div className="max-h-40 overflow-y-auto space-y-2">
+                      {(localTimer.durationTiers || []).map((tier, i) => (
+                        <div key={i} className="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-none">
+                          <span className="flex-1 text-xs font-bold">
+                            Rp {tier.amount.toLocaleString()} → {tier.hours || 0}h {tier.minutes || 0}m {tier.seconds || 0}s
+                          </span>
+                          <button
+                            onClick={() => removeTier(i)}
+                            className="p-1 text-red-500 hover:text-red-700"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
         </div>
