@@ -58,7 +58,7 @@ const MilestonesWidget = () => {
     <div style={{
       width: '100%',
       minHeight: '100vh',
-      background: 'transparent',
+      // background: 'transparent',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
@@ -66,10 +66,10 @@ const MilestonesWidget = () => {
       padding: 0,
     }}>
       <div style={{
-        background: 'rgba(15, 15, 25, 0.92)',
+        background: 'rgba(15, 15, 25, 1)',
         borderRadius: 20,
         padding: '18px 20px',
-        border: '1.5px solid rgba(255,255,255,0.08)',
+        border: '1.5px solid rgba(255,255,255,1)',
         boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
       }}>
         {/* Header */}
@@ -112,7 +112,7 @@ const MilestonesWidget = () => {
                     <span style={{
                       fontSize: 12,
                       fontWeight: 700,
-                      color: achieved ? 'rgba(255,255,255,0.45)' : '#ffffff',
+                      color: achieved ? 'rgba(255,255,255,1)' : '#ffffff',
                       textDecoration: achieved ? 'line-through' : 'none',
                     }}>
                       {m.title}
@@ -130,7 +130,7 @@ const MilestonesWidget = () => {
                 {/* Progress bar */}
                 <div style={{
                   height: 6,
-                  background: 'rgba(255,255,255,0.08)',
+                  background: 'rgba(255,255,255,1)',
                   borderRadius: 6,
                   overflow: 'hidden',
                 }}>
@@ -149,7 +149,7 @@ const MilestonesWidget = () => {
                 <div style={{
                   marginTop: 4,
                   fontSize: 9,
-                  color: 'rgba(255,255,255,0.25)',
+                  color: 'rgba(255,255,255,1)',
                   fontWeight: 600,
                   textAlign: 'right',
                 }}>
