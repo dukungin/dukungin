@@ -378,7 +378,6 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
   const PRESET_MEDIA = [
     { url: 'https://picsum.photos/400/300?random=1', type: 'image', label: '🖼️ Random Image', thumb: 'https://picsum.photos/80/60?random=1' },
     { url: 'https://picsum.photos/400/300?random=2', type: 'image', label: '🖼️ Image 2', thumb: 'https://picsum.photos/80/60?random=2' },
-    { url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4', type: 'video', label: '▶ Video Sample', thumb: 'https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg' },
     { url: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif', type: 'image', label: '🎬 GIF', thumb: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy-preview.webp' },
     { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', type: 'video', label: '📺 YouTube', thumb: 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg' },
   ];
@@ -477,7 +476,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 pb-1">
           Quick Presets
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {PRESET_MEDIA.map((preset, i) => (
             <button 
               key={i}
@@ -485,7 +484,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
                 updateForm('mediaUrl', preset.url);
                 updateForm('mediaType', preset.type);
               }}
-              className={`group relative p-2 rounded-none border-2 transition-all overflow-hidden hover:shadow-md ${
+              className={`cursor-pointer active:scale-[0.99] hover:brightness-80 group relative p-2 rounded-none border-2 transition-all overflow-hidden hover:shadow-md ${
                 formData.mediaUrl === preset.url 
                   ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/30 shadow-md ring-2 ring-purple-200' 
                   : 'border-slate-200 dark:border-slate-700 hover:border-purple-300 bg-slate-50 dark:bg-slate-800/50'
