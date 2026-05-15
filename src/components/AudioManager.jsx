@@ -130,41 +130,75 @@ const AudioManager = ({
     }
   };
 
-  const addSound = async () => {
-    if (!newSound.name || !newSound.url || publicSounds.length >= 20) return;
-    
-    try {
-      // ✅ TEST dengan fetch (lebih reliable)
-      const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(newSound.url)}`;
-      const response = await fetch(proxyUrl, { 
-        method: 'HEAD',
-        cache: 'no-cache'
-      });
+  // AudioManager.jsx - SMART VALIDATION
+    const addSound = async () => {
+      const name = newSound.name?.trim() || '';
+      const url = newSound.url?.trim() || '';
       
-      if (response.ok && response.headers.get('content-type')?.startsWith('audio/')) {
+      if (!name || !url || publicSounds.length >= 20) {
+        toast.error('❌ Isi nama & URL suara!');
+        return;
+      }
+      
+      try {
+        // ✅ QUICK CHECK: Local upload = auto OK
+        const isLocalUpload = url.includes('/uploads/audio/') || url.includes('taptiptup.vercel.app');
+        
+        if (isLocalUpload) {
+          console.log('✅ Local MP3 - skip test');
+          
+          const newSoundObj = {
+            url: url,
+            proxyUrl: `/api/proxy-audio?url=${encodeURIComponent(url)}`,
+            label: name,
+            emoji: '🎵'
+          };
+          
+          onUpdatePublicSounds([...publicSounds, newSoundObj]);
+          setNewSound({ name: '', url: '', file: null });
+          toast.success('✅ MP3 lokal ditambahkan!');
+          return;
+        }
+        
+        // External URL → test
+        const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(url)}`;
+        const response = await fetch(proxyUrl, { 
+          method: 'HEAD',
+          cache: 'no-cache',
+          signal: AbortSignal.timeout(5000)
+        });
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const contentType = response.headers.get('content-type') || '';
+        const isAudioUrl = /\.(mp3|wav|ogg|m4a|webm|aac)(\?.*)?$/i.test(url);
+        
+        if (!contentType.startsWith('audio/') && !isAudioUrl) {
+          throw new Error('Bukan file audio');
+        }
+        
+        // Success
         const newSoundObj = {
-          url: newSound.url,
+          url: url,
           proxyUrl: proxyUrl,
-          label: newSound.name,
+          label: name,
           emoji: '🎵'
         };
         
         onUpdatePublicSounds([...publicSounds, newSoundObj]);
         setNewSound({ name: '', url: '', file: null });
         toast.success('✅ Suara ditambahkan!');
-      } else {
-        throw new Error('Invalid audio');
+        
+      } catch (err) {
+        console.error('❌ Add failed:', err);
+        toast.error(`❌ ${err.message}`);
       }
-    } catch (err) {
-      console.error('Test audio failed:', err);
-      toast.error('❌ Audio tidak valid atau tidak bisa diakses!');
-    }
-  };
+    };
 
-  const onUpdatePublicSounds = useCallback((newSounds) => {
-    setIsDirty(true); // Mark as dirty
-    parentOnUpdatePublicSounds?.(newSounds);
-  }, []);
+  // const onUpdatePublicSounds = useCallback((newSounds) => {
+  //   setIsDirty(true); // Mark as dirty
+  //   parentOnUpdatePublicSounds?.(newSounds);
+  // }, []);
 
   // ✅ TAMBAH SAVE FUNCTION
   const saveToServer = async () => {
