@@ -11,6 +11,7 @@ const AudioManager = ({
 }) => {
   // ✅ TAMBAH STATE INI (baris 15)
   const [uploading, setUploading] = useState(false);
+  const [isDirty, setIsDirty] = useState(false); // Track changes
   
   const [newSound, setNewSound] = useState({ name: '', url: '', file: null });
   const [playingPreview, setPlayingPreview] = useState(null);
@@ -159,6 +160,41 @@ const AudioManager = ({
       toast.error('❌ Audio tidak valid atau tidak bisa diakses!');
     }
   };
+
+  const onUpdatePublicSounds = useCallback((newSounds) => {
+    setIsDirty(true); // Mark as dirty
+    parentOnUpdatePublicSounds?.(newSounds);
+  }, []);
+
+  // ✅ TAMBAH SAVE FUNCTION
+  const saveToServer = async () => {
+    if (!publicSounds.length || !isDirty) return;
+    
+    try {
+      setUploading(true);
+      const res = await api.put('/api/overlay/settings', {
+        publicSounds // ← Kirim array ke server
+      });
+      
+      toast.success('✅ Public sounds tersimpan!');
+      setIsDirty(false);
+    } catch (err) {
+      toast.error('❌ Gagal simpan: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Auto-save setiap 3 detik kalau dirty
+  useEffect(() => {
+    if (!isDirty) return;
+    
+    const timeout = setTimeout(() => {
+      saveToServer();
+    }, 3000);
+    
+    return () => clearTimeout(timeout);
+  }, [isDirty, publicSounds]);
 
   const removeSound = (index) => {
     const sound = publicSounds[index];
@@ -334,6 +370,16 @@ const AudioManager = ({
               </motion.div>
             ))}
           </div>
+
+          {isDirty && (
+            <motion.button
+              onClick={saveToServer}
+              disabled={uploading}
+              className="w-full mt-4 p-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-xl font-black text-sm shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+            >
+              {uploading ? '💾 Menyimpan...' : '💾 Simpan ke Server (Live)'}
+            </motion.button>
+          )}
         </div>
       )}
 
