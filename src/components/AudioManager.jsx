@@ -1,6 +1,6 @@
 // components/AudioManager.jsx - FIXED VERSION
 import { useCallback, useState, useRef, useEffect } from 'react';
-import { Upload, Music, Link, Trash2, Volume2, Play, Pause } from 'lucide-react';
+import { Upload, Music, Link, Trash2, Volume2, Play, Pause, StopCircle, Ear, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../lib/axiosInstance';
 import toast from 'react-hot-toast';
@@ -244,12 +244,9 @@ const AudioManager = ({
   return (
     <div className="space-y-4">
       {/* Add New Sound */}
-      <div className="p-6 border border-indigo-200 dark:border-slate-50/15 rounded-xl bg-white dark:bg-slate-900 shadow-sm">
-        <h3 className="font-black text-lg text-indigo-700 dark:text-indigo-300 mb-5 flex items-center gap-2">
-          <Music size={20} /> Tambah Suara Publik
-        </h3>
+      <div className="rounded-none bg-white dark:bg-slate-900 shadow-sm">
         
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-4 pt-1">
           {/* File Upload */}
           <div>
             <label className="block text-sm font-bold text-slate-500 dark:text-slate-400 mb-2">
@@ -263,7 +260,7 @@ const AudioManager = ({
                 disabled={uploading}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer peer"
               />
-              <div className={`flex items-center gap-3 p-4 border-2 border-dashed rounded-xl transition-all cursor-pointer ${
+              <div className={`flex items-center gap-3 p-4 border-2 border-dashed rounded-none transition-all cursor-pointer ${
                 newSound.file 
                   ? 'border-emerald-300 bg-emerald-50 dark:bg-emerald-950/20' 
                   : 'border-slate-200 dark:border-slate-700 hover:border-indigo-300 bg-white dark:bg-slate-800'
@@ -291,7 +288,7 @@ const AudioManager = ({
                 value={newSound.url}
                 onChange={(e) => setNewSound({ ...newSound, url: e.target.value })}
                 placeholder="https://example.com/sound.mp3"
-                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-400 rounded-xl text-sm outline-none transition-all"
+                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-400 rounded-none text-sm outline-none transition-all"
               />
             </div>
           </div>
@@ -308,16 +305,16 @@ const AudioManager = ({
                 onChange={(e) => setNewSound({ ...newSound, name: e.target.value })}
                 placeholder="Epic Win, Cash Sound, dll"
                 maxLength={30}
-                className="w-full p-4 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-400 rounded-xl text-sm outline-none transition-all font-medium"
+                className="w-full p-4 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-400 rounded-none text-sm outline-none transition-all font-medium"
               />
             </div>
             
             <button
               onClick={addSound}
               disabled={!newSound.name || !newSound.url || publicSounds.length >= 20 || uploading}
-              className="w-full p-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+              className="cursor-pointer active:scale-[0.99] hover:brightness-90 flex justify-center items-center w-full p-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-sm shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {publicSounds.length >= 20 ? 'Max 20 Suara' : '✅ Tambah Suara'}
+              {publicSounds.length >= 20 ? 'Max 20 Suara' : <Save size={21.2} />}
             </button>
           </div>
         </div>
@@ -328,30 +325,30 @@ const AudioManager = ({
         <div>
           <div className="flex items-center justify-between mb-4">
             <h4 className="font-black text-lg text-slate-800 dark:text-slate-100 flex items-center gap-2">
-              🎵 Suara Aktif ({publicSounds.length}/20)
+              <Music /> Suara Aktif ({publicSounds.length}/20)
             </h4>
             {playingPreview && (
               <button
                 onClick={stopPreview}
-                className="flex items-center gap-1.5 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-bold shadow-md active:scale-[0.98] transition-all"
+                className="cursor-pointer flex items-center gap-2 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-none text-sm font-bold shadow-md active:scale-[0.98] transition-all"
               >
-                ⏹️ Stop
+                Stop
               </button>
             )}
           </div>
           
-          <div className="space-y-3 max-h-60 overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="space-y-3 max-h-60 overflow-y-auto rounded-none border border-slate-200 dark:border-slate-700 p-4 bg-slate-50/50 dark:bg-slate-900/30">
             {publicSounds.map((sound, index) => (
               <motion.div
                 key={`${sound.url}-${index}`}
                 layout
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="group flex items-center justify-between p-4 bg-white/80 dark:bg-slate-800/70 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-xl hover:shadow-md hover:border-indigo-300 transition-all hover:bg-white dark:hover:bg-slate-700"
+                className="group flex items-center justify-between p-4 bg-white/80 dark:bg-slate-800/70 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-none hover:shadow-md hover:border-indigo-300 transition-all hover:bg-white dark:hover:bg-slate-700"
               >
                 <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-                    <span className="text-2xl">{sound.emoji || '🎵'}</span>
+                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-none flex items-center justify-center shadow-lg flex-shrink-0">
+                    <span className="text-2xl"><Ear /></span>
                   </div>
                   
                   <div className="min-w-0 flex-1">
@@ -367,7 +364,7 @@ const AudioManager = ({
                   <button
                     onClick={() => playPreview(getAudioProxyUrl(sound.url))}
                     disabled={previewError}
-                    className={`p-3 rounded-xl shadow-md active:scale-[0.95] transition-all flex-shrink-0 flex items-center justify-center ${
+                    className={`p-3 h-[40px] cursor-pointer hover:brightness-90 rounded-none shadow-md active:scale-[0.95] transition-all flex-shrink-0 flex items-center justify-center ${
                       playingPreview === sound.url
                         ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-emerald-500/25'
                         : previewError
@@ -388,7 +385,7 @@ const AudioManager = ({
                 
                 <button
                   onClick={() => removeSound(index)}
-                  className="p-3 ml-3 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-xl shadow-md hover:shadow-red-500/25 active:scale-[0.95] transition-all flex-shrink-0"
+                  className="p-3 ml-3 h-[40px] cursor-pointer hover:brightness-90 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-none shadow-md hover:shadow-red-500/25 active:scale-[0.95] transition-all flex-shrink-0"
                   title="Hapus suara"
                 >
                   <Trash2 size={16} />
@@ -401,7 +398,7 @@ const AudioManager = ({
             <motion.button
               onClick={saveToServer}
               disabled={uploading}
-              className="w-full mt-4 p-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-xl font-black text-sm shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+              className="w-full mt-4 p-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white rounded-none font-black text-sm shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
             >
               {uploading ? '💾 Menyimpan...' : '💾 Simpan ke Server (Live)'}
             </motion.button>
@@ -424,7 +421,7 @@ const AudioManager = ({
             initial={{ opacity: 0, y: 10 }} 
             animate={{ opacity: 1, y: 0 }} 
             exit={{ opacity: 0, y: 10 }}
-            className="fixed bottom-6 left-6 z-[1000] bg-red-500 text-white px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center gap-3 max-w-sm"
+            className="fixed bottom-6 left-6 z-[1000] bg-red-500 text-white px-6 py-3 rounded-none shadow-2xl font-bold flex items-center gap-3 max-w-sm"
           >
             <Volume2 size={18} />
             <span>Audio tidak bisa diputar (CORS)</span>

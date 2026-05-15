@@ -500,10 +500,72 @@ function Marquee({ C }) {
   );
 }
 
+const PLATFORMS = [
+  { name: "TapTipTup", fee: 2.5, winner: true },
+  { name: "Streamlabs", fee: 5.0 },
+  { name: "Saweria",    fee: 5.0 },
+  { name: "Trakteer",  fee: 5.0 },
+  { name: "Sociabuzz", fee: 10.0 },
+  { name: "Karyakarsa",fee: 10.0 },
+];
+
+function FeeComparison({ C }) {
+  const maxFee = Math.max(...PLATFORMS.map(p => p.fee));
+  const saving = Math.round(((maxFee - 2.5) / 100) * 10_000_000);
+
+  return (
+    <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+      {/* Header */}
+      <div className="text-center flex flex-col justify-center items-center"
+        style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+        <Kicker C={C}>Transparansi Biaya</Kicker>
+        <BigTitle C={C}>POTONGAN TERKECIL DI{" "}
+          <span style={{ color: C.lime }}>KELASNYA.</span>
+        </BigTitle>
+        <p style={{ fontSize: 14, color: C.muted, marginTop: 16, transition: "color 0.4s" }}>
+          Kami hanya ambil 2.5% — sisanya langsung ke kantongmu.
+        </p>
+      </div>
+
+      {/* Grid perbandingan */}
+      <div className="grid grid-cols-3 md:grid-cols-6"
+        style={{ borderBottom: `1px solid ${C.line}` }}>
+        {PLATFORMS.map((p, i) => {
+          const barWidth = Math.round((p.fee / maxFee) * 100);
+          const isLast = i === PLATFORMS.length - 1;
+          return (
+            <div key={p.name}
+              style={{
+                padding: "32px 24px",
+                borderRight: !isLast ? `1px solid ${C.line}` : "none",
+                background: p.winner ? C.bg2 : "transparent",
+                transition: "background 0.4s, border-color 0.4s",
+              }}>
+              {p.winner
+                ? <span style={{ display: "inline-block", marginBottom: 10, background: C.lime, color: C.bg, fontSize: 10, padding: "3px 10px", letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 700, transition: "background 0.4s" }}>Terkecil</span>
+                : <div style={{ height: 24, marginBottom: 10 }} />}
+              <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 4, fontFamily: "'Space Grotesk',sans-serif", transition: "color 0.4s" }}>{p.name}</div>
+              <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 32, lineHeight: 1, marginBottom: 12, color: p.winner ? C.lime : p.fee >= 10 ? "#e05a3a" : C.text, transition: "color 0.4s" }}>
+                {p.fee.toFixed(1)}%
+              </div>
+              <div style={{ height: 4, background: C.line2, borderRadius: 2, marginBottom: 8 }}>
+                <div style={{ height: 4, width: `${barWidth}%`, background: p.winner ? C.lime : C.dim, borderRadius: 2, transition: "background 0.4s" }} />
+              </div>
+              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: C.muted, letterSpacing: "0.05em", textTransform: "uppercase", transition: "color 0.4s" }}>
+                potongan withdraw
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function HowItWorks({ C }) {
   return (
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} id="cara-kerja">
-      <div className="text-center flex flex-col justify-center items-center w-full" style={{ padding: "56px 40px", borderBottom: `1px solid ${C.line}`, flexWrap: "wrap", transition: "border-color 0.4s" }}>
+      <div className="text-center flex  flex-col justify-center items-center w-full" style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, flexWrap: "wrap", transition: "border-color 0.4s" }}>
         <div>
           <BigTitle C={C}>MULAI LIVE DALAM 5 MENIT.</BigTitle>
         </div>
@@ -539,7 +601,7 @@ function HowStep({ step, last, C }) {
 function Testimonials({ C }) {
   return (
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
-      <div className="text-center justify-center items-center flex flex-col" style={{ padding: "56px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+      <div className="text-center justify-center items-center flex flex-col" style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
         <Kicker C={C}>Kata Mereka</Kicker>
         <BigTitle C={C}>SUDAH TERUJI OLEH STREAMER.</BigTitle>
       </div>
@@ -817,6 +879,7 @@ export default function TapTipTup() {
       <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} isDark={isDark} onToggleTheme={handleToggleTheme} C={C} />
       <Hero C={C} isDark={isDark} />
       <Marquee C={C} />
+      <FeeComparison C={C} /> 
       <HowItWorks C={C} />
       <Testimonials C={C} />
       <CTA C={C} isDark={isDark} />

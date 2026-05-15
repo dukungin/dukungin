@@ -15,6 +15,7 @@ import {
   Menu,
   MessageSquare,
   Moon,
+  Music,
   PanelLeft,
   Plus,
   RefreshCw,
@@ -2825,7 +2826,7 @@ export const DashboardStreamer = () => {
                     <SectionHeader icon={<span className="text-2xl">🔊</span>} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-indigo-500" />
                     
                     {/* Deskripsi */}
-                    <div className="text-center py-6 bg-gradient-to-r from-emerald-50 to-indigo-50 dark:from-emerald-950/30 dark:to-indigo-950/30 rounded-xl border border-emerald-100 dark:border-emerald-900/50">
+                    <div className="text-center py-6 bg-gradient-to-r from-emerald-50 to-indigo-50 dark:from-emerald-950/30 dark:to-indigo-950/30 rounded-none border border-emerald-100 dark:border-emerald-900/50">
                       <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">🎵 2 Jenis Suara:</p>
                       <div className="flex flex-col sm:flex-row gap-4 text-xs text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
                         <span>📢 <strong>Suara Default:</strong> Semua donasi otomatis pakai ini</span>
@@ -2835,7 +2836,7 @@ export const DashboardStreamer = () => {
 
                     {/* 1. SUARA DEFAULT & TIERS */}
                     <div className="space-y-6">
-                      <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                      <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-none border border-slate-200 dark:border-slate-700">
                         <h4 className="font-black text-sm text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
                           📢 Suara Default (Semua Donasi)
                         </h4>
@@ -2859,7 +2860,9 @@ export const DashboardStreamer = () => {
                     {/* 2. SUARA PUBLIK - SINCRON DENGAN SETTINGS */}
                     <div className="pt-8 border-t border-slate-200 dark:border-slate-700">
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="w-11 h-11 bg-emerald-500 rounded-xl flex items-center justify-center text-white text-xl font-black shadow-lg">🎵</div>
+                        <div className="p-3 w-11 h-11 bg-emerald-500 rounded-none flex items-center justify-center text-white text-xl font-black shadow-lg">
+                          <Music />
+                        </div>
                         <div>
                           <h4 className="text-xl font-black text-slate-800 dark:text-white">Suara Publik Donatur</h4>
                           <p className="text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ≥ Rp10.000</p>
@@ -2870,7 +2873,9 @@ export const DashboardStreamer = () => {
                         publicSounds={formData.publicSounds}
                         onUpdatePublicSounds={(sounds) => setFormData({ ...formData, publicSounds: sounds })}
                       />
-                      
+
+                      <div className='w-full h-[1px] bg-slate-100/10 my-4'></div>
+
                       {/* ✅ SAVE BUTTON - Sync ke settings */}
                       <button 
                         onClick={() => {
@@ -2880,7 +2885,7 @@ export const DashboardStreamer = () => {
                           saveSettingsMutation.mutate(settings);
                         }}
                         disabled={saveSettingsMutation.isPending || uploading}
-                        className="cursor-pointer active:scale-[0.99] mt-6 w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:brightness-90 text-white font-black rounded-xl shadow-xl shadow-emerald-200/50 dark:shadow-emerald-900/30 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+                        className="cursor-pointer active:scale-[0.99] mt-0 w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:brightness-90 text-white font-black rounded-none shadow-xl shadow-emerald-200/50 dark:shadow-emerald-900/30 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
                       >
                         {saveSettingsMutation.isPending ? (
                           <>
@@ -2895,7 +2900,7 @@ export const DashboardStreamer = () => {
                         ) : (
                           <>
                             <Save size={20} />
-                            💾 Simpan Semua Suara
+                            Simpan Semua Suara
                           </>
                         )}
                       </button>
@@ -3002,7 +3007,7 @@ export const DashboardStreamer = () => {
                 </div>
                 
                 {/* ✅ SHOW ALL BADGES - Active & Locked */}
-                <div className="flex w-full flex-wrap gap-1.5 justify-center md:justify-start bg-gradient-to-r from-slate-50/50 to-indigo-50/30 dark:from-slate-900/50 dark:to-indigo-900/20 p-3 py-2 border border-slate-100/20 dark:border-slate-700/50 backdrop-blur-sm rounded-xl shadow-sm">
+                <div className="flex w-full flex-wrap gap-1.5 justify-center md:justify-start bg-gradient-to-r from-slate-50/50 to-indigo-50/30 dark:from-slate-900/50 dark:to-indigo-900/20 p-3 py-2 border border-slate-100/20 dark:border-slate-700/50 backdrop-blur-sm rounded-none shadow-sm">
                   {/* 10K */}
                   <Badge 
                     type="streamer" 
