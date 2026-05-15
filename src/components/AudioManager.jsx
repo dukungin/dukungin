@@ -363,12 +363,12 @@ const AudioManager = ({
   return (
     <div className="space-y-4">
       {/* Add New Sound */}
-      <div className="p-6 border-2 border-dashed border-indigo-200 dark:border-indigo-800 rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 shadow-sm">
+      <div className="p-6 border border-indigo-200 dark:border-slate-50/15 rounded-xl bg-white dark:bg-slate-900 shadow-sm">
         <h3 className="font-black text-lg text-indigo-700 dark:text-indigo-300 mb-5 flex items-center gap-2">
           <Music size={20} /> Tambah Suara Publik
         </h3>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
           {/* File Upload */}
           <div>
             <label className="block text-sm font-bold text-slate-500 dark:text-slate-400 mb-2">
@@ -410,7 +410,7 @@ const AudioManager = ({
                 value={newSound.url}
                 onChange={(e) => setNewSound({ ...newSound, url: e.target.value })}
                 placeholder="https://example.com/sound.mp3"
-                className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-400 rounded-xl text-sm outline-none transition-all"
+                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-400 rounded-xl text-sm outline-none transition-all"
               />
             </div>
           </div>
@@ -434,7 +434,7 @@ const AudioManager = ({
             <button
               onClick={addSound}
               disabled={!newSound.name || !newSound.url || publicSounds.length >= 20 || uploading}
-              className="w-full p-4 bg-gradient-to-r from-emerald-500 to-indigo-600 hover:from-emerald-600 hover:to-indigo-700 text-white rounded-xl font-black text-sm shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+              className="w-full p-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-black text-sm shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
             >
               {publicSounds.length >= 20 ? 'Max 20 Suara' : '✅ Tambah Suara'}
             </button>
@@ -533,7 +533,7 @@ const AudioManager = ({
             initial={{ opacity: 0, y: 10 }} 
             animate={{ opacity: 1, y: 0 }} 
             exit={{ opacity: 0, y: 10 }}
-            className="fixed bottom-6 left-6 z-[1000] bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl font-bold flex items-center gap-3 max-w-sm"
+            className="fixed bottom-6 left-6 z-[1000] bg-red-500 text-white px-6 py-3 rounded-xl shadow-2xl font-bold flex items-center gap-3 max-w-sm"
           >
             <Volume2 size={18} />
             <span>Audio tidak bisa diputar (CORS)</span>
