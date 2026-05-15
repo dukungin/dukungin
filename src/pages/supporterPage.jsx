@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ImageIcon, Loader2, Video, X, LogOut, User, ChevronDown, Heart, Eye, EyeOff, Mail, Lock, AtSign, Moon, Sun } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import Badge from '../components/badge';
@@ -629,10 +629,13 @@ const QuickAudioSection = ({
   onSoundChange,
   amount 
 }) => {
+  // ✅ SAFETY CHECK: pastikan publicSounds selalu array
+  const safePublicSounds = Array.isArray(publicSounds) ? publicSounds.slice(0, 7) : [];
+  
   const audioRef = useRef(null);
   const [previewing, setPreviewing] = useState(null);
 
-  const playPreview = (url) => {
+  const playPreview = useCallback((url) => {
     if (!url) return;
     if (audioRef.current) {
       audioRef.current.pause();
@@ -646,9 +649,10 @@ const QuickAudioSection = ({
         setPreviewing(null);
       }, 2000);
     }
-  };
+  }, []);
 
-  if (!publicSounds.length || amount < 10000) return null; // Minimal 10K untuk audio
+  // Minimal 10K untuk audio
+  if (safePublicSounds.length === 0 || amount < 10000) return null;
 
   return (
     <div className="space-y-3">
@@ -670,36 +674,38 @@ const QuickAudioSection = ({
           <span className="leading-tight">No Sound</span>
         </button>
 
-        {/* Quick sounds */}
-        {publicSounds.slice(0, 7).map((sound, i) => (
+        {/* Quick sounds - SAFE RENDER */}
+        {safePublicSounds.map((sound, i) => (
           <button 
-            key={i}
+            key={`${sound.url}-${i}`} // ✅ UNIQUE KEY
             onClick={() => onSoundChange(sound.url)}
             className={`p-2.5 rounded-none border-2 font-bold text-xs flex flex-col items-center gap-1 transition-all relative ${
               selectedSound === sound.url
                 ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 shadow-sm ring-2 ring-indigo-200' 
                 : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-indigo-300 hover:bg-indigo-50'
             }`}
+            title={sound.label || `Sound ${i + 1}`}
           >
             {previewing === sound.url && (
               <div className="absolute inset-0 bg-indigo-500/20 animate-pulse rounded-none flex items-center justify-center">
                 <span className="text-[10px]">▶ playing</span>
               </div>
             )}
-            <span className="text-lg">{sound.emoji}</span>
-            <span className="leading-tight truncate max-w-[45px]">{sound.label.split(' ')[0]}</span>
+            <span className="text-lg">{sound.emoji || '🎵'}</span>
+            <span className="leading-tight truncate max-w-[45px]">
+              {sound.label?.split(' ')[0] || `Sound ${i + 1}`}
+            </span>
           </button>
         ))}
       </div>
 
-      <audio ref={audioRef} />
+      <audio ref={audioRef} preload="none" />
       <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center">
         * Tersedia mulai Rp 10.000
       </p>
     </div>
   );
 };
-
 
 // ============================================================
 // MAIN COMPONENT
@@ -720,21 +726,22 @@ const SupporterPage = () => {
     soundUrl: '', // ← NEW
   });
 
+  
   // Auth state — semua dikelola di sini, dioper ke navbar sebagai props
   const [authPayload, setAuthPayload] = useState(getPayload());
   const [authProfile, setAuthProfile] = useState(null); // data lengkap dari API
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState('login');
   const [badges, setBadges] = useState({ streamer: {}, donor: {} }); // ← DEFAULT OBJECT
-
+  
   const isLoggedIn = !!authPayload;
-
+  
   // Open auth modal helper
   const openAuth = (tab = 'login') => {
     setAuthModalTab(tab);
     setAuthModalOpen(true);
   };
-
+  
   // Logout: hapus token, reset semua auth state
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -742,13 +749,13 @@ const SupporterPage = () => {
     setAuthProfile(null);
     setForm((prev) => ({ ...prev, donorName: '', email: '' }));
   };
-
+  
   // After successful login — update payload + fetch profil lengkap
   const handleAuthSuccess = async (data) => {
-      const newPayload = getPayload();
-      setAuthPayload(newPayload);
+    const newPayload = getPayload();
+    setAuthPayload(newPayload);
       
-      if (data?.user) {
+    if (data?.user) {
         setAuthProfile(data.user);
         setForm((prev) => ({
           ...prev,
@@ -756,7 +763,7 @@ const SupporterPage = () => {
           email: data.user.email || prev.email,
         }));
       }
-
+      
       // ✅ FETCH BADGES SETELAH LOGIN
       if (newPayload?.id) {
         try {
@@ -769,27 +776,28 @@ const SupporterPage = () => {
         }
       }
     };
-  // Load Midtrans Snap.js
-  useEffect(() => {
-    const existing = document.querySelector('script[src*="snap.js"]');
-    if (existing) { setSnapReady(true); return; }
-    const script = document.createElement('script');
-    script.src = SNAP_URL;
-    script.setAttribute('data-client-key', MIDTRANS_CLIENT_KEY);
-    script.onload = () => setSnapReady(true);
-    document.head.appendChild(script);
-  }, []);
-
-  // Fetch streamer
-  useEffect(() => {
-    if (!username) return;
-    const cleanUsername = username.replace(/^@+/, '');
+    
+    // Load Midtrans Snap.js
+    useEffect(() => {
+      const existing = document.querySelector('script[src*="snap.js"]');
+      if (existing) { setSnapReady(true); return; }
+      const script = document.createElement('script');
+      script.src = SNAP_URL;
+      script.setAttribute('data-client-key', MIDTRANS_CLIENT_KEY);
+      script.onload = () => setSnapReady(true);
+      document.head.appendChild(script);
+    }, []);
+    
+    // Fetch streamer
+    useEffect(() => {
+      if (!username) return;
+      const cleanUsername = username.replace(/^@+/, '');
     axios
-      .get(`${BASE_URL}/api/overlay/public/${cleanUsername}`)
-      .then((res) => setStreamer(res.data))
-      .catch(() => alert('Streamer tidak ditemukan'));
+    .get(`${BASE_URL}/api/overlay/public/${cleanUsername}`)
+    .then((res) => setStreamer(res.data))
+    .catch(() => alert('Streamer tidak ditemukan'));
   }, [username]);
-
+  
   // Fetch profil lengkap jika sudah login (misal refresh halaman dengan token ada)
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -807,54 +815,54 @@ const SupporterPage = () => {
         }
       })
       .catch(() => {});
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    if (!isLoggedIn || !authPayload?.id) return;
+    }, [isLoggedIn]);
     
-    const fetchUserBadges = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/api/midtrans/badges`, { 
-          headers: authHeader() 
-        });
+    useEffect(() => {
+      if (!isLoggedIn || !authPayload?.id) return;
+    
+      const fetchUserBadges = async () => {
+        try {
+          const res = await axios.get(`${BASE_URL}/api/midtrans/badges`, { 
+            headers: authHeader() 
+          });
         setBadges(res.data.badges || { streamer: {}, donor: {} });
       } catch (err) {
         console.log('Failed to fetch badges:', err);
       }
     };
-
+    
     fetchUserBadges();
   }, [isLoggedIn, authPayload?.id]);
-
+  
   const mediaTriggers =
     streamer?.overlaySetting?.mediaTriggers || streamer?.OverlaySetting?.mediaTriggers || [];
-  const eligibleTrigger = getEligibleTrigger(mediaTriggers, form.amount);
-
-  useEffect(() => {
+    const eligibleTrigger = getEligibleTrigger(mediaTriggers, form.amount);
+    
+    useEffect(() => {
     if (!eligibleTrigger) setMediaUrl('');
   }, [eligibleTrigger]);
-
+  
   // Handle Donate
   const handleDonate = async () => {
     if (!form.amount || form.amount < 1000) return alert('Minimal donasi Rp 1.000');
     if (!streamer?._id) return alert('Data streamer belum siap.');
-
+    
     const minDonate =
-      streamer?.overlaySetting?.minDonate || streamer?.OverlaySetting?.minDonate || 1000;
+    streamer?.overlaySetting?.minDonate || streamer?.OverlaySetting?.minDonate || 1000;
     const maxDonate =
-      streamer?.overlaySetting?.maxDonate || streamer?.OverlaySetting?.maxDonate || 10000000;
-
+    streamer?.overlaySetting?.maxDonate || streamer?.OverlaySetting?.maxDonate || 10000000;
+    
     if (form.amount < minDonate)
       return alert(`Minimal donasi Rp ${minDonate.toLocaleString('id-ID')}`);
     if (form.amount > maxDonate)
       return alert(`Maksimal donasi Rp ${maxDonate.toLocaleString('id-ID')}`);
-
+    
     try {
       setLoading(true);
-
+      
       const hasMedia = eligibleTrigger && mediaUrl.trim();
       const detectedMediaType = getMediaType(mediaUrl?.trim());
-
+      
       if (hasMedia) {
         if (eligibleTrigger.mediaType === 'image' && detectedMediaType !== 'image') {
           return alert('Hanya gambar yang diizinkan untuk nominal ini.');
@@ -866,19 +874,19 @@ const SupporterPage = () => {
           return alert('Hanya video atau YouTube yang diizinkan untuk nominal ini.');
         }
       }
-
+      
       // const payload = {
-      //   amount: Math.round(Number(form.amount)),
-      //   donorName: form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
-      //   message: form.message,
-      //   userId: streamer._id,
+        //   amount: Math.round(Number(form.amount)),
+        //   donorName: form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
+        //   message: form.message,
+        //   userId: streamer._id,
       //   email: form.email.trim() || 'guest@mail.com',
       //   mediaUrl: hasMedia ? mediaUrl.trim() : null,
       //   mediaType: detectedMediaType,
       //   // Kirim donorUserId jika login agar masuk ke myDonations
       //   donorUserId: authPayload?.id,
       // };
-
+      
       const payload = {
         amount: Math.round(Number(form.amount)),
         donorName: form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
@@ -891,9 +899,9 @@ const SupporterPage = () => {
         soundUrl: form.soundUrl || null, // ← NEW
       };
 
-
+      
       const res = await axios.post(`${BASE_URL}/api/midtrans/create-invoice`, payload);
-
+      
       if (res.data.token && snapReady && window.snap) {
         window.snap.pay(res.data.token, {
           onSuccess: () =>
@@ -913,7 +921,7 @@ const SupporterPage = () => {
       setLoading(false);
     }
   };
-
+  
   if (!streamer) {
     return (
       <>
@@ -924,7 +932,7 @@ const SupporterPage = () => {
           onLogout={handleLogout}
           theme={theme}           
           toggleTheme={toggleTheme} 
-        />
+          />
         <div className="min-h-screen flex items-center justify-center font-bold text-indigo-600 dark:text-indigo-400 bg-blue-50 dark:bg-slate-900 pt-16">
           <Loader2 className="animate-spin mr-2" size={24} /> Memuat Profil...
         </div>
@@ -933,11 +941,11 @@ const SupporterPage = () => {
           onClose={() => setAuthModalOpen(false)}
           defaultTab={authModalTab}
           onAuthSuccess={handleAuthSuccess}
-        />
+          />
       </>
     );
   }
-
+  
   const overlaySetting = streamer?.overlaySetting || streamer?.OverlaySetting || {};
   const minDonate = overlaySetting?.minDonate || 1000;
   const maxDonate = overlaySetting?.maxDonate || 10000000;
@@ -946,9 +954,12 @@ const SupporterPage = () => {
     streamer?.OverlaySetting?.quickAmounts ||
     [10000, 25000, 50000, 100000]
   ).filter((v) => v >= minDonate && v <= maxDonate);
-
+  
   const sortedTriggers = [...mediaTriggers].sort((a, b) => a.minAmount - b.minAmount);
-
+  const publicSounds = Array.isArray(streamer?.overlaySetting?.publicSounds) 
+  ? streamer.overlaySetting.publicSounds 
+  : [];
+  
   return (
     <>
       {/* Auth Modal */}
@@ -957,7 +968,7 @@ const SupporterPage = () => {
         onClose={() => setAuthModalOpen(false)}
         defaultTab={authModalTab}
         onAuthSuccess={handleAuthSuccess}
-      />
+        />
 
       {/* Navbar */}
       <SupporterNavbar 
@@ -1129,6 +1140,15 @@ const SupporterPage = () => {
                 />
               )}
             </AnimatePresence>
+
+             {quickAmounts.length > 0 && form.amount >= 10000 && publicSounds.length > 0 && (
+              <QuickAudioSection
+                publicSounds={publicSounds} // ✅ SEKARANG SAFE
+                selectedSound={form.soundUrl}
+                onSoundChange={(url) => setForm({ ...form, soundUrl: url })}
+                amount={form.amount}
+              />
+            )}
 
             {/* Nama & Email */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

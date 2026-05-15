@@ -84,6 +84,30 @@ const fetchMyFollowing  = async (userId) => (await api.get(`/api/follows/${userI
 const toggleFollowApi   = async (userId) => (await api.post(`/api/follows/${userId}/toggle`, {})).data;
 // Fetch public profile streamer lain (untuk modal komunitas)
 const fetchPublicProfile = async (username) => (await api.get(`/api/overlay/public/${username}`)).data;
+const APP_URL = window.location.origin;
+
+const SOUND_PRESETS = [
+  { label: 'Ding 🔔',     url: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' },
+  { label: 'Pop 💬',      url: 'https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3' },
+  { label: 'Cash 💰',     url: 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3' },
+  { label: 'Chime ✨',    url: 'https://assets.mixkit.co/active_storage/sfx/2867/2867-preview.mp3' },
+  { label: 'Alert 🚨',    url: 'https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3' },
+  { label: 'Kururing 📢', url: `${APP_URL}/kururing.mpeg` },
+  { label: 'Kaching 💸',  url: `${APP_URL}/kaching.mpeg` },
+  { label: 'Booom 💥',     url: `${APP_URL}/boom.mp3` },
+  { label: 'Tuturu 🎊',    url: `${APP_URL}/tuturu.mp3` },
+  { label: 'Dana 🤑',      url: `${APP_URL}/dana.mp3` },
+  { label: 'Cihuy 🔥',     url: `${APP_URL}/cihuy.mp3` },
+  { label: 'Tada 🎉',     url: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3' },
+  { label: 'Gold 🪙',     url: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3' },
+  { label: 'Whooo 🗣️',   url: 'https://assets.mixkit.co/active_storage/sfx/2010/2010-preview.mp3' },
+  { label: 'Treasure 💎', url: 'https://assets.mixkit.co/active_storage/sfx/1945/1945-preview.mp3' },
+  { label: 'Machine 🎰',  url: 'https://assets.mixkit.co/active_storage/sfx/2015/2015-preview.mp3' },
+  { label: 'Jackpot 🎰',  url: 'https://assets.mixkit.co/active_storage/sfx/2017/2017-preview.mp3' },
+  { label: 'Bling ✨',    url: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3' },
+  { label: 'Payout 💸',   url: 'https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3' },
+  { label: '🔔',   url: `${APP_URL}/bell.mp3` },
+];
 
 // ─── Default settings ─────────────────────────────────────────────────────────
 
@@ -98,7 +122,7 @@ const DEFAULT_SETTINGS = {
   borderColor: '#ffffff26',
   primaryColor: '#6366f1',
   textColor: '#ffffff',
-  publicSounds: SOUND_PRESETS.slice(0, 8), // 8 suara default untuk donatur
+  publicSounds: SOUND_PRESETS.slice(0, 8), // ✅ SELALU ARRAY
   publicSoundDefault: '',  
   animation: 'bounce',
   quickAmounts: [10000, 25000, 50000, 100000, 250000],
@@ -847,30 +871,6 @@ const MilestonesEditor = () => {
 
 // ─── Sound ────────────────────────────────────────────────────────────────────
 
-const APP_URL = window.location.origin;
-const SOUND_PRESETS = [
-  { label: 'Ding 🔔',     url: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' },
-  { label: 'Pop 💬',      url: 'https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3' },
-  { label: 'Cash 💰',     url: 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3' },
-  { label: 'Chime ✨',    url: 'https://assets.mixkit.co/active_storage/sfx/2867/2867-preview.mp3' },
-  { label: 'Alert 🚨',    url: 'https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3' },
-  { label: 'Kururing 📢', url: `${APP_URL}/kururing.mpeg` },
-  { label: 'Kaching 💸',  url: `${APP_URL}/kaching.mpeg` },
-  { label: 'Booom 💥',     url: `${APP_URL}/boom.mp3` },
-  { label: 'Tuturu 🎊',    url: `${APP_URL}/tuturu.mp3` },
-  { label: 'Dana 🤑',      url: `${APP_URL}/dana.mp3` },
-  { label: 'Cihuy 🔥',     url: `${APP_URL}/cihuy.mp3` },
-  { label: 'Tada 🎉',     url: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3' },
-  { label: 'Gold 🪙',     url: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3' },
-  { label: 'Whooo 🗣️',   url: 'https://assets.mixkit.co/active_storage/sfx/2010/2010-preview.mp3' },
-  { label: 'Treasure 💎', url: 'https://assets.mixkit.co/active_storage/sfx/1945/1945-preview.mp3' },
-  { label: 'Machine 🎰',  url: 'https://assets.mixkit.co/active_storage/sfx/2015/2015-preview.mp3' },
-  { label: 'Jackpot 🎰',  url: 'https://assets.mixkit.co/active_storage/sfx/2017/2017-preview.mp3' },
-  { label: 'Bling ✨',    url: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3' },
-  { label: 'Payout 💸',   url: 'https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3' },
-  { label: '🔔',   url: `${APP_URL}/bell.mp3` },
-];
-
 const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
   const [mode, setMode] = useState(value && !SOUND_PRESETS.find(p => p.url === value) ? 'custom' : 'preset');
   const audioRef = useRef(null);
@@ -932,6 +932,9 @@ const PublicSoundPicker = ({
 }) => {
   const audioRef = useRef(null);
   
+  // ✅ SAFE FALLBACK: pastikan publicSounds selalu array
+  const safePublicSounds = Array.isArray(publicSounds) ? publicSounds : [];
+  
   const playPreview = (url) => {
     if (!url) return;
     if (audioRef.current) {
@@ -963,20 +966,22 @@ const PublicSoundPicker = ({
           <span>Tanpa Suara</span>
         </button>
 
-        {/* Public sounds */}
-        {publicSounds.map((sound, i) => (
+        {/* Public sounds - SAFE RENDER */}
+        {safePublicSounds.slice(0, 8).map((sound, i) => (
           <button 
-            key={i}
+            key={`${sound.url}-${i}`} // ✅ UNIQUE KEY
             onClick={() => { onChange(sound.url); playPreview(sound.url); }}
             className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${
               value === sound.url 
                 ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-md' 
                 : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:border-indigo-300'
             }`}
-            title={sound.label}
+            title={sound.label || `Sound ${i + 1}`}
           >
-            <span className="text-lg">{sound.emoji}</span>
-            <span className="truncate max-w-[70px]">{sound.label.split(' ')[0]}</span>
+            <span className="text-lg">{sound.emoji || '🎵'}</span>
+            <span className="truncate max-w-[70px]">
+              {sound.label?.split(' ')[0] || `Sound ${i + 1}`}
+            </span>
             <span 
               onClick={(e) => { e.stopPropagation(); playPreview(sound.url); }} 
               className="text-[9px] font-medium text-slate-400 hover:text-indigo-600 cursor-pointer"
@@ -985,6 +990,16 @@ const PublicSoundPicker = ({
             </span>
           </button>
         ))}
+        
+        {/* Filler jika kurang dari 8 */}
+        {safePublicSounds.length === 0 && (
+          Array.from({ length: 7 }, (_, i) => (
+            <div key={`filler-${i}`} className="p-3 opacity-30">
+              <span className="text-lg">🎵</span>
+              <span className="text-xs">Loading...</span>
+            </div>
+          ))
+        )}
       </div>
       
       {/* Audio preview */}
@@ -2215,7 +2230,15 @@ export const DashboardStreamer = () => {
   useEffect(() => {
     if (profileData && !localSettings) {
       const s = profileData.settings || profileData.overlaySetting || {};
-      setLocalSettings({ ...DEFAULT_SETTINGS, ...s });
+      
+      // ✅ SAFETY: pastikan publicSounds adalah array
+      const safeSettings = {
+        ...DEFAULT_SETTINGS,
+        ...s,
+        publicSounds: Array.isArray(s.publicSounds) ? s.publicSounds : DEFAULT_SETTINGS.publicSounds,
+      };
+      
+      setLocalSettings(safeSettings);
     }
   }, [profileData]);
 
@@ -2297,22 +2320,35 @@ export const DashboardStreamer = () => {
 
   const settings = localSettings || DEFAULT_SETTINGS;
 
+  // const upd = useCallback((key, val) => {
+  //   // Jika yang masuk adalah Event (dari input onChange yang lupa e.target.value)
+  //   if (val && typeof val === 'object' && 'target' in val && 'nativeEvent' in val) {
+  //     console.warn(`[upd] key="${key}" menerima Event bukan value — fix onChange di sini`);
+  //     return;
+  //   }
+    
+  //   // ✅ DEBOUNCE UNTUK COLOR CHANGES
+  //   if (key.includes('Color')) {
+  //     const timeoutId = setTimeout(() => {
+  //       setLocalSettings(s => ({ ...s, [key]: val }));
+  //     }, 100);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+    
+  //   setLocalSettings(s => ({ ...s, [key]: val }));
+  // }, []);
+
   const upd = useCallback((key, val) => {
-    // Jika yang masuk adalah Event (dari input onChange yang lupa e.target.value)
-    if (val && typeof val === 'object' && 'target' in val && 'nativeEvent' in val) {
-      console.warn(`[upd] key="${key}" menerima Event bukan value — fix onChange di sini`);
+    // Safety check untuk array fields
+    if (key === 'publicSounds' && !Array.isArray(val)) {
+      console.warn(`[upd] publicSounds must be array, got:`, val);
       return;
     }
     
-    // ✅ DEBOUNCE UNTUK COLOR CHANGES
-    if (key.includes('Color')) {
-      const timeoutId = setTimeout(() => {
-        setLocalSettings(s => ({ ...s, [key]: val }));
-      }, 100);
-      return () => clearTimeout(timeoutId);
-    }
-    
-    setLocalSettings(s => ({ ...s, [key]: val }));
+    setLocalSettings(s => ({ 
+      ...s, 
+      [key]: val 
+    }));
   }, []);
 
   const copyToClipboard = (text, label = 'URL') => {
