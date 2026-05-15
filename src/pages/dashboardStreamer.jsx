@@ -2873,7 +2873,7 @@ export const DashboardStreamer = () => {
                         </div>
                         <div>
                           <h4 className="text-xl font-black text-slate-800 dark:text-white">Quick Soundboard</h4>
-                          <p className="text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ≥ Rp10.000</p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ke streamer</p>
                         </div>
                       </div>
                       

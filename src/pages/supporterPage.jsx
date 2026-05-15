@@ -90,9 +90,6 @@ const YouTubeTimePicker = ({ startTime, onChange }) => {
       className="mt-4 p-4 bg-gradient-to-r from-yellow-50/70 to-orange-50/70 dark:from-yellow-900/30 dark:to-orange-900/30 border border-yellow-200 dark:border-yellow-800 rounded-none space-y-3"
     >
       <div className="flex items-center gap-2">
-        <div className="w-7 h-7 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-none flex items-center justify-center text-white text-xs font-black flex-shrink-0">
-          ⏰
-        </div>
         <div>
           <p className="text-xs font-black text-yellow-700 dark:text-yellow-400 leading-none">
             Kustom Waktu Mulai Video
@@ -149,13 +146,13 @@ const YouTubeTimePicker = ({ startTime, onChange }) => {
           />
         </div>
       </div>
-
+{/* 
       <div className="text-center pt-2 border-t border-yellow-200 dark:border-yellow-800">
         <p className="text-[10px] text-yellow-500 dark:text-yellow-400 font-medium">
           Total: {hours.toString().padStart(2, '0')}:{minutes.toString().padStart(2, '0')}:
           {seconds.toString().padStart(2, '0')}
         </p>
-      </div>
+      </div> */}
     </motion.div>
   );
 };
