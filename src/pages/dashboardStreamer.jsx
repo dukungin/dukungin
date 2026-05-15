@@ -91,10 +91,7 @@ const APP_URL = window.location.origin;
 
 const SOUND_PRESETS = [
   { label: 'Ding 🔔',     url: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3' },
-  { label: 'Pop 💬',      url: 'https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3' },
   { label: 'Cash 💰',     url: 'https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3' },
-  { label: 'Chime ✨',    url: 'https://assets.mixkit.co/active_storage/sfx/2867/2867-preview.mp3' },
-  { label: 'Alert 🚨',    url: 'https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3' },
   { label: 'Kururing 📢', url: `${APP_URL}/kururing.mpeg` },
   { label: 'Kaching 💸',  url: `${APP_URL}/kaching.mpeg` },
   { label: 'Booom 💥',     url: `${APP_URL}/boom.mp3` },
@@ -104,12 +101,9 @@ const SOUND_PRESETS = [
   { label: 'Tada 🎉',     url: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3' },
   { label: 'Gold 🪙',     url: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3' },
   { label: 'Whooo 🗣️',   url: 'https://assets.mixkit.co/active_storage/sfx/2010/2010-preview.mp3' },
-  { label: 'Treasure 💎', url: 'https://assets.mixkit.co/active_storage/sfx/1945/1945-preview.mp3' },
-  { label: 'Machine 🎰',  url: 'https://assets.mixkit.co/active_storage/sfx/2015/2015-preview.mp3' },
   { label: 'Jackpot 🎰',  url: 'https://assets.mixkit.co/active_storage/sfx/2017/2017-preview.mp3' },
   { label: 'Bling ✨',    url: 'https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3' },
   { label: 'Payout 💸',   url: 'https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3' },
-  { label: '🔔',   url: `${APP_URL}/bell.mp3` },
 ];
 
 // ─── Default settings ─────────────────────────────────────────────────────────
@@ -426,7 +420,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
         </div>
         <div>
           <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-            🎬 Full MediaShare Test
+            Instant Test Medser
           </h3>
           <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
             Test lengkap: media + nama + nominal + pesan
@@ -520,17 +514,14 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
                   : 'border-slate-200 dark:border-slate-700 hover:border-purple-300 bg-slate-50 dark:bg-slate-800/50'
               }`}
             >
-              <div className="w-full h-16 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded overflow-hidden mb-1">
+              <div className="w-full h-16 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded overflow-hidden">
                 <img 
                   src={preset.thumb} 
                   alt={preset.label}
                   className="w-full h-full object-cover transition-transform group-hover:scale-110"
                 />
               </div>
-              <p className="text-[10px] font-bold text-center truncate leading-tight px-1 text-slate-700 dark:text-slate-300">
-                {preset.label}
-              </p>
-            </button>
+          </button>
           ))}
         </div>
       </div>
@@ -2849,17 +2840,8 @@ export const DashboardStreamer = () => {
                   <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
                     
                     {/* Header Utama */}
-                    <SectionHeader icon={<span className="text-2xl">🔊</span>} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-indigo-500" />
+                    <SectionHeader icon={<span className="text-2xl"><Music /></span>} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-indigo-500" />
                     
-                    {/* Deskripsi */}
-                    <div className="text-center py-6 bg-gradient-to-r from-emerald-50 to-indigo-50 dark:from-emerald-950/30 dark:to-indigo-950/30 rounded-none border border-emerald-100 dark:border-emerald-900/50">
-                      <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">🎵 2 Jenis Suara:</p>
-                      <div className="flex flex-col sm:flex-row gap-4 text-xs text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
-                        <span>📢 <strong>Suara Default:</strong> Semua donasi otomatis pakai ini</span>
-                        <span>🎯 <strong>Suara Publik:</strong> Donatur pilih sendiri (min Rp10K)</span>
-                      </div>
-                    </div>
-
                     {/* 1. SUARA DEFAULT & TIERS */}
                     <div className="space-y-6">
                       <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-none border border-slate-200 dark:border-slate-700">
@@ -2873,14 +2855,14 @@ export const DashboardStreamer = () => {
                         />
                       </div>
                       
-                      {settings.soundTiers?.length > 0 && (
-                        <SoundTiersEditor 
-                          saveSettingsMutation={saveSettingsMutation} 
-                          settings={settings} 
-                          tiers={settings.soundTiers || []} 
-                          onChange={v => upd('soundTiers', v)} 
-                        />
-                      )}
+                      {/* {settings.soundTiers?.length > 0 && (
+                      )} */}
+                      <SoundTiersEditor 
+                        saveSettingsMutation={saveSettingsMutation} 
+                        settings={settings} 
+                        tiers={settings.soundTiers || []} 
+                        onChange={v => upd('soundTiers', v)} 
+                      />
                     </div>
 
                     {/* 2. SUARA PUBLIK - SINCRON DENGAN SETTINGS */}
@@ -2890,7 +2872,7 @@ export const DashboardStreamer = () => {
                           <Music />
                         </div>
                         <div>
-                          <h4 className="text-xl font-black text-slate-800 dark:text-white">Suara Publik Donatur</h4>
+                          <h4 className="text-xl font-black text-slate-800 dark:text-white">Quick Soundboard</h4>
                           <p className="text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ≥ Rp10.000</p>
                         </div>
                       </div>

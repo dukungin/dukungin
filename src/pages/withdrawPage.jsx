@@ -152,7 +152,7 @@ export const WithdrawPage = () => {
         </h2>
 
         {/* Aturan singkat */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mb-6">
           {[
             { label: 'Min. Tarik',  value: `Rp ${MIN_TARIK.toLocaleString('id-ID')}` },
             { label: 'Maks. Tarik', value: `Rp ${(MAX_TARIK / 1000000).toFixed(0)}jt` },

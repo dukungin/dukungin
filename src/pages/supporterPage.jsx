@@ -57,6 +57,110 @@ const getYouTubeEmbedUrl = (url) => {
   return url;
 };
 
+const getYouTubeStartTime = (seconds) => {
+  if (!seconds || seconds < 0) return 0;
+  return Math.floor(seconds);
+};
+
+const YouTubeTimePicker = ({ startTime, onChange }) => {
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const totalSeconds = getYouTubeStartTime(startTime);
+    setHours(Math.floor(totalSeconds / 3600));
+    setMinutes(Math.floor((totalSeconds % 3600) / 60));
+    setSeconds(totalSeconds % 60);
+  }, [startTime]);
+
+  const handleTimeChange = () => {
+    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+    onChange(totalSeconds);
+  };
+
+  useEffect(() => {
+    handleTimeChange();
+  }, [hours, minutes, seconds]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: 'auto' }}
+      className="mt-4 p-4 bg-gradient-to-r from-yellow-50/70 to-orange-50/70 dark:from-yellow-900/30 dark:to-orange-900/30 border border-yellow-200 dark:border-yellow-800 rounded-none space-y-3"
+    >
+      <div className="flex items-center gap-2">
+        <div className="w-7 h-7 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-none flex items-center justify-center text-white text-xs font-black flex-shrink-0">
+          ⏰
+        </div>
+        <div>
+          <p className="text-xs font-black text-yellow-700 dark:text-yellow-400 leading-none">
+            Kustom Waktu Mulai Video
+          </p>
+          <p className="text-[10px] text-yellow-500 dark:text-yellow-400 font-medium mt-0.5">
+            Video akan dimulai dari waktu yang kamu pilih
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        {/* Hours */}
+        <div className="space-y-1">
+          <label className="block text-[9px] font-black text-yellow-600 dark:text-yellow-400 uppercase tracking-wider text-center">
+            Jam
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="23"
+            value={hours}
+            onChange={(e) => setHours(Math.max(0, parseInt(e.target.value) || 0))}
+            className="w-full p-2 text-center rounded-none bg-white dark:bg-slate-800 border border-yellow-200 dark:border-yellow-700 focus:border-yellow-400 dark:focus:border-yellow-500 font-mono text-sm font-bold text-slate-700 dark:text-white outline-none"
+          />
+        </div>
+
+        {/* Minutes */}
+        <div className="space-y-1">
+          <label className="block text-[9px] font-black text-yellow-600 dark:text-yellow-400 uppercase tracking-wider text-center">
+            Menit
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="59"
+            value={minutes}
+            onChange={(e) => setMinutes(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
+            className="w-full p-2 text-center rounded-none bg-white dark:bg-slate-800 border border-yellow-200 dark:border-yellow-700 focus:border-yellow-400 dark:focus:border-yellow-500 font-mono text-sm font-bold text-slate-700 dark:text-white outline-none"
+          />
+        </div>
+
+        {/* Seconds */}
+        <div className="space-y-1">
+          <label className="block text-[9px] font-black text-yellow-600 dark:text-yellow-400 uppercase tracking-wider text-center">
+            Detik
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="59"
+            value={seconds}
+            onChange={(e) => setSeconds(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
+            className="w-full p-2 text-center rounded-none bg-white dark:bg-slate-800 border border-yellow-200 dark:border-yellow-700 focus:border-yellow-400 dark:focus:border-yellow-500 font-mono text-sm font-bold text-slate-700 dark:text-white outline-none"
+          />
+        </div>
+      </div>
+
+      <div className="text-center pt-2 border-t border-yellow-200 dark:border-yellow-800">
+        <p className="text-[10px] text-yellow-500 dark:text-yellow-400 font-medium">
+          Total: {hours.toString().padStart(2, '0')}:{minutes.toString().padStart(2, '0')}:
+          {seconds.toString().padStart(2, '0')}
+        </p>
+      </div>
+    </motion.div>
+  );
+};
+
+
 const getMediaType = (url) => {
   if (!url) return null;
   if (isYouTubeUrl(url)) return 'youtube';
@@ -465,9 +569,10 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
 // ============================================================
 // SUB-COMPONENT — Media Input Section
 // ============================================================
-const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
+const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStartTime }) => {
   const [previewError, setPreviewError] = useState(false);
   const videoRef = useRef(null);
+  const isYouTube = isYouTubeUrl(mediaUrl);
 
   useEffect(() => {
     setPreviewError(false);
@@ -485,6 +590,17 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
       : allowVideo
       ? 'https://youtu.be/xxxx atau https://example.com/video.mp4'
       : 'https://i.imgur.com/contoh-gambar.jpg';
+
+  // MODIFIED: getYouTubeEmbedUrl dengan start time
+  const getYouTubeEmbedUrlWithTime = (url, startSeconds = 0) => {
+    if (!url) return '';
+    let embedUrl = getYouTubeEmbedUrl(url);
+    if (startSeconds > 0) {
+      const separator = embedUrl.includes('?') ? '&' : '?';
+      embedUrl += `${separator}start=${startSeconds}&autoplay=1&mute=1`;
+    }
+    return embedUrl;
+  };
 
   return (
     <motion.div
@@ -521,7 +637,10 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
           </div>
           {mediaUrl && (
             <button
-              onClick={() => setMediaUrl('')}
+              onClick={() => {
+                setMediaUrl('');
+                setStartTime(0);
+              }}
               className="w-6 h-6 rounded-none bg-indigo-100 dark:bg-indigo-900 hover:bg-red-100 dark:hover:bg-red-900 text-indigo-400 dark:text-indigo-500 flex items-center justify-center transition-all hover:text-red-500 dark:hover:text-red-400"
             >
               <X size={12} />
@@ -551,7 +670,10 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
           <input
             type="url"
             value={mediaUrl}
-            onChange={(e) => setMediaUrl(e.target.value)}
+            onChange={(e) => {
+              setMediaUrl(e.target.value);
+              setStartTime(0); // Reset waktu saat ganti URL
+            }}
             className="w-full p-4 rounded-none bg-white dark:bg-slate-800 border-2 border-indigo-100 dark:border-indigo-800 focus:border-indigo-400 dark:focus:border-indigo-500 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400 dark:placeholder:text-slate-500"
             placeholder={placeholderText}
           />
@@ -559,6 +681,16 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
             * Opsional — Gambar (jpg, gif, png, webp), Video langsung (.mp4), atau link YouTube
           </p>
         </div>
+
+        {/* ✅ YOUTUBE TIME PICKER — HANYA UNTUK YOUTUBE */}
+        <AnimatePresence>
+          {isYouTube && mediaUrl && (
+            <YouTubeTimePicker
+              startTime={startTime}
+              onChange={setStartTime}
+            />
+          )}
+        </AnimatePresence>
 
         {/* PREVIEW */}
         <AnimatePresence>
@@ -573,7 +705,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
             >
               {mediaType === 'youtube' ? (
                 <iframe
-                  src={getYouTubeEmbedUrl(mediaUrl)}
+                  src={getYouTubeEmbedUrlWithTime(mediaUrl, startTime)}
                   className="w-full aspect-video"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -602,7 +734,18 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
               )}
               <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-black/60 backdrop-blur-sm">
                 <p className="text-[10px] text-white/90 font-bold">
-                  {mediaType === 'youtube' ? '▶️ YouTube Video' : mediaType === 'video' ? '🎬 Direct Video' : '🖼️ Gambar'} — Preview
+                  {mediaType === 'youtube' ? (
+                    <>
+                      ▶️ YouTube Video 
+                      {startTime > 0 && (
+                        <span className="ml-1 bg-yellow-500/30 px-1 py-0.5 rounded text-[9px]">
+                          {Math.floor(startTime / 60).toString().padStart(2, '0')}:
+                          {(startTime % 60).toString().padStart(2, '0')}
+                        </span>
+                      )}
+                    </>
+                  ) : mediaType === 'video' ? '🎬 Direct Video' : '🖼️ Gambar'}
+                  — Preview
                 </p>
               </div>
             </motion.div>
@@ -622,7 +765,6 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
     </motion.div>
   );
 };
-
 
 const QuickAudioSection = ({ 
   publicSounds = [], 
@@ -819,6 +961,7 @@ const SupporterPage = () => {
   const [snapReady, setSnapReady] = useState(false);
   const [mediaUrl, setMediaUrl] = useState('');
   const { theme, toggle: toggleTheme } = useTheme();  
+  const [startTime, setStartTime] = useState(0);
   const [form, setForm] = useState({
     donorName: '',
     isAnonymous: false,
@@ -997,10 +1140,10 @@ const SupporterPage = () => {
         email: form.email.trim() || 'guest@mail.com',
         mediaUrl: hasMedia ? mediaUrl.trim() : null,
         mediaType: detectedMediaType,
+        startTime: isYouTubeUrl(mediaUrl) ? startTime : 0, // ← NEW
         donorUserId: authPayload?.id,
-        soundUrl: form.soundUrl || null, // ← NEW
+        soundUrl: form.soundUrl || null,
       };
-
       
       const res = await axios.post(`${BASE_URL}/api/midtrans/create-invoice`, payload);
       
@@ -1167,10 +1310,10 @@ const SupporterPage = () => {
               </div>
             )}
 
-            {/* Custom Amount + Trigger Info */}
+            {/* Kustom Amount + Trigger Info */}
             <div>
               <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
-                Nominal Custom
+                Nominal Kustom
               </label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-indigo-600 dark:text-indigo-400 text-sm">
@@ -1181,7 +1324,7 @@ const SupporterPage = () => {
                   value={form.amount || ''}
                   onChange={(e) => setForm({ ...form, amount: Number(e.target.value) })}
                   className="w-full p-4 pl-12 rounded-none font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-700 outline-none transition-all"
-                  placeholder="Nominal custom..."
+                  placeholder="Nominal Kustom..."
                 />
               </div>
 
@@ -1241,6 +1384,8 @@ const SupporterPage = () => {
                   trigger={eligibleTrigger}
                   mediaUrl={mediaUrl}
                   setMediaUrl={setMediaUrl}
+                  startTime={startTime}
+                  setStartTime={setStartTime}
                 />
               )}
             </AnimatePresence>

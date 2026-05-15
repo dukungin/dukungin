@@ -36,8 +36,10 @@ const MilestonesWidget = () => {
   useEffect(() => {
     if (!token) return;
     const socket = io(BASE_URL);
+    console.log('baseUrl done!')
     socket.emit('join-room', token);
     socket.on('new-donation', () => fetchData());
+    socket.on('new-media-donation', () => fetchData());
     return () => socket.disconnect();
   }, [token]);
 
