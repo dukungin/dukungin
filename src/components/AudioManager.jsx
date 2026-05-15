@@ -272,6 +272,7 @@ const AudioManager = ({
     };
   }, []);
 
+  // components/AudioManager.jsx - UPDATE handleFileUpload & addSound
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('audio/')) {
@@ -282,23 +283,34 @@ const AudioManager = ({
         file 
       });
     } else {
-      alert('Hanya file audio (.mp3, .wav, .ogg, .m4a) yang diizinkan!');
+      toast.error('❌ Hanya file audio (.mp3, .wav, .ogg, .m4a)!');
     }
   };
 
   const addSound = () => {
     if (newSound.name && newSound.url && publicSounds.length < 20) {
-      onUpdatePublicSounds([...publicSounds, {
-        url: newSound.url,
-        label: newSound.name,
-        emoji: '🎵'
-      }]);
-      setNewSound({ name: '', url: '', file: null });
       
-      // Cleanup blob URL
-      if (newSound.file) {
-        URL.revokeObjectURL(newSound.url);
+      // ✅ VALIDASI URL AUDIO
+      if (!newSound.url.startsWith('http') && !newSound.url.startsWith('blob:')) {
+        toast.error('❌ URL tidak valid!');
+        return;
       }
+      
+      // ✅ CEK AUDIO VALID (client-side)
+      const audio = new Audio();
+      audio.src = newSound.url;
+      audio.onloadedmetadata = () => {
+        onUpdatePublicSounds([...publicSounds, {
+          url: newSound.url,
+          label: newSound.name,
+          emoji: '🎵'
+        }]);
+        setNewSound({ name: '', url: '', file: null });
+        if (newSound.file) URL.revokeObjectURL(newSound.url);
+        toast.success('✅ Suara ditambahkan!');
+      };
+      audio.onerror = () => toast.error('❌ URL audio tidak valid!');
+      audio.load();
     }
   };
 
