@@ -623,6 +623,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
   );
 };
 
+
 const QuickAudioSection = ({ 
   publicSounds = [], 
   selectedSound, 
@@ -709,7 +710,7 @@ const QuickAudioSection = ({
     };
   }, [stopPreview]);
 
-  if (safePublicSounds.length === 0 || amount < 10000) return null;
+  if (safePublicSounds.length === 0 || amount === 0) return null;
 
   return (
     <div className="space-y-3">
@@ -1244,7 +1245,7 @@ const SupporterPage = () => {
               )}
             </AnimatePresence>
 
-            {form.amount >= 10000 && publicSounds.length > 0 && (
+            {publicSounds.length > 0 && (
               <QuickAudioSection
                 publicSounds={publicSounds}
                 selectedSound={form.soundUrl}
