@@ -2235,7 +2235,7 @@ export const DashboardStreamer = () => {
       const safeSettings = {
         ...DEFAULT_SETTINGS,
         ...s,
-        publicSounds: Array.isArray(s.publicSounds) ? s.publicSounds : DEFAULT_SETTINGS.publicSounds,
+        publicSounds: Array.isArray(s.publicSounds) ? s.publicSounds : s.publicSounds || DEFAULT_SETTINGS.publicSounds,
       };
       
       setLocalSettings(safeSettings);
@@ -2797,7 +2797,7 @@ export const DashboardStreamer = () => {
                       </p>
                       
                       <PublicSoundPicker 
-                        publicSounds={settings.publicSounds || SOUND_PRESETS.slice(0, 8)} // Default 8 suara pertama
+                        publicSounds={settings.publicSounds || DEFAULT_SETTINGS.publicSounds} 
                         value={settings.publicSoundDefault || ''}
                         onChange={v => upd('publicSoundDefault', v)}
                       />

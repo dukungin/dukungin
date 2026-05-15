@@ -956,9 +956,11 @@ const SupporterPage = () => {
   ).filter((v) => v >= minDonate && v <= maxDonate);
   
   const sortedTriggers = [...mediaTriggers].sort((a, b) => a.minAmount - b.minAmount);
-  const publicSounds = Array.isArray(streamer?.overlaySetting?.publicSounds) 
-  ? streamer.overlaySetting.publicSounds 
-  : [];
+  const publicSounds = Array.isArray(streamer?.publicSounds) 
+    ? streamer.publicSounds 
+    : Array.isArray(streamer?.overlaySetting?.publicSounds)
+      ? streamer.overlaySetting.publicSounds 
+      : [];
   
   return (
     <>
