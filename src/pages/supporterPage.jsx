@@ -623,6 +623,84 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl }) => {
   );
 };
 
+const QuickAudioSection = ({ 
+  publicSounds = [], 
+  selectedSound, 
+  onSoundChange,
+  amount 
+}) => {
+  const audioRef = useRef(null);
+  const [previewing, setPreviewing] = useState(null);
+
+  const playPreview = (url) => {
+    if (!url) return;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current.src = url;
+      audioRef.current.play().catch(() => {});
+      setPreviewing(url);
+      
+      setTimeout(() => {
+        audioRef.current.pause();
+        setPreviewing(null);
+      }, 2000);
+    }
+  };
+
+  if (!publicSounds.length || amount < 10000) return null; // Minimal 10K untuk audio
+
+  return (
+    <div className="space-y-3">
+      <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">
+        Pilih Suara Notif 🎵
+      </label>
+      
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
+        {/* Tanpa suara */}
+        <button 
+          onClick={() => onSoundChange('')}
+          className={`p-2.5 rounded-none border-2 font-bold text-xs flex flex-col items-center gap-1 transition-all ${
+            !selectedSound 
+              ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 shadow-sm' 
+              : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-indigo-300'
+          }`}
+        >
+          <span className="text-lg">🔇</span>
+          <span className="leading-tight">No Sound</span>
+        </button>
+
+        {/* Quick sounds */}
+        {publicSounds.slice(0, 7).map((sound, i) => (
+          <button 
+            key={i}
+            onClick={() => onSoundChange(sound.url)}
+            className={`p-2.5 rounded-none border-2 font-bold text-xs flex flex-col items-center gap-1 transition-all relative ${
+              selectedSound === sound.url
+                ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 shadow-sm ring-2 ring-indigo-200' 
+                : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-indigo-300 hover:bg-indigo-50'
+            }`}
+          >
+            {previewing === sound.url && (
+              <div className="absolute inset-0 bg-indigo-500/20 animate-pulse rounded-none flex items-center justify-center">
+                <span className="text-[10px]">▶ playing</span>
+              </div>
+            )}
+            <span className="text-lg">{sound.emoji}</span>
+            <span className="leading-tight truncate max-w-[45px]">{sound.label.split(' ')[0]}</span>
+          </button>
+        ))}
+      </div>
+
+      <audio ref={audioRef} />
+      <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center">
+        * Tersedia mulai Rp 10.000
+      </p>
+    </div>
+  );
+};
+
+
 // ============================================================
 // MAIN COMPONENT
 // ============================================================
@@ -633,6 +711,14 @@ const SupporterPage = () => {
   const [snapReady, setSnapReady] = useState(false);
   const [mediaUrl, setMediaUrl] = useState('');
   const { theme, toggle: toggleTheme } = useTheme();  
+  const [form, setForm] = useState({
+    donorName: '',
+    isAnonymous: false,
+    email: '',
+    amount: 0,
+    message: '',
+    soundUrl: '', // ← NEW
+  });
 
   // Auth state — semua dikelola di sini, dioper ke navbar sebagai props
   const [authPayload, setAuthPayload] = useState(getPayload());
@@ -789,6 +875,18 @@ const SupporterPage = () => {
         }
       }
 
+      // const payload = {
+      //   amount: Math.round(Number(form.amount)),
+      //   donorName: form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
+      //   message: form.message,
+      //   userId: streamer._id,
+      //   email: form.email.trim() || 'guest@mail.com',
+      //   mediaUrl: hasMedia ? mediaUrl.trim() : null,
+      //   mediaType: detectedMediaType,
+      //   // Kirim donorUserId jika login agar masuk ke myDonations
+      //   donorUserId: authPayload?.id,
+      // };
+
       const payload = {
         amount: Math.round(Number(form.amount)),
         donorName: form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
@@ -797,9 +895,10 @@ const SupporterPage = () => {
         email: form.email.trim() || 'guest@mail.com',
         mediaUrl: hasMedia ? mediaUrl.trim() : null,
         mediaType: detectedMediaType,
-        // Kirim donorUserId jika login agar masuk ke myDonations
         donorUserId: authPayload?.id,
+        soundUrl: form.soundUrl || null, // ← NEW
       };
+
 
       const res = await axios.post(`${BASE_URL}/api/midtrans/create-invoice`, payload);
 

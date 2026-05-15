@@ -98,6 +98,8 @@ const DEFAULT_SETTINGS = {
   borderColor: '#ffffff26',
   primaryColor: '#6366f1',
   textColor: '#ffffff',
+  publicSounds: SOUND_PRESETS.slice(0, 8), // 8 suara default untuk donatur
+  publicSoundDefault: '',  
   animation: 'bounce',
   quickAmounts: [10000, 25000, 50000, 100000, 250000],
   maxWidth: 280,
@@ -639,18 +641,6 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
                 </p>
               </div>
 
-              {/* Stats Grid */}
-              {/* <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
-                  <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400">{streamer?.followersCount ?? 0}</p>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Followers</p>
-                </div>
-                <div className="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-100 dark:border-slate-700/50">
-                  <p className="text-2xl font-black text-purple-600 dark:text-purple-400">{streamer?.supportersCount ?? 0}</p>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Supporters</p>
-                </div>
-              </div> */}
-
               {/* Social Media Grid */}
               { (streamer?.instagram || streamer?.facebook || streamer?.youtube || streamer?.twitter) && (
               <div className="pt-4 border-t border-slate-100 dark:border-slate-700">
@@ -929,6 +919,98 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
           <button onClick={() => onChange('')} className="cursor-pointer text-slate-300 hover:text-red-400 transition-colors text-sm flex-shrink-0">✕</button>
         </div>
       )}
+      <audio ref={audioRef} />
+    </div>
+  );
+};
+
+const PublicSoundPicker = ({ 
+  publicSounds = [], 
+  onChange, 
+  value, 
+  label = 'Pilih Suara Publik' 
+}) => {
+  const audioRef = useRef(null);
+  
+  const playPreview = (url) => {
+    if (!url) return;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = url;
+      audioRef.current.play().catch(() => {});
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      {label && (
+        <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+          {label}
+        </label>
+      )}
+      
+      {/* Grid pilihan suara */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        {/* Tanpa suara */}
+        <button 
+          onClick={() => onChange('')}
+          className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${
+            !value ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-md' 
+                   : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'
+          }`}
+        >
+          <span className="text-lg">🔇</span>
+          <span>Tanpa Suara</span>
+        </button>
+
+        {/* Public sounds */}
+        {publicSounds.map((sound, i) => (
+          <button 
+            key={i}
+            onClick={() => { onChange(sound.url); playPreview(sound.url); }}
+            className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${
+              value === sound.url 
+                ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-md' 
+                : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:border-indigo-300'
+            }`}
+            title={sound.label}
+          >
+            <span className="text-lg">{sound.emoji}</span>
+            <span className="truncate max-w-[70px]">{sound.label.split(' ')[0]}</span>
+            <span 
+              onClick={(e) => { e.stopPropagation(); playPreview(sound.url); }} 
+              className="text-[9px] font-medium text-slate-400 hover:text-indigo-600 cursor-pointer"
+            >
+              ▶
+            </span>
+          </button>
+        ))}
+      </div>
+      
+      {/* Audio preview */}
+      {value && (
+        <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-none p-3 border border-slate-100 dark:border-slate-700">
+          <button 
+            onClick={() => playPreview(value)} 
+            className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-indigo-600 rounded-none flex items-center justify-center text-white text-xs hover:bg-indigo-700 transition-all flex-shrink-0"
+          >
+            ▶
+          </button>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 truncate">
+              {SOUND_PRESETS.find(p => p.url === value)?.label || 'Custom Sound'}
+            </p>
+            <p className="text-[9px] text-slate-300 dark:text-slate-600 font-mono truncate">{value}</p>
+          </div>
+          <button 
+            onClick={() => onChange('')} 
+            className="cursor-pointer text-slate-300 hover:text-red-400 transition-colors text-sm flex-shrink-0"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+      
       <audio ref={audioRef} />
     </div>
   );
@@ -2672,6 +2754,27 @@ export const DashboardStreamer = () => {
                       <SoundPicker label="Suara Default (semua donasi)" value={settings.soundUrl || ''} onChange={v => upd('soundUrl', v)} />
                     </div>
                     <SoundTiersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
+                    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-6">
+                      <SectionHeader icon={<span className="text-lg">🎵</span>} title="Suara Publik untuk Donatur" color="bg-emerald-500" />
+                      <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
+                        Donatur bisa pilih suara ini saat donasi. Pilih yang mau diaktifkan.
+                      </p>
+                      
+                      <PublicSoundPicker 
+                        publicSounds={settings.publicSounds || SOUND_PRESETS.slice(0, 8)} // Default 8 suara pertama
+                        value={settings.publicSoundDefault || ''}
+                        onChange={v => upd('publicSoundDefault', v)}
+                      />
+                      
+                      <button 
+                        onClick={() => saveSettingsMutation.mutate(settings)} 
+                        disabled={saveSettingsMutation.isPending}
+                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-emerald-600 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-emerald-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2"
+                      >
+                        <Save size={20} />
+                        {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Suara Publik'}
+                      </button>
+                    </div>
                   </div>
 
                   <BannedWordsEditor saveSettingsMutation={saveSettingsMutation} settings={settings} />
