@@ -116,12 +116,14 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
         {/* Logo */}
         <div className="flex items-center justify-between mb-8 md:mb-11">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-200 rounded-none flex items-center justify-center text-white font-black text-xl italic shadow-lg">
-              <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
+          <a href='/'>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-red-200 rounded-none flex items-center justify-center text-white font-black text-xl italic shadow-lg">
+                <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
+              </div>
+              <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">TapTipTup</h1>
             </div>
-            <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">TapTipTup</h1>
-          </div>
+          </a>
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="relative left-3.5 w-max cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500"
