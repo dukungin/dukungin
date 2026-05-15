@@ -49,6 +49,7 @@ import { useSearchParams } from 'react-router-dom';
 import Badge from '../components/badge';
 import React from 'react';
 import AudioManager from '../components/AudioManager';
+import toast from 'react-hot-toast';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -933,15 +934,22 @@ const PublicSoundPicker = ({
 }) => {
   const audioRef = useRef(null);
   
-  // ✅ SAFE FALLBACK: pastikan publicSounds selalu array
+  // ✅ SAFE FALLBACK
   const safePublicSounds = Array.isArray(publicSounds) ? publicSounds : [];
   
-  const playPreview = (url) => {
-    if (!url) return;
+  const playPreview = (sound) => {
+    if (!sound?.url) return;
+    
+    // ✅ SELALU PROXY URL
+    const proxyUrl = sound.proxyUrl || `/api/proxy-audio?url=${encodeURIComponent(sound.url)}`;
+    
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current.src = url;
-      audioRef.current.play().catch(() => {});
+      audioRef.current.src = proxyUrl;
+      audioRef.current.play().catch(e => {
+        console.error('Audio play failed:', e);
+        toast.error('❌ Audio tidak valid!');
+      });
     }
   };
 
@@ -953,7 +961,6 @@ const PublicSoundPicker = ({
         </label>
       )}
       
-      {/* Grid pilihan suara */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {/* Tanpa suara */}
         <button 
@@ -967,11 +974,14 @@ const PublicSoundPicker = ({
           <span>Tanpa Suara</span>
         </button>
 
-        {/* Public sounds - SAFE RENDER */}
+        {/* ✅ FIXED: Public sounds */}
         {safePublicSounds.slice(0, 8).map((sound, i) => (
           <button 
-            key={`${sound.url}-${i}`} // ✅ UNIQUE KEY
-            onClick={() => { onChange(sound.url); playPreview(sound.url); }}
+            key={`${sound.url}-${i}`}
+            onClick={() => { 
+              onChange(sound.url); 
+              playPreview(sound);  // ✅ sound OBJECT!
+            }}
             className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${
               value === sound.url 
                 ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-md' 
@@ -984,30 +994,22 @@ const PublicSoundPicker = ({
               {sound.label?.split(' ')[0] || `Sound ${i + 1}`}
             </span>
             <span 
-              onClick={(e) => { e.stopPropagation(); playPreview(sound.url); }} 
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                playPreview(sound);  // ✅ sound OBJECT!
+              }} 
               className="text-[9px] font-medium text-slate-400 hover:text-indigo-600 cursor-pointer"
             >
               ▶
             </span>
           </button>
         ))}
-        
-        {/* Filler jika kurang dari 8 */}
-        {safePublicSounds.length === 0 && (
-          Array.from({ length: 7 }, (_, i) => (
-            <div key={`filler-${i}`} className="p-3 opacity-30">
-              <span className="text-lg">🎵</span>
-              <span className="text-xs">Loading...</span>
-            </div>
-          ))
-        )}
       </div>
       
-      {/* Audio preview */}
       {value && (
         <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-none p-3 border border-slate-100 dark:border-slate-700">
           <button 
-            onClick={() => playPreview(value)} 
+            onClick={() => playPreview({ url: value })} 
             className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-indigo-600 rounded-none flex items-center justify-center text-white text-xs hover:bg-indigo-700 transition-all flex-shrink-0"
           >
             ▶

@@ -273,43 +273,46 @@ const AudioManager = ({
   }, []);
 
   // components/AudioManager.jsx - UPDATE handleFileUpload & addSound
+  // AudioManager.jsx - UPDATE addSound & handleFileUpload
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('audio/')) {
-      const url = URL.createObjectURL(file);
-      setNewSound({ 
-        name: file.name.replace(/\.[^/.]+$/, ''), 
-        url, 
-        file 
-      });
-    } else {
-      toast.error('❌ Hanya file audio (.mp3, .wav, .ogg, .m4a)!');
+      
+      // ✅ UPLOAD KE SERVER, JANGAN BLOB!
+      const formData = new FormData();
+      formData.append('audio', file);
+      
+      api.post('/api/overlay/upload-audio', formData)
+        .then(res => {
+          setNewSound({ 
+            name: file.name.replace(/\.[^/.]+$/, ''), 
+            url: res.data.url  // ✅ SERVER URL, bukan blob!
+          });
+          toast.success('✅ File diupload!');
+        })
+        .catch(() => toast.error('❌ Upload gagal!'));
     }
   };
 
   const addSound = () => {
     if (newSound.name && newSound.url && publicSounds.length < 20) {
       
-      // ✅ VALIDASI URL AUDIO
-      if (!newSound.url.startsWith('http') && !newSound.url.startsWith('blob:')) {
-        toast.error('❌ URL tidak valid!');
-        return;
-      }
+      // ✅ SELALU GUNAKAN PROXY URL
+      const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(newSound.url)}`;
       
-      // ✅ CEK AUDIO VALID (client-side)
-      const audio = new Audio();
-      audio.src = newSound.url;
+      // Test audio
+      const audio = new Audio(proxyUrl);
       audio.onloadedmetadata = () => {
         onUpdatePublicSounds([...publicSounds, {
-          url: newSound.url,
+          url: newSound.url,  // ✅ SAVE ORIGINAL URL
+          proxyUrl,           // ✅ SAVE PROXY URL
           label: newSound.name,
           emoji: '🎵'
         }]);
-        setNewSound({ name: '', url: '', file: null });
-        if (newSound.file) URL.revokeObjectURL(newSound.url);
+        setNewSound({ name: '', url: '' });
         toast.success('✅ Suara ditambahkan!');
       };
-      audio.onerror = () => toast.error('❌ URL audio tidak valid!');
+      audio.onerror = () => toast.error('❌ Audio tidak valid!');
       audio.load();
     }
   };
