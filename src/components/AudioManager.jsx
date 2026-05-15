@@ -130,75 +130,62 @@ const AudioManager = ({
     }
   };
 
-  // AudioManager.jsx - SMART VALIDATION
-    const addSound = async () => {
-      const name = newSound.name?.trim() || '';
-      const url = newSound.url?.trim() || '';
+  const addSound = async () => {
+    const name = newSound.name?.trim() || '';
+    const url = newSound.url?.trim() || '';
+    
+    if (!name || !url || publicSounds.length >= 20) {
+      toast.error('❌ Isi nama & URL suara!');
+      return;
+    }
+    
+    try {
+      // ✅ MP3 LOCAL = AUTO OK (no test needed)
+      const isLocalMp3 = url.includes('/uploads/audio/') || 
+                        url.includes('taptiptup.vercel.app') || 
+                        url.includes('railway.app');
       
-      if (!name || !url || publicSounds.length >= 20) {
-        toast.error('❌ Isi nama & URL suara!');
-        return;
-      }
+      let proxyUrl;
       
-      try {
-        // ✅ QUICK CHECK: Local upload = auto OK
-        const isLocalUpload = url.includes('/uploads/audio/') || url.includes('taptiptup.vercel.app');
+      if (isLocalMp3) {
+        console.log('🎵 Local MP3 - direct URL');
+        proxyUrl = url; // DIRECT - no proxy!
+        toast.success('✅ MP3 lokal siap!');
+      } else {
+        // External → test
+        proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(url)}`;
         
-        if (isLocalUpload) {
-          console.log('✅ Local MP3 - skip test');
-          
-          const newSoundObj = {
-            url: url,
-            proxyUrl: `/api/proxy-audio?url=${encodeURIComponent(url)}`,
-            label: name,
-            emoji: '🎵'
-          };
-          
-          onUpdatePublicSounds([...publicSounds, newSoundObj]);
-          setNewSound({ name: '', url: '', file: null });
-          toast.success('✅ MP3 lokal ditambahkan!');
-          return;
-        }
-        
-        // External URL → test
-        const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(url)}`;
         const response = await fetch(proxyUrl, { 
           method: 'HEAD',
           cache: 'no-cache',
           signal: AbortSignal.timeout(5000)
         });
         
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) throw new Error(`Server error ${response.status}`);
         
         const contentType = response.headers.get('content-type') || '';
-        const isAudioUrl = /\.(mp3|wav|ogg|m4a|webm|aac)(\?.*)?$/i.test(url);
-        
-        if (!contentType.startsWith('audio/') && !isAudioUrl) {
-          throw new Error('Bukan file audio');
+        if (!contentType.startsWith('audio/')) {
+          throw new Error('External audio tidak valid');
         }
-        
-        // Success
-        const newSoundObj = {
-          url: url,
-          proxyUrl: proxyUrl,
-          label: name,
-          emoji: '🎵'
-        };
-        
-        onUpdatePublicSounds([...publicSounds, newSoundObj]);
-        setNewSound({ name: '', url: '', file: null });
-        toast.success('✅ Suara ditambahkan!');
-        
-      } catch (err) {
-        console.error('❌ Add failed:', err);
-        toast.error(`❌ ${err.message}`);
       }
-    };
-
-  // const onUpdatePublicSounds = useCallback((newSounds) => {
-  //   setIsDirty(true); // Mark as dirty
-  //   parentOnUpdatePublicSounds?.(newSounds);
-  // }, []);
+      
+      // ✅ TAMBAH KE LIST
+      const newSoundObj = {
+        url: url,           // Original
+        proxyUrl: proxyUrl, // Play URL
+        label: name,
+        emoji: '🎵'
+      };
+      
+      onUpdatePublicSounds([...publicSounds, newSoundObj]);
+      setNewSound({ name: '', url: '', file: null });
+      toast.success('✅ Suara ditambahkan!');
+      
+    } catch (err) {
+      console.error('❌ Error:', err);
+      toast.error(`❌ ${err.message}`);
+    }
+  };
 
   // ✅ TAMBAH SAVE FUNCTION
   const saveToServer = async () => {
@@ -243,10 +230,15 @@ const AudioManager = ({
 
   // ✅ PROXY untuk external audio (bypass CORS)
   const getAudioProxyUrl = (url) => {
-    if (url.startsWith('http') && !url.includes(window.location.origin)) {
-      return `/api/proxy-audio?url=${encodeURIComponent(url)}`;
+    // ✅ Local/server files = DIRECT (fastest + no CORS)
+    if (url.includes('/uploads/') || 
+        url.includes('taptiptup.vercel.app') || 
+        url.includes('railway.app') ||
+        url.includes(window.location.origin)) {
+      return url;
     }
-    return url;
+    // External = proxy
+    return `/api/proxy-audio?url=${encodeURIComponent(url)}`;
   };
 
   return (
