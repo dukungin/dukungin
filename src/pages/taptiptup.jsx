@@ -643,7 +643,7 @@ function CTA({ C, isDark }) {
       <div
         className="w-full flex flex-col justify-center items-center"
         style={{
-          padding: "80px 40px 80px 40px",
+          padding: "120px 40px 80px 40px",
           borderRight: `1px solid ${C.line}`,
           display: "flex",
           flexDirection: "column",
