@@ -25,12 +25,10 @@ const AudioManager = ({
     // Stop previous
     audioRef.current.pause();
     audioRef.current.currentTime = 0;
-    
-    // Set new source
     audioRef.current.src = url;
     setPreviewError(false);
     
-    // Play & handle events
+    // ✅ FIXED - langsung play tanpa if rusak
     const playPromise = audioRef.current.play();
     
     if (playPromise !== undefined) {
@@ -42,6 +40,8 @@ const AudioManager = ({
           console.warn('Audio play failed:', err);
           setPreviewError(true);
         });
+    } else {
+      setPlayingPreview(url); // Fallback untuk browser lama
     }
     
     // ✅ PROPER EVENT HANDLERS
@@ -129,31 +129,35 @@ const AudioManager = ({
     }
   };
 
-  const addSound = () => {
+  const addSound = async () => {
     if (!newSound.name || !newSound.url || publicSounds.length >= 20) return;
     
-    // ✅ TEST AUDIO DENGAN PROXY
-    const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(newSound.url)}`;
-    const testAudio = new Audio(proxyUrl);
-    
-    testAudio.onloadedmetadata = () => {
-      const newSoundObj = {
-        url: newSound.url,        // Original URL
-        proxyUrl: proxyUrl,       // Proxy URL
-        label: newSound.name,
-        emoji: '🎵'
-      };
+    try {
+      // ✅ TEST dengan fetch (lebih reliable)
+      const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(newSound.url)}`;
+      const response = await fetch(proxyUrl, { 
+        method: 'HEAD',
+        cache: 'no-cache'
+      });
       
-      onUpdatePublicSounds([...publicSounds, newSoundObj]);
-      setNewSound({ name: '', url: '', file: null });
-      toast.success('✅ Suara ditambahkan!');
-    };
-    
-    testAudio.onerror = () => {
-      toast.error('❌ Audio tidak valid atau tidak bisa diputar!');
-    };
-    
-    testAudio.load();
+      if (response.ok && response.headers.get('content-type')?.startsWith('audio/')) {
+        const newSoundObj = {
+          url: newSound.url,
+          proxyUrl: proxyUrl,
+          label: newSound.name,
+          emoji: '🎵'
+        };
+        
+        onUpdatePublicSounds([...publicSounds, newSoundObj]);
+        setNewSound({ name: '', url: '', file: null });
+        toast.success('✅ Suara ditambahkan!');
+      } else {
+        throw new Error('Invalid audio');
+      }
+    } catch (err) {
+      console.error('Test audio failed:', err);
+      toast.error('❌ Audio tidak valid atau tidak bisa diakses!');
+    }
   };
 
   const removeSound = (index) => {
