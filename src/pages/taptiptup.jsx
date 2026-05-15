@@ -514,7 +514,7 @@ function FeeComparison({ C }) {
   const saving = Math.round(((maxFee - 2.5) / 100) * 10_000_000);
 
   return (
-    <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+    <section style={{ transition: "border-color 0.4s" }}>
       {/* Header */}
       <div className="text-center flex flex-col justify-center items-center"
         style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
@@ -528,19 +528,27 @@ function FeeComparison({ C }) {
       </div>
 
       {/* Grid perbandingan */}
-      <div className="grid grid-cols-3 md:grid-cols-6"
-        style={{ borderBottom: `1px solid ${C.line}` }}>
+      <div className="grid grid-cols-2 md:grid-cols-6"
+        style={{ borderBottom: `1px solid ${C.line}` }}
+        >
         {PLATFORMS.map((p, i) => {
           const barWidth = Math.round((p.fee / maxFee) * 100);
           const isLast = i === PLATFORMS.length - 1;
+          
+          // ✅ MOBILE CHECK (width < 768px)
+          const isMobile = window.innerWidth < 768;
+          
           return (
             <div key={p.name}
               style={{
                 padding: "32px 24px",
                 borderRight: !isLast ? `1px solid ${C.line}` : "none",
+                // ✅ BOTTOM BORDER: HANYA MOBILE ATAU !isLast
+                borderBottom: (isMobile) ? `1px solid ${C.line}` : "none",
                 background: p.winner ? C.bg2 : "transparent",
-                transition: "background 0.4s, border-color 0.4s",
+                transition: "all 0.4s",
               }}>
+
               {p.winner
                 ? <span style={{ display: "inline-block", marginBottom: 10, background: C.lime, color: C.bg, fontSize: 10, padding: "3px 10px", letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 700, transition: "background 0.4s" }}>Terkecil</span>
                 : <div style={{ height: 24, marginBottom: 10 }} />}

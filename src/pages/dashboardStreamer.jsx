@@ -1841,7 +1841,7 @@ const HistoryPage = () => {
                   <table className="w-full text-left min-w-[700px]">
                     <thead>
                       <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                        {['Donatur', 'Nominal', 'Pesan', 'Media', 'Waktu', 'Replay'].map((h) => (  // ✅ Tambah Replay
+                        {['Donatur', 'Nominal', 'Pesan', 'Replay', 'Media', 'status', 'Waktu'].map((h) => (  // ✅ Tambah Replay
                           <th key={h} className="px-6 md:px-8 py-6">{h}</th>
                         ))}
                       </tr>
@@ -1899,8 +1899,8 @@ const HistoryPage = () => {
                                 <span className="text-slate-300 dark:text-slate-600 text-xs">-</span>
                               )}
                             </td>
-                            <td className="px-6 md:px-8 py-5 text-center">
-                              <span className={`px-3 py-1.5 rounded-none text-[10px] font-black tracking-widest ${
+                            <td className="py-5 w-max mx-auto flex justify-center">
+                              <span className={`px-3 py-1.5 rounded-none text-[10px] ml-[-24px] font-black tracking-widest ${
                                 item.status === 'PAID' ? 'bg-green-100 dark:bg-green-950/40 text-green-600' :
                                 item.status === 'EXPIRED' ? 'bg-red-100 dark:bg-red-950/40 text-red-400' :
                                 'bg-amber-100 dark:bg-amber-950/40 text-amber-600'

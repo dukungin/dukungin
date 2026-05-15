@@ -20,10 +20,10 @@ const C = {
 ───────────────────────────────────────── */
 function SectionTitle({ children }) {
   return (
-    <h3 style={{
+    <h3 className="md:text-[32px] text-[24px]" style={{
       fontFamily: "'Bebas Neue', sans-serif",
-      fontSize: 32,
       color: C.lime,
+      fontWeight: 800,
       marginTop: 48,
       marginBottom: 16,
       letterSpacing: "0.02em"
@@ -70,22 +70,22 @@ export default function PrivacyPolicy() {
           <div style={{ width: 24, height: 24, background: C.lime, color: C.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 900 }}>🪼</div>
           TAP-TIP-TUP
         </Link>
-        <Link to="/" style={{ fontSize: 12, color: C.muted, textDecoration: "none", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+        <Link className="text-white hover:text-white/80 active:scale-[0.98]" to="/" style={{ fontSize: 12, textDecoration: "none", textTransform: "uppercase", letterSpacing: "0.1em" }}>
           Kembali ke Beranda →
         </Link>
       </nav>
 
       {/* Header Halaman */}
-      <header style={{ padding: "80px 40px 40px", textAlign: "center", borderBottom: `1px solid ${C.line}` }}>
+      <header className="w-full md:w-[56vw] md:text-justify text-center flex justify-start items-start flex-col mx-auto border-x border-slate-100/10 px-[40px] pt-[40px] md:pt-[80px] pb-[40px]" style={{ textAlign: "center" }}>
         <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: C.lime, textTransform: "uppercase", letterSpacing: "0.2em" }}>Legal Document</span>
-        <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(48px, 8vw, 80px)", lineHeight: 1, marginTop: 16 }}>
+        <h1 className="w-max text-[30px] md:text-[50px]" style={{ fontWeight: 800, fontFamily: "'Bebas Neue', sans-serif", lineHeight: 1, marginTop: 16 }}>
           KEBIJAKAN <span style={{ color: C.lime }}>PRIVASI</span>
         </h1>
-        <p style={{ color: C.muted, fontSize: 14, marginTop: 12 }}>Terakhir diperbarui: 12 Mei 2026</p>
+        <p className="text-slate-400 list-disc" style={{ fontSize: 16, marginTop: 12 }}>Terakhir diperbarui: 12 Mei 2026</p>
       </header>
 
       {/* Konten Utama */}
-      <main style={{ maxWidth: 800, margin: "0 auto", padding: "60px 40px" }}>
+      <main className="border-x border-t border-slate-100/10 w-full md:w-[56vw] md:text-justify py-[30px] md:py-[60px] px-[30px] md:px-[40px]" style={{ margin: "0 auto"}}>
         <PolicyText>
           Selamat datang di TapTipTup. Kami menghargai privasi Anda dan berkomitmen untuk melindungi data pribadi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan menjaga informasi Anda saat Anda menggunakan platform kami.
         </PolicyText>
@@ -94,7 +94,7 @@ export default function PrivacyPolicy() {
         <PolicyText>
           Kami mengumpulkan informasi yang Anda berikan langsung kepada kami saat mendaftar, seperti:
         </PolicyText>
-        <ul style={{ color: C.muted, fontSize: 14, paddingLeft: 20, marginBottom: 20, lineHeight: 2 }}>
+        <ul className="text-slate-400 list-disc" style={{ fontSize: 16, paddingLeft: 20, marginBottom: 20, lineHeight: 2 }}>
           <li>Nama lengkap dan nama pengguna (username).</li>
           <li>Alamat email untuk verifikasi dan notifikasi.</li>
           <li>Data akun bank atau e-wallet (untuk pencairan donasi).</li>
@@ -105,7 +105,7 @@ export default function PrivacyPolicy() {
         <PolicyText>
           Data yang kami kumpulkan digunakan untuk tujuan berikut:
         </PolicyText>
-        <ul style={{ color: C.muted, fontSize: 14, paddingLeft: 20, marginBottom: 20, lineHeight: 2 }}>
+        <ul className="text-slate-400 list-disc" style={{ fontSize: 16, paddingLeft: 20, marginBottom: 20, lineHeight: 2 }}>
           <li>Memproses transaksi donasi secara real-time.</li>
           <li>Menampilkan alert donasi pada overlay OBS Anda.</li>
           <li>Mengelola sistem leaderboard dan milestone donasi.</li>
@@ -116,7 +116,7 @@ export default function PrivacyPolicy() {
         <PolicyText>
           Kami tidak menjual data pribadi Anda. Namun, kami berbagi data dengan mitra penyedia layanan untuk operasional:
         </PolicyText>
-        <ul style={{ color: C.muted, fontSize: 14, paddingLeft: 20, marginBottom: 20, lineHeight: 2 }}>
+        <ul className="text-slate-400 list-disc" style={{ fontSize: 16, paddingLeft: 20, marginBottom: 20, lineHeight: 2 }}>
           <li><strong>Payment Gateway:</strong> Untuk memproses pembayaran via QRIS dan transfer bank.</li>
           <li><strong>Penyedia Cloud:</strong> Untuk menyimpan data overlay dan aset media Anda dengan aman.</li>
         </ul>
@@ -144,15 +144,15 @@ export default function PrivacyPolicy() {
           <PolicyText>
             Jika Anda memiliki pertanyaan mengenai Kebijakan Privasi ini, silakan hubungi kami di: 
             <br />
-            <strong style={{ color: C.text }}>legal@taptiptup.com</strong>
+            <strong style={{ color: C.text }}>taptiptup.support@gmail.com</strong>
           </PolicyText>
         </div>
       </main>
 
       {/* Footer Sederhana */}
-      <footer style={{ padding: "40px", borderTop: `1px solid ${C.line}`, textAlign: "center" }}>
-        <p style={{ fontSize: 11, color: C.dim, letterSpacing: "0.05em" }}>
-          © 2026 TAP-TIP-TUP. DIBUAT DENGAN SEMANGAT UNTUK KREATOR INDONESIA.
+      <footer className="text-slate-500" style={{ padding: "40px", borderTop: `1px solid ${C.line}`, textAlign: "center" }}>
+        <p style={{ fontSize: 11, letterSpacing: "0.05em" }}>
+          © 2026 TAP-TIP-TUP OFFICIAL.
         </p>
       </footer>
     </div>
