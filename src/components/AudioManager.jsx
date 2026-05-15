@@ -190,6 +190,7 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload, Music, Link, Trash2, Volume2, Play, Pause } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '../lib/axiosInstance';
 
 const AudioManager = ({ 
   publicSounds = [],  // ✅ Default empty array
@@ -293,28 +294,73 @@ const AudioManager = ({
         .catch(() => toast.error('❌ Upload gagal!'));
     }
   };
+  
+  // AudioManager.jsx - FIXED VERSION
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !file.type.startsWith('audio/')) {
+      toast.error('❌ Hanya file audio (.mp3, .wav, .ogg, .m4a)!');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) { // 10MB
+      toast.error('❌ File terlalu besar! Max 10MB');
+      return;
+    }
+
+    try {
+      setUploading(true);
+      
+      // ✅ UPLOAD KE SERVER
+      const formData = new FormData();
+      formData.append('audio', file);
+      
+      const res = await api.post('/api/overlay/upload-audio', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 30000
+      });
+      
+      // ✅ SET SERVER URL
+      setNewSound({ 
+        name: file.name.replace(/\.[^/.]+$/, ''), 
+        url: res.data.url,  // ✅ SERVER URL bukan blob!
+        file: null
+      });
+      
+      toast.success('✅ File berhasil diupload!');
+    } catch (err) {
+      console.error('Upload error:', err);
+      toast.error('❌ Upload gagal: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const addSound = () => {
-    if (newSound.name && newSound.url && publicSounds.length < 20) {
-      
-      // ✅ SELALU GUNAKAN PROXY URL
-      const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(newSound.url)}`;
-      
-      // Test audio
-      const audio = new Audio(proxyUrl);
-      audio.onloadedmetadata = () => {
-        onUpdatePublicSounds([...publicSounds, {
-          url: newSound.url,  // ✅ SAVE ORIGINAL URL
-          proxyUrl,           // ✅ SAVE PROXY URL
-          label: newSound.name,
-          emoji: '🎵'
-        }]);
-        setNewSound({ name: '', url: '' });
-        toast.success('✅ Suara ditambahkan!');
+    if (!newSound.name || !newSound.url || publicSounds.length >= 20) return;
+    
+    // ✅ TEST AUDIO DENGAN PROXY
+    const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(newSound.url)}`;
+    const testAudio = new Audio(proxyUrl);
+    
+    testAudio.onloadedmetadata = () => {
+      const newSoundObj = {
+        url: newSound.url,        // Original URL
+        proxyUrl: proxyUrl,       // Proxy URL
+        label: newSound.name,
+        emoji: '🎵'
       };
-      audio.onerror = () => toast.error('❌ Audio tidak valid!');
-      audio.load();
-    }
+      
+      onUpdatePublicSounds([...publicSounds, newSoundObj]);
+      setNewSound({ name: '', url: '', file: null });
+      toast.success('✅ Suara ditambahkan!');
+    };
+    
+    testAudio.onerror = () => {
+      toast.error('❌ Audio tidak valid atau tidak bisa diputar!');
+    };
+    
+    testAudio.load();
   };
 
   const removeSound = (index) => {
