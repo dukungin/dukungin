@@ -146,7 +146,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
 
   return (
     <>
-      <div className={`hidden md:flex sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white/80 dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between gap-4`}>
+      <div className={`hidden md:flex sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-black/70 dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between gap-4`}>
 
         {/* Kiri: Breadcrumb */}
         <div className="flex items-center gap-1.5 min-w-0">
@@ -292,7 +292,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowLogoutConfirm(false)}
-              className="absolute inset-0 bg-white/60 backdrop-blur-md"
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}

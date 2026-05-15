@@ -68,6 +68,7 @@ function App() {
           {/* Auth — redirect ke dashboard kalau sudah login */}
           <Route path="/login"    element={<PublicOnlyRoute><Auth /></PublicOnlyRoute>} />
           <Route path="/register" element={<PublicOnlyRoute><Auth /></PublicOnlyRoute>} />
+          <Route path="/auth/reset-password" element={<Auth />} /> {/* Handle via searchParams */}
 
           {/* Dashboard — harus login */}
           <Route path="/dashboard" element={<ProtectedRoute><DashboardStreamer /></ProtectedRoute>} />
