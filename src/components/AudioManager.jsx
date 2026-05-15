@@ -202,6 +202,8 @@ const AudioManager = ({
   const [playingPreview, setPlayingPreview] = useState(null);
   const [previewError, setPreviewError] = useState(false);
   const audioRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+
 
   // ✅ FIXED playPreview - dengan cleanup & error handling
   const playPreview = useCallback((url) => {
