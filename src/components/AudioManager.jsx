@@ -1,191 +1,3 @@
-// // components/AudioManager.jsx - Komponen baru
-// import { useCallback, useState, useRef } from 'react';
-// import { Upload, Music, Link, Trash2, Volume2, Play, Pause } from 'lucide-react';
-// import { motion, AnimatePresence } from 'framer-motion';
-
-// const AudioManager = ({ 
-//   publicSounds, 
-//   onUpdatePublicSounds, 
-//   uploading, 
-//   onUpload 
-// }) => {
-//   const [newSound, setNewSound] = useState({ name: '', url: '', file: null });
-//   const [playingPreview, setPlayingPreview] = useState(null);
-//   const audioRef = useRef(null);
-
-//   const playPreview = useCallback((url) => {
-//     if (audioRef.current) {
-//       audioRef.current.pause();
-//       audioRef.current.currentTime = 0;
-//       audioRef.current.src = url;
-//       audioRef.current.play().catch(() => {});
-//       setPlayingPreview(url);
-      
-//       audioRef.current.onended = () => setPlayingPreview(null);
-//     }
-//   }, []);
-
-//   const stopPreview = () => {
-//     if (audioRef.current) {
-//       audioRef.current.pause();
-//       setPlayingPreview(null);
-//     }
-//   };
-
-//   const handleFileUpload = (e) => {
-//     const file = e.target.files[0];
-//     if (file && ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'].includes(file.type)) {
-//       const url = URL.createObjectURL(file);
-//       setNewSound({ name: file.name.replace(/\.[^/.]+$/, ''), url, file });
-//     }
-//   };
-
-//   const addSound = () => {
-//     if (newSound.name && newSound.url && publicSounds.length < 20) { // Max 20 sounds
-//       onUpdatePublicSounds([...publicSounds, {
-//         url: newSound.url,
-//         label: newSound.name,
-//         emoji: '🎵'
-//       }]);
-//       setNewSound({ name: '', url: '', file: null });
-//     }
-//   };
-
-//   const removeSound = (index) => {
-//     const updated = publicSounds.filter((_, i) => i !== index);
-//     onUpdatePublicSounds(updated);
-//   };
-
-//   return (
-//     <div className="space-y-4">
-//       {/* Add New Sound */}
-//       <div className="p-4 border-2 border-dashed border-indigo-200 dark:border-slate-700 rounded-lg bg-indigo-50/50 dark:bg-slate-800/20">
-//         <h3 className="font-black text-sm text-indigo-700 dark:text-indigo-400 mb-4 flex items-center gap-2">
-//           <Music size={16} /> Tambah Suara Baru
-//         </h3>
-        
-//         <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
-//           {/* File Upload */}
-//           <div>
-//             <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">
-//               Upload File (.mp3, .wav, .ogg)
-//             </label>
-//             <div className="relative">
-//               <input
-//                 type="file"
-//                 accept="audio/*"
-//                 onChange={handleFileUpload}
-//                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-//               />
-//               <div className="flex items-center gap-2 p-3 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 hover:border-indigo-300 transition-all cursor-pointer">
-//                 <Upload size={16} className="text-indigo-500" />
-//                 <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
-//                   {newSound.file ? newSound.file.name : 'Pilih file audio'}
-//                 </span>
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* External URL */}
-//           <div className='grid gap-3 w-full grid-cols-1 md:grid-cols-2'>   
-//             <div>
-//               <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">
-//                 Atau Link External
-//               </label>
-//               <div className="relative">
-//                 <Link size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-//                 <input
-//                   type="url"
-//                   value={newSound.url}
-//                   onChange={(e) => setNewSound({ ...newSound, url: e.target.value })}
-//                   placeholder="https://example.com/sound.mp3"
-//                   className="w-full pl-9 pr-4 py-3 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-400 rounded-lg text-sm outline-none"
-//                 />
-//               </div>
-//             </div>
-
-//             {/* Name & Add */}
-//             <div className="space-y-2">
-//               <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">
-//                 Nama
-//               </label>
-//               <input
-//                 type="text"
-//                 value={newSound.name}
-//                 onChange={(e) => setNewSound({ ...newSound, name: e.target.value })}
-//                 placeholder="Nama suara (contoh: Epic Win)"
-//                 className="w-full p-3 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 focus:border-indigo-400 rounded-lg text-sm outline-none"
-//               />
-//             </div>
-//           </div>
-//           <button
-//             onClick={addSound}
-//             disabled={!newSound.name || !newSound.url || publicSounds.length >= 20}
-//             className="cursor-pointer active:scale-[0.99] w-full p-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg font-black text-sm disabled:opacity-50 hover:brightness-110 transition-all flex items-center justify-center gap-2"
-//           >
-//             Tambah Suara
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Current Sounds List */}
-//       {publicSounds.length > 0 && (
-//         <div>
-//           <h4 className="font-black text-sm text-slate-700 dark:text-white mb-3 flex items-center gap-2">
-//             Suara Publik ({publicSounds.length}/20)
-//           </h4>
-//           <div className="space-y-2 max-h-48 overflow-y-auto">
-//             {publicSounds.map((sound, index) => (
-//               <motion.div
-//                 key={`${sound.url}-${index}`}
-//                 layout
-//                 className="group flex items-center justify-between p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
-//               >
-//                 <div className="flex items-center gap-3 flex-1 min-w-0">
-//                   <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
-//                     <span className="text-xl">{sound.emoji || '🎵'}</span>
-//                   </div>
-//                   <div className="min-w-0 flex-1">
-//                     <p className="font-bold text-sm text-slate-700 dark:text-white truncate">
-//                       {sound.label}
-//                     </p>
-//                     <p className="text-xs text-slate-500 dark:text-slate-400 truncate maxw-w-[90%]">
-//                       {sound.url}
-//                     </p>
-//                   </div>
-//                   <button
-//                     onClick={() => playPreview(sound.url)}
-//                     className="cursor-pointer active:scale-[0.98] p-2 bg-emerald-500 hover:brightness-[85%] rounded-lg transition-all flex-shrink-0"
-//                     title="Preview"
-//                   >
-//                     {playingPreview === sound.url ? (
-//                       <Pause size={16} className="text-white" />
-//                     ) : (
-//                       <Volume2 size={16} className="text-white group-hover:text-white" />
-//                     )}
-//                   </button>
-//                 </div>
-//                 <button
-//                   onClick={() => removeSound(index)}
-//                   className="cursor-pointer active:scale-[0.98] p-2 ml-2 bg-white hover:brightness-[85%] rounded-lg transition-all flex-shrink-0"
-//                   title="Hapus"
-//                 >
-//                   <Trash2 size={16} className="text-red-600" />
-//                 </button>
-//               </motion.div>
-//             ))}
-//           </div>
-//         </div>
-//       )}
-
-//       <audio ref={audioRef} preload="none" />
-//     </div>
-//   );
-// };
-
-// export default AudioManager;
-
-
 // components/AudioManager.jsx - FIXED VERSION
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload, Music, Link, Trash2, Volume2, Play, Pause } from 'lucide-react';
@@ -193,16 +5,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import api from '../lib/axiosInstance';
 
 const AudioManager = ({ 
-  publicSounds = [],  // ✅ Default empty array
-  onUpdatePublicSounds, 
-  uploading = false,
-  onUpload 
+  publicSounds = [],  
+  onUpdatePublicSounds 
 }) => {
+  // ✅ TAMBAH STATE INI (baris 15)
+  const [uploading, setUploading] = useState(false);
+  
+  const [newSound, setNewSound] = useState({ name: '', url: '', file: null });
   const [newSound, setNewSound] = useState({ name: '', url: '', file: null });
   const [playingPreview, setPlayingPreview] = useState(null);
   const [previewError, setPreviewError] = useState(false);
   const audioRef = useRef(null);
-  const [uploading, setUploading] = useState(false);
 
 
   // ✅ FIXED playPreview - dengan cleanup & error handling

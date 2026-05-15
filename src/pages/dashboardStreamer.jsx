@@ -2867,10 +2867,8 @@ export const DashboardStreamer = () => {
                       </div>
                       
                       <AudioManager
-                        publicSounds={formData.publicSounds}  // Local state untuk UI
+                        publicSounds={formData.publicSounds}
                         onUpdatePublicSounds={(sounds) => setFormData({ ...formData, publicSounds: sounds })}
-                        uploading={uploading}
-                        onUpload={handleUploadAudio}
                       />
                       
                       {/* ✅ SAVE BUTTON - Sync ke settings */}
