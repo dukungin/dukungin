@@ -729,14 +729,6 @@ const SupporterPage = () => {
 
   const isLoggedIn = !!authPayload;
 
-  const [form, setForm] = useState({
-    donorName: '',
-    isAnonymous: false,
-    email: '',
-    amount: 0,
-    message: '',
-  });
-
   // Open auth modal helper
   const openAuth = (tab = 'login') => {
     setAuthModalTab(tab);
