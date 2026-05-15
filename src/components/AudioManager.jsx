@@ -3,6 +3,7 @@ import { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload, Music, Link, Trash2, Volume2, Play, Pause } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../lib/axiosInstance';
+import toast from 'react-hot-toast';
 
 const AudioManager = ({ 
   publicSounds = [],  
@@ -11,7 +12,6 @@ const AudioManager = ({
   // ✅ TAMBAH STATE INI (baris 15)
   const [uploading, setUploading] = useState(false);
   
-  const [newSound, setNewSound] = useState({ name: '', url: '', file: null });
   const [newSound, setNewSound] = useState({ name: '', url: '', file: null });
   const [playingPreview, setPlayingPreview] = useState(null);
   const [previewError, setPreviewError] = useState(false);
@@ -205,7 +205,7 @@ const AudioManager = ({
                 <Upload size={18} className={newSound.file ? 'text-emerald-500' : 'text-indigo-500'} />
                 <div className="flex-1 min-w-0">
                   <span className="block text-sm font-medium text-slate-600 dark:text-slate-300">
-                    {newSound.file ? newSound.file.name : 'Pilih file audio (.mp3, .wav, .ogg)'}
+                    {newSound.file?.name || 'Pilih file audio (.mp3, .wav, .ogg)'}
                   </span>
                   <span className="text-xs text-slate-400">Max 10MB</span>
                 </div>
