@@ -2751,7 +2751,7 @@ export const DashboardStreamer = () => {
                           ))}
                         </div>
                       </div>
-                      <div className="md:col-span-2">
+                      {/* <div className="md:col-span-2">
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
                         <select value={settings.overlayPosition || 'bottom-right'} onChange={e => upd('overlayPosition', e.target.value)}
                           className="w-full px-5 py-3 mt-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
@@ -2759,15 +2759,15 @@ export const DashboardStreamer = () => {
                           <option value="bottom-left">Kiri Bawah</option><option value="bottom-right">Kanan Bawah</option>
                           <option value="top-center">Tengah Atas</option><option value="bottom-center">Tengah Bawah</option>
                         </select>
-                      </div>
-                      {/* <div className="flex flex-col gap-3">
+                      </div> */}
+                      <div className="md:col-span-2 w-full flex flex-col gap-3">
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Animasi Masuk</label>
                         <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
-                          className="w-full p-5 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
+                          className="w-full px-5 py-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
                           <option value="bounce">Bounce</option><option value="slide-left">Slide Kiri</option>
                           <option value="slide-right">Slide Kanan</option><option value="fade">Fade</option>
                         </select>
-                      </div> */}
+                      </div>
                       <div className="md:col-span-2">
                         <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
                           Lebar Maks Overlay OBS <span className="text-indigo-500 normal-case font-bold ml-1">({settings.maxWidth || 280}px)</span>
