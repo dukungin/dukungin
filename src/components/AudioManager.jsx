@@ -273,28 +273,6 @@ const AudioManager = ({
     };
   }, []);
 
-  // components/AudioManager.jsx - UPDATE handleFileUpload & addSound
-  // AudioManager.jsx - UPDATE addSound & handleFileUpload
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('audio/')) {
-      
-      // ✅ UPLOAD KE SERVER, JANGAN BLOB!
-      const formData = new FormData();
-      formData.append('audio', file);
-      
-      api.post('/api/overlay/upload-audio', formData)
-        .then(res => {
-          setNewSound({ 
-            name: file.name.replace(/\.[^/.]+$/, ''), 
-            url: res.data.url  // ✅ SERVER URL, bukan blob!
-          });
-          toast.success('✅ File diupload!');
-        })
-        .catch(() => toast.error('❌ Upload gagal!'));
-    }
-  };
-  
   // AudioManager.jsx - FIXED VERSION
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
