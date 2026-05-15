@@ -2250,6 +2250,19 @@ export const DashboardStreamer = () => {
   }, [profileData]);
 
   useEffect(() => {
+    if (profileData && localSettings) {
+      // ✅ SINKRONKAN formData dengan settings dari server
+      setFormData({
+        publicSounds: Array.isArray(localSettings.publicSounds) 
+          ? localSettings.publicSounds 
+          : [],
+        publicSoundDefault: localSettings.publicSoundDefault || ''
+      });
+    }
+  }, [localSettings]); // ← Dependensi localSettings
+
+
+  useEffect(() => {
     const tabFromUrl = searchParams.get('tab');
     if (tabFromUrl && ['settings','history','wallet','community','myDonations','profile','poll','subathon','milestones','leaderboard','contact','ghostAlert','admin'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
@@ -2346,7 +2359,6 @@ export const DashboardStreamer = () => {
   // }, []);
 
   const upd = useCallback((key, val) => {
-    // Safety check untuk array fields
     if (key === 'publicSounds' && !Array.isArray(val)) {
       console.warn(`[upd] publicSounds must be array, got:`, val);
       return;
@@ -2356,6 +2368,11 @@ export const DashboardStreamer = () => {
       ...s, 
       [key]: val 
     }));
+    
+    // ✅ AUTO SYNC ke formData jika publicSounds
+    if (key === 'publicSounds') {
+      setFormData(prev => ({ ...prev, publicSounds: val }));
+    }
   }, []);
 
   const copyToClipboard = (text, label = 'URL') => {
@@ -2514,6 +2531,7 @@ export const DashboardStreamer = () => {
   ColorInput.displayName = 'ColorInput';
 
   // Handler upload audio
+  // Update handleUploadAudio
   const handleUploadAudio = async (file) => {
     const uploadFormData = new FormData();
     uploadFormData.append('audio', file);
@@ -2522,16 +2540,24 @@ export const DashboardStreamer = () => {
       setUploading(true);
       const res = await api.post('/api/overlay/upload-audio', uploadFormData);
       
-      // Tambah ke list
       const newSound = {
         url: res.data.url,
         label: file.name.replace(/\.[^/.]+$/, ''),
         emoji: '🎵'
       };
       
+      // ✅ SYNC KE KEDUA STATE
+      const updatedSounds = [...formData.publicSounds, newSound];
+      
       setFormData(prev => ({
         ...prev,
-        publicSounds: [...prev.publicSounds, newSound]
+        publicSounds: updatedSounds
+      }));
+      
+      // Juga update localSettings
+      setLocalSettings(prev => ({
+        ...prev,
+        publicSounds: updatedSounds
       }));
       
       toast.success('✅ Suara berhasil diupload!');
@@ -2871,7 +2897,10 @@ export const DashboardStreamer = () => {
                       
                       <AudioManager
                         publicSounds={formData.publicSounds}
-                        onUpdatePublicSounds={(sounds) => setFormData({ ...formData, publicSounds: sounds })}
+                        onUpdatePublicSounds={(sounds) => {
+                          setFormData({ ...formData, publicSounds: sounds });
+                          upd('publicSounds', sounds); // ← Ini sync ke localSettings
+                        }}
                       />
 
                       <div className='w-full h-[1px] bg-slate-100/10 my-4'></div>
@@ -2879,9 +2908,7 @@ export const DashboardStreamer = () => {
                       {/* ✅ SAVE BUTTON - Sync ke settings */}
                       <button 
                         onClick={() => {
-                          // 1. Update settings dengan publicSounds
-                          upd('publicSounds', formData.publicSounds);
-                          // 2. Save ke server
+                          // publicSounds sudah sync di localSettings
                           saveSettingsMutation.mutate(settings);
                         }}
                         disabled={saveSettingsMutation.isPending || uploading}

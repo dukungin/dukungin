@@ -1,13 +1,14 @@
 // components/AudioManager.jsx - FIXED VERSION
-import { useCallback, useState, useRef, useEffect } from 'react';
-import { Upload, Music, Link, Trash2, Volume2, Play, Pause, StopCircle, Ear, Save } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import api from '../lib/axiosInstance';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Ear, Link, Music, Pause, Play, Save, Trash2, Upload, Volume2 } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import api from '../lib/axiosInstance';
 
 const AudioManager = ({ 
   publicSounds = [],  
-  onUpdatePublicSounds 
+  onUpdatePublicSounds,
+  uploading: parentUploading = false
 }) => {
   // ✅ TAMBAH STATE INI (baris 15)
   const [uploading, setUploading] = useState(false);
@@ -169,40 +170,21 @@ const AudioManager = ({
         }
       }
       
-      // ✅ TAMBAH KE LIST
       const newSoundObj = {
-        url: url,           // Original
-        proxyUrl: proxyUrl, // Play URL
+        url: url,
+        proxyUrl: proxyUrl,
         label: name,
         emoji: '🎵'
       };
       
+      // ✅ CALL PARENT HANDLER (akan sync ke localSettings)
       onUpdatePublicSounds([...publicSounds, newSoundObj]);
+      
       setNewSound({ name: '', url: '', file: null });
       toast.success('✅ Suara ditambahkan!');
       
     } catch (err) {
-      console.error('❌ Error:', err);
       toast.error(`❌ ${err.message}`);
-    }
-  };
-
-  // ✅ TAMBAH SAVE FUNCTION
-  const saveToServer = async () => {
-    if (!publicSounds.length || !isDirty) return;
-    
-    try {
-      setUploading(true);
-      const res = await api.put('/api/overlay/settings', {
-        publicSounds // ← Kirim array ke server
-      });
-      
-      toast.success('✅ Public sounds tersimpan!');
-      setIsDirty(false);
-    } catch (err) {
-      toast.error('❌ Gagal simpan: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setUploading(false);
     }
   };
 
