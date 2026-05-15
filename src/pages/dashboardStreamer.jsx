@@ -48,6 +48,7 @@ import MyDonationsHistory from './MyDonationsHistory';
 import { useSearchParams } from 'react-router-dom';
 import Badge from '../components/badge';
 import React from 'react';
+import AudioManager from '../components/AudioManager';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -2194,8 +2195,6 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
   );
 };
 
-// ─── Main Dashboard ───────────────────────────────────────────────────────────
-
 export const DashboardStreamer = () => {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
@@ -2204,6 +2203,11 @@ export const DashboardStreamer = () => {
   const [showToast, setShowToast]         = useState(false);
   const [localSettings, setLocalSettings] = useState(null);
   const [donationToasts, setDonationToasts] = useState([]);
+  const [formData, setFormData] = useState({
+    publicSounds: [],
+    publicSoundDefault: ''
+  });
+  const [uploading, setUploading] = useState(false);
   const [profileForm, setProfileForm] = useState({
     username: '',
     email: '',
@@ -2506,6 +2510,35 @@ export const DashboardStreamer = () => {
 
   ColorInput.displayName = 'ColorInput';
 
+  // Handler upload audio
+  const handleUploadAudio = async (file) => {
+    const uploadFormData = new FormData();
+    uploadFormData.append('audio', file);
+    
+    try {
+      setUploading(true);
+      const res = await api.post('/api/overlay/upload-audio', uploadFormData);
+      
+      // Tambah ke list
+      const newSound = {
+        url: res.data.url,
+        label: file.name.replace(/\.[^/.]+$/, ''),
+        emoji: '🎵'
+      };
+      
+      setFormData(prev => ({
+        ...prev,
+        publicSounds: [...prev.publicSounds, newSound]
+      }));
+      
+      toast.success('✅ Suara berhasil diupload!');
+    } catch (err) {
+      toast.error('❌ Upload gagal: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
 
@@ -2784,31 +2817,87 @@ export const DashboardStreamer = () => {
                   </div>
 
                   {/* ── Sound ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
-                    <SectionHeader icon={<span className="text-lg">🔊</span>} title="Custom Suara per Nominal" color="bg-violet-500" />
-                    <div className="mb-6 mt-5">
-                      <SoundPicker label="Suara Default (semua donasi)" value={settings.soundUrl || ''} onChange={v => upd('soundUrl', v)} />
+                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
+                    
+                    {/* Header Utama */}
+                    <SectionHeader icon={<span className="text-2xl">🔊</span>} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-indigo-500" />
+                    
+                    {/* Deskripsi */}
+                    <div className="text-center py-6 bg-gradient-to-r from-emerald-50 to-indigo-50 dark:from-emerald-950/30 dark:to-indigo-950/30 rounded-xl border border-emerald-100 dark:border-emerald-900/50">
+                      <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">🎵 2 Jenis Suara:</p>
+                      <div className="flex flex-col sm:flex-row gap-4 text-xs text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+                        <span>📢 <strong>Suara Default:</strong> Semua donasi otomatis pakai ini</span>
+                        <span>🎯 <strong>Suara Publik:</strong> Donatur pilih sendiri (min Rp10K)</span>
+                      </div>
                     </div>
-                    <SoundTiersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
-                    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-6">
-                      <SectionHeader icon={<span className="text-lg">🎵</span>} title="Suara Publik untuk Donatur" color="bg-emerald-500" />
-                      <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
-                        Donatur bisa pilih suara ini saat donasi. Pilih yang mau diaktifkan.
-                      </p>
+
+                    {/* 1. SUARA DEFAULT & TIERS */}
+                    <div className="space-y-6">
+                      <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <h4 className="font-black text-sm text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                          📢 Suara Default (Semua Donasi)
+                        </h4>
+                        <SoundPicker 
+                          label="Pilih suara default" 
+                          value={settings.soundUrl || ''} 
+                          onChange={v => upd('soundUrl', v)} 
+                        />
+                      </div>
                       
-                      <PublicSoundPicker 
-                        publicSounds={settings.publicSounds || DEFAULT_SETTINGS.publicSounds} 
-                        value={settings.publicSoundDefault || ''}
-                        onChange={v => upd('publicSoundDefault', v)}
+                      {settings.soundTiers?.length > 0 && (
+                        <SoundTiersEditor 
+                          saveSettingsMutation={saveSettingsMutation} 
+                          settings={settings} 
+                          tiers={settings.soundTiers || []} 
+                          onChange={v => upd('soundTiers', v)} 
+                        />
+                      )}
+                    </div>
+
+                    {/* 2. SUARA PUBLIK - SINCRON DENGAN SETTINGS */}
+                    <div className="pt-8 border-t border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-11 h-11 bg-emerald-500 rounded-xl flex items-center justify-center text-white text-xl font-black shadow-lg">🎵</div>
+                        <div>
+                          <h4 className="text-xl font-black text-slate-800 dark:text-white">Suara Publik Donatur</h4>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ≥ Rp10.000</p>
+                        </div>
+                      </div>
+                      
+                      <AudioManager
+                        publicSounds={formData.publicSounds}  // Local state untuk UI
+                        onUpdatePublicSounds={(sounds) => setFormData({ ...formData, publicSounds: sounds })}
+                        uploading={uploading}
+                        onUpload={handleUploadAudio}
                       />
                       
+                      {/* ✅ SAVE BUTTON - Sync ke settings */}
                       <button 
-                        onClick={() => saveSettingsMutation.mutate(settings)} 
-                        disabled={saveSettingsMutation.isPending}
-                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-emerald-600 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-emerald-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2"
+                        onClick={() => {
+                          // 1. Update settings dengan publicSounds
+                          upd('publicSounds', formData.publicSounds);
+                          // 2. Save ke server
+                          saveSettingsMutation.mutate(settings);
+                        }}
+                        disabled={saveSettingsMutation.isPending || uploading}
+                        className="cursor-pointer active:scale-[0.99] mt-6 w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:brightness-90 text-white font-black rounded-xl shadow-xl shadow-emerald-200/50 dark:shadow-emerald-900/30 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
                       >
-                        <Save size={20} />
-                        {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Suara Publik'}
+                        {saveSettingsMutation.isPending ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Menyimpan...
+                          </>
+                        ) : uploading ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Save size={20} />
+                            💾 Simpan Semua Suara
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>

@@ -671,7 +671,7 @@ const QuickAudioSection = ({
           }`}
         >
           <span className="text-lg">🔇</span>
-          <span className="leading-tight">No Sound</span>
+          <span className="leading-tight dark:text-white text-slate-900">No Sound</span>
         </button>
 
         {/* Quick sounds - SAFE RENDER */}
@@ -692,7 +692,7 @@ const QuickAudioSection = ({
               </div>
             )}
             <span className="text-lg">{sound.emoji || '🎵'}</span>
-            <span className="leading-tight truncate max-w-[45px]">
+            <span className="leading-tight dark:text-white text-slate-900 truncate max-w-[45px]">
               {sound.label?.split(' ')[0] || `Sound ${i + 1}`}
             </span>
           </button>
