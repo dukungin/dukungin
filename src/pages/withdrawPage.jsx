@@ -30,7 +30,7 @@ const STATUS_CONFIG = {
 
 const MIN_TARIK   = 10000;
 const MAX_TARIK   = 10000000;
-const MIN_SALDO   = 20000;
+const MIN_SALDO   = 10000;
 const FEE_PERCENT = 0.025;
 
 export const WithdrawPage = () => {
@@ -84,9 +84,9 @@ export const WithdrawPage = () => {
 
   const handleSubmit = () => {
     if (!formData.amount || isNaN(amt) || amt <= 0) return alert('Masukkan nominal yang valid');
-    if (balance < MIN_SALDO)      return alert(`Saldo minimum untuk penarikan adalah Rp ${formatRupiah(MIN_SALDO)}`);
-    if (amt < MIN_TARIK)          return alert(`Minimal penarikan adalah Rp ${formatRupiah(MIN_TARIK)}`);
-    if (amt > MAX_TARIK)          return alert(`Maksimal penarikan adalah Rp ${formatRupiah(MAX_TARIK)} per transaksi`);
+    if (balance < MIN_SALDO) return alert(`Saldo minimum Rp ${formatRupiah(MIN_SALDO)}`);  // ✅ 10K
+    if (amt < MIN_TARIK)     return alert(`Minimal penarikan Rp ${formatRupiah(MIN_TARIK)}`); // ✅ 10K
+    if (amt > MAX_TARIK)     return alert(`Maksimal penarikan Rp ${formatRupiah(MAX_TARIK)}`);
     if (amt > balance)            return alert(`Saldo tidak mencukupi. Total yang dibutuhkan Rp ${formatRupiah(amt)} (termasuk fee 2.5%)`);
     if (!formData.accountNumber || !formData.accountName) return alert('Lengkapi data rekening / e-wallet');
     withdrawMutation.mutate({ ...formData, paymentMethod: method });
