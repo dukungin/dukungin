@@ -629,27 +629,63 @@ const QuickAudioSection = ({
   onSoundChange,
   amount 
 }) => {
-  // ✅ SAFETY CHECK: pastikan publicSounds selalu array
+  // ✅ SAFETY CHECK
   const safePublicSounds = Array.isArray(publicSounds) ? publicSounds.slice(0, 7) : [];
   
   const audioRef = useRef(null);
   const [previewing, setPreviewing] = useState(null);
+  const [previewError, setPreviewError] = useState(null);
 
-  const playPreview = useCallback((url) => {
-    if (!url) return;
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current.src = url;
-      audioRef.current.play().catch(() => {});
-      setPreviewing(url);
-      
-      setTimeout(() => {
-        audioRef.current.pause();
-        setPreviewing(null);
-      }, 2000);
+  // ✅ PROXY LOGIC SAMA SEPERTI AudioManager
+  const getAudioProxyUrl = useCallback((url) => {
+    if (!url) return '';
+    
+    // ✅ Local/server files = DIRECT (no CORS)
+    const baseOrigin = window.location.origin;
+    if (
+      url.includes('/uploads/') || 
+      url.includes('taptiptup.vercel.app') || 
+      url.includes('railway.app') ||
+      url.includes(baseOrigin)
+    ) {
+      return url;
     }
+    // External = proxy
+    return `/api/overlay/proxy-audio?url=${encodeURIComponent(url)}`;
   }, []);
+
+  const playPreview = useCallback((originalUrl) => {
+    const proxyUrl = getAudioProxyUrl(originalUrl);
+    if (!proxyUrl || !audioRef.current) return;
+    
+    // Stop previous
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    audioRef.current.src = proxyUrl;
+    setPreviewError(null);
+    
+    const playPromise = audioRef.current.play();
+    
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setPreviewing(originalUrl);
+        })
+        .catch((err) => {
+          console.warn('Audio play failed:', err);
+          setPreviewError(originalUrl);
+        });
+    }
+    
+    // Auto stop after 2s
+    const timeout = setTimeout(() => {
+      audioRef.current.pause();
+      setPreviewing(null);
+      setPreviewError(null);
+    }, 2000);
+    
+    return () => clearTimeout(timeout);
+  }, [getAudioProxyUrl]);
 
   // Minimal 10K untuk audio
   if (safePublicSounds.length === 0 || amount < 10000) return null;
@@ -664,7 +700,7 @@ const QuickAudioSection = ({
         {/* Tanpa suara */}
         <button 
           onClick={() => onSoundChange('')}
-          className={`p-2.5 rounded-none border-2 font-bold text-xs flex flex-col items-center gap-1 transition-all ${
+          className={`cursor-pointer active:scale-[0.99] hover:bg-slate-900 p-2.5 rounded-none border-2 font-bold text-xs flex flex-col items-center gap-1 transition-all ${
             !selectedSound 
               ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 shadow-sm' 
               : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-indigo-300'
@@ -674,34 +710,59 @@ const QuickAudioSection = ({
           <span className="leading-tight dark:text-white text-slate-900">No Sound</span>
         </button>
 
-        {/* Quick sounds - SAFE RENDER */}
-        {safePublicSounds.map((sound, i) => (
-          <button 
-            key={`${sound.url}-${i}`} // ✅ UNIQUE KEY
-            onClick={() => onSoundChange(sound.url)}
-            className={`p-2.5 rounded-none border-2 font-bold text-xs flex flex-col items-center gap-1 transition-all relative ${
-              selectedSound === sound.url
-                ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 shadow-sm ring-2 ring-indigo-200' 
-                : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-indigo-300 hover:bg-indigo-50'
-            }`}
-            title={sound.label || `Sound ${i + 1}`}
-          >
-            {previewing === sound.url && (
-              <div className="absolute inset-0 bg-indigo-500/20 animate-pulse rounded-none flex items-center justify-center">
-                <span className="text-[10px]">▶ playing</span>
-              </div>
-            )}
-            <span className="text-lg">{sound.emoji || '🎵'}</span>
-            <span className="leading-tight dark:text-white text-slate-900 truncate max-w-[45px]">
-              {sound.label?.split(' ')[0] || `Sound ${i + 1}`}
-            </span>
-          </button>
-        ))}
+        {/* Quick sounds */}
+        {safePublicSounds.map((sound, i) => {
+          const isPlaying = previewing === sound.url;
+          const hasError = previewError === sound.url;
+          
+          return (
+            <button 
+              key={`${sound.url}-${i}`}
+              onClick={() => !hasError && playPreview(sound.url)}
+              disabled={hasError}
+              className={`cursor-pointer active:scale-[0.99] p-2.5 rounded-none border-2 font-bold text-xs flex flex-col items-center gap-1 transition-all relative group ${
+                selectedSound === sound.url
+                  ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 shadow-sm ring-2 ring-indigo-200' 
+                  : hasError
+                    ? 'border-red-200 dark:border-red-700 bg-red-50 dark:bg-red-900/20 text-red-500 cursor-not-allowed'
+                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-indigo-300 hover:bg-slate-900'
+              }`}
+              title={hasError ? 'Audio tidak bisa diputar' : sound.label || `Sound ${i + 1}`}
+            >
+              {isPlaying && (
+                <div className="absolute inset-0 bg-emerald-500/20 animate-pulse rounded-none flex items-center justify-center z-10">
+                  <span className="text-[10px] font-bold text-emerald-800">▶</span>
+                </div>
+              )}
+              {hasError && (
+                <div className="absolute inset-0 bg-red-500/20 animate-pulse rounded-none flex items-center justify-center z-10">
+                  <span className="text-[10px]">⚠</span>
+                </div>
+              )}
+              <span className="text-lg z-20 relative">{sound.emoji || '🎵'}</span>
+              <span className="leading-tight dark:text-white text-slate-900 z-20 relative truncate max-w-[45px]">
+                {sound.label?.split(' ')[0] || `Sound ${i + 1}`}
+              </span>
+              {hasError && (
+                <span className="absolute -top-7 text-[9px] text-red-500 bg-red-100 dark:bg-red-900 px-1 py-0.5 rounded whitespace-nowrap">
+                  CORS Error
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
-      <audio ref={audioRef} preload="none" />
+      {/* HIDDEN AUDIO PLAYER */}
+      <audio 
+        ref={audioRef} 
+        preload="metadata"
+        crossOrigin="anonymous"
+        className="hidden"
+      />
+
       <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center">
-        * Tersedia mulai Rp 10.000
+        * Tersedia mulai Rp 10.000 • Klik untuk preview
       </p>
     </div>
   );
@@ -1143,9 +1204,9 @@ const SupporterPage = () => {
               )}
             </AnimatePresence>
 
-             {quickAmounts.length > 0 && form.amount >= 10000 && publicSounds.length > 0 && (
+            {form.amount >= 10000 && publicSounds.length > 0 && (
               <QuickAudioSection
-                publicSounds={publicSounds} // ✅ SEKARANG SAFE
+                publicSounds={publicSounds}
                 selectedSound={form.soundUrl}
                 onSoundChange={(url) => setForm({ ...form, soundUrl: url })}
                 amount={form.amount}
