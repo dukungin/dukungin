@@ -5,7 +5,7 @@
 ::-webkit-scrollbar {
     background-color: rgb(255, 255, 255);
     width: 6px;
-    /* display: none;  */
+    display: none; 
     padding-left: 3px;
     padding-right: 3px;
 }
@@ -15,7 +15,7 @@
 } */
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgb(21, 18, 51);
+    background-color: rgb(156, 156, 156);
     border-radius: 999px;
     /* display: none; */
 }
