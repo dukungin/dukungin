@@ -2293,6 +2293,7 @@ export const DashboardStreamer = () => {
         username: profileData?.user?.username || profileData?.User?.username || '',
         email:    profileData?.user?.email    || profileData?.User?.email    || '',
         bio:      profileData?.user?.bio      || profileData?.User?.bio      || '',
+        profilePicture: profileData?.user?.profilePicture || profileData?.User?.profilePicture || '',  // ← TAMBAHKAN
         donateIntro: profileData?.user?.donateIntro || profileData?.User?.donateIntro || '',
         instagram: profileData?.user?.instagram || profileData?.User?.instagram || '',
         facebook:  profileData?.user?.facebook  || profileData?.User?.facebook  || '',
@@ -3004,8 +3005,17 @@ export const DashboardStreamer = () => {
                 {/* ── Header dengan Badges ── */}
                 <div className="bg-indigo-600 rounded-none px-6 py-6 text-white relative overflow-hidden">
                   <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                    <div className="w-16 h-16 bg-white rounded-none flex items-center justify-center text-5xl font-black text-slate-900 shadow-xl">
-                      {user.username.charAt(0).toUpperCase()}
+                    {/* Avatar */}
+                    <div className="w-20 h-20 mt-2 mx-auto rounded-none overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-white dark:border-slate-900">
+                      {streamer.profilePicture ? (
+                        <img 
+                          src={streamer.profilePicture} 
+                          alt={streamer.username}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        streamer.username?.charAt(0).toUpperCase()
+                      )}
                     </div>
                     <div className="flex-1 text-center md:text-left space-y-2">
                       <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
@@ -3063,6 +3073,39 @@ export const DashboardStreamer = () => {
                   <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-indigo-500" />
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+                    {/* Upload Profile Picture */}
+                    <div className="md:col-span-2">
+                      <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">
+                        Foto Profil
+                      </label>
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="w-24 h-24 rounded-none border-2 border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black">
+                          {profileForm.profilePicture ? (
+                            <img 
+                              src={profileForm.profilePicture} 
+                              alt="Profile" 
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            profileForm.username?.charAt(0)?.toUpperCase() || '?'
+                          )}
+                        </div>
+
+                        <div className="flex-1">
+                          <input
+                            type="url"
+                            value={profileForm.profilePicture || ''}
+                            onChange={e => setProfileForm(f => ({ ...f, profilePicture: e.target.value }))}
+                            className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-mono text-sm outline-none focus:border-indigo-500"
+                            placeholder="https://i.imgur.com/abc123.jpg"
+                          />
+                          <p className="text-[10px] text-slate-400 mt-1.5 ml-1">
+                            Masukkan link gambar (Imgur, Google Drive direct link, dll). Kosongkan untuk pakai inisial.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                     <div className="md:col-span-2 mb-1">
                       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">
                         Link Halaman Donasi

@@ -1237,8 +1237,21 @@ const SupporterPage = () => {
             className="bg-white dark:bg-slate-900 px-8 pt-8 pb-6 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 text-center border border-indigo-100 dark:border-slate-800 relative overflow-hidden"
           >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500" />
-            <div className="w-20 mt-2 h-20 mx-auto rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-3xl font-black shadow-lg mb-4">
-              {streamer.username?.charAt(0).toUpperCase()}
+            {/* AVATAR WITH PROFILE PICTURE SUPPORT */}
+            <div className="w-20 h-20 mt-2 mx-auto rounded-none overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg mb-4 border-4 border-white dark:border-slate-900">
+              {streamer?.profilePicture ? (
+                <img 
+                  src={streamer.profilePicture} 
+                  alt={streamer.username}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = streamer.username?.charAt(0).toUpperCase() || '?';
+                  }}
+                />
+              ) : (
+                streamer.username?.charAt(0).toUpperCase() || '?'
+              )}
             </div>
             <h1 className="text-2xl font-black text-slate-800 dark:text-white">@{streamer.username}</h1>
             <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">{streamer.donateIntro || 'Support aku biar makin semangat 🚀'}</p>
