@@ -3085,7 +3085,7 @@ export const DashboardStreamer = () => {
                 
                 {/* ── Header dengan Badges ── */}
                 <div className="bg-indigo-600 rounded-none px-6 py-6 text-white relative overflow-hidden">
-                  <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+                  <div className="relative z-2 flex flex-col md:flex-row items-center gap-6">
                     
                     {/* AVATAR WITH PROFILE PICTURE SUPPORT */}
                     <div className="w-26 h-26 mt-2 mx-auto rounded-none overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-white dark:border-slate-900">
