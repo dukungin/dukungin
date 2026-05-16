@@ -85,7 +85,7 @@ const PollWidget = () => {
         key={animKey}
         style={{
           background: 'rgba(15, 15, 25, 0.92)',
-          borderRadius: 20,
+          borderRadius: 0,
           padding: '18px 20px',
           width: '100%',
           border: '1.5px solid rgba(255,255,255,0.08)',
@@ -96,7 +96,7 @@ const PollWidget = () => {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
           <span style={{
-            width: 7, height: 7, borderRadius: '50%',
+            width: 7, height: 7, borderRadius: '0',
             background: '#6366f1',
             display: 'inline-block',
             animation: 'pulse 1.5s ease-in-out infinite',
@@ -141,7 +141,7 @@ const PollWidget = () => {
                   top: 0, left: 0, bottom: 0,
                   width: `${pct}%`,
                   background: `${color}22`,
-                  borderRadius: 10,
+                  borderRadius: 0,
                   transition: 'width 0.6s ease',
                   borderLeft: poll.showResults !== false ? `3px solid ${color}` : 'none',
                 }} />

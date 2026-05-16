@@ -72,7 +72,7 @@ const LeaderboardWidget = () => {
         key={animKey}
         style={{
           background: 'rgba(15, 15, 25, 1)',
-          borderRadius: 20,
+          borderRadius: 0,
           overflow: 'hidden',
           border: '1.5px solid rgba(255,255,255,0.08)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
@@ -125,7 +125,7 @@ const LeaderboardWidget = () => {
               <div style={{
                 width: 28,
                 height: 28,
-                borderRadius: 8,
+                borderRadius: 0,
                 background: i < 3 ? `${RANK_COLORS[i]}22` : 'rgba(255,255,255,1)',
                 display: 'flex',
                 alignItems: 'center',

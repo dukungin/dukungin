@@ -68,7 +68,7 @@ const MilestonesWidget = () => {
     }}>
       <div style={{
         background: 'rgba(15, 15, 25, 1)',
-        borderRadius: 20,
+        borderRadius: 0,
         padding: '18px 20px',
         // border: '1.5px solid rgba(255,255,255,1)',
         boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
@@ -104,7 +104,7 @@ const MilestonesWidget = () => {
                     {achieved
                       ? <span style={{ fontSize: 24 }}>✅</span>
                       : <span style={{
-                          width: 8, height: 8, borderRadius: '50%',
+                          width: 8, height: 8, borderRadius: '0',
                           background: '#6366f1',
                           display: 'inline-block',
                           animation: !achieved ? 'pulse 1.5s ease-in-out infinite' : 'none',
@@ -132,7 +132,7 @@ const MilestonesWidget = () => {
                 <div style={{
                   height: 6,
                   background: 'rgba(255,255,255,1)',
-                  borderRadius: 6,
+                  borderRadius: 0,
                   overflow: 'hidden',
                 }}>
                   <div style={{
@@ -141,7 +141,7 @@ const MilestonesWidget = () => {
                     background: achieved
                       ? '#10b981'
                       : 'linear-gradient(90deg, #6366f1, #8b5cf6)',
-                    borderRadius: 6,
+                    borderRadius: 0,
                     transition: 'width 1s ease',
                   }} />
                 </div>

@@ -89,7 +89,7 @@ const SubathonWidget = () => {
     }}>
       <div style={{
         background: '#0f0f19',
-        borderRadius: 20,
+        borderRadius: 0,
         padding: '20px 28px',
         minWidth: 280,
         border: `2px solid ${isLow ? '#ef444460' : 'rgba(255,255,255,0.08)'}`,
@@ -132,7 +132,7 @@ const SubathonWidget = () => {
           <div style={{
             height: 4,
             background: 'rgba(255,255,255,0.1)',
-            borderRadius: 4,
+            borderRadius: 0,
             overflow: 'hidden',
             marginBottom: 8,
           }}>
@@ -140,7 +140,7 @@ const SubathonWidget = () => {
               height: '100%',
               width: `${progressPct}%`,
               background: progressColor,
-              borderRadius: 4,
+              borderRadius: 0,
               transition: 'width 1s linear, background 0.5s',
             }} />
           </div>
@@ -151,7 +151,7 @@ const SubathonWidget = () => {
           <span style={{
             width: 6,
             height: 6,
-            borderRadius: '50%',
+            borderRadius: '0',
             background: timer.isRunning ? '#22c55e' : '#64748b',
             display: 'inline-block',
             animation: timer.isRunning ? 'pulse 1.5s ease-in-out infinite' : 'none',
