@@ -387,13 +387,9 @@ export const SubathonManager = ({ overlayToken }) => {
     if (!overlayToken) return;
     const socket = io(BASE_URL);
     socket.emit('join-room', overlayToken);
-    socket.on('subathon-updated', (timer) => {
-      setLocalTimer(timer);
-      // Hanya sync displaySeconds kalau sedang running atau dari event start/reset
-      if (timer.isRunning) {
-        setDisplaySeconds(timer.currentSeconds || 0);
-      }
-      // queryClient.setQueryData(['subathon'], timer);
+    socket.on('subathon-updated', (data) => {
+      setTimer(data);
+      setDisplaySeconds(data.currentSeconds || 0);
     });
     return () => socket.disconnect();
   }, [overlayToken]);

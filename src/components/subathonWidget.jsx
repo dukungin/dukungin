@@ -58,7 +58,7 @@ const SubathonWidget = () => {
     socket.emit('join-room', token);
     socket.on('subathon-updated', (data) => {
       setTimer(data);
-      setDisplaySeconds(data.currentSeconds || 0);
+      setDisplaySeconds(timer.currentSeconds || 0);
     });
     return () => socket.disconnect();
   }, [token]);
