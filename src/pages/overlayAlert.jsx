@@ -257,7 +257,7 @@ const OverlayAlert = () => {
                 marginBottom: 6,
               }}>
                 <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
-                Donasi Masuk
+                Dukungan Masuk
               </div>
 
               <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
