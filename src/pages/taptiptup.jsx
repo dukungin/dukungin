@@ -505,8 +505,6 @@ const PLATFORMS = [
   { name: "Streamlabs", fee: 5.0 },
   { name: "Saweria",    fee: 5.0 },
   { name: "Trakteer",  fee: 5.0 },
-  { name: "Sociabuzz", fee: 10.0 },
-  { name: "Karyakarsa",fee: 10.0 },
 ];
 
 function FeeComparison({ C }) {
@@ -528,7 +526,7 @@ function FeeComparison({ C }) {
       </div>
 
       {/* Grid perbandingan */}
-      <div className="grid grid-cols-2 md:grid-cols-6"
+      <div className="grid grid-cols-2 md:grid-cols-4"
         style={{ borderBottom: `1px solid ${C.line}` }}
         >
         {PLATFORMS.map((p, i) => {

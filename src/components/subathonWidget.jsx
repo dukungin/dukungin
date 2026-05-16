@@ -82,14 +82,14 @@ const SubathonWidget = () => {
     <div style={{
       width: '100%',
       height: '100vh',
-      background: '#0f0f19',
+      background: 'transparent',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       fontFamily: "'Inter', 'Segoe UI', sans-serif",
     }}>
       <div style={{
-        background: 'rgba(15, 15, 25, 0.92)',
+        background: '#0f0f19',
         borderRadius: 20,
         padding: '20px 28px',
         minWidth: 280,
