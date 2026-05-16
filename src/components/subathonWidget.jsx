@@ -178,7 +178,7 @@ const SubathonWidget = () => {
           )}
         </div>
 
-        {timer.autoAddEnabled && timer.durationTiers?.length > 0 && (
+        {/* {timer.autoAddEnabled && timer.durationTiers?.length > 0 && (
           <div style={{ 
             fontSize: 9, 
             color: 'rgba(99, 102, 241, 0.8)', 
@@ -196,7 +196,7 @@ const SubathonWidget = () => {
               timer.durationTiers[0].seconds
             )} / Rp{timer.durationTiers[0].amount?.toLocaleString('id-ID')}
           </div>
-        )}
+        )} */}
       </div>
 
       <style>{`
