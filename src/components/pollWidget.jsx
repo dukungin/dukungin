@@ -10,7 +10,7 @@ import axios from 'axios';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 
-const COLORS = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+const COLORS = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4443'];
 
 const PollWidget = () => {
   const { token } = useParams();
