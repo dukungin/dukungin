@@ -100,7 +100,7 @@ const SubathonWidget = () => {
       }}>
         {/* Title */}
         <p style={{
-          color: 'rgba(255,255,255,0.45)',
+          color: 'white',
           fontSize: 10,
           fontWeight: 700,
           textTransform: 'uppercase',
