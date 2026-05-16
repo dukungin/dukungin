@@ -2335,24 +2335,6 @@ export const DashboardStreamer = () => {
 
   const settings = localSettings || DEFAULT_SETTINGS;
 
-  // const upd = useCallback((key, val) => {
-  //   // Jika yang masuk adalah Event (dari input onChange yang lupa e.target.value)
-  //   if (val && typeof val === 'object' && 'target' in val && 'nativeEvent' in val) {
-  //     console.warn(`[upd] key="${key}" menerima Event bukan value — fix onChange di sini`);
-  //     return;
-  //   }
-    
-  //   // ✅ DEBOUNCE UNTUK COLOR CHANGES
-  //   if (key.includes('Color')) {
-  //     const timeoutId = setTimeout(() => {
-  //       setLocalSettings(s => ({ ...s, [key]: val }));
-  //     }, 100);
-  //     return () => clearTimeout(timeoutId);
-  //   }
-    
-  //   setLocalSettings(s => ({ ...s, [key]: val }));
-  // }, []);
-
   const upd = useCallback((key, val) => {
     if (key === 'publicSounds' && !Array.isArray(val)) {
       console.warn(`[upd] publicSounds must be array, got:`, val);
@@ -2375,6 +2357,35 @@ export const DashboardStreamer = () => {
     setCopiedUrl(text);
     setCopiedLabel(label);
     setShowCopyModal(true);
+  };
+
+  const handleProfilePictureUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validasi ukuran (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Ukuran file maksimal 5MB');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await api.post('/api/auth/upload-profile-picture', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      const imageUrl = res.data.url;
+      
+      setProfileForm(prev => ({ ...prev, profilePicture: imageUrl }));
+      
+      toast.success('✅ Foto profil berhasil diupload!');
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || 'Upload foto gagal');
+    }
   };
 
   const TAB_TITLE = {
@@ -3005,24 +3016,31 @@ export const DashboardStreamer = () => {
                 {/* ── Header dengan Badges ── */}
                 <div className="bg-indigo-600 rounded-none px-6 py-6 text-white relative overflow-hidden">
                   <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                    {/* Avatar */}
+                    
+                    {/* AVATAR WITH PROFILE PICTURE SUPPORT */}
                     <div className="w-20 h-20 mt-2 mx-auto rounded-none overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-white dark:border-slate-900">
-                      {streamer.profilePicture ? (
+                      {profileForm.profilePicture || user?.profilePicture ? (
                         <img 
-                          src={streamer.profilePicture} 
-                          alt={streamer.username}
+                          src={profileForm.profilePicture || user?.profilePicture} 
+                          alt={user.username}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            // fallback ke inisial
+                            const parent = e.target.parentElement;
+                            if (parent) parent.innerHTML = (user.username?.charAt(0) || '?').toUpperCase();
+                          }}
                         />
                       ) : (
-                        streamer.username?.charAt(0).toUpperCase()
+                        (user.username?.charAt(0) || '?').toUpperCase()
                       )}
                     </div>
+
                     <div className="flex-1 text-center md:text-left space-y-2">
                       <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                         <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2>
                         <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-none text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
                       </div>
-                      
                       <p className="text-slate-200 font-medium text-sm">{user.email}</p>
                     </div>
                   </div>
@@ -3079,30 +3097,53 @@ export const DashboardStreamer = () => {
                         Foto Profil
                       </label>
                       
-                      <div className="flex items-center gap-4">
-                        <div className="w-24 h-24 rounded-none border-2 border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black">
+                      <div className="flex flex-col sm:flex-row items-start gap-4">
+                        {/* Preview */}
+                        <div className="w-24 h-24 rounded-none border-2 border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl font-black flex-shrink-0">
                           {profileForm.profilePicture ? (
                             <img 
                               src={profileForm.profilePicture} 
-                              alt="Profile" 
+                              alt="Profile Preview" 
                               className="w-full h-full object-cover"
+                              onError={(e) => e.target.src = ''} // fallback
                             />
                           ) : (
                             profileForm.username?.charAt(0)?.toUpperCase() || '?'
                           )}
                         </div>
 
-                        <div className="flex-1">
-                          <input
-                            type="url"
-                            value={profileForm.profilePicture || ''}
-                            onChange={e => setProfileForm(f => ({ ...f, profilePicture: e.target.value }))}
-                            className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-mono text-sm outline-none focus:border-indigo-500"
-                            placeholder="https://i.imgur.com/abc123.jpg"
-                          />
-                          <p className="text-[10px] text-slate-400 mt-1.5 ml-1">
-                            Masukkan link gambar (Imgur, Google Drive direct link, dll). Kosongkan untuk pakai inisial.
-                          </p>
+                        <div className="flex-1 space-y-3 w-full">
+                          {/* Upload Local File */}
+                          <div>
+                            <label className="cursor-pointer block">
+                              <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-none p-4 text-center hover:border-indigo-400 transition-all">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleProfilePictureUpload}
+                                  className="hidden"
+                                  id="profile-upload"
+                                />
+                                <label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">
+                                  <ImageIcon size={28} className="text-slate-400 mb-2" />
+                                  <p className="font-bold text-slate-600 dark:text-slate-300">Pilih Foto dari HP/Komputer</p>
+                                  <p className="text-[10px] text-slate-400">JPG, PNG, WebP (max 5MB)</p>
+                                </label>
+                              </div>
+                            </label>
+                          </div>
+
+                          {/* Atau masukkan URL */}
+                          <div>
+                            <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">ATAU MASUKKAN URL</p>
+                            <input
+                              type="url"
+                              value={profileForm.profilePicture || ''}
+                              onChange={e => setProfileForm(f => ({ ...f, profilePicture: e.target.value }))}
+                              className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-mono text-sm outline-none focus:border-indigo-500"
+                              placeholder="https://i.imgur.com/abc123.jpg"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
