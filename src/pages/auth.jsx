@@ -167,7 +167,9 @@ const BrandLogo = () => (
     border:'1px solid rgba(255,255,255,0.2)', borderRadius:0, padding:'8px 16px' 
   }}>
     <div style={{ width:26, height:26, background:'white', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center' }}>
-      <span style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>S</span>
+      <span className='flex justify-center items-center' style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>
+        <img src="/jellyfish.png" alt="icon" className='w-[70%] h-[70%]' />
+      </span>
     </div>
     <span style={{ color:'white', fontWeight:800, fontSize:13, letterSpacing:'-0.01em' }}>
       TAPTIPTUP From Indonesia 🚀
@@ -219,7 +221,7 @@ const StatBadge = ({ value, label }) => (
 const StatsGrid = () => (
   <div className='md:inline hidden' style={{ position:'relative', zIndex:10 }}>
     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:28 }}>
-      <StatBadge value="12K+" label="Streamer Aktif" />
+      <StatBadge value="2.5%" label="Potongan" />
       <StatBadge value="99.9%" label="Uptime" />
       <StatBadge value="<2det" label="Notif Alert" />
     </div>

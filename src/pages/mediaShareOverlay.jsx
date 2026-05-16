@@ -60,6 +60,7 @@ const getAlertDuration = (config, amount) => {
 // ── MediaShareOverlay Component ───────────────────────────────────────────────
 const MediaShareOverlay = () => {
   const { token } = useParams();
+  const videoRef = useRef(null);
 
   const [alert, setAlert]       = useState(null);
   const [config, setConfig]     = useState(null);
@@ -131,6 +132,23 @@ const MediaShareOverlay = () => {
         setAlert(null);
         setProgress(100);
       }, duration);
+    });
+
+    socket.on('mediashare-control', ({ action, volume }) => {
+      if (action === 'skip') {
+        // Langsung dismiss alert
+        setAlert(null);
+        setProgress(100);
+        if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+        if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+        if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
+        // Set volume di video/iframe via ref
+        if (videoRef.current) videoRef.current.src = '';
+      }
+      if (action === 'volume' && typeof volume === 'number') {
+        if (audioRef.current) audioRef.current.volume = volume / 100;
+        if (videoRef.current) videoRef.current.volume = volume / 100;
+      }
     });
 
     socket.on('settings-updated', (newConfig) => {
@@ -218,6 +236,7 @@ const MediaShareOverlay = () => {
         )}
         {t === 'video' && (
           <video
+            ref={videoRef}
             src={alert.mediaUrl}
             autoPlay loop muted
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}

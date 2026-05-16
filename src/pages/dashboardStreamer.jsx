@@ -2815,6 +2815,8 @@ export const DashboardStreamer = () => {
                     user={user} 
                   />
 
+                  <MediaShareControl />
+
                   {/* ── FITUR BARU 2: Quick Nominal Editor ── */}
                   <QuickAmountsEditor 
                     amounts={settings.quickAmounts || DEFAULT_SETTINGS.quickAmounts} 
@@ -2994,7 +2996,7 @@ export const DashboardStreamer = () => {
             )}
 
             {activeTab === 'profile' && (
-              <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl mx-auto space-y-3 pb-6">
+              <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-3 pb-6">
                 
                 {/* ── Header dengan Badges ── */}
                 <div className="bg-indigo-600 rounded-none px-6 py-6 text-white relative overflow-hidden">

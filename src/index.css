@@ -4,8 +4,8 @@
 
 ::-webkit-scrollbar {
     background-color: rgb(255, 255, 255);
-    width: 4px;
-    display: none; 
+    width: 6px;
+    /* display: none;  */
     padding-left: 3px;
     padding-right: 3px;
 }
@@ -15,7 +15,7 @@
 } */
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgb(221, 221, 221);
+    background-color: rgb(21, 18, 51);
     border-radius: 999px;
     /* display: none; */
 }
