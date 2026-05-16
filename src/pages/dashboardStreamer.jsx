@@ -2364,8 +2364,8 @@ export const DashboardStreamer = () => {
     if (!file) return;
 
     // Validasi ukuran (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Ukuran file maksimal 5MB');
+    if (file.size > 3 * 1024 * 1024) {
+      alert('Ukuran file maksimal 3MB');
       return;
     }
 
@@ -3127,7 +3127,7 @@ export const DashboardStreamer = () => {
                                 <label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">
                                   <ImageIcon size={28} className="text-slate-400 mb-2" />
                                   <p className="font-bold text-slate-600 dark:text-slate-300">Pilih Foto dari HP/Komputer</p>
-                                  <p className="text-[10px] text-slate-400">JPG, PNG, WebP (max 5MB)</p>
+                                  <p className="text-[10px] text-slate-400">JPG, PNG, WebP (max 3MB)</p>
                                 </label>
                               </div>
                             </label>
@@ -3147,7 +3147,7 @@ export const DashboardStreamer = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="md:col-span-2 mb-1">
+                    <div className="md:col-span-2 mb-1 border-t border-slate-100/10 pt-5 mt-2">
                       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">
                         Link Halaman Donasi
                       </label>
