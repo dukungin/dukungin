@@ -3095,7 +3095,7 @@ export const DashboardStreamer = () => {
                       />
                     </div>
 
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-2 mb-1">
                       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest ml-1">
                         Intro Halaman Donate
                       </label>
@@ -3107,7 +3107,6 @@ export const DashboardStreamer = () => {
                         placeholder="Support aku biar makin semangat 🚀"
                         maxLength={120}
                       />
-                      <p className="text-[10px] text-slate-400 mt-1 ml-1">Akan muncul di bawah nama di halaman donasi</p>
                     </div>
 
                     {/* Social Media */}
