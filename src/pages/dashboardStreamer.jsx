@@ -2308,6 +2308,7 @@ export const DashboardStreamer = () => {
   const user = {
     username:     profileData?.user?.username     || profileData?.User?.username     || 'Streamer',
     email:        profileData?.user?.email         || profileData?.User?.email         || '',
+    profilePicture:        profileData?.user?.profilePicture         || profileData?.User?.profilePicture         || '',
     balance:      profileData?.User?.walletBalance || profileData?.walletBalance       || 0,
     overlayToken: profileData?.user?.overlayToken  || profileData?.User?.overlayToken  || '',
     overlayUrl:   `${window.location.origin}/overlay/${profileData?.user?.overlayToken || profileData?.User?.overlayToken || ''}`,

@@ -218,7 +218,19 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
               className="cursor-pointer h-[38.4px] flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none px-1.5 py-3 transition-all active:scale-[0.97]"
             >
               <div className="w-8 h-8 rounded-none bg-indigo-600 flex items-center justify-center text-white font-bold text-md flex-shrink-0">
-                {user.username.charAt(0).toUpperCase()}
+                {user?.profilePicture ? (
+                <img 
+                  src={user.profilePicture} 
+                  alt={user.username}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = user.username?.charAt(0).toUpperCase() || '?';
+                  }}
+                />
+              ) : (
+                user.username?.charAt(0).toUpperCase() || '?'
+              )}
               </div>
               <div className="text-left hidden sm:block">
                 <p className="font-bold text-slate-800 dark:text-slate-200 text-md leading-tight">@{user.username}</p>
