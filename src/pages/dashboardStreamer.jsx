@@ -2210,6 +2210,7 @@ export const DashboardStreamer = () => {
     instagram: '',
     facebook: '',
     youtube: '',
+    donateIntro: '',
     twitter: '',
   });
   const [showCopyModal, setShowCopyModal] = useState(false);
@@ -2292,6 +2293,7 @@ export const DashboardStreamer = () => {
         username: profileData?.user?.username || profileData?.User?.username || '',
         email:    profileData?.user?.email    || profileData?.User?.email    || '',
         bio:      profileData?.user?.bio      || profileData?.User?.bio      || '',
+        donateIntro: profileData?.user?.donateIntro || profileData?.User?.donateIntro || '',
         instagram: profileData?.user?.instagram || profileData?.User?.instagram || '',
         facebook:  profileData?.user?.facebook  || profileData?.User?.facebook  || '',
         youtube:   profileData?.user?.youtube   || profileData?.User?.youtube   || '',
@@ -3091,6 +3093,21 @@ export const DashboardStreamer = () => {
                         className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-none font-bold outline-none focus:border-indigo-500 h-32 transition-all" 
                         placeholder="Ceritakan tentang kontenmu..." 
                       />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest ml-1">
+                        Intro Halaman Donate
+                      </label>
+                      <input
+                        type="text"
+                        value={profileForm.donateIntro || ''}
+                        onChange={e => setProfileForm(f => ({ ...f, donateIntro: e.target.value }))}
+                        className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-none font-bold outline-none focus:border-indigo-500 transition-all"
+                        placeholder="Support aku biar makin semangat 🚀"
+                        maxLength={120}
+                      />
+                      <p className="text-[10px] text-slate-400 mt-1 ml-1">Akan muncul di bawah nama di halaman donasi</p>
                     </div>
 
                     {/* Social Media */}

@@ -372,7 +372,7 @@ const WaveformBars = ({ isRecording }) => (
         style={{
           width: 3,
           background: isRecording ? '#ef4444' : 'rgba(148,163,184,0.4)',
-          borderRadius: 2,
+          borderRadius: 0,
           minHeight: 4,
         }}
       />
@@ -533,7 +533,7 @@ export const VoiceRecorder = ({ onVoiceReady, maxSeconds = 60, disabled = false 
             <motion.span
               animate={{ opacity: [1, 0.2, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
-              style={{ width: 10, height: 10, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }}
+              style={{ width: 10, height: 10, borderRadius: 0, background: '#ef4444', display: 'inline-block' }}
             />
             <span className="font-black text-sm text-red-600 dark:text-red-400">Merekam...</span>
           </div>

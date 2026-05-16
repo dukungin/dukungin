@@ -1241,7 +1241,7 @@ const SupporterPage = () => {
               {streamer.username?.charAt(0).toUpperCase()}
             </div>
             <h1 className="text-2xl font-black text-slate-800 dark:text-white">@{streamer.username}</h1>
-            <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">Support aku biar makin semangat 🚀</p>
+            <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">{streamer.donateIntro || 'Support aku biar makin semangat 🚀'}</p>
 
             {/* Login status badge */}
             {isLoggedIn ? (
