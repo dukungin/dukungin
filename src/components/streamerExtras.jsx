@@ -41,11 +41,12 @@ const saveMilestones  = async (d) => (await axios.put(`${BASE_URL}/api/milestone
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const formatSeconds = (s) => {
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  const sec = s % 60;
-  if (h > 0) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  if (!s && s !== 0) return '00:00:00';
+  const totalSec = Math.max(0, Math.floor(s));
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const sec = totalSec % 60;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 };
 
 // ─── PollManager ─────────────────────────────────────────────────────────────

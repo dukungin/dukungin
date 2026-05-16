@@ -11,13 +11,12 @@ import axios from 'axios';
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 
 const formatSeconds = (s) => {
-  if (!s && s !== 0) return '00:00';
+  if (!s && s !== 0) return '00:00:00';
   const totalSec = Math.max(0, Math.floor(s));
   const h = Math.floor(totalSec / 3600);
   const m = Math.floor((totalSec % 3600) / 60);
   const sec = totalSec % 60;
-  if (h > 0) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 };
 
 const SubathonWidget = () => {
@@ -177,26 +176,6 @@ const SubathonWidget = () => {
             </span>
           )}
         </div>
-
-        {/* {timer.autoAddEnabled && timer.durationTiers?.length > 0 && (
-          <div style={{ 
-            fontSize: 9, 
-            color: 'rgba(99, 102, 241, 0.8)', 
-            fontWeight: 700,
-            marginTop: 6,
-            textAlign: 'center',
-            padding: '4px 8px',
-            background: 'rgba(99, 102, 241, 0.1)',
-            borderRadius: 6,
-            border: '1px solid rgba(99, 102, 241, 0.2)'
-          }}>
-            +{formatSeconds(
-              (timer.durationTiers[0].hours*3600) + 
-              (timer.durationTiers[0].minutes*60) + 
-              timer.durationTiers[0].seconds
-            )} / Rp{timer.durationTiers[0].amount?.toLocaleString('id-ID')}
-          </div>
-        )} */}
       </div>
 
       <style>{`
