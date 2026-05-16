@@ -11,6 +11,7 @@ import {
   Globe,
   HeadphonesIcon,
   Heart,
+  Image,
   ImageIcon,
   Menu,
   MessageSquare,
@@ -3018,7 +3019,7 @@ export const DashboardStreamer = () => {
                   <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
                     
                     {/* AVATAR WITH PROFILE PICTURE SUPPORT */}
-                    <div className="w-20 h-20 mt-2 mx-auto rounded-none overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-white dark:border-slate-900">
+                    <div className="w-26 h-26 mt-2 mx-auto rounded-none overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-white dark:border-slate-900">
                       {profileForm.profilePicture || user?.profilePicture ? (
                         <img 
                           src={profileForm.profilePicture || user?.profilePicture} 
@@ -3099,7 +3100,7 @@ export const DashboardStreamer = () => {
                       
                       <div className="flex flex-col sm:flex-row items-start gap-4">
                         {/* Preview */}
-                        <div className="w-24 h-24 rounded-none border-2 border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl font-black flex-shrink-0">
+                        <div className="w-20 h-20 rounded-none border-2 border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl font-black flex-shrink-0">
                           {profileForm.profilePicture ? (
                             <img 
                               src={profileForm.profilePicture} 
@@ -3116,36 +3117,25 @@ export const DashboardStreamer = () => {
                           {/* Upload Local File */}
                           <div>
                             <label className="cursor-pointer block">
-                              <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-none p-4 text-center hover:border-indigo-400 transition-all">
+                              <div className="h-20 border-2 active:scale-[0.99] border-dashed border-slate-300 dark:border-slate-600 rounded-none p-4 text-center hover:border-indigo-400 transition-all">
                                 <input
                                   type="file"
                                   accept="image/*"
                                   onChange={handleProfilePictureUpload}
-                                  className="hidden"
+                                  className="hidden h-20"
                                   id="profile-upload"
                                 />
                                 <label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">
-                                  <ImageIcon size={28} className="text-slate-400 mb-2" />
-                                  <p className="font-bold text-slate-600 dark:text-slate-300">Pilih Foto dari HP/Komputer</p>
+                                  {/* <ImageIcon size={28} className="text-slate-400 mb-2" /> */}
+                                  <p className="flex items-center gap-2 mb-1 font-bold text-slate-600 dark:text-slate-300">Klik untuk upload gambar <Image size={16} /></p>
                                   <p className="text-[10px] text-slate-400">JPG, PNG, WebP (max 3MB)</p>
                                 </label>
                               </div>
                             </label>
                           </div>
 
-                          {/* Atau masukkan URL */}
-                          <div>
-                            <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">ATAU MASUKKAN URL</p>
-                            <input
-                              type="url"
-                              value={profileForm.profilePicture || ''}
-                              onChange={e => setProfileForm(f => ({ ...f, profilePicture: e.target.value }))}
-                              className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-mono text-sm outline-none focus:border-indigo-500"
-                              placeholder="https://i.imgur.com/abc123.jpg"
-                            />
-                          </div>
-                        </div>
                       </div>
+                    </div>
                     </div>
                     <div className="md:col-span-2 mb-1 border-t border-slate-100/10 pt-5 mt-2">
                       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">
