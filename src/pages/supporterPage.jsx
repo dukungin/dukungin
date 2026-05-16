@@ -1402,7 +1402,7 @@ const SupporterPage = () => {
             {/* ── Voice Message ── */}
             <div>
               <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 ml-1">
-                Pesan Suara 🎙️{' '}
+                Pesan Suara {' '}
                 <span className="normal-case font-medium text-slate-300 dark:text-slate-600">
                   (opsional)
                 </span>

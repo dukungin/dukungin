@@ -391,7 +391,7 @@ export const VoiceRecorder = ({ onVoiceReady, maxSeconds = 60, disabled = false 
   const [phase, setPhase] = useState('idle'); // idle | recording | preview | uploading | done | error
   const [elapsed, setElapsed] = useState(0);
   const [blobUrl, setBlobUrl] = useState(null);
-  const [uploadedUrl, setUploadedUrl] = useState(null);
+//   const [uploadedUrl, setUploadedUrl] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
   const mediaRecorderRef = useRef(null);
@@ -486,13 +486,13 @@ export const VoiceRecorder = ({ onVoiceReady, maxSeconds = 60, disabled = false 
       const ext = blob.type.includes('ogg') ? 'ogg' : blob.type.includes('mp4') ? 'mp4' : 'webm';
       formData.append('voice', blob, `voice-${Date.now()}.${ext}`);
 
-      const token = localStorage.getItem('token');
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    //   const token = localStorage.getItem('token');
+    //   const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      const uploadRes = await axios.post(`${BASE_URL}/api/overlay/upload-voice`, formData, { headers });
-      const url = uploadRes.data.url;
+      const uploadRes = await axios.post(`${BASE_URL}/api/voice/upload`, formData);
+      const url = uploadRes.data.voiceUrl;
 
-      setUploadedUrl(url);
+    //   setUploadedUrl(url);
       setPhase('done');
       onVoiceReady(url);
     } catch (err) {
@@ -511,17 +511,14 @@ export const VoiceRecorder = ({ onVoiceReady, maxSeconds = 60, disabled = false 
         disabled={disabled}
         onClick={startRecording}
         whileTap={{ scale: 0.97 }}
-        className={`w-full flex items-center justify-center gap-3 py-3.5 rounded-none border-2 font-black text-sm transition-all
+        className={`w-full flex items-center justify-center gap-3 py-4 rounded-none border-2 font-black text-xs transition-all
           ${disabled
             ? 'border-slate-100 dark:border-slate-700 text-slate-300 dark:text-slate-600 cursor-not-allowed'
             : 'border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-950/50 cursor-pointer'
           }`}
       >
-        <span style={{ fontSize: 18 }}>🎙️</span>
+        <span style={{ fontSize: 12 }}>🎙️</span>
         Rekam Pesan Suara
-        <span className="text-[10px] font-medium text-rose-400 dark:text-rose-500 normal-case">
-          maks {maxSeconds}s
-        </span>
       </motion.button>
     );
   }
