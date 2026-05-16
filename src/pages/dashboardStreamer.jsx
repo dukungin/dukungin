@@ -2935,6 +2935,74 @@ export const DashboardStreamer = () => {
                     </div>
                   </div>
 
+                  {/* ==================== TEXT TO SPEECH ==================== */}
+                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+                    <SectionHeader 
+                      icon={<span className="text-2xl">🔊</span>} 
+                      title="Text-to-Speech Alert" 
+                      color="bg-rose-500" 
+                    />
+
+                    <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-100 dark:border-slate-700 mt-4">
+                      <div>
+                        <p className="font-black text-slate-700 dark:text-slate-200">Aktifkan Text-to-Speech</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500">Suara akan otomatis membaca: Nama + Nominal + Pesan</p>
+                      </div>
+                      <button 
+                        onClick={() => upd('ttsEnabled', !settings.ttsEnabled)}
+                        className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${settings.ttsEnabled ? 'bg-rose-500' : 'bg-slate-300 dark:bg-slate-600'}`}
+                      >
+                        <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform ${settings.ttsEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
+                      </button>
+                    </div>
+
+                    {settings.ttsEnabled && (
+                      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                          <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Kecepatan</label>
+                          <input 
+                            type="range" 
+                            min="0.5" 
+                            max="2" 
+                            step="0.1" 
+                            value={settings.ttsRate || 1} 
+                            onChange={e => upd('ttsRate', parseFloat(e.target.value))} 
+                            className="w-full accent-rose-500" 
+                          />
+                          <div className="text-center text-xs text-slate-400 mt-1">{(settings.ttsRate || 1).toFixed(1)}x</div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Nada Suara</label>
+                          <input 
+                            type="range" 
+                            min="0.5" 
+                            max="2" 
+                            step="0.1" 
+                            value={settings.ttsPitch || 1} 
+                            onChange={e => upd('ttsPitch', parseFloat(e.target.value))} 
+                            className="w-full accent-rose-500" 
+                          />
+                          <div className="text-center text-xs text-slate-400 mt-1">{(settings.ttsPitch || 1).toFixed(1)}</div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Volume</label>
+                          <input 
+                            type="range" 
+                            min="0.1" 
+                            max="1" 
+                            step="0.1" 
+                            value={settings.ttsVolume || 1} 
+                            onChange={e => upd('ttsVolume', parseFloat(e.target.value))} 
+                            className="w-full accent-rose-500" 
+                          />
+                          <div className="text-center text-xs text-slate-400 mt-1">{Math.round((settings.ttsVolume || 1) * 100)}%</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <BannedWordsEditor saveSettingsMutation={saveSettingsMutation} settings={settings} />
                   <MilestonesEditor />
 

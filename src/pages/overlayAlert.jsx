@@ -79,6 +79,24 @@
     const progressIntervalRef = useRef(null);
     const dismissTimerRef     = useRef(null);
 
+    // ==================== TEXT TO SPEECH ====================
+    const speakDonation = useCallback((donation) => {
+      if (!('speechSynthesis' in window)) return;
+      if (!configRef.current?.ttsEnabled) return;
+
+      const text = `${donation.donorName || 'Seseorang'} memberikan donasi Rp ${Number(donation.amount).toLocaleString('id-ID')}. ${donation.message || ''}`;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      utterance.rate = configRef.current.ttsRate || 1.0;
+      utterance.pitch = configRef.current.ttsPitch || 1.0;
+      utterance.volume = configRef.current.ttsVolume || 1.0;
+
+      // Stop speech sebelumnya (agar tidak tumpuk)
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }, []);
+
     useEffect(() => {
       if (!token) return;
       axios
@@ -118,6 +136,8 @@
           audioRef.current.src = soundToPlay;
           audioRef.current.play().catch(() => {});
         }
+        
+        speakDonation(donationWithTime);
 
         const duration = getAlertDuration(configRef.current, data.amount);
 
