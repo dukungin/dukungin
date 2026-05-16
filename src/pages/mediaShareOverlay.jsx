@@ -110,7 +110,7 @@ const MediaShareOverlay = () => {
       setAlert(donationWithTime);
       setProgress(100);
 
-      const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
+      const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
       if (soundToPlay && audioRef.current) {
         audioRef.current.src = soundToPlay;
         audioRef.current.play().catch(() => {});

@@ -1,7 +1,7 @@
 // components/MediaShareControl.jsx
 import { useState, useRef } from 'react';
 import { SkipForward, Volume2, VolumeX } from 'lucide-react';
-import api from '../utils/api'; // sesuaikan path
+import api from '../lib/axiosInstance';
 
 const PRESETS = [
   { label: 'Mute', value: 0 },
@@ -58,19 +58,16 @@ export const MediaShareControl = () => {
           <SkipForward size={18} />
         </div>
         <div>
-          <p className="font-black text-slate-800 dark:text-white text-sm">MediaShare Remote Control</p>
+          <p className="font-black text-slate-800 dark:text-white text-xl">MediaShare Control</p>
           <p className="text-[11px] text-slate-400 dark:text-slate-500">Skip atau atur volume langsung dari dashboard</p>
         </div>
-        <span className="ml-auto px-2 py-0.5 bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-[9px] font-black rounded-none uppercase tracking-widest">
-          Live
-        </span>
       </div>
 
       {/* Skip button */}
       <button
         onClick={handleSkip}
         disabled={skipping}
-        className="cursor-pointer w-full flex items-center justify-center gap-2 py-4 rounded-none border-2 border-red-400 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 font-black text-sm transition-all hover:bg-red-100 active:scale-[0.98] disabled:opacity-60"
+        className="cursor-pointer w-full flex items-center justify-center gap-2 py-3 rounded-none border-2 border-red-400 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 font-black text-sm transition-all hover:bg-red-100 active:scale-[0.98] disabled:opacity-60"
       >
         <SkipForward size={18} />
         {skipping ? 'Mengirim skip...' : 'Skip MediaShare Sekarang'}

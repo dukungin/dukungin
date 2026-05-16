@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import Badge from '../components/badge';
+import { VoiceRecorder } from '../components/voiceOver';
 
 // ============================================================
 // DETEKSI ENVIRONMENT
@@ -964,6 +965,7 @@ const SupporterPage = () => {
     isAnonymous: false,
     email: '',
     amount: 0,
+    voiceUrl: '',
     message: '',
     soundUrl: '', // ← NEW
   });
@@ -1140,6 +1142,7 @@ const SupporterPage = () => {
         startTime: isYouTubeUrl(mediaUrl) ? startTime : 0, // ← NEW
         donorUserId: authPayload?.id,
         soundUrl: form.soundUrl || null,
+        voiceUrl: form.voiceUrl || null,   // ← TAMBAH INI
       };
       
       const res = await axios.post(`${BASE_URL}/api/midtrans/create-invoice`, payload);
@@ -1395,6 +1398,26 @@ const SupporterPage = () => {
                 amount={form.amount}
               />
             )}
+
+            {/* ── Voice Message ── */}
+            <div>
+              <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 ml-1">
+                Pesan Suara 🎙️{' '}
+                <span className="normal-case font-medium text-slate-300 dark:text-slate-600">
+                  (opsional)
+                </span>
+              </label>
+              <VoiceRecorder
+                onVoiceReady={(url) => setForm(f => ({ ...f, voiceUrl: url || '' }))}
+                maxSeconds={60}
+                disabled={form.amount < 1000}
+              />
+              {form.amount < 1000 && (
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-1.5 ml-1">
+                  Masukkan nominal donasi dulu untuk mengaktifkan voice message
+                </p>
+              )}
+            </div>
 
             {/* Nama & Email */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

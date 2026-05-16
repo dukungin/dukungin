@@ -113,7 +113,7 @@
         setAlert(donationWithTime);
         setProgress(100);
 
-        const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
+        const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
         if (soundToPlay && audioRef.current) {
           audioRef.current.src = soundToPlay;
           audioRef.current.play().catch(() => {});
@@ -327,6 +327,17 @@
                   {alert.message}
                 </div>
               )}
+              {alert.voiceUrl && (
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  background: 'rgba(0,0,0,0.2)',
+                  padding: '3px 8px',
+                  fontSize: 11, color: 'rgba(255,255,255,0.6)',
+                  marginTop: 4,
+                }}>
+                  🎙️ Voice message
+                </div>
+              )}
               {renderTimestamp()}
               <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
                 <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
@@ -357,6 +368,18 @@
             {alert.message && (
               <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
                 "{alert.message}"
+              </div>
+            )}
+
+            {alert.voiceUrl && (
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 5,
+                background: 'rgba(0,0,0,0.2)',
+                padding: '3px 8px',
+                fontSize: 11, color: 'rgba(255,255,255,0.6)',
+                marginTop: 4,
+              }}>
+                🎙️ Voice message
               </div>
             )}
 

@@ -51,6 +51,7 @@ import Badge from '../components/badge';
 import React from 'react';
 import AudioManager from '../components/AudioManager';
 import toast from 'react-hot-toast';
+import { MediaShareControl } from '../components/mediaShareController';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -226,9 +227,9 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
   return (
     <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
       <SectionHeader icon={<Plus size={20} />} title="Quick Nominal" color="bg-emerald-500" />
-      <p className="text-xs text-slate-400 mt-2 mb-4">Nominal cepat yang muncul di halaman donasi</p>
+      {/* <p className="text-xs text-slate-400 mt-2 mb-4">Nominal cepat yang muncul di halaman donasi</p> */}
 
-      <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
+      <div className="gap-4 grid grid-cols-1 mt-5 md:grid-cols-2">
         {amounts.map((amt, i) => (
           <div key={i} className="w-[100%] flex gap-3 items-center bg-slate-50 dark:bg-slate-800 p-3 rounded-none">
             <input
@@ -1269,7 +1270,7 @@ const DurationTiersEditor = ({ tiers, onChange, saveSettingsMutation, settings }
   const removeTier = (i) => onChange(tiers.filter((_, idx) => idx !== i));
   const updateTier = (i, key, val) => onChange(tiers.map((t, idx) => idx === i ? { ...t, [key]: val === '' ? null : Number(val) } : t));
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 mt-5">
       {tiers.map((tier, i) => (
         <div key={i} className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-none p-4 border border-slate-100 dark:border-slate-700">
           <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -2828,7 +2829,7 @@ export const DashboardStreamer = () => {
                   {/* ── Durasi ── */}
                   <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
-                    <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p>
+                    {/* <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p> */}
                     <DurationTiersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
                   </div>
 
