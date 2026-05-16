@@ -101,7 +101,7 @@ export const ContactPage = () => {
           <p className="text-white/50 text-sm font-medium leading-relaxed">
             Tim kami siap membantu kamu. Hubungi developer atau admin platform melalui kanal yang tersedia di bawah.
           </p>
-          <img src="/jellyfish.png" alt="icon" className="w-[16%] opacity-90 z-[1] absolute top-[10%] right-[-60px] -rotate-40" />
+          <img src="/jellyfish.png" alt="icon" className="md:flex hidden w-[16%] opacity-90 z-[1] absolute top-[10%] right-[-60px] -rotate-40" />
         </div>
 
         <div className="relative z-10 hidden md:grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">
