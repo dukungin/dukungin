@@ -82,7 +82,7 @@ const SubathonWidget = () => {
     <div style={{
       width: '100%',
       height: '100vh',
-      background: 'transparent',
+      background: '#0f0f19',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

@@ -28,7 +28,7 @@ const deletePoll    = async (id) => (await axios.delete(`${BASE_URL}/api/polls/$
 const fetchSubathon   = async () => (await axios.get(`${BASE_URL}/api/subathon`, { headers: authHeader() })).data;
 const updateSubConfig = async (d) => (await axios.put(`${BASE_URL}/api/subathon/config`, d, { headers: authHeader() })).data;
 const startSubathon   = async () => (await axios.post(`${BASE_URL}/api/subathon/start`, {}, { headers: authHeader() })).data;
-const pauseSubathon   = async () => (await axios.post(`${BASE_URL}/api/subathon/pause`, {}, { headers: authHeader() })).data;
+const pauseSubathon   = async (data) => (await axios.post(`${BASE_URL}/api/subathon/pause`, data, { headers: authHeader() })).data;
 const resetSubathon   = async () => (await axios.post(`${BASE_URL}/api/subathon/reset`, {}, { headers: authHeader() })).data;
 const addTimeSubathon = async (s) => (await axios.post(`${BASE_URL}/api/subathon/add-time`, { seconds: s }, { headers: authHeader() })).data;
 
@@ -388,8 +388,11 @@ export const SubathonManager = ({ overlayToken }) => {
     socket.emit('join-room', overlayToken);
     socket.on('subathon-updated', (timer) => {
       setLocalTimer(timer);
-      setDisplaySeconds(timer.currentSeconds || 0);
-      queryClient.setQueryData(['subathon'], timer);
+      // Hanya sync displaySeconds kalau sedang running atau dari event start/reset
+      if (timer.isRunning) {
+        setDisplaySeconds(timer.currentSeconds || 0);
+      }
+      // queryClient.setQueryData(['subathon'], timer);
     });
     return () => socket.disconnect();
   }, [overlayToken]);
@@ -497,7 +500,10 @@ export const SubathonManager = ({ overlayToken }) => {
       {/* Kontrol Utama */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <button
-          onClick={() => isRunning ? pauseMutation.mutate() : startMutation.mutate()}
+          onClick={() => isRunning 
+            ? pauseMutation.mutate({ currentSeconds: displaySeconds }) 
+            : startMutation.mutate()
+          }
           disabled={startMutation.isPending || pauseMutation.isPending}
           className={`cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-4 rounded-none font-black text-sm transition-all disabled:opacity-60 ${
             isRunning ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'

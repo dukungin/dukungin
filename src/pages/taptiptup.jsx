@@ -520,7 +520,7 @@ function FeeComparison({ C }) {
         style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
         <Kicker C={C}>Transparansi Biaya</Kicker>
         <BigTitle C={C}>POTONGAN TERKECIL DI{" "}
-          <span style={{ color: C.lime }}>KELASNYA.</span>
+          <span style={{ color: C.lime }}>KELASNYA</span>
         </BigTitle>
         <p style={{ fontSize: 14, color: C.muted, marginTop: 16, transition: "color 0.4s" }}>
           Kami hanya ambil 2.5% — sisanya langsung ke kantongmu.
@@ -575,7 +575,7 @@ function HowItWorks({ C }) {
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} id="cara-kerja">
       <div className="text-center flex  flex-col justify-center items-center w-full" style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, flexWrap: "wrap", transition: "border-color 0.4s" }}>
         <div>
-          <BigTitle C={C}>MULAI LIVE DALAM 5 MENIT.</BigTitle>
+          <BigTitle C={C}>MULAI LIVE DALAM 5 MENIT</BigTitle>
         </div>
         <p style={{ fontSize: 14, lineHeight: 1.75, color: C.muted, fontWeight: 400, maxWidth: '80%', transition: "color 0.4s" }}>
           Proses setup yang dirancang seminimal mungkin
@@ -611,7 +611,7 @@ function Testimonials({ C }) {
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
       <div className="text-center justify-center items-center flex flex-col" style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
         <Kicker C={C}>Kata Mereka</Kicker>
-        <BigTitle C={C}>SUDAH TERUJI OLEH STREAMER.</BigTitle>
+        <BigTitle C={C}>SUDAH TERUJI OLEH STREAMER</BigTitle>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)" }}
         className="testimonials-grid">

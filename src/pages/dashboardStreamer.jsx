@@ -1869,7 +1869,7 @@ const HistoryPage = () => {
                               <button 
                                 onClick={() => replayDonation(item._id)}
                                 disabled={replayLoading.has(item._id)}
-                                className={`cursor-pointer active:scale-[0.99] hover:brightness-80 flex items-center gap-2 text-sm ${replayLoading.has(item._id) ? 'opacity-70 cursor-not-allowed bg-indigo-400' : ''}`}
+                                className={`cursor-pointer active:scale-[0.99] text-blue-400 hover:text-blue-500 hover:brightness-80 flex items-center gap-2 text-sm ${replayLoading.has(item._id) ? 'opacity-70 cursor-not-allowed bg-indigo-400' : ''}`}
                               >
                                 {replayLoading.has(item._id) ? (
                                   <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
