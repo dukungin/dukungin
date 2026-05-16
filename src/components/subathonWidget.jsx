@@ -165,16 +165,6 @@ const SubathonWidget = () => {
           }}>
             {timer.isRunning ? 'Live' : 'Paused'}
           </span>
-          {timer.autoAddEnabled && (
-            <span style={{
-              marginLeft: 'auto',
-              fontSize: 9,
-              color: 'rgba(255,255,255,0.25)',
-              fontWeight: 600,
-            }}>
-              +{timer.addSecondsPerAmount}s / Rp{(timer.addPerAmount || 10000).toLocaleString('id-ID')}
-            </span>
-          )}
         </div>
       </div>
 
