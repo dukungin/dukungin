@@ -18,40 +18,41 @@ const LeaderboardWidget = () => {
   const [settings, setSettings] = useState({ leaderboardShowAmount: true, leaderboardLimit: 10 });
   const [animKey, setAnimKey] = useState(0);
 
-    const fetchData = async () => {
+  // ✅ Wrap dengan useCallback agar referensi stabil
+  const fetchData = useCallback(async () => {
     try {
-        const res = await axios.get(`${BASE_URL}/widget/${token}/leaderboard`, {
-        headers: { 'Accept': 'application/json' } // Paksa minta JSON
-        });
-        
-        // Sesuaikan dengan struktur res.json di atas
-        const donorsData = res.data.donors || [];
-        setDonors(donorsData);
-        
-        if (res.data.settings) {
-        setSettings(res.data.settings);
-        }
+      const res = await axios.get(`${BASE_URL}/widget/${token}/leaderboard`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      setDonors(res.data.donors || []);
+      if (res.data.settings) setSettings(res.data.settings);
     } catch (err) {
-        console.error('Failed to fetch leaderboard:', err);
-        setDonors([]); // Reset ke array kosong jika error agar tidak crash
+      console.error('Failed to fetch leaderboard:', err);
+      setDonors([]);
     }
-    };
+  }, [token]);
 
   useEffect(() => {
     if (!token) return;
     fetchData();
-  }, [token]);
+  }, [fetchData]);
 
   useEffect(() => {
     if (!token) return;
     const socket = io(BASE_URL);
     socket.emit('join-room', token);
-    socket.on('new-donation', () => {
+    socket.emit('join-room', `${token}-mediashare`); // ✅ join mediashare room
+
+    const refresh = () => {
       fetchData();
       setAnimKey(k => k + 1);
-    });
+    };
+
+    socket.on('new-donation', refresh);
+    socket.on('new-media-donation', refresh); // ✅ tambah
+
     return () => socket.disconnect();
-  }, [token]);
+  }, [token, fetchData]);
 
   if (!donors.length) return (
     <div style={{ width: '100%', height: '100vh', background: 'transparent' }} />
