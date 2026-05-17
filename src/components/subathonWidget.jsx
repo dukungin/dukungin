@@ -53,12 +53,12 @@ const SubathonWidget = () => {
 
   // Real-time socket
   useEffect(() => {
-    if (!token) return;
+  if (!token) return;
     const socket = io(BASE_URL);
     socket.emit('join-room', token);
     socket.on('subathon-updated', (data) => {
       setTimer(data);
-      setDisplaySeconds(timer.currentSeconds || 0);
+      setDisplaySeconds(data.currentSeconds || 0); // ← pakai `data`, bukan `timer`
     });
     return () => socket.disconnect();
   }, [token]);
