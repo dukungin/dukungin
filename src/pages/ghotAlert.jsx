@@ -4,6 +4,7 @@ import {
   AlertCircle,
   CheckCircle2,
   ChevronDown,
+  HeadphonesIcon,
   Loader2,
   Radio,
   Send,
