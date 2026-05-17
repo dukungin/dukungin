@@ -198,7 +198,7 @@ export const WithdrawPage = () => {
         </div>
 
         <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-none px-4 py-3 mb-6">
-          <span className="text-amber-500 text-base flex-shrink-0">⏳</span>
+          {/* <span className="text-amber-500 text-base flex-shrink-0">⏳</span> */}
           <p className="text-[11px] text-amber-700 dark:text-amber-400 font-medium leading-relaxed">
             Donasi yang baru masuk minimal menunggu{' '}
             <span className="font-black">1x24 jam</span> terlebih dahulu agar saldo tersedia dan dapat diproses penarikan dana oleh sistem
