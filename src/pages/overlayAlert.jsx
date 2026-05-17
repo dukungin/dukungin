@@ -1,4 +1,4 @@
-  import React, { useEffect, useState, useRef } from 'react';
+  import React, { useEffect, useState, useRef, useCallback } from 'react';
   import { useParams } from 'react-router-dom';
   import { io } from 'socket.io-client';
   import { motion, AnimatePresence } from 'framer-motion';
