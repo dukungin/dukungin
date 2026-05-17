@@ -39,8 +39,12 @@ const MilestonesWidget = () => {
     socket.emit('join-room', token);
     socket.emit('join-room', `${token}-mediashare`); // ✅ join mediashare room
 
-    socket.on('new-donation', () => fetchData());
-    socket.on('new-media-donation', () => fetchData());
+    const refresh = () => {
+      fetchData();
+    };
+
+    socket.on('new-donation', refresh);
+    socket.on('new-media-donation', refresh);
     return () => socket.disconnect();
   }, [token, fetchData]);
 
