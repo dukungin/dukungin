@@ -7,14 +7,36 @@
   const API_URL = 'https://server-dukungin-production.up.railway.app';
 
   // ── Helpers (sama persis) ────────────────────────────────────────────────────
-  const getYouTubeEmbedUrl = (url) => {
+  // const getYouTubeEmbedUrl = (url) => {
+  //   if (!url) return null;
+  //   const watchMatch  = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
+  //   if (watchMatch)  return `https://www.youtube.com/embed/${watchMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${watchMatch[1]}`;
+  //   const shortMatch  = url.match(/youtu\.be\/([\w-]+)/);
+  //   if (shortMatch)  return `https://www.youtube.com/embed/${shortMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortMatch[1]}`;
+  //   const shortsMatch = url.match(/youtube\.com\/shorts\/([\w-]+)/);
+  //   if (shortsMatch) return `https://www.youtube.com/embed/${shortsMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortsMatch[1]}`;
+  //   return null;
+  // };
+
+  const getYouTubeEmbedUrl = (url, startSeconds = 0) => {
     if (!url) return null;
-    const watchMatch  = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
-    if (watchMatch)  return `https://www.youtube.com/embed/${watchMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${watchMatch[1]}`;
-    const shortMatch  = url.match(/youtu\.be\/([\w-]+)/);
-    if (shortMatch)  return `https://www.youtube.com/embed/${shortMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortMatch[1]}`;
+    const start = startSeconds > 0 ? `&start=${Math.floor(startSeconds)}` : '';
+    
+    const watchMatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
+    if (watchMatch) {
+      const id = watchMatch[1];
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+    }
+    const shortMatch = url.match(/youtu\.be\/([\w-]+)/);
+    if (shortMatch) {
+      const id = shortMatch[1];
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+    }
     const shortsMatch = url.match(/youtube\.com\/shorts\/([\w-]+)/);
-    if (shortsMatch) return `https://www.youtube.com/embed/${shortsMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortsMatch[1]}`;
+    if (shortsMatch) {
+      const id = shortsMatch[1];
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+    }
     return null;
   };
 
@@ -226,7 +248,7 @@
         }}>
           {t === 'youtube' && (
             <iframe
-              src={getYouTubeEmbedUrl(alert.mediaUrl)}
+              src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}  // ← pakai startTime dari data donasi
               width="100%" height="100%"
               frameBorder="0"
               allow="autoplay; encrypted-media"
