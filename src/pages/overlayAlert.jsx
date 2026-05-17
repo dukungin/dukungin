@@ -133,7 +133,7 @@
 
         const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
         if (soundToPlay && audioRef.current) {
-          audioRef.current.src = soundToPlay;
+          audioRef.current.src = `${`https://server-dukungin-production.up.railway.app/${soundToPlay}`}`;
           audioRef.current.play().catch(() => {});
         }
         
