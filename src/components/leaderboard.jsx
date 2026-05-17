@@ -2,7 +2,7 @@
 // Route: /widget/:token/leaderboard
 // OBS Browser Source — ukuran 360×420px, background transparan
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import axios from 'axios';
@@ -52,7 +52,8 @@ const LeaderboardWidget = () => {
     socket.on('new-media-donation', refresh); // ✅ tambah
 
     return () => socket.disconnect();
-  }, [token, fetchData]);
+  }, [token, fetchData]); // ✅ tambah fetchData ke dependency
+
 
   if (!donors.length) return (
     <div style={{ width: '100%', height: '100vh', background: 'transparent' }} />

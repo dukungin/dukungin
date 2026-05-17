@@ -2,7 +2,7 @@
 // Route: /widget/:token/milestones
 // OBS Browser Source — ukuran 400×280px, background transparan
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import axios from 'axios';
@@ -14,7 +14,7 @@ const MilestonesWidget = () => {
   const [milestones, setMilestones] = useState([]);
   const [totalDonation, setTotalDonation] = useState(0);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [msRes, statsRes] = await Promise.all([
         axios.get(`${BASE_URL}/widget/${token}/milestones`),
@@ -25,7 +25,7 @@ const MilestonesWidget = () => {
     } catch (err) {
       console.error('Failed to fetch milestones');
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     if (!token) return;
@@ -37,10 +37,12 @@ const MilestonesWidget = () => {
     if (!token) return;
     const socket = io(BASE_URL);
     socket.emit('join-room', token);
+    socket.emit('join-room', `${token}-mediashare`); // ✅ join mediashare room
+
     socket.on('new-donation', () => fetchData());
     socket.on('new-media-donation', () => fetchData());
     return () => socket.disconnect();
-  }, [token]);
+  }, [token, fetchData]);
 
   if (!milestones.length) return (
     <div style={{ width: '100%', height: '100vh', background: 'transparent' }} />
