@@ -493,14 +493,14 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
           <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex-1">
             Media URL
           </label>
-          <select 
+          {/* <select 
             value={formData.mediaType} 
             onChange={e => updateForm('mediaType', e.target.value)}
             className="px-3 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none text-xs font-bold"
           >
             <option value="image">🖼️ Image/GIF</option>
             <option value="video">▶ MP4/YouTube</option>
-          </select>
+          </select> */}
         </div>
         <input 
           value={formData.mediaUrl}
