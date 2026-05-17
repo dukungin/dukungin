@@ -477,9 +477,21 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
                 onClick={() => setDropdownOpen((v) => !v)}
                 className="flex items-center gap-2 px-2 h-[40px] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none transition-all cursor-pointer border border-slate-200 dark:border-slate-700"
               >
-                {/* Avatar inisial */}
-                <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-none flex items-center justify-center text-white font-black text-xs flex-shrink-0">
-                  {displayName.charAt(0).toUpperCase()}
+                {/* Avatar inisial — GANTI INI */}
+                <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-none flex items-center justify-center text-white font-black text-xs flex-shrink-0 overflow-hidden">
+                  {profile?.profilePicture ? (
+                    <img
+                      src={profile.profilePicture}
+                      alt={displayName}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentElement.innerHTML = displayName.charAt(0).toUpperCase();
+                      }}
+                    />
+                  ) : (
+                    displayName.charAt(0).toUpperCase()
+                  )}
                 </div>
                 <span className="font-black text-sm text-slate-700 dark:text-white hidden sm:block max-w-[130px] truncate">
                   @{displayName}
