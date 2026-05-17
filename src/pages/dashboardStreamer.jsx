@@ -270,6 +270,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
   const [customAmount, setCustomAmount] = useState(50000);
   const [customName, setCustomName] = useState('TestDonor');
   const [customMsg, setCustomMsg] = useState('Ini test donasi dari dashboard! 🎉');
+  const [customVoiceUrl, setCustomVoiceUrl] = useState('');
 
   const SOCKET_URL = 'https://server-dukungin-production.up.railway.app';
 
@@ -279,12 +280,13 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
 
     try {
       await api.post('/api/test-alert/send', {
-        targetUsername: user.username,        // atau username streamer target
+        targetUsername: user.username,
         donorName: customName,
         amount: Number(customAmount),
         message: customMsg,
         mediaUrl: null,
         mediaType: null,
+        voiceUrl: customVoiceUrl.trim() || null,  // ← TAMBAH INI
       });
 
       setLastSent(new Date());
@@ -326,6 +328,17 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
           <input value={customMsg} onChange={e => setCustomMsg(e.target.value)}
             className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
             placeholder="Pesan test..." />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+            Voice URL <span className="normal-case font-medium text-slate-300">(opsional)</span>
+          </label>
+          <input
+            value={customVoiceUrl}
+            onChange={e => setCustomVoiceUrl(e.target.value)}
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+            placeholder="https://... (URL audio)" 
+          />
         </div>
       </div>
 
