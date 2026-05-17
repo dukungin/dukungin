@@ -2110,10 +2110,15 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
               <video ref={videoRef} src={mediaUrl} autoPlay muted loop playsInline
                 className="w-full object-cover" style={{ maxHeight: 200 }}
                 onError={() => setPreviewError(true)} />
-            ) : (
-              <img src={mediaUrl} alt="Media preview" className="w-full object-cover"
-                style={{ maxHeight: 200 }} onError={() => setPreviewError(true)} />
-            )}
+            ): mediaType === 'gif' || mediaType === 'image' ? (
+              <img 
+                src={mediaUrl} 
+                alt="Media preview" 
+                className="w-full object-cover" 
+                style={{ maxHeight: 200 }} 
+                onError={() => setPreviewError(true)} 
+              />
+            ) : null}
             <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-black/60 backdrop-blur-sm">
               <p className="text-[10px] text-white/90 font-bold">
                 {mediaType === 'youtube' ? (
@@ -2463,8 +2468,11 @@ const SupporterPage = () => {
     try {
       setLoading(true);
       const isMediaShareTab = activeTab === 'mediashare';
-      const hasMedia = (isMediaShareTab || getMediaType(mediaUrl) === 'gif') && mediaUrl.trim();
-      const detectedMediaType = hasMedia ? getMediaType(mediaUrl.trim()) : null;
+      const mediaTypeDetected = getMediaType(mediaUrl?.trim());
+      const isGif = mediaTypeDetected === 'gif';
+          // GIF selalu masuk ke alert, bukan media share
+      const hasMedia = mediaUrl?.trim() && (isMediaShareTab || isGif);
+      const detectedMediaType = hasMedia ? mediaTypeDetected : null;
 
       if (hasMedia && eligibleTrigger) {
         if (eligibleTrigger.mediaType === 'image' && detectedMediaType !== 'image') {
@@ -2483,10 +2491,13 @@ const SupporterPage = () => {
         email: form.email.trim() || 'guest@mail.com',
         donorUserId: authPayload?.id,
 
-        // Media Logic Baru
+        // Media Logic
         mediaUrl: hasMedia ? mediaUrl.trim() : null,
         mediaType: detectedMediaType,
-        isMediaShare: isMediaShareTab && detectedMediaType !== 'gif', // GIF bukan Media Share
+        
+        // GIF tidak dianggap Media Share
+        isMediaShare: isMediaShareTab && !isGif,
+
         startTime: hasMedia && isYouTubeUrl(mediaUrl) ? startTime : 0,
 
         soundUrl: activeTab === 'alert' ? (form.soundUrl || null) : null,
@@ -2552,10 +2563,13 @@ const SupporterPage = () => {
     if (!form.message.trim()) return true;
 
     if (activeTab === 'mediashare') {
-      // nominal harus cukup trigger
-      if (!eligibleTrigger) return true;
-      // link media wajib diisi
-      if (!mediaUrl.trim()) return true;
+      if (!eligibleTrigger) return alert('Nominal belum cukup untuk Media Share');
+      if (!mediaUrl.trim()) return alert('Link media wajib diisi');
+      
+      const type = getMediaType(mediaUrl.trim());
+      if (type === 'gif') {
+        return alert('GIF hanya bisa dikirim melalui tab Alert, bukan Media Share');
+      }
     }
 
     if (activeTab === 'voice') {
