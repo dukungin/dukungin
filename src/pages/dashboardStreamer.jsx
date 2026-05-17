@@ -411,9 +411,9 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
       <div className="flex items-center gap-4">
-        <div className="bg-rose-500 p-3 rounded-xl text-white shadow-lg">
+        <div className="bg-rose-500 p-3 rounded-none text-white shadow-lg">
           <Zap size={20} />
         </div>
         <div>
@@ -429,7 +429,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
           <input
             value={customName}
             onChange={e => setCustomName(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
             placeholder="TestDonor"
           />
         </div>
@@ -439,7 +439,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
             type="number"
             value={customAmount}
             onChange={e => setCustomAmount(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -447,7 +447,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
           <input
             value={customMsg}
             onChange={e => setCustomMsg(e.target.value)}
-            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
             placeholder="Pesan test..."
           />
         </div>
@@ -459,7 +459,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
           <button
             key={v}
             onClick={() => setCustomAmount(v)}
-            className={`cursor-pointer active:scale-[0.97] px-3 py-1.5 rounded-xl text-xs font-black transition-all border-2 ${
+            className={`cursor-pointer active:scale-[0.97] px-3 py-1.5 rounded-none text-xs font-black transition-all border-2 ${
               Number(customAmount) === v
                 ? 'bg-rose-500 border-rose-500 text-white'
                 : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-rose-300'
@@ -482,7 +482,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
           disabled={false}
         />
         {voiceUrl && (
-          <div className="flex items-center gap-3 p-3 bg-rose-50 dark:bg-rose-950/30 rounded-xl border border-rose-100 dark:border-rose-900">
+          <div className="flex items-center gap-3 p-3 bg-rose-50 dark:bg-rose-950/30 rounded-none border border-rose-100 dark:border-rose-900">
             <span className="text-rose-500 text-sm font-black">🎙 Voice siap dikirim</span>
             <button
               onClick={() => setVoiceUrl('')}
@@ -498,7 +498,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
       <button
         onClick={sendTest}
         disabled={isSending || !overlayToken}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-rose-200 dark:shadow-rose-900/30"
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-rose-200 dark:shadow-rose-900/30"
       >
         {isSending
           ? <><RefreshCw size={18} className="animate-spin" /> Mengirim...</>
@@ -510,7 +510,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
         <motion.div
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-xl px-4 py-3 border border-emerald-100 dark:border-emerald-900"
+          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900"
         >
           <CheckCircle2 size={14} /> Test terakhir: {lastSent.toLocaleTimeString('id-ID')}
           {voiceUrl && <span className="ml-1 opacity-60">· dengan voice</span>}
