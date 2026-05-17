@@ -1,4 +1,4 @@
-import { CheckCircle2, Clock, XCircle, ArrowRight, CreditCard, Smartphone, Wallet, RefreshCw } from 'lucide-react';
+import { CheckCircle2, Clock, XCircle, ArrowRight, CreditCard, Smartphone, Wallet, RefreshCw, EyeOff, Eye } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -101,15 +101,48 @@ export const WithdrawPage = () => {
       <div className="bg-indigo-600 py-7 rounded-none p-6 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 p-12 opacity-10 md:flex hidden"><Wallet size={120} /></div>
         <div className="relative z-[2]">
-          <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">Total Saldo Bisa Ditarik</p>
+          {/* <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">Total Saldo Bisa Ditarik</p>
           <h1 className="text-3xl font-black">
             {showBalance 
               ? `Rp ${balance.toLocaleString('id-ID')}` 
               : "Rp *********"}
-          </h1>
+          </h1> */}
+          <div className="flex flex-col items-start gap-3 mb-2">
+          <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs">Total Saldo Bisa Ditarik</p>
+          <div className='flex w-max items-center'>
+              <h1 className={`text-3xl font-black`}>
+                Rp
+                <span className={`${!showBalance ? 'relative top-1.5' : ''}`}>
+                  {showBalance 
+                    ? `${balance.toLocaleString('id-ID')}` 
+                    : " *********"}
+                </span>
+              </h1>
+              <button
+                onClick={() => {
+                  const next = !showBalance;
+                  setShowBalance(next);
+                  localStorage.setItem('showBalance', String(next));
+                  window.dispatchEvent(new Event('storage'));
+                }}
+                className="relative bg-white top-[1.4px] ml-3 cursor-pointer active:scale-[0.98] flex items-center gap-1 bg-indigo-500/40 hover:bg-white/90 border border-indigo-400/40 rounded-none px-2 py-0.5 text-[10px] font-black text-slate-900 transition-all active:scale-95"
+              >
+                {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </div>
           <p className="text-indigo-200 text-xs font-medium mt-2">
             Penarikan diproses manual oleh admin dalam 1×24 jam hari kerja
           </p>
+          {/* <div className="mt-3 flex items-start gap-2 bg-indigo-500/30 border border-indigo-400/40 rounded-none px-3 py-2.5">
+            <span className="text-amber-300 text-sm flex-shrink-0">⏳</span>
+            <p className="text-indigo-100 text-[11px] font-medium leading-relaxed">
+              <span className="font-black text-amber-300">Donasi baru masuk?</span>{' '}
+              Dana yang baru diterima memerlukan waktu{' '}
+              <span className="font-black text-white">1x24 jam</span> untuk diproses
+              sebelum bisa ditarik.
+            </p>
+          </div> */}
         </div>
         <img src="/jellyfish.png" alt="icon" className="absolute top-4 md:top-3 right-[-20px] md:right-[-40px] w-[15%] md:w-[17%] -rotate-25 opacity-90" />
         <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-90" />
@@ -162,6 +195,14 @@ export const WithdrawPage = () => {
               <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold mt-0.5">{r.label}</p>
             </div>
           ))}
+        </div>
+
+        <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-none px-4 py-3 mb-6">
+          <span className="text-amber-500 text-base flex-shrink-0">⏳</span>
+          <p className="text-[11px] text-amber-700 dark:text-amber-400 font-medium leading-relaxed">
+            Donasi yang baru masuk minimal menunggu{' '}
+            <span className="font-black">1x24 jam</span> terlebih dahulu agar saldo tersedia dan dapat diproses penarikan dana oleh sistem
+          </p>
         </div>
 
         {/* Method selector */}
