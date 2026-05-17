@@ -764,25 +764,33 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
   );
 };
 
-const QuickAudioSection = ({ 
-  publicSounds = [], 
-  selectedSound, 
-  onSoundChange,
-  amount 
-}) => {
-  const safePublicSounds = Array.isArray(publicSounds) ? publicSounds.slice(0, 7) : [];
-  const audioRef = useRef(null);
-  const [previewing, setPreviewing] = useState(null);
-  const [previewError, setPreviewError] = useState(null);
-  const timeoutRef = useRef(null);
+  const QuickAudioSection = ({ 
+    publicSounds = [], 
+    selectedSound, 
+    onSoundChange,
+    amount 
+  }) => {
+    const safePublicSounds = Array.isArray(publicSounds) ? publicSounds.slice(0, 7) : [];
+    const audioRef = useRef(null);
+    const [previewing, setPreviewing] = useState(null);
+    const [previewError, setPreviewError] = useState(null);
+    const timeoutRef = useRef(null);
 
-  const getAudioProxyUrl = useCallback((url) => {
+    const getAudioProxyUrl = useCallback((url) => {
     if (!url) return '';
-    const baseOrigin = window.location.origin;
-    if (url.includes('/uploads/') || url.includes('taptiptup.vercel.app') || 
-        url.includes('railway.app') || url.includes(baseOrigin)) {
+    
+    // ✅ Cloudinary URL — langsung pakai, tidak perlu proxy
+    if (
+      url.includes('cloudinary.com') ||
+      url.includes('res.cloudinary.com') ||
+      url.includes('/uploads/') ||
+      url.includes('railway.app') ||
+      url.includes(window.location.origin)
+    ) {
       return url;
     }
+    
+    // Hanya proxy untuk URL eksternal lain (myinstants, dll)
     return `/api/overlay/proxy-audio?url=${encodeURIComponent(url)}`;
   }, []);
 
@@ -1201,12 +1209,12 @@ const SupporterPage = () => {
   ).filter((v) => v >= minDonate && v <= maxDonate);
   
   const sortedTriggers = [...mediaTriggers].sort((a, b) => a.minAmount - b.minAmount);
-  const publicSounds = Array.isArray(streamer?.publicSounds) 
-    ? streamer.publicSounds 
-    : Array.isArray(streamer?.overlaySetting?.publicSounds)
-      ? streamer.overlaySetting.publicSounds 
-      : [];
-  
+  const publicSounds = Array.isArray(streamer?.overlaySetting?.publicSounds)
+  ? streamer.overlaySetting.publicSounds
+  : Array.isArray(streamer?.publicSounds)
+    ? streamer.publicSounds
+    : [];
+    
   return (
     <>
       {/* Auth Modal */}

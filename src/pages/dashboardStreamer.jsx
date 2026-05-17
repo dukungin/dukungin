@@ -2515,24 +2515,22 @@ export const DashboardStreamer = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validasi ukuran (max 5MB)
     if (file.size > 3 * 1024 * 1024) {
       alert('Ukuran file maksimal 3MB');
       return;
     }
 
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('image', file);  // ← key harus 'image'
 
     try {
-      const res = await api.post('/api/auth/upload-profile-picture', formData, {
+      // ✅ Ganti endpoint ke overlayRouter yang sudah pakai Cloudinary
+      const res = await api.post('/api/overlay/upload-profile-picture', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      const imageUrl = res.data.url;
-      
-      setProfileForm(prev => ({ ...prev, profilePicture: imageUrl }));
-      
+      // Cloudinary langsung kasih URL permanen di res.data.url
+      setProfileForm(prev => ({ ...prev, profilePicture: res.data.url }));
       toast.success('✅ Foto profil berhasil diupload!');
     } catch (err) {
       console.error(err);
@@ -2560,27 +2558,25 @@ export const DashboardStreamer = () => {
     
     try {
       setUploading(true);
-      const res = await api.post('/api/overlay/upload-audio', uploadFormData);
-      
+      const res = await api.post('/api/overlay/upload-audio', uploadFormData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      // ✅ Cloudinary URL langsung dari res.data.url
+      if (!res.data.url) {
+        throw new Error('URL tidak ditemukan dari response');
+      }
+
       const newSound = {
-        url: res.data.url,
+        url: res.data.url,  // https://res.cloudinary.com/...
         label: file.name.replace(/\.[^/.]+$/, ''),
         emoji: '🎵'
       };
       
-      // ✅ SYNC KE KEDUA STATE
       const updatedSounds = [...formData.publicSounds, newSound];
       
-      setFormData(prev => ({
-        ...prev,
-        publicSounds: updatedSounds
-      }));
-      
-      // Juga update localSettings
-      setLocalSettings(prev => ({
-        ...prev,
-        publicSounds: updatedSounds
-      }));
+      setFormData(prev => ({ ...prev, publicSounds: updatedSounds }));
+      setLocalSettings(prev => ({ ...prev, publicSounds: updatedSounds }));
       
       toast.success('✅ Suara berhasil diupload!');
     } catch (err) {
