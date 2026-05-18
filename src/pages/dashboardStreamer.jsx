@@ -313,7 +313,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1">
           <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nama Donor</label>
           <input value={customName} onChange={e => setCustomName(e.target.value)}
@@ -331,7 +331,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
             className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
             placeholder="Pesan test..." />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col w-full gap-1">
           <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
             Voice URL <span className="normal-case font-medium text-slate-300">(opsional)</span>
           </label>
@@ -1389,18 +1389,18 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
 
       {/* Contoh Perhitungan */}
       <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-none text-sm border border-dashed border-slate-200 dark:border-slate-700">
-        <p className="font-black text-xs text-slate-400 mb-3">CONTOH PERHITUNGAN</p>
+        <p className="font-black text-xs text-slate-400 mb-3">DURASI SAAT INI</p>
         <div className="space-y-2">
           <div className="flex justify-between">
             <span>Rp25.000 — Alert Biasa</span>
-            <span className="font-bold text-amber-600">
+            <span className="font-bold text-slate-900 dark:text-white">
               {(Number(settings.alertBaseDuration) || 0) + 
                Math.floor(25000 / (Number(settings.alertExtraPerAmount) || 1)) * (Number(settings.alertExtraDuration) || 0)} detik
             </span>
           </div>
           <div className="flex justify-between">
             <span>Rp50.000 — Media Share</span>
-            <span className="font-bold text-purple-600">
+            <span className="font-bold text-slate-900 dark:text-white">
               {(Number(settings.mediaShareBaseDuration) || 0) + 
                Math.floor(50000 / (Number(settings.mediaShareExtraPerAmount) || 1)) * (Number(settings.mediaShareExtraDuration) || 0)} detik
             </span>
