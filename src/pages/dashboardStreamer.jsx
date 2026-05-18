@@ -1299,7 +1299,6 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
         {/* ALERT BIASA */}
         <div className="space-y-5">
           <div className="flex items-center gap-3">
-            <div className="text-2xl">🔔</div>
             <h4 className="font-black text-lg">Alert Biasa</h4>
           </div>
 
@@ -1312,7 +1311,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
                   type="number"
                   value={settings.alertBaseDuration || ''}   // Menggunakan || '' agar bisa dihapus kosong
                   onChange={(e) => onChange('alertBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
+                  className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2"
                 />
                 <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span>
               </div>
@@ -1325,7 +1324,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
                   type="number"
                   value={settings.alertExtraPerAmount || ''} // Menggunakan || '' agar bisa dihapus kosong
                   onChange={(e) => onChange('alertExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
+                  className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2"
                 />
                 <span className="dark:text-white text-slate-900 font-bold">
                   <Plus />
@@ -1334,7 +1333,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
                   type="number"
                   value={settings.alertExtraDuration || ''}  // Menggunakan || '' agar bisa dihapus kosong
                   onChange={(e) => onChange('alertExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
+                  className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2"
                 />
                 <span className="text-slate-500 text-sm">detik</span>
               </div>
@@ -1345,7 +1344,6 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
         {/* MEDIA SHARE */}
         <div className="space-y-5">
           <div className="flex items-center gap-3">
-            <div className="text-2xl">📺</div>
             <h4 className="font-black text-lg">Media Share</h4>
           </div>
 
@@ -1358,7 +1356,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
                   type="number"
                   value={settings.mediaShareBaseDuration || ''} // Menggunakan || '' agar bisa dihapus kosong
                   onChange={(e) => onChange('mediaShareBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
+                  className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2"
                 />
                 <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span>
               </div>
@@ -1371,7 +1369,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
                   type="number"
                   value={settings.mediaShareExtraPerAmount || ''} // Menggunakan || '' agar bisa dihapus kosong
                   onChange={(e) => onChange('mediaShareExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
+                  className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2"
                 />
                 <span className="dark:text-white text-slate-900 font-bold">
                   <Plus />
@@ -1380,7 +1378,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
                   type="number"
                   value={settings.mediaShareExtraDuration || ''}  // Menggunakan || '' agar bisa dihapus kosong
                   onChange={(e) => onChange('mediaShareExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
+                  className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2"
                 />
                 <span className="text-slate-500 text-sm">detik</span>
               </div>
