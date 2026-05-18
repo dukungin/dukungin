@@ -119,16 +119,22 @@ export const FeeConfigPage = () => {
   }, [profileData]);
 
   const saveMutation = useMutation({
-      mutationFn: (bearer) => {
-        const current = profileData?.settings || profileData?.overlaySetting || {};
-        return saveFeeConfig({ ...current, feeBearer: bearer });
+    mutationFn: (bearer) => {
+      const current = profileData?.settings || profileData?.overlaySetting || {};
+      const payload = { ...current, feeBearer: bearer };
+      console.log("💾 Mengirim ke backend:", payload);
+      return saveFeeConfig(payload);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      console.log("✅ Berhasil disimpan dari server:", response);
       queryClient.invalidateQueries({ queryKey: ['profile'] });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     },
-    onError: (err) => alert(err.response?.data?.message || 'Gagal menyimpan konfigurasi'),
+    onError: (err) => {
+      console.error("❌ Gagal menyimpan:", err.response?.data || err);
+      alert(err.response?.data?.message || 'Gagal menyimpan konfigurasi');
+    },
   });
 
   const OPTIONS = [
