@@ -79,22 +79,20 @@
     return (config.baseDuration || 8) * 1000;
   };
 
-  const calculateMediaShareDuration = (config, amount) => {
-    if (!config) return 15000;
+const calculateMediaShareDuration = (config, amount) => {
+  if (!config || !amount || amount <= 0) return 15000;
 
-    // Prioritas 1: Gunakan pengaturan dari dashboard
-    if (config.mediaShareBaseDuration != null) {
-      const base = Number(config.mediaShareBaseDuration) || 15;
-      const perAmount = Number(config.mediaShareExtraPerAmount) || 10000;
-      const extraDur = Number(config.mediaShareExtraDuration) || 10;
+  const base = Number(config.mediaShareBaseDuration) || 15;
+  const perAmount = Number(config.mediaShareExtraPerAmount) || 10000;
+  const extraDur = Number(config.mediaShareExtraDuration) || 10;
 
-      const extras = perAmount > 0 ? Math.floor(amount / perAmount) : 0;
-      return (base + extras * extraDur) * 1000;
-    }
+  const extras = perAmount > 0 ? Math.floor(amount / perAmount) : 0;
+  const totalSeconds = base + (extras * extraDur);
 
-    // Fallback
-    return 15000;
-  };
+  console.log(`[MediaShare Duration] Rp ${amount.toLocaleString('id-ID')} → ${base} + ${extras}×${extraDur} = ${totalSeconds} detik`);
+
+  return totalSeconds * 1000;
+};
 
   // ── MediaShareOverlay Component ───────────────────────────────────────────────
   const MediaShareOverlay = () => {
@@ -138,7 +136,8 @@
       console.log(`[MediaShare] Joined: ${token}, ${token}-mediashare`);
 
       socket.on('new-media-donation', (data) => {
-        console.log('[MediaShare] RECEIVED:', data.donorName);
+        console.log('[MediaShare] RECEIVED:', data.donorName, 'Rp', data.amount);
+
         if (configRef.current?.overlayEnabled === false) return;
 
         const donationWithTime = {
@@ -149,24 +148,28 @@
         setAlert(donationWithTime);
         setProgress(100);
 
+        // Sound
         const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
         if (soundToPlay && audioRef.current) {
           audioRef.current.src = soundToPlay;
           audioRef.current.play().catch(() => {});
         }
 
-        const duration = calculateMediaShareDuration(configRef.current, donationWithTime.amount);
+        // ✅ DURASI
+        const duration = calculateMediaShareDuration(configRef.current, Number(donationWithTime.amount));
 
+        // Clear timer lama
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
         if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
 
         const startTime = Date.now();
+
         progressIntervalRef.current = setInterval(() => {
           const elapsed = Date.now() - startTime;
           const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
           setProgress(remaining);
           if (remaining <= 0) clearInterval(progressIntervalRef.current);
-        }, 50);
+        }, 40); // lebih smooth
 
         dismissTimerRef.current = setTimeout(() => {
           setAlert(null);
