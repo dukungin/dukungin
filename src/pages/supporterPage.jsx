@@ -1172,18 +1172,20 @@ const SupporterPage = () => {
               )}
             </div>
 
-            {/* Message */}
-            <div>
-              <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
-                Pesan Dukungan
-              </label>
-              <textarea
+            {/* Message — hide kalau tab voice */}
+            {activeTab !== 'voice' && (
+              <div>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
+                  Pesan Dukungan
+                </label>
+                <textarea
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 min-h-[90px] outline-none transition-all resize-none text-slate-700 dark:text-white dark:placeholder:text-slate-500"
-                  placeholder={activeTab === 'voice' ? 'Pesan teks (opsional untuk voice)' : 'Semangat terus bang! 🔥'}
+                  placeholder="Semangat terus bang! 🔥"
                 />
-            </div>
+              </div>
+            )}
 
             {/* ═══════════════════════════════════════════════
                 TAB SELECTOR

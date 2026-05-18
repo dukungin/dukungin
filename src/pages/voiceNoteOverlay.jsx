@@ -110,7 +110,7 @@ const VoiceNoteOverlay = () => {
     socket.on('new-voice-donation', (data) => {
       if (configRef.current?.overlayEnabled === false) return;
 
-      // Clear timers sebelumnya
+      // Clear semua timer sebelumnya
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
       stopAudioProgress();
@@ -121,20 +121,18 @@ const VoiceNoteOverlay = () => {
       setAudioProgress(0);
       setIsPlaying(false);
 
-      // Play notification sound dulu jika ada
-      const notifSound = data.soundUrl || configRef.current?.soundUrl;
-      if (notifSound && audioRef.current) {
-        audioRef.current.src = notifSound;
-        audioRef.current.play().catch(() => {});
-      }
+      // ← JANGAN play soundUrl dulu — langsung play voiceUrl
+      const TOTAL_DURATION = 33000; // 3s intro + 30s voice = total 33s fixed
 
-      // Delay lalu play voice note
+      // Delay 1s untuk animasi masuk, lalu play voice
       setTimeout(() => {
         if (data.voiceUrl && audioRef.current) {
           audioRef.current.src = data.voiceUrl;
           audioRef.current.load();
+
           audioRef.current.onloadedmetadata = () => {
-            setAudioDuration(audioRef.current.duration || 30);
+            // Clamp ke max 30 detik
+            setAudioDuration(Math.min(audioRef.current.duration, 30));
           };
           audioRef.current.onplay = () => {
             setIsPlaying(true);
@@ -148,21 +146,29 @@ const VoiceNoteOverlay = () => {
             stopAudioProgress();
             setIsPlaying(false);
           };
+
+          // Paksa stop setelah 30 detik meski audio lebih panjang
           audioRef.current.play().catch(() => setIsPlaying(false));
+          setTimeout(() => {
+            if (audioRef.current) {
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+            }
+            stopAudioProgress();
+            setIsPlaying(false);
+          }, 30000); // ← max 30 detik
         }
       }, 1000);
 
-      // Progress bar overlay (total duration = 5s intro + max 30s voice + 3s outro)
-      const totalDuration = 5000 + 30000 + 3000;
+      // Progress bar & auto dismiss — selalu 33 detik
       const startTime = Date.now();
       progressIntervalRef.current = setInterval(() => {
         const elapsed = Date.now() - startTime;
-        const remaining = Math.max(0, 100 - (elapsed / totalDuration) * 100);
+        const remaining = Math.max(0, 100 - (elapsed / TOTAL_DURATION) * 100);
         setProgress(remaining);
         if (remaining <= 0) clearInterval(progressIntervalRef.current);
       }, 50);
 
-      // Auto dismiss setelah voice selesai + buffer
       dismissTimerRef.current = setTimeout(() => {
         setAlert(null);
         setProgress(100);
@@ -173,7 +179,7 @@ const VoiceNoteOverlay = () => {
           audioRef.current.pause();
           audioRef.current.src = '';
         }
-      }, totalDuration);
+      }, TOTAL_DURATION);
     });
 
     socket.on('settings-updated', (newConfig) => {
