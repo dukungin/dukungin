@@ -1279,11 +1279,9 @@ const AdminWithdrawalPage = () => {
   );
 };
 
-// ─── DurationSettings ──────────────────────────────────────────────────────
-
 // DurationSettings.jsx
 const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
-  return (
+    return (
     <div className="bg-white dark:bg-slate-900 rounded-none p-5 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-8">
       
       <SectionHeader 
@@ -1306,12 +1304,12 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
+            <div className='w-full'>
               <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar</label>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.alertBaseDuration || 8}
+                  value={settings.alertBaseDuration ?? 10}   // ← Diubah ke 10
                   onChange={(e) => onChange('alertBaseDuration', Number(e.target.value))}
                   className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
@@ -1324,14 +1322,16 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.alertExtraPerAmount || 10000}
+                  value={settings.alertExtraPerAmount ?? 10000}
                   onChange={(e) => onChange('alertExtraPerAmount', Number(e.target.value))}
                   className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
-                <span className="text-amber-500 font-bold">→</span>
+                <span className="dark:text-white text-slate-900 font-bold">
+                  <Plus />
+                </span>
                 <input
                   type="number"
-                  value={settings.alertExtraDuration || 5}
+                  value={settings.alertExtraDuration ?? 5}
                   onChange={(e) => onChange('alertExtraDuration', Number(e.target.value))}
                   className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
@@ -1354,7 +1354,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.mediaShareBaseDuration || 15}
+                  value={settings.mediaShareBaseDuration ?? 15}   // ← Diubah ke 15
                   onChange={(e) => onChange('mediaShareBaseDuration', Number(e.target.value))}
                   className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
@@ -1367,14 +1367,16 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.mediaShareExtraPerAmount || 10000}
+                  value={settings.mediaShareExtraPerAmount ?? 10000}
                   onChange={(e) => onChange('mediaShareExtraPerAmount', Number(e.target.value))}
                   className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
-                <span className="text-purple-500 font-bold">→</span>
+                <span className="dark:text-white text-slate-900 font-bold">
+                  <Plus />
+                </span>
                 <input
                   type="number"
-                  value={settings.mediaShareExtraDuration || 8}
+                  value={settings.mediaShareExtraDuration ?? 10}   // ← Diubah ke 10
                   onChange={(e) => onChange('mediaShareExtraDuration', Number(e.target.value))}
                   className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
@@ -1392,13 +1394,15 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
           <div className="flex justify-between">
             <span>Rp25.000 — Alert Biasa</span>
             <span className="font-bold text-amber-600">
-              {(settings.alertBaseDuration || 8) + Math.floor(25000 / (settings.alertExtraPerAmount || 10000)) * (settings.alertExtraDuration || 5)} detik
+              {(settings.alertBaseDuration ?? 10) + 
+               Math.floor(25000 / (settings.alertExtraPerAmount ?? 10000)) * (settings.alertExtraDuration ?? 5)} detik
             </span>
           </div>
           <div className="flex justify-between">
             <span>Rp50.000 — Media Share</span>
             <span className="font-bold text-purple-600">
-              {(settings.mediaShareBaseDuration || 15) + Math.floor(50000 / (settings.mediaShareExtraPerAmount || 10000)) * (settings.mediaShareExtraDuration || 8)} detik
+              {(settings.mediaShareBaseDuration ?? 15) + 
+               Math.floor(50000 / (settings.mediaShareExtraPerAmount ?? 10000)) * (settings.mediaShareExtraDuration ?? 10)} detik
             </span>
           </div>
         </div>
@@ -1407,7 +1411,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
       <button
         onClick={() => saveSettingsMutation.mutate(settings)}
         disabled={saveSettingsMutation.isPending}
-        className="w-full py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-black rounded-none hover:brightness-105 active:scale-[0.98] transition-all shadow"
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2"
       >
         {saveSettingsMutation.isPending ? "Menyimpan..." : "💾 Simpan Pengaturan Durasi"}
       </button>
