@@ -108,26 +108,33 @@ const VoiceNoteOverlay = () => {
     });
 
     socket.on('new-voice-donation', (data) => {
-      if (configRef.current?.overlayEnabled === false) return;
+        if (configRef.current?.overlayEnabled === false) return;
 
-      // Clear semua timer sebelumnya
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
-      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
-      stopAudioProgress();
+        if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+        if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+        stopAudioProgress();
 
-      const donationData = { ...data, receivedAt: data.receivedAt || new Date().toISOString() };
-      setAlert(donationData);
-      setProgress(100);
-      setAudioProgress(0);
-      setIsPlaying(false);
+        // ← FIX: pastikan voiceUrl absolute
+        const absoluteVoiceUrl = data.voiceUrl?.startsWith('http')
+          ? data.voiceUrl
+          : data.voiceUrl ? `${BASE_URL}${data.voiceUrl}` : null;
 
-      // ← JANGAN play soundUrl dulu — langsung play voiceUrl
-      const TOTAL_DURATION = 33000; // 3s intro + 30s voice = total 33s fixed
+        const donationData = { 
+          ...data, 
+          voiceUrl: absoluteVoiceUrl,
+          receivedAt: data.receivedAt || new Date().toISOString() 
+        };
+        
+        setAlert(donationData);
+        setProgress(100);
+        setAudioProgress(0);
+        setIsPlaying(false);
 
-      // Delay 1s untuk animasi masuk, lalu play voice
-      setTimeout(() => {
-        if (data.voiceUrl && audioRef.current) {
-          audioRef.current.src = data.voiceUrl;
+        const TOTAL_DURATION = 33000;
+
+        setTimeout(() => {
+          if (absoluteVoiceUrl && audioRef.current) {
+            audioRef.current.src = absoluteVoiceUrl;  // ← pakai absoluteVoiceUrl
           audioRef.current.load();
 
           audioRef.current.onloadedmetadata = () => {
