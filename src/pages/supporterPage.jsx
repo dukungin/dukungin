@@ -792,6 +792,7 @@ const SupporterPage = () => {
   const [mediaUrl, setMediaUrl] = useState('');
   const [startTime, setStartTime] = useState(0);
   const { theme, toggle: toggleTheme } = useTheme();
+  const [feeBearer, setFeeBearer] = useState('streamer');
 
   // ── Tab state ──────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState('alert'); // 'alert' | 'mediashare' | 'voice'
@@ -888,6 +889,25 @@ const SupporterPage = () => {
     if (!eligibleTrigger) { setMediaUrl(''); setStartTime(0); }
   }, [eligibleTrigger]);
 
+  useEffect(() => {
+    if (streamer) {
+      const fb = streamer.feeBearer || streamer.overlaySetting?.feeBearer || 'streamer';
+      setFeeBearer(fb);
+    }
+  }, [streamer]);
+
+  // Hitung total yang harus dibayar donor
+  const donorTotalAmount = useMemo(() => {
+    if (!form.amount) return 0;
+    const percentFee = Math.round(form.amount * 0.025);
+    return feeBearer === 'donor' ? form.amount + percentFee : form.amount;
+  }, [form.amount, feeBearer]);
+
+  // Update tombol submit
+  const submitButtonText = loading 
+    ? "Memproses..." 
+    : `Kirim Donasi Rp ${donorTotalAmount.toLocaleString('id-ID')}`;
+
   // ── Handle Donate ──────────────────────────────────────────
   const handleDonate = async () => {
     const overlaySetting = streamer?.overlaySetting || streamer?.OverlaySetting || {};
@@ -930,20 +950,17 @@ const SupporterPage = () => {
       }
 
       const payload = {
-        amount:       Math.round(Number(form.amount)),
+        amount:       Math.round(Number(form.amount)),     // nominal input
         donorName:    form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
         message:      form.message,
         userId:       streamer._id,
         email:        form.email.trim() || 'guest@mail.com',
         donorUserId:  authPayload?.id,
-        // Media share
         mediaUrl:     hasMedia ? mediaUrl.trim() : null,
         mediaType:    detectedMediaType,
-        isMediaShare: isMediaShareTab,   // ← flag untuk queue routing
+        isMediaShare: isMediaShareTab,
         startTime:    hasMedia && isYouTubeUrl(mediaUrl) ? startTime : 0,
-        // Alert sound (hanya kalau tab alert)
         soundUrl:     activeTab === 'alert' ? (form.soundUrl || null) : null,
-        // Voice (hanya kalau tab voice)
         voiceUrl:     activeTab === 'voice' ? (form.voiceUrl || null) : null,
       };
 
@@ -1414,21 +1431,20 @@ const SupporterPage = () => {
               whileTap={!isSubmitDisabled ? { scale: 0.99 } : {}}
               onClick={handleDonate}
               disabled={isSubmitDisabled}
-              className={`w-full py-3 rounded-none font-black text-lg flex items-center justify-center gap-2 transition-all ${
+              className={`w-full py-4 rounded-none font-black text-lg flex items-center justify-center gap-2 transition-all ${
                 isSubmitDisabled
-                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed'
-                  : 'cursor-pointer bg-gradient-to-r from-blue-700 to-blue-700 text-white hover:brightness-110'
+                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                  : 'cursor-pointer bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:brightness-110'
               }`}
             >
               {loading ? (
                 <><Loader2 size={20} className="animate-spin" /> Memproses...</>
               ) : (
                 <>
-                  {activeTab === 'alert' && '🔔'}
-                  {activeTab === 'mediashare' && '🎬'}
-                  {activeTab === 'voice' && '🎙️'}
-                  {' '}Kirim Donasi
-                  {form.amount > 0 ? ` Rp ${Number(form.amount).toLocaleString('id-ID')}` : ''}
+                  {activeTab === 'alert' && '🔔 '}
+                  {activeTab === 'mediashare' && '🎬 '}
+                  {activeTab === 'voice' && '🎙️ '}
+                  {submitButtonText}
                 </>
               )}
             </motion.button>
