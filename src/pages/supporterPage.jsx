@@ -915,7 +915,7 @@ const SupporterPage = () => {
       return alert(`Minimal donasi Rp ${minDonate.toLocaleString('id-ID')}`);
     if (form.amount > maxDonate)
       return alert(`Maksimal donasi Rp ${maxDonate.toLocaleString('id-ID')}`);
-    if (!form.message.trim())
+    if (!form.message.trim() && activeTab !== 'voice')
       return alert('Pesan dukungan tidak boleh kosong');
     if (!streamer?._id) return alert('Data streamer belum siap.');
 
@@ -1017,17 +1017,14 @@ const SupporterPage = () => {
   const isSubmitDisabled = (() => {
     if (loading) return true;
     if (!form.amount || form.amount < minDonate) return true;
-    if (!form.message.trim()) return true;
+    if (!form.message.trim() && activeTab !== 'voice') return true; // ← UBAH INI
 
     if (activeTab === 'mediashare') {
-      // nominal harus cukup trigger
       if (!eligibleTrigger) return true;
-      // link media wajib diisi
       if (!mediaUrl.trim()) return true;
     }
 
     if (activeTab === 'voice') {
-      // voice url wajib ada (sudah direkam/upload)
       if (!form.voiceUrl?.trim()) return true;
     }
 
@@ -1038,7 +1035,7 @@ const SupporterPage = () => {
   const submitHint = (() => {
     if (!form.amount || form.amount < minDonate)
       return `Masukkan nominal min. Rp ${Number(minDonate).toLocaleString('id-ID')}`;
-    if (!form.message.trim())
+    if (!form.message.trim() && activeTab !== 'voice') // ← UBAH INI
       return 'Pesan dukungan tidak boleh kosong';
     if (activeTab === 'mediashare') {
       if (!eligibleTrigger)
@@ -1181,11 +1178,11 @@ const SupporterPage = () => {
                 Pesan Dukungan
               </label>
               <textarea
-                value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-                className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 min-h-[90px] outline-none transition-all resize-none text-slate-700 dark:text-white dark:placeholder:text-slate-500"
-                placeholder="Semangat terus bang! 🔥"
-              />
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 min-h-[90px] outline-none transition-all resize-none text-slate-700 dark:text-white dark:placeholder:text-slate-500"
+                  placeholder={activeTab === 'voice' ? 'Pesan teks (opsional untuk voice)' : 'Semangat terus bang! 🔥'}
+                />
             </div>
 
             {/* ═══════════════════════════════════════════════
