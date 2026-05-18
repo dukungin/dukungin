@@ -1283,133 +1283,123 @@ const AdminWithdrawalPage = () => {
 
 // DurationSettings.jsx
 const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
-  const formatRupiah = (num) => new Intl.NumberFormat('id-ID').format(num || 0);
-
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-6 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-10">
+    <div className="bg-white dark:bg-slate-900 rounded-none p-5 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-8">
+      
       <SectionHeader 
-        icon={<Timer size={24} />} 
-        title="Pengaturan Durasi Tampil" 
-        color="bg-gradient-to-br from-amber-500 to-orange-500" 
+        icon={<Timer size={22} />} 
+        title="Pengaturan Durasi Alert" 
+        color="bg-amber-500" 
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
-        {/* ==================== ALERT BIASA ==================== */}
-        <div className="space-y-6 border border-slate-100 dark:border-slate-700 p-6 rounded-none">
+      <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+        Atur berapa lama alert muncul berdasarkan nominal donasi.
+      </p>
+
+      <div className="space-y-10">
+
+        {/* ALERT BIASA */}
+        <div className="space-y-5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-amber-100 dark:bg-amber-900/50 rounded-none flex items-center justify-center text-xl">🔔</div>
-            <div>
-              <h4 className="font-black text-lg">Alert Biasa</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Donasi tanpa media</p>
-            </div>
+            <div className="text-2xl">🔔</div>
+            <h4 className="font-black text-lg">Alert Biasa</h4>
           </div>
 
-          <div className="space-y-5">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-black text-slate-400 dark:text-slate-500 block mb-2">DURASI BASE</label>
-              <div className="flex items-center gap-3">
+              <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar</label>
+              <div className="flex items-center gap-2">
                 <input
                   type="number"
                   value={settings.alertBaseDuration || 8}
                   onChange={(e) => onChange('alertBaseDuration', Number(e.target.value))}
-                  className="w-24 text-center text-3xl font-black bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                  className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
-                <span className="text-slate-500 font-medium">detik</span>
+                <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span>
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-black text-slate-400 dark:text-slate-500 block mb-2">
-                TAMBAHAN SETIAP
-              </label>
-              <div className="flex items-center gap-3">
+              <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
+              <div className="flex items-center gap-2">
                 <input
                   type="number"
                   value={settings.alertExtraPerAmount || 10000}
                   onChange={(e) => onChange('alertExtraPerAmount', Number(e.target.value))}
-                  className="flex-1 text-center text-xl font-bold bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
-                  placeholder="10000"
+                  className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
-                <span className="text-slate-400">→</span>
+                <span className="text-amber-500 font-bold">→</span>
                 <input
                   type="number"
                   value={settings.alertExtraDuration || 5}
                   onChange={(e) => onChange('alertExtraDuration', Number(e.target.value))}
-                  className="w-28 text-center text-xl font-bold bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                  className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
-                <span className="text-slate-500 font-medium">detik</span>
+                <span className="text-slate-500 text-sm">detik</span>
               </div>
-              <p className="text-[10px] text-slate-400 mt-2">
-                Contoh: Rp10.000 → +5 detik
-              </p>
             </div>
           </div>
         </div>
 
-        {/* ==================== MEDIA SHARE ==================== */}
-        <div className="space-y-6 border border-slate-100 dark:border-slate-700 p-6 rounded-none">
+        {/* MEDIA SHARE */}
+        <div className="space-y-5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-purple-100 dark:bg-purple-900/50 rounded-none flex items-center justify-center text-xl">📺</div>
-            <div>
-              <h4 className="font-black text-lg">Media Share</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Donasi dengan gambar/video</p>
-            </div>
+            <div className="text-2xl">📺</div>
+            <h4 className="font-black text-lg">Media Share</h4>
           </div>
 
-          <div className="space-y-5">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-black text-slate-400 dark:text-slate-500 block mb-2">DURASI BASE</label>
-              <div className="flex items-center gap-3">
+              <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar</label>
+              <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.mediaShareBaseDuration || 12}
+                  value={settings.mediaShareBaseDuration || 15}
                   onChange={(e) => onChange('mediaShareBaseDuration', Number(e.target.value))}
-                  className="w-24 text-center text-3xl font-black bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                  className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
-                <span className="text-slate-500 font-medium">detik</span>
+                <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span>
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-black text-slate-400 dark:text-slate-500 block mb-2">
-                TAMBAHAN SETIAP
-              </label>
-              <div className="flex items-center gap-3">
+              <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
+              <div className="flex items-center gap-2">
                 <input
                   type="number"
                   value={settings.mediaShareExtraPerAmount || 10000}
                   onChange={(e) => onChange('mediaShareExtraPerAmount', Number(e.target.value))}
-                  className="flex-1 text-center text-xl font-bold bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                  className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
-                <span className="text-slate-400">→</span>
+                <span className="text-purple-500 font-bold">→</span>
                 <input
                   type="number"
                   value={settings.mediaShareExtraDuration || 8}
                   onChange={(e) => onChange('mediaShareExtraDuration', Number(e.target.value))}
-                  className="w-28 text-center text-xl font-bold bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                  className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
-                <span className="text-slate-500 font-medium">detik</span>
+                <span className="text-slate-500 text-sm">detik</span>
               </div>
-              <p className="text-[10px] text-slate-400 mt-2">
-                Biasanya lebih lama karena ada media
-              </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Preview Info */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-none border border-dashed border-slate-200 dark:border-slate-700">
-        <p className="text-xs font-black text-slate-400 mb-3">CONTOH PERHITUNGAN</p>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <span className="text-amber-600 font-bold">Alert Biasa</span><br />
-            Rp50.000 = {Math.ceil(50000 / (settings.alertExtraPerAmount || 10000)) * (settings.alertExtraDuration || 5) + (settings.alertBaseDuration || 8)} detik
+      {/* Contoh Perhitungan */}
+      <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-none text-sm border border-dashed border-slate-200 dark:border-slate-700">
+        <p className="font-black text-xs text-slate-400 mb-3">CONTOH PERHITUNGAN</p>
+        <div className="space-y-2">
+          <div className="flex justify-between">
+            <span>Rp25.000 — Alert Biasa</span>
+            <span className="font-bold text-amber-600">
+              {(settings.alertBaseDuration || 8) + Math.floor(25000 / (settings.alertExtraPerAmount || 10000)) * (settings.alertExtraDuration || 5)} detik
+            </span>
           </div>
-          <div>
-            <span className="text-purple-600 font-bold">Media Share</span><br />
-            Rp50.000 = {Math.ceil(50000 / (settings.mediaShareExtraPerAmount || 10000)) * (settings.mediaShareExtraDuration || 8) + (settings.mediaShareBaseDuration || 12)} detik
+          <div className="flex justify-between">
+            <span>Rp50.000 — Media Share</span>
+            <span className="font-bold text-purple-600">
+              {(settings.mediaShareBaseDuration || 15) + Math.floor(50000 / (settings.mediaShareExtraPerAmount || 10000)) * (settings.mediaShareExtraDuration || 8)} detik
+            </span>
           </div>
         </div>
       </div>
@@ -1417,13 +1407,9 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
       <button
         onClick={() => saveSettingsMutation.mutate(settings)}
         disabled={saveSettingsMutation.isPending}
-        className="w-full py-4 bg-gradient-to-r from-amber-600 to-orange-600 hover:brightness-105 text-white font-black text-lg rounded-none transition-all active:scale-[0.985] shadow-lg"
+        className="w-full py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-black rounded-none hover:brightness-105 active:scale-[0.98] transition-all shadow"
       >
-        {saveSettingsMutation.isPending ? (
-          <>Menyimpan Durasi...</>
-        ) : (
-          <>💾 Simpan Pengaturan Durasi</>
-        )}
+        {saveSettingsMutation.isPending ? "Menyimpan..." : "💾 Simpan Pengaturan Durasi"}
       </button>
     </div>
   );
@@ -2952,15 +2938,12 @@ export const DashboardStreamer = () => {
                   />
 
                   {/* ── Durasi ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
-                    <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
-                    {/* <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p> */}
-                    <DurationSettings 
-                      settings={settings} 
-                      onChange={upd} 
-                      saveSettingsMutation={saveSettingsMutation} 
-                    />
-                  </div>
+                  {/* <ddiv> */}
+                  <DurationSettings 
+                    settings={settings} 
+                    onChange={upd} 
+                    saveSettingsMutation={saveSettingsMutation} 
+                  />
 
                   {/* ── Media ── */}
                   <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
