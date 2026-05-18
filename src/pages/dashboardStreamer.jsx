@@ -1281,49 +1281,149 @@ const AdminWithdrawalPage = () => {
 
 // ─── DurationSettings ──────────────────────────────────────────────────────
 
+// DurationSettings.jsx
 const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
-  return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
-      <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil Alert" color="bg-amber-500" />
+  const formatRupiah = (num) => new Intl.NumberFormat('id-ID').format(num || 0);
 
-      <div className="space-y-8">
-        {/* Alert Biasa */}
-        <div>
-          <label className="block text-sm font-black mb-3">Alert Biasa (per Rp 1.000)</label>
-          <div className="flex items-center gap-4">
-            <input
-              type="number"
-              value={settings.alertDurationPerThousand || 10}
-              onChange={(e) => onChange('alertDurationPerThousand', Number(e.target.value))}
-              className="w-24 p-4 text-center text-2xl font-black bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none"
-            />
-            <span className="text-slate-500 dark:text-slate-400 font-medium">detik</span>
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-none p-6 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-10">
+      <SectionHeader 
+        icon={<Timer size={24} />} 
+        title="Pengaturan Durasi Tampil" 
+        color="bg-gradient-to-br from-amber-500 to-orange-500" 
+      />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        {/* ==================== ALERT BIASA ==================== */}
+        <div className="space-y-6 border border-slate-100 dark:border-slate-700 p-6 rounded-none">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-amber-100 dark:bg-amber-900/50 rounded-none flex items-center justify-center text-xl">🔔</div>
+            <div>
+              <h4 className="font-black text-lg">Alert Biasa</h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Donasi tanpa media</p>
+            </div>
           </div>
-          <p className="text-xs text-slate-400 mt-2">Contoh: 10 = Rp10.000 → 100 detik</p>
+
+          <div className="space-y-5">
+            <div>
+              <label className="text-xs font-black text-slate-400 dark:text-slate-500 block mb-2">DURASI BASE</label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="number"
+                  value={settings.alertBaseDuration || 8}
+                  onChange={(e) => onChange('alertBaseDuration', Number(e.target.value))}
+                  className="w-24 text-center text-3xl font-black bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                />
+                <span className="text-slate-500 font-medium">detik</span>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-black text-slate-400 dark:text-slate-500 block mb-2">
+                TAMBAHAN SETIAP
+              </label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="number"
+                  value={settings.alertExtraPerAmount || 10000}
+                  onChange={(e) => onChange('alertExtraPerAmount', Number(e.target.value))}
+                  className="flex-1 text-center text-xl font-bold bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                  placeholder="10000"
+                />
+                <span className="text-slate-400">→</span>
+                <input
+                  type="number"
+                  value={settings.alertExtraDuration || 5}
+                  onChange={(e) => onChange('alertExtraDuration', Number(e.target.value))}
+                  className="w-28 text-center text-xl font-bold bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                />
+                <span className="text-slate-500 font-medium">detik</span>
+              </div>
+              <p className="text-[10px] text-slate-400 mt-2">
+                Contoh: Rp10.000 → +5 detik
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Media Share */}
-        <div>
-          <label className="block text-sm font-black mb-3">Media Share (per Rp 1.000)</label>
-          <div className="flex items-center gap-4">
-            <input
-              type="number"
-              value={settings.mediaShareDurationPerThousand || 15}
-              onChange={(e) => onChange('mediaShareDurationPerThousand', Number(e.target.value))}
-              className="w-24 p-4 text-center text-2xl font-black bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none"
-            />
-            <span className="text-slate-500 dark:text-slate-400 font-medium">detik</span>
+        {/* ==================== MEDIA SHARE ==================== */}
+        <div className="space-y-6 border border-slate-100 dark:border-slate-700 p-6 rounded-none">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-purple-100 dark:bg-purple-900/50 rounded-none flex items-center justify-center text-xl">📺</div>
+            <div>
+              <h4 className="font-black text-lg">Media Share</h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Donasi dengan gambar/video</p>
+            </div>
           </div>
-          <p className="text-xs text-slate-400 mt-2">Biasanya lebih lama karena ada media</p>
+
+          <div className="space-y-5">
+            <div>
+              <label className="text-xs font-black text-slate-400 dark:text-slate-500 block mb-2">DURASI BASE</label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="number"
+                  value={settings.mediaShareBaseDuration || 12}
+                  onChange={(e) => onChange('mediaShareBaseDuration', Number(e.target.value))}
+                  className="w-24 text-center text-3xl font-black bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                />
+                <span className="text-slate-500 font-medium">detik</span>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-black text-slate-400 dark:text-slate-500 block mb-2">
+                TAMBAHAN SETIAP
+              </label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="number"
+                  value={settings.mediaShareExtraPerAmount || 10000}
+                  onChange={(e) => onChange('mediaShareExtraPerAmount', Number(e.target.value))}
+                  className="flex-1 text-center text-xl font-bold bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                />
+                <span className="text-slate-400">→</span>
+                <input
+                  type="number"
+                  value={settings.mediaShareExtraDuration || 8}
+                  onChange={(e) => onChange('mediaShareExtraDuration', Number(e.target.value))}
+                  className="w-28 text-center text-xl font-bold bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none p-4"
+                />
+                <span className="text-slate-500 font-medium">detik</span>
+              </div>
+              <p className="text-[10px] text-slate-400 mt-2">
+                Biasanya lebih lama karena ada media
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Preview Info */}
+      <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-none border border-dashed border-slate-200 dark:border-slate-700">
+        <p className="text-xs font-black text-slate-400 mb-3">CONTOH PERHITUNGAN</p>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="text-amber-600 font-bold">Alert Biasa</span><br />
+            Rp50.000 = {Math.ceil(50000 / (settings.alertExtraPerAmount || 10000)) * (settings.alertExtraDuration || 5) + (settings.alertBaseDuration || 8)} detik
+          </div>
+          <div>
+            <span className="text-purple-600 font-bold">Media Share</span><br />
+            Rp50.000 = {Math.ceil(50000 / (settings.mediaShareExtraPerAmount || 10000)) * (settings.mediaShareExtraDuration || 8) + (settings.mediaShareBaseDuration || 12)} detik
+          </div>
         </div>
       </div>
 
       <button
         onClick={() => saveSettingsMutation.mutate(settings)}
         disabled={saveSettingsMutation.isPending}
-        className="w-full py-4 bg-amber-600 hover:bg-amber-700 text-white font-black rounded-none transition-all"
+        className="w-full py-4 bg-gradient-to-r from-amber-600 to-orange-600 hover:brightness-105 text-white font-black text-lg rounded-none transition-all active:scale-[0.985] shadow-lg"
       >
-        {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Pengaturan Durasi'}
+        {saveSettingsMutation.isPending ? (
+          <>Menyimpan Durasi...</>
+        ) : (
+          <>💾 Simpan Pengaturan Durasi</>
+        )}
       </button>
     </div>
   );
@@ -2855,7 +2955,11 @@ export const DashboardStreamer = () => {
                   <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
                     {/* <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p> */}
-                    <DurationSettings saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
+                    <DurationSettings 
+                      settings={settings} 
+                      onChange={upd} 
+                      saveSettingsMutation={saveSettingsMutation} 
+                    />
                   </div>
 
                   {/* ── Media ── */}
