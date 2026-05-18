@@ -568,12 +568,26 @@ export const WithdrawPage = () => {
   const fee = Math.round(amt * FEE_PERCENT); // potongan 2.5%
 
   const handleSubmit = () => {
-    if (!formData.amount || isNaN(amt) || amt <= 0) return alert('Masukkan nominal yang valid');
-    if (balance < MIN_SALDO) return alert(`Saldo minimum Rp ${formatRupiah(MIN_SALDO)}`);
-    if (amt < MIN_TARIK)     return alert(`Minimal penarikan Rp ${formatRupiah(MIN_TARIK)}`);
-    if (amt > MAX_TARIK)     return alert(`Maksimal penarikan Rp ${formatRupiah(MAX_TARIK)}`);
-    if (amt > balance)       return alert(`Saldo tidak mencukupi. Total yang dibutuhkan Rp ${formatRupiah(amt)} (termasuk fee 2.5% + Rp 5.000)`);
-    if (!formData.accountNumber || !formData.accountName) return alert('Lengkapi data rekening / e-wallet');
+    if (!formData.amount || isNaN(amt) || amt <= 0) 
+      return alert('Masukkan nominal yang valid');
+
+    if (balance < MIN_SALDO) 
+      return alert(`Saldo minimum Rp ${formatRupiah(MIN_SALDO)}`);
+
+    if (amt < MIN_TARIK)     
+      return alert(`Minimal penarikan Rp ${formatRupiah(MIN_TARIK)}`);
+
+    if (amt > MAX_TARIK)     
+      return alert(`Maksimal penarikan Rp ${formatRupiah(MAX_TARIK)}`);
+
+    const totalNeeded = amt + ADMIN_FEE; // Hanya 5k yang pasti dipotong
+
+    if (amt > balance)       
+      return alert(`Saldo tidak mencukupi. Total yang dibutuhkan Rp ${formatRupiah(totalNeeded)} (Rp ${formatRupiah(amt)} + Rp 5.000 admin)`);
+
+    if (!formData.accountNumber || !formData.accountName) 
+      return alert('Lengkapi data rekening / e-wallet');
+
     withdrawMutation.mutate({ ...formData, paymentMethod: method });
   };
 
@@ -614,8 +628,6 @@ export const WithdrawPage = () => {
             Penarikan diproses manual oleh admin dalam 1×24 jam hari kerja
           </p>
         </div>
-        <img src="/jellyfish.png" alt="icon" className="absolute top-4 md:top-3 right-[-20px] md:right-[-40px] w-[15%] md:w-[17%] -rotate-25 opacity-90" />
-        <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-90" />
       </div>
 
       {/* ── Banner saldo tidak cukup ── */}
@@ -757,24 +769,16 @@ export const WithdrawPage = () => {
             {amt > 0 && (
               <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-none p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">Nominal yang diajukan</span>
-                  <span className="font-black text-slate-800 dark:text-slate-100">Rp {formatRupiah(amt)}</span>
+                  <span>Nominal penarikan</span>
+                  <span className="font-black">Rp {formatRupiah(amt)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">Biaya admin (2.5%)</span>
-                  <span className="font-bold text-red-400">- Rp {formatRupiah(fee)}</span>
+                <div className="flex justify-between text-red-500">
+                  <span>Biaya admin tetap</span>
+                  <span>- Rp {formatRupiah(ADMIN_FEE)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">Biaya admin tetap</span>
-                  <span className="font-bold text-red-400">- Rp {formatRupiah(ADMIN_FEE)}</span>
-                </div>
-                <div className="border-t border-slate-200 dark:border-slate-700 pt-2 flex justify-between text-emerald-500 dark:text-emerald-400">
+                <div className="border-t pt-2 flex justify-between text-emerald-600 font-bold">
                   <span>Yang kamu terima</span>
-                  <span>Rp {formatRupiah(amt - fee - ADMIN_FEE)}</span>
-                </div>
-                <div className="flex justify-between text-xs pt-1">
-                  <span className="text-slate-400 dark:text-slate-500">Saldo yang dipotong</span>
-                  <span className="text-slate-600 dark:text-slate-300">Rp {formatRupiah(amt)}</span>
+                  <span>Rp {formatRupiah(amt - ADMIN_FEE)}</span>
                 </div>
               </div>
             )}

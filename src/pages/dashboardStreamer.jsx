@@ -3116,8 +3116,8 @@ export const DashboardStreamer = () => {
                       <p className="text-slate-200 font-medium text-sm">{user.email}</p>
                     </div>
                   </div>
-                  <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
-                  <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
+                  {/* <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
+                  <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" /> */}
                 </div>
                 
                 {/* ✅ SHOW ALL BADGES - Active & Locked */}
