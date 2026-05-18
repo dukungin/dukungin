@@ -1599,19 +1599,23 @@ const authHeader = () => ({ Authorization: `Bearer ${getToken()}` });
 // ============================================================
 const isDirectVideoUrl = (url) => /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
 
-const isGifUrl = (url) => /\.(gif)(\?.*)?$/i.test(url);
-
 const isYouTubeUrl = (url) => {
   if (!url) return false;
   return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|youtube-nocookie\.com)/i.test(url);
 };
 
-const getMediaType = (url) => {
-  if (!url) return null;
-  if (isYouTubeUrl(url)) return 'youtube';
-  if (isDirectVideoUrl(url)) return 'video';
-  if (isGifUrl(url)) return 'gif';
-  return 'image'; // jpg, png, webp, dll
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return '';
+  if (url.includes('youtu.be')) {
+    const videoId = url.split('youtu.be/')[1]?.split(/[?&]/)[0];
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+  }
+  try {
+    const urlObj = new URL(url);
+    const videoId = urlObj.searchParams.get('v');
+    if (videoId) return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+  } catch { /* fallback */ }
+  return url;
 };
 
 const getYouTubeStartTime = (seconds) => {
@@ -1996,14 +2000,13 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
   useEffect(() => { setPreviewError(false); }, [mediaUrl]);
 
   const mediaType = getMediaType(mediaUrl);
-  const isGif = mediaType === 'gif';
   const hasPreview = mediaUrl && !previewError;
   const allowImage = trigger.mediaType === 'image' || trigger.mediaType === 'both';
   const allowVideo = trigger.mediaType === 'video' || trigger.mediaType === 'both';
 
   const placeholderText =
     allowImage && allowVideo
-      ? 'https://i.imgur.com/xxxx.gif atau https://youtu.be/xxxx'
+      ? 'https://youtu.be/xxxx atau https://i.imgur.com/xxxx.jpg'
       : allowVideo
         ? 'https://youtu.be/xxxx atau https://example.com/video.mp4'
         : 'https://i.imgur.com/contoh-gambar.jpg';
@@ -2094,11 +2097,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
             className="rounded-none overflow-hidden border border-indigo-100 dark:border-indigo-800 bg-slate-900 relative"
             style={{ maxHeight: 200 }}
           >
-            {
-            mediaType === 'gif' ? (
-              <img src={mediaUrl} alt="GIF preview" className="w-full object-cover" style={{ maxHeight: 200 }} />
-            ) :
-            mediaType === 'youtube' ? (
+            {mediaType === 'youtube' ? (
               <iframe
                 src={getYouTubeEmbedUrlWithTime(mediaUrl, startTime)}
                 className="w-full aspect-video"
@@ -2110,15 +2109,10 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
               <video ref={videoRef} src={mediaUrl} autoPlay muted loop playsInline
                 className="w-full object-cover" style={{ maxHeight: 200 }}
                 onError={() => setPreviewError(true)} />
-            ): mediaType === 'gif' || mediaType === 'image' ? (
-              <img 
-                src={mediaUrl} 
-                alt="Media preview" 
-                className="w-full object-cover" 
-                style={{ maxHeight: 200 }} 
-                onError={() => setPreviewError(true)} 
-              />
-            ) : null}
+            ) : (
+              <img src={mediaUrl} alt="Media preview" className="w-full object-cover"
+                style={{ maxHeight: 200 }} onError={() => setPreviewError(true)} />
+            )}
             <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-black/60 backdrop-blur-sm">
               <p className="text-[10px] text-white/90 font-bold">
                 {mediaType === 'youtube' ? (
@@ -2467,12 +2461,10 @@ const SupporterPage = () => {
 
     try {
       setLoading(true);
+
       const isMediaShareTab = activeTab === 'mediashare';
-      const mediaTypeDetected = getMediaType(mediaUrl?.trim());
-      const isGif = mediaTypeDetected === 'gif';
-          // GIF selalu masuk ke alert, bukan media share
-      const hasMedia = mediaUrl?.trim() && (isMediaShareTab || isGif);
-      const detectedMediaType = hasMedia ? mediaTypeDetected : null;
+      const hasMedia = isMediaShareTab && mediaUrl.trim();
+      const detectedMediaType = hasMedia ? getMediaType(mediaUrl.trim()) : null;
 
       if (hasMedia && eligibleTrigger) {
         if (eligibleTrigger.mediaType === 'image' && detectedMediaType !== 'image') {
@@ -2484,24 +2476,21 @@ const SupporterPage = () => {
       }
 
       const payload = {
-        amount: Math.round(Number(form.amount)),
-        donorName: form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
-        message: form.message,
-        userId: streamer._id,
-        email: form.email.trim() || 'guest@mail.com',
-        donorUserId: authPayload?.id,
-
-        // Media Logic
-        mediaUrl: hasMedia ? mediaUrl.trim() : null,
-        mediaType: detectedMediaType,
-        
-        // GIF tidak dianggap Media Share
-        isMediaShare: isMediaShareTab && !isGif,
-
-        startTime: hasMedia && isYouTubeUrl(mediaUrl) ? startTime : 0,
-
-        soundUrl: activeTab === 'alert' ? (form.soundUrl || null) : null,
-        voiceUrl: activeTab === 'voice' ? (form.voiceUrl || null) : null,
+        amount:       Math.round(Number(form.amount)),
+        donorName:    form.isAnonymous ? 'Anonim' : form.donorName || 'Anonim',
+        message:      form.message,
+        userId:       streamer._id,
+        email:        form.email.trim() || 'guest@mail.com',
+        donorUserId:  authPayload?.id,
+        // Media share
+        mediaUrl:     hasMedia ? mediaUrl.trim() : null,
+        mediaType:    detectedMediaType,
+        isMediaShare: isMediaShareTab,   // ← flag untuk queue routing
+        startTime:    hasMedia && isYouTubeUrl(mediaUrl) ? startTime : 0,
+        // Alert sound (hanya kalau tab alert)
+        soundUrl:     activeTab === 'alert' ? (form.soundUrl || null) : null,
+        // Voice (hanya kalau tab voice)
+        voiceUrl:     activeTab === 'voice' ? (form.voiceUrl || null) : null,
       };
 
       const res = await axios.post(`${BASE_URL}/api/midtrans/create-invoice`, payload);
@@ -2563,13 +2552,10 @@ const SupporterPage = () => {
     if (!form.message.trim()) return true;
 
     if (activeTab === 'mediashare') {
-      if (!eligibleTrigger) return alert('Nominal belum cukup untuk Media Share');
-      if (!mediaUrl.trim()) return alert('Link media wajib diisi');
-      
-      const type = getMediaType(mediaUrl.trim());
-      if (type === 'gif') {
-        return alert('GIF hanya bisa dikirim melalui tab Alert, bukan Media Share');
-      }
+      // nominal harus cukup trigger
+      if (!eligibleTrigger) return true;
+      // link media wajib diisi
+      if (!mediaUrl.trim()) return true;
     }
 
     if (activeTab === 'voice') {

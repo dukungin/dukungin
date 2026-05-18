@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 export const useTheme = () => {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('sawer-theme') || 'light';
+    return localStorage.getItem('sawer-theme') || 'dark';
   });
 
   useEffect(() => {

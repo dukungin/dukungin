@@ -1,7 +1,9 @@
 // ─── AdminWithdrawalPage ──────────────────────────────────────────────────────
 // Paste ini sebagai pengganti komponen AdminWithdrawalPage di DashboardStreamer.jsx
 
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { RefreshCw } from "lucide-react";
+import { useState } from "react";
 
 export const AdminWithdrawalPage = () => {
   const queryClient = useQueryClient();
@@ -19,6 +21,7 @@ export const AdminWithdrawalPage = () => {
   });
 
   const withdrawals = data?.withdrawals || [];
+  console.log('withdraw', withdrawals)
   const pagination  = data?.pagination  || {};
 
   const updateMutation = useMutation({

@@ -46,6 +46,8 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     { id: 'myDonations', label: 'Berdonasi',        icon: <Heart size={20} /> },   
     { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },
     { id: 'poll',        label: 'Poll & Voting',    icon: <Vote size={20} /> },
+    { id: 'feeConfig',   label: 'Konfigurasi Fee',  icon: <ReceiptText size={20} /> }, // ← TAMBAHKAN INI
+
     // Tambahkan property 'mobileOnly' pada profile
     { id: 'profile',     label: 'Profile Saya',     icon: <User size={20} /> },
     { id: 'subathon',    label: 'Subathon',         icon: <Timer size={20} /> },

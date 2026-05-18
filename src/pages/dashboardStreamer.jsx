@@ -53,6 +53,7 @@ import React from 'react';
 import AudioManager from '../components/AudioManager';
 import toast from 'react-hot-toast';
 import { MediaShareControl } from '../components/mediaShareController';
+import { FeeConfigPage } from './feeConfig';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -2408,7 +2409,7 @@ export const DashboardStreamer = () => {
 
   useEffect(() => {
     const tabFromUrl = searchParams.get('tab');
-    if (tabFromUrl && ['settings','history','wallet','community','myDonations','profile','poll','subathon','milestones','leaderboard','contact','ghostAlert','admin'].includes(tabFromUrl)) {
+    if (tabFromUrl && ['settings','history','wallet','community', 'feeConfig', 'myDonations','profile','poll','subathon','milestones','leaderboard','contact','ghostAlert','admin'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [searchParams]);
@@ -2539,7 +2540,7 @@ export const DashboardStreamer = () => {
   };
 
   const TAB_TITLE = {
-    settings: 'Dashboard', history: 'Riwayat', wallet: 'Wallet', community: 'Community',
+    settings: 'Dashboard', history: 'Riwayat', feeConfig:   'Konfigurasi Fee', wallet: 'Wallet', community: 'Community',
     myDonations: 'Riwayat Berdonasi',     
     profile: 'Profil', poll: 'Poll & Voting', subathon: 'Subathon', milestones: 'Milestones',
     leaderboard: 'Leaderboard', contact: 'Contact', ghostAlert: 'Notif Hantu', admin: 'Admin',
@@ -2769,15 +2770,6 @@ export const DashboardStreamer = () => {
                           ))}
                         </div>
                       </div>
-                      {/* <div className="md:col-span-2">
-                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Posisi Overlay di Layar</label>
-                        <select value={settings.overlayPosition || 'bottom-right'} onChange={e => upd('overlayPosition', e.target.value)}
-                          className="w-full px-5 py-3 mt-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-indigo-500 transition-all">
-                          <option value="top-left">Kiri Atas</option><option value="top-right">Kanan Atas</option>
-                          <option value="bottom-left">Kiri Bawah</option><option value="bottom-right">Kanan Bawah</option>
-                          <option value="top-center">Tengah Atas</option><option value="bottom-center">Tengah Bawah</option>
-                        </select>
-                      </div> */}
                       <div className="md:col-span-2 w-full flex flex-col gap-3">
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Animasi Masuk</label>
                         <select value={settings.animation} onChange={e => upd('animation', e.target.value)}
@@ -3310,6 +3302,11 @@ export const DashboardStreamer = () => {
             )}
 
             {activeTab === 'wallet' && <WithdrawPage />}
+            {activeTab === 'feeConfig' && (
+              <motion.div key="feeConfig" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <FeeConfigPage />
+              </motion.div>
+            )}
             {activeTab === 'ghostAlert' && isSuperAdmin && <GhostAlertPage />}
 
             {activeTab === 'admin' && isSuperAdmin && (
