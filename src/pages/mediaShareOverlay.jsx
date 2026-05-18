@@ -138,7 +138,9 @@
           audioRef.current.play().catch(() => {});
         }
 
-        const duration = config.getMediaShareDuration?.(alert.amount) || 12000;
+        const duration = configRef.current?.getMediaShareDuration 
+          ? configRef.current.getMediaShareDuration(donationWithTime.amount) 
+          : 12000;
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
         if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
 
