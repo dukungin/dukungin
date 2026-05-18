@@ -155,8 +155,6 @@
           audioRef.current.play().catch(() => {});
         }
 
-        let duration = 15000; // default
-
         const duration = calculateMediaShareDuration(configRef.current, donationWithTime.amount);
 
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
