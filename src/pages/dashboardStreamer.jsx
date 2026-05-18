@@ -1303,14 +1303,15 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
             <h4 className="font-black text-lg">Alert Biasa</h4>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Diubah dari grid-cols-2 menjadi 1 kolom saja (space-y-4) */}
+          <div className="flex flex-col gap-4">
             <div className='w-full'>
               <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar</label>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.alertBaseDuration ?? 10}   // ← Diubah ke 10
-                  onChange={(e) => onChange('alertBaseDuration', Number(e.target.value))}
+                  value={settings.alertBaseDuration || ''}   // Menggunakan || '' agar bisa dihapus kosong
+                  onChange={(e) => onChange('alertBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
                 <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span>
@@ -1322,8 +1323,8 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.alertExtraPerAmount ?? 10000}
-                  onChange={(e) => onChange('alertExtraPerAmount', Number(e.target.value))}
+                  value={settings.alertExtraPerAmount || ''} // Menggunakan || '' agar bisa dihapus kosong
+                  onChange={(e) => onChange('alertExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
                 <span className="dark:text-white text-slate-900 font-bold">
@@ -1331,8 +1332,8 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
                 </span>
                 <input
                   type="number"
-                  value={settings.alertExtraDuration ?? 5}
-                  onChange={(e) => onChange('alertExtraDuration', Number(e.target.value))}
+                  value={settings.alertExtraDuration || ''}  // Menggunakan || '' agar bisa dihapus kosong
+                  onChange={(e) => onChange('alertExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
                 <span className="text-slate-500 text-sm">detik</span>
@@ -1348,14 +1349,15 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
             <h4 className="font-black text-lg">Media Share</h4>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Diubah dari grid-cols-2 menjadi 1 kolom saja (space-y-4) */}
+          <div className="flex flex-col gap-4">
             <div>
               <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar</label>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.mediaShareBaseDuration ?? 15}   // ← Diubah ke 15
-                  onChange={(e) => onChange('mediaShareBaseDuration', Number(e.target.value))}
+                  value={settings.mediaShareBaseDuration || ''} // Menggunakan || '' agar bisa dihapus kosong
+                  onChange={(e) => onChange('mediaShareBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
                 <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span>
@@ -1367,8 +1369,8 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  value={settings.mediaShareExtraPerAmount ?? 10000}
-                  onChange={(e) => onChange('mediaShareExtraPerAmount', Number(e.target.value))}
+                  value={settings.mediaShareExtraPerAmount || ''} // Menggunakan || '' agar bisa dihapus kosong
+                  onChange={(e) => onChange('mediaShareExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
                 <span className="dark:text-white text-slate-900 font-bold">
@@ -1376,8 +1378,8 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
                 </span>
                 <input
                   type="number"
-                  value={settings.mediaShareExtraDuration ?? 10}   // ← Diubah ke 10
-                  onChange={(e) => onChange('mediaShareExtraDuration', Number(e.target.value))}
+                  value={settings.mediaShareExtraDuration || ''}  // Menggunakan || '' agar bisa dihapus kosong
+                  onChange={(e) => onChange('mediaShareExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-3"
                 />
                 <span className="text-slate-500 text-sm">detik</span>
@@ -1394,15 +1396,15 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
           <div className="flex justify-between">
             <span>Rp25.000 — Alert Biasa</span>
             <span className="font-bold text-amber-600">
-              {(settings.alertBaseDuration ?? 10) + 
-               Math.floor(25000 / (settings.alertExtraPerAmount ?? 10000)) * (settings.alertExtraDuration ?? 5)} detik
+              {(Number(settings.alertBaseDuration) || 0) + 
+               Math.floor(25000 / (Number(settings.alertExtraPerAmount) || 1)) * (Number(settings.alertExtraDuration) || 0)} detik
             </span>
           </div>
           <div className="flex justify-between">
             <span>Rp50.000 — Media Share</span>
             <span className="font-bold text-purple-600">
-              {(settings.mediaShareBaseDuration ?? 15) + 
-               Math.floor(50000 / (settings.mediaShareExtraPerAmount ?? 10000)) * (settings.mediaShareExtraDuration ?? 10)} detik
+              {(Number(settings.mediaShareBaseDuration) || 0) + 
+               Math.floor(50000 / (Number(settings.mediaShareExtraPerAmount) || 1)) * (Number(settings.mediaShareExtraDuration) || 0)} detik
             </span>
           </div>
         </div>
