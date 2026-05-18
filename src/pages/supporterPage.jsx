@@ -16,7 +16,7 @@ import {
   User,
   Video, X,
 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Badge from '../components/badge';
 import { VoiceRecorder } from '../components/voiceOver';
