@@ -131,6 +131,20 @@ const AudioManager = ({
     }
   };
 
+  const saveToServer = async () => {
+    if (uploading) return;
+    try {
+      setUploading(true);
+      await api.put('/api/overlay/settings', { publicSounds });
+      setIsDirty(false);
+      toast.success('✅ Suara tersimpan!');
+    } catch (err) {
+      toast.error('❌ Gagal menyimpan: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const addSound = async () => {
     const name = newSound.name?.trim() || '';
     const url = newSound.url?.trim() || '';
@@ -179,7 +193,7 @@ const AudioManager = ({
       
       // ✅ CALL PARENT HANDLER (akan sync ke localSettings)
       onUpdatePublicSounds([...publicSounds, newSoundObj]);
-      
+      setIsDirty(true); // ← tambahkan ini
       setNewSound({ name: '', url: '', file: null });
       toast.success('✅ Suara ditambahkan!');
       
@@ -203,11 +217,8 @@ const AudioManager = ({
     const sound = publicSounds[index];
     const updated = publicSounds.filter((_, i) => i !== index);
     onUpdatePublicSounds(updated);
-    
-    // Cleanup blob URL
-    if (sound.file) {
-      URL.revokeObjectURL(sound.url);
-    }
+    setIsDirty(true); // ← tambahkan ini
+    if (sound.file) URL.revokeObjectURL(sound.url);
   };
 
   // ✅ PROXY untuk external audio (bypass CORS)
@@ -347,12 +358,12 @@ const AudioManager = ({
                   <button
                     onClick={() => playPreview(getAudioProxyUrl(sound.url))}
                     disabled={previewError}
-                    className={`p-3 h-[40px] cursor-pointer hover:brightness-90 rounded-none shadow-md active:scale-[0.95] transition-all flex-shrink-0 flex items-center justify-center ${
+                    className={`p-3 h-[40px] cursor-pointer hover:brightness-90 rounded-none active:scale-[0.95] transition-all flex-shrink-0 flex items-center justify-center ${
                       playingPreview === sound.url
-                        ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-emerald-500/25'
+                        ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white'
                         : previewError
-                          ? 'bg-red-100 dark:bg-red-900/30 text-red-500 border-2 border-red-200 cursor-not-allowed'
-                          : 'bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white shadow-indigo-500/25'
+                          ? ' text-red-500 border-2 border-red-200 cursor-not-allowed'
+                          : 'text-white shadow-indigo-500/25'
                     }`}
                     title={previewError ? 'Audio tidak bisa diputar (CORS/proxy)' : 'Preview suara'}
                   >
@@ -368,10 +379,10 @@ const AudioManager = ({
                 
                 <button
                   onClick={() => removeSound(index)}
-                  className="p-3 ml-3 h-[40px] cursor-pointer hover:brightness-90 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-none shadow-md hover:shadow-red-500/25 active:scale-[0.95] transition-all flex-shrink-0"
+                  className="p-3 ml-3 h-[40px] cursor-pointer hover:brightness-90 text-red-500 rounded-none shadow-md hover:shadow-red-500/25 active:scale-[0.95] transition-all flex-shrink-0"
                   title="Hapus suara"
                 >
-                  <Trash2 size={16} />
+                  <Trash2 size={18} />
                 </button>
               </motion.div>
             ))}

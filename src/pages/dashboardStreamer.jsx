@@ -901,17 +901,17 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
         ))}
       </div>
       {mode === 'preset' && (
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 uppercase md:grid-cols-4 gap-2">
           <button onClick={() => onChange('')}
-            className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${!value ? 'border-slate-600 bg-slate-800 text-white shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-400'}`}>
-            <span className="text-lg">🔇</span><span>Tanpa Suara</span>
+            className={`cursor-pointer active:scale-[0.97] flex items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${!value ? 'border-slate-600 bg-slate-800 text-white shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
+            <span className="text-lg">🔇</span><span className='text-xs md:text-sm uppercase'>Tanpa Suara</span>
           </button>
           {SOUND_PRESETS.map(preset => (
             <button key={preset.url} onClick={() => { onChange(preset.url); playPreview(preset.url); }}
-              className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${value === preset.url ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
+              className={`cursor-pointer active:scale-[0.97] flex items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${value === preset.url ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
               <span className="text-lg">{preset.label.split(' ')[1]}</span>
-              <span>{preset.label.split(' ')[0]}</span>
-              <span onClick={e => { e.stopPropagation(); playPreview(preset.url); }} className="text-[9px] font-medium text-slate-400 hover:text-indigo-600 transition-colors">▶ preview</span>
+              <span className='text-xs md:text-sm uppercase'>{preset.label.split(' ')[0]}</span>
+              {/* <span onClick={e => { e.stopPropagation(); playPreview(preset.url); }} className="text-[9px] font-medium text-slate-400 hover:text-indigo-600 transition-colors">▶ preview</span> */}
             </button>
           ))}
         </div>
@@ -924,8 +924,8 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
         <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-none p-3 border border-slate-100 dark:border-slate-700">
           <button onClick={() => playPreview(value)} className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-indigo-600 rounded-none flex items-center justify-center text-white text-xs hover:bg-indigo-700 transition-all flex-shrink-0">▶</button>
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-black text-slate-500 dark:text-slate-400">{SOUND_PRESETS.find(p => p.url === value)?.label || 'Custom Sound'}</p>
-            <p className="text-[9px] text-slate-300 dark:text-slate-600 font-mono truncate">{value}</p>
+            <p className="text-sm font-black text-slate-500 dark:text-slate-400">{SOUND_PRESETS.find(p => p.url === value)?.label || 'Custom Sound'}</p>
+            <p className="text-xs text-slate-300 dark:text-slate-400 mt-1 font-mono truncate">{value}</p>
           </div>
           <button onClick={() => onChange('')} className="cursor-pointer text-slate-300 hover:text-red-400 transition-colors text-sm flex-shrink-0">✕</button>
         </div>
