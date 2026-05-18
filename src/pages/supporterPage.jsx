@@ -12,6 +12,7 @@ import {
   LogOut,
   Mail,
   Mic,
+  Monitor,
   Moon, Sun,
   User,
   Video, X,
@@ -926,55 +927,8 @@ const SupporterPage = () => {
         return alert('Link media wajib diisi untuk Media Share');
     }
 
-    {/* ── TAB: VOICE ── */}
-    {activeTab === 'voice' && (
-      <motion.div
-        key="tab-voice"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        transition={{ duration: 0.2 }}
-        className="space-y-4"
-      >
-        {form.amount < minDonate ? (
-          // Nominal belum cukup — warning
-          <div className="flex items-center gap-3 px-4 py-4 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-200 dark:border-amber-800 rounded-none">
-            <span className="text-2xl flex-shrink-0">🔒</span>
-            <div>
-              <p className="text-xs font-black text-amber-700 dark:text-amber-400">
-                Voice Message belum aktif
-              </p>
-              <p className="text-[10px] text-amber-500 font-medium mt-0.5">
-                Masukkan nominal minimal Rp {Number(minDonate).toLocaleString('id-ID')} untuk merekam suara
-              </p>
-              <button
-                onClick={() => setForm({ ...form, amount: minDonate })}
-                className="mt-2 px-3 py-1 bg-amber-500 text-white text-[10px] font-black rounded-none hover:bg-amber-600 transition-all cursor-pointer"
-              >
-                Set Rp {Number(minDonate).toLocaleString('id-ID')}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 px-3 py-2 bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-none">
-              <Mic size={13} className="text-violet-500 flex-shrink-0" />
-              <p className="text-[10px] font-bold text-violet-600 dark:text-violet-400">
-                Rekam pesan suaramu — max 60 detik
-              </p>
-            </div>
-            <VoiceRecorder
-              onVoiceReady={(url) => setForm(f => ({ ...f, voiceUrl: url || '' }))}
-              maxSeconds={60}
-              disabled={false}
-            />
-          </div>
-        )}
-
-        {/* ── OBS Voice Overlay URL ── */}
-        <VoiceObsUrlInfo streamer={streamer} />
-      </motion.div>
-    )}
+    if (activeTab === 'voice' && !form.voiceUrl?.trim())
+      return alert('Rekam atau upload voice message dulu');
 
     try {
       setLoading(true);
@@ -1347,6 +1301,7 @@ const SupporterPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
+                  className="space-y-4"
                 >
                   {form.amount < minDonate ? (
                     // Nominal belum cukup — warning
@@ -1474,10 +1429,10 @@ const SupporterPage = () => {
               whileTap={!isSubmitDisabled ? { scale: 0.99 } : {}}
               onClick={handleDonate}
               disabled={isSubmitDisabled}
-              className={`w-full py-4 rounded-none font-black text-lg flex items-center justify-center gap-2 transition-all ${
+              className={`w-full py-4 rounded-none font-black text-sm flex items-center justify-center gap-2 transition-all ${
                 isSubmitDisabled
                   ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
-                  : 'cursor-pointer bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:brightness-110'
+                  : 'active:scale-[0.99] cursor-pointer bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:brightness-110'
               }`}
             >
               {loading ? (
