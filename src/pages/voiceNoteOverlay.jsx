@@ -108,37 +108,36 @@ const VoiceNoteOverlay = () => {
     });
 
     socket.on('new-voice-donation', (data) => {
-        if (configRef.current?.overlayEnabled === false) return;
+      if (configRef.current?.overlayEnabled === false) return;
 
-        if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
-        if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
-        stopAudioProgress();
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+      stopAudioProgress();
 
-        // ← FIX: pastikan voiceUrl absolute
-        const absoluteVoiceUrl = data.voiceUrl?.startsWith('http')
-          ? data.voiceUrl
-          : data.voiceUrl ? `${BASE_URL}${data.voiceUrl}` : null;
+      // FIX: pastikan voiceUrl absolute
+      const absoluteVoiceUrl = data.voiceUrl?.startsWith('http')
+        ? data.voiceUrl
+        : data.voiceUrl ? `${BASE_URL}${data.voiceUrl}` : null;
 
-        const donationData = { 
-          ...data, 
-          voiceUrl: absoluteVoiceUrl,
-          receivedAt: data.receivedAt || new Date().toISOString() 
-        };
-        
-        setAlert(donationData);
-        setProgress(100);
-        setAudioProgress(0);
-        setIsPlaying(false);
+      const donationData = {
+        ...data,
+        voiceUrl: absoluteVoiceUrl,
+        receivedAt: data.receivedAt || new Date().toISOString(),
+      };
 
-        const TOTAL_DURATION = 33000;
+      setAlert(donationData);
+      setProgress(100);
+      setAudioProgress(0);
+      setIsPlaying(false);
 
-        setTimeout(() => {
-          if (absoluteVoiceUrl && audioRef.current) {
-            audioRef.current.src = absoluteVoiceUrl;  // ← pakai absoluteVoiceUrl
+      const TOTAL_DURATION = 33000;
+
+      setTimeout(() => {
+        if (absoluteVoiceUrl && audioRef.current) {
+          audioRef.current.src = absoluteVoiceUrl;
           audioRef.current.load();
 
           audioRef.current.onloadedmetadata = () => {
-            // Clamp ke max 30 detik
             setAudioDuration(Math.min(audioRef.current.duration, 30));
           };
           audioRef.current.onplay = () => {
@@ -154,8 +153,8 @@ const VoiceNoteOverlay = () => {
             setIsPlaying(false);
           };
 
-          // Paksa stop setelah 30 detik meski audio lebih panjang
           audioRef.current.play().catch(() => setIsPlaying(false));
+
           setTimeout(() => {
             if (audioRef.current) {
               audioRef.current.pause();
@@ -163,11 +162,11 @@ const VoiceNoteOverlay = () => {
             }
             stopAudioProgress();
             setIsPlaying(false);
-          }, 30000); // ← max 30 detik
+          }, 30000);
         }
       }, 1000);
 
-      // Progress bar & auto dismiss — selalu 33 detik
+      // Progress bar countdown
       const startTime = Date.now();
       progressIntervalRef.current = setInterval(() => {
         const elapsed = Date.now() - startTime;
@@ -176,6 +175,7 @@ const VoiceNoteOverlay = () => {
         if (remaining <= 0) clearInterval(progressIntervalRef.current);
       }, 50);
 
+      // Auto dismiss
       dismissTimerRef.current = setTimeout(() => {
         setAlert(null);
         setProgress(100);
