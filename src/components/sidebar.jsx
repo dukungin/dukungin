@@ -5,6 +5,7 @@ import {
   History,
   Layout,
   LogOut,
+  ReceiptText,
   ShieldAlert,
   Timer,
   TrendingUp,
