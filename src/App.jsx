@@ -19,6 +19,7 @@ import PrivacyPolicy from './pages/privacyPolice';
 import ResetPassword from './pages/resetPassword';
 import SupporterPage from './pages/supporterPage';
 import { Toaster } from 'react-hot-toast';
+import VoiceNoteOverlay from './pages/voiceNoteOverlay';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -94,6 +95,7 @@ function App() {
 
           {/* Overlay OBS */}
           <Route path="/overlay/:token" element={<OverlayAlert />} />
+          <Route path="/overlay/:token/voice" element={<VoiceNoteOverlay />} />
           <Route path="/overlay/:token/mediashare" element={<MediaShareOverlay />} />
 
           {/* Fallback — 404 redirect ke landing */}

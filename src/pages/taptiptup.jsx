@@ -279,7 +279,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
       padding: "18px clamp(27px, 5vw, 40px)",
       background: C.navBg,
       backdropFilter: "blur(12px)",
-      borderBottom: `1px solid ${C.line}`,
+      // borderBottom: `1px solid ${C.line}`,
       transition: "background 0.4s, border-color 0.4s",
     }}>
       <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 16, textDecoration: "none", color: C.text, transition: "color 0.4s" }}>
@@ -367,17 +367,34 @@ function Hero({ C, isDark }) {
         background: C.bg 
       }}
     >
+      {/* Grid Background */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="crossgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path 
+                d="M 40 0 L 0 0 0 40" 
+                fill="none" 
+                stroke={isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.6)"} 
+                strokeWidth="0.5"
+              />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#crossgrid)" />
+        </svg>
+      </div>
+
       {/* Aurora Background Effect */}
       <div 
         className="absolute inset-0 overflow-hidden pointer-events-none" 
-        style={{ zIndex: 0, opacity: isDark ? 0.3 : 0.5 }}
+        style={{ zIndex: 1, opacity: isDark ? 0.3 : 0.5 }}
       >
         <div className="aurora-blob aurora-1" style={{ background: C.lime }} />
         <div className="aurora-blob aurora-2" style={{ background: '#6366f1' }} />
         <div className="aurora-blob aurora-3" style={{ background: '#a855f7' }} />
       </div>
 
-      <div style={{ zIndex: 1, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} className="hero-main-grid relative h-full flex items-center">
+      <div style={{ zIndex: 2, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} className="hero-main-grid relative h-full flex items-center">
         <div className="text-center mx-auto w-full flex flex-col justify-center items-center px-6" style={{ paddingBottom: "0px" }}>
           
           {/* Badge Atas */}
