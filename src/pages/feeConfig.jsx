@@ -168,7 +168,7 @@ export const FeeConfigPage = () => {
     <motion.div className="w-full space-y-5 pb-10" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
       {/* Header */}
       <div className="bg-indigo-600 rounded-none p-6 text-white relative overflow-hidden">
-        <div className="relative z-10">
+        <div className="relative z-2">
           <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">PENGATURAN BIAYA</p>
           <h2 className="text-3xl font-black tracking-tight">Fee Configuration</h2>
           <p className="text-indigo-200 text-sm mt-1">Atur siapa yang menanggung biaya platform</p>
