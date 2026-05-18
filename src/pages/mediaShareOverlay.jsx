@@ -118,10 +118,10 @@
       socket.emit('join-room', token);
       socket.emit('join-room', `${token}-mediashare`);
       
-      console.log(`[MediaShare] 🎬 Joined: ${token}, ${token}-mediashare`);
+      console.log(`[MediaShare] Joined: ${token}, ${token}-mediashare`);
 
       socket.on('new-media-donation', (data) => {
-        console.log('[MediaShare] 🎬 RECEIVED:', data.donorName);
+        console.log('[MediaShare] RECEIVED:', data.donorName);
         if (configRef.current?.overlayEnabled === false) return;
 
         const donationWithTime = {
@@ -138,7 +138,7 @@
           audioRef.current.play().catch(() => {});
         }
 
-        const duration = getAlertDuration(configRef.current, data.amount);
+        const duration = config.getMediaShareDuration?.(alert.amount) || 12000;
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
         if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
 
@@ -314,7 +314,7 @@
                   marginBottom: 6,
                 }}>
                   <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%' }} />
-                  🎬 Media Share
+                  Media Share
                 </div>
 
                 <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
@@ -360,7 +360,7 @@
             }}>
               <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIcon(customIcon, 18)}</span>
               <span style={{ fontSize: 26, fontWeight: 900, color: highlight, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                🎬 Media Share!
+                Media Share!
               </span>
             </div>
             
@@ -401,7 +401,7 @@
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </div>
               <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                🎬 Media
+                Media
               </div>
             </div>
 

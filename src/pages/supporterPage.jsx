@@ -770,9 +770,9 @@ const DonationTabs = ({ activeTab, onTabChange, mediaTriggers, amount, minDonate
                 <span className="text-[8px] opacity-60 font-medium">🔒 {tab.lockMsg}</span>
               )}
               {/* Warning dot — nominal belum cukup tapi belum aktif */}
-              {hasWarning && !isLocked && (
+              {/* {hasWarning && !isLocked && (
                 <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-amber-400 rounded-full" />
-              )}
+              )} */}
             </button>
           );
         })}

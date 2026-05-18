@@ -139,8 +139,7 @@
         
         speakDonation(donationWithTime);
 
-        const duration = getAlertDuration(configRef.current, data.amount);
-
+        const duration = config.getAlertDuration?.(alert.amount) || 8000;
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
         if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
 

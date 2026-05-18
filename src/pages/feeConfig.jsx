@@ -145,7 +145,7 @@ export const FeeConfigPage = () => {
       subtitle: '2.5% dipotong dari saldo streamer',
       desc: 'Donor hanya membayar sesuai nominal yang diketik. Biaya 2.5% akan dipotong otomatis dari saldo kamu saat donasi masuk. Biaya tetap Rp5.000 dibebankan saat penarikan.',
       badge: 'Ramah Donor',
-      badgeColor: 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600',
+      badgeColor: 'bg-indigo-100 dark:bg-white text-slate-900',
       borderActive: 'border-indigo-600',
       bgActive: 'bg-indigo-50 dark:bg-indigo-950/30',
       iconColor: 'bg-indigo-600',
@@ -157,7 +157,7 @@ export const FeeConfigPage = () => {
       subtitle: '2.5% ditambahkan ke nominal donasi',
       desc: 'Donor akan membayar nominal + 2.5%. Streamer menerima persis sesuai nominal yang diinput donor. Biaya tetap Rp5.000 tetap ditanggung streamer saat penarikan.',
       badge: 'Saldo Penuh',
-      badgeColor: 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600',
+      badgeColor: 'bg-emerald-100 dark:bg-white text-slate-900',
       borderActive: 'border-emerald-500',
       bgActive: 'bg-emerald-50 dark:bg-emerald-950/30',
       iconColor: 'bg-emerald-500',
@@ -203,7 +203,7 @@ export const FeeConfigPage = () => {
                   <div className={`${opt.iconColor} p-3 rounded-none text-white shadow-md`}>
                     {opt.icon}
                   </div>
-                  <div className={`px-3 py-1 rounded-none text-[10px] font-black ${opt.badgeColor}`}>
+                  <div className={`px-3 py-1 rounded-none text-[10px] font-bold ${opt.badgeColor}`}>
                     {opt.badge}
                   </div>
                 </div>
