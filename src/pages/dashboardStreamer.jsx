@@ -2586,17 +2586,30 @@ export const DashboardStreamer = () => {
   const settings = localSettings || DEFAULT_SETTINGS;
 
   const upd = useCallback((key, val) => {
+    // Khusus publicSounds harus array
     if (key === 'publicSounds' && !Array.isArray(val)) {
       console.warn(`[upd] publicSounds must be array, got:`, val);
       return;
     }
-    
-    setLocalSettings(s => ({ 
-      ...s, 
-      [key]: val 
-    }));
-    
-    // ✅ AUTO SYNC ke formData jika publicSounds
+
+    setLocalSettings(prev => {
+      const updated = { 
+        ...prev, 
+        [key]: val 
+      };
+
+      // Optional: Auto cleanup jika null/undefined (kembalikan ke default)
+      if (val === null || val === undefined || val === '') {
+        if (key.includes('Duration') || key.includes('PerAmount')) {
+          updated[key] = key.includes('Base') ? 10 : 
+                        key.includes('ExtraDuration') ? 5 : 10000;
+        }
+      }
+
+      return updated;
+    });
+
+    // Auto sync publicSounds
     if (key === 'publicSounds') {
       setFormData(prev => ({ ...prev, publicSounds: val }));
     }

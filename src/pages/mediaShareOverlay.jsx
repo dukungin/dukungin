@@ -79,6 +79,23 @@
     return (config.baseDuration || 8) * 1000;
   };
 
+  const calculateMediaShareDuration = (config, amount) => {
+    if (!config) return 15000;
+
+    // Prioritas 1: Gunakan pengaturan dari dashboard
+    if (config.mediaShareBaseDuration != null) {
+      const base = Number(config.mediaShareBaseDuration) || 15;
+      const perAmount = Number(config.mediaShareExtraPerAmount) || 10000;
+      const extraDur = Number(config.mediaShareExtraDuration) || 10;
+
+      const extras = perAmount > 0 ? Math.floor(amount / perAmount) : 0;
+      return (base + extras * extraDur) * 1000;
+    }
+
+    // Fallback
+    return 15000;
+  };
+
   // ── MediaShareOverlay Component ───────────────────────────────────────────────
   const MediaShareOverlay = () => {
     const { token } = useParams();
@@ -138,9 +155,10 @@
           audioRef.current.play().catch(() => {});
         }
 
-        const duration = configRef.current?.getMediaShareDuration 
-          ? configRef.current.getMediaShareDuration(donationWithTime.amount) 
-          : 12000;
+        let duration = 15000; // default
+
+        const duration = calculateMediaShareDuration(configRef.current, donationWithTime.amount);
+
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
         if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
 

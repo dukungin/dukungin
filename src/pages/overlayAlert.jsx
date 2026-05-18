@@ -55,17 +55,33 @@
   // };
 
   const getAlertDuration = (config, amount) => {
-    if (!config) return 8000;
-    const tiers = config.durationTiers || [];
-    if (tiers.length > 0) {
-      const sorted = [...tiers].sort((a, b) => b.minAmount - a.minAmount);
+    if (!config) return 10000;
+    // ✅ Gunakan pengaturan baru
+    if (config.alertBaseDuration != null) {
+      const base = Number(config.alertBaseDuration) || 10;
+      const perAmount = Number(config.alertExtraPerAmount) || 10000;
+      const extraDur = Number(config.alertExtraDuration) || 5;
+
+      const extras = perAmount > 0 ? Math.floor(amount / perAmount) : 0;
+      return (base + extras * extraDur) * 1000;
+    }
+
+    // Fallback lama
+    if (config.alertDurationPerThousand) {
+      const seconds = Math.ceil(amount / 1000) * config.alertDurationPerThousand;
+      return seconds * 1000;
+    }
+
+    if (config.durationTiers?.length > 0) {
+      const sorted = [...config.durationTiers].sort((a, b) => b.minAmount - a.minAmount);
       for (const tier of sorted) {
-        const inRange = amount >= tier.minAmount &&
-          (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount);  // ✅ Fixed
-        if (inRange) return tier.duration * 1000;
+        if (amount >= tier.minAmount && (tier.maxAmount === null || amount <= tier.maxAmount)) {
+          return tier.duration * 1000;
+        }
       }
     }
-    return (config.baseDuration || 8) * 1000;
+
+    return 10000; // default
   };
 
   const OverlayAlert = () => {
