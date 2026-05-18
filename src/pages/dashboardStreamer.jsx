@@ -13,6 +13,7 @@ import {
   Heart,
   Image,
   ImageIcon,
+  Loader2,
   Menu,
   MessageSquare,
   Moon,
@@ -1653,7 +1654,9 @@ const HistoryPage = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [historyTab, setHistoryTab] = useState('received'); // 'received' | 'sent'
-  const [replayLoading, setReplayLoading] = useState(new Set()); // Track loading per donation
+  // Replay protection
+  const [replayLoading, setReplayLoading] = useState(new Set());
+  const [lastReplayTime, setLastReplayTime] = useState({}); // anti spam cepat
 
   // Eye toggles (hanya relevan untuk tab received)
   const [showAmounts, setShowAmounts] = useState(true);
@@ -1698,29 +1701,32 @@ const HistoryPage = () => {
     showEmails ? (email || '-') : '••••@•••';
 
   const replayDonation = async (donationId) => {
-    setReplayLoading(prev => new Set([...prev, donationId]));
-    
-    try {
-      const response = await api.post(`/api/midtrans/replay-donation/${donationId}`);
-      
-      // ✅ Toast sukses
-      toast.success(
-        `✅ Replay "${response.data.donation.donor}" ${response.data.donation.hasMedia ? '🎬 MediaShare' : '💜 Alert'} (${response.data.donation.duration})`,
-        { duration: 3000, position: 'top-right' }
-      );
-      
-      console.log('✅ Replay success:', response.data);
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Gagal replay');
-      console.error('❌ Replay error:', err);
-    } finally {
-      setReplayLoading(prev => {
-        const next = new Set(prev);
-        next.delete(donationId);
-        return next;
-      });
-    }
-  };
+    if (replayLoading.has(donationId)) return;
+
+      const now = Date.now();
+      if (lastReplayTime[donationId] && now - lastReplayTime[donationId] < 3000) {
+        return;
+      }
+
+      setReplayLoading(prev => new Set([...prev, donationId]));
+      setLastReplayTime(prev => ({ ...prev, [donationId]: now }));
+
+      try {
+        const response = await api.post(`/api/midtrans/replay-donation/${donationId}`);
+        
+        toast.success(`✅ Replay berhasil: ${response.data.donation.donor}`, {
+          duration: 2500,
+        });
+      } catch (err) {
+        toast.error(err.response?.data?.message || 'Gagal replay');
+      } finally {
+        setReplayLoading(prev => {
+          const next = new Set(prev);
+          next.delete(donationId);
+          return next;
+        });
+      }
+    };
 
   return (
     <div className="space-y-6 pb-6">
@@ -1839,116 +1845,101 @@ const HistoryPage = () => {
             /* ==================== RECEIVED TABLE ==================== */
             <>
               {isLoading ? (
-                <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
-                  <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />
-                  Memuat riwayat...
-                </div>
-              ) : (
-                <>
+  <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
+    <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />
+    Memuat riwayat...
+  </div>
+                ) : (
                   <table className="w-full text-left min-w-[700px]">
                     <thead>
                       <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                        {['Donatur', 'Nominal', 'Pesan', 'Replay', 'Media', 'status', 'Waktu'].map((h) => (  // ✅ Tambah Replay
-                          <th key={h} className="px-6 md:px-8 py-6">{h}</th>
-                        ))}
+                        <th className="px-6 md:px-8 py-6">Donatur</th>
+                        <th className="px-6 md:px-8 py-6">Nominal</th>
+                        <th className="px-6 md:px-8 py-6">Pesan</th>
+                        <th className="px-6 md:px-8 py-6 text-center">Replay</th>
+                        <th className="px-6 md:px-8 py-6">Media</th>
+                        <th className="px-6 md:px-8 py-6">Status</th>
+                        <th className="px-6 md:px-8 py-6">Waktu</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                       {donations.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className="text-center py-16 text-slate-400 font-bold">
+                          <td colSpan={7} className="text-center py-16 text-slate-400 font-bold">
                             Belum ada donasi masuk
                           </td>
                         </tr>
                       ) : (
-                        donations.map((item) => (
-                          <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
-                            <td className="px-6 md:px-8 py-5">
-                              <p className="font-black text-slate-700 dark:text-slate-200 text-sm">
-                                {item.donorName || 'Anonim'}
-                              </p>
-                              <p className={`text-[10px] font-mono mt-0.5 transition-all ${showEmails ? 'text-slate-400' : 'text-slate-200 dark:text-slate-700 select-none'}`}>
-                                {maskEmail(item.donorEmail)}
-                              </p>
-                            </td>
-                            <td className="px-6 md:px-8 py-5">
-                              <p className={`font-black transition-all ${showAmounts ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-300 dark:text-slate-700 select-none tracking-widest'}`}>
-                                {maskAmount(item.amount)}
-                              </p>
-                            </td>
-                            <td className="px-6 md:px-8 py-5 max-w-[200px]">
-                              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic truncate">
-                                {item.message ? `"${item.message}"` : <span className="text-slate-300 dark:text-slate-600 not-italic font-normal">-</span>}
-                              </p>
-                            </td>
-                            <td className="px-6 md:px-8 py-5">
-                              <button 
-                                onClick={() => replayDonation(item._id)}
-                                disabled={replayLoading.has(item._id)}
-                                className={`cursor-pointer active:scale-[0.99] text-blue-400 hover:text-blue-500 hover:brightness-80 flex items-center gap-2 text-sm ${replayLoading.has(item._id) ? 'opacity-70 cursor-not-allowed bg-indigo-400' : ''}`}
-                              >
-                                {replayLoading.has(item._id) ? (
-                                  <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        donations.map((item) => {
+                          const isReplaying = replayLoading.has(item._id);   // ← Pastikan ini ada di sini
+
+                          return (
+                            <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
+                              <td className="px-6 md:px-8 py-5">
+                                <p className="font-black text-slate-700 dark:text-slate-200 text-sm">
+                                  {item.donorName || 'Anonim'}
+                                </p>
+                              </td>
+                              <td className="px-6 md:px-8 py-5">
+                                <p className={`font-black ${showAmounts ? 'text-emerald-400' : 'text-slate-300'}`}>
+                                  {maskAmount(item.amount)}
+                                </p>
+                              </td>
+                              <td className="px-6 md:px-8 py-5 max-w-[220px]">
+                                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic line-clamp-2">
+                                  {item.message || '-'}
+                                </p>
+                              </td>
+                              <td className="px-6 md:px-8 py-5 text-center">
+                                <button 
+                                  onClick={() => replayDonation(item._id)}
+                                  disabled={isReplaying}
+                                  className={`cursor-pointer active:scale-[0.99] inline-flex items-center gap-1.5 px-4 py-2 rounded-none text-xs font-black transition-all active:scale-[0.97] ${
+                                    isReplaying 
+                                      ? 'text-slate-400 cursor-not-allowed' 
+                                      : 'text-blue-500 hover:text-blue-300'
+                                  }`}
+                                >
+                                  {isReplaying ? (
+                                    <>
+                                      <Loader2 size={14} className="animate-spin" />
+                                      Replay...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Video size={15} />
+                                      Replay
+                                    </>
+                                  )}
+                                </button>
+                              </td>
+                              <td className="px-6 md:px-8 py-5">
+                                {item.mediaUrl ? (
+                                  <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" 
+                                    className="text-blue-500 hover:underline flex items-center gap-1 text-sm">
+                                    <ImageIcon size={14} /> Lihat
+                                  </a>
                                 ) : (
-                                  <>
-                                    <Video size={14} />
-                                    Replay
-                                  </>
+                                  <span className="text-slate-300 text-xs">-</span>
                                 )}
-                              </button>
-                            </td>
-                            <td className="px-6 md:px-8 py-5">
-                              {item.mediaUrl ? (
-                                <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm text-blue-400 hover:text-blue-500">
-                                  {item.mediaType === 'video' ? <Video size={12} /> : <ImageIcon size={12} />} Lihat
-                                </a>
-                              ) : (
-                                <span className="text-slate-300 dark:text-slate-600 text-xs">-</span>
-                              )}
-                            </td>
-                            <td className="py-5 w-max mx-auto flex justify-center">
-                              <span className={`px-3 py-1.5 rounded-none text-[10px] ml-[-24px] font-black tracking-widest ${
-                                item.status === 'PAID' ? 'bg-green-100 dark:bg-green-950/40 text-green-600' :
-                                item.status === 'EXPIRED' ? 'bg-red-100 dark:bg-red-950/40 text-red-400' :
-                                'bg-amber-100 dark:bg-amber-950/40 text-amber-600'
-                              }`}>
-                                {item.status}
-                              </span>
-                            </td>
-                            <td className="px-6 md:px-8 py-5">
-                              <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">
+                              </td>
+                              <td className="px-6 md:px-8 py-5">
+                                <span className={`px-3 py-1 rounded-none text-[10px] font-black ${
+                                  item.status === 'PAID' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'
+                                }`}>
+                                  {item.status}
+                                </span>
+                              </td>
+                              <td className="px-6 md:px-8 py-5 text-[10px] text-slate-400 whitespace-nowrap">
                                 {formatDate(item.createdAt)}
-                              </p>
-                            </td>
-                          </tr>
-                        ))
+                              </td>
+                            </tr>
+                          );
+                        })
                       )}
                     </tbody>
                   </table>
-
-                  {pagination.totalPages > 1 && (
-                    <div className="flex items-center justify-between px-8 py-4 border-t border-slate-100 dark:border-slate-800">
-                      <button
-                        onClick={() => setPage(p => Math.max(1, p - 1))}
-                        disabled={page === 1}
-                        className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-600 cursor-pointer active:scale-[0.98] disabled:opacity-40"
-                      >
-                        ← Sebelumnya
-                      </button>
-                      <span className="text-xs font-bold text-slate-400">
-                        Halaman <span className="text-indigo-600">{page}</span> dari {pagination.totalPages}
-                      </span>
-                      <button
-                        onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
-                        disabled={page === pagination.totalPages}
-                        className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-600 cursor-pointer active:scale-[0.98] disabled:opacity-40"
-                      >
-                        Berikutnya →
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
+                )}
             </>
           ) : (
             /* ==================== SENT TABLE ==================== */
