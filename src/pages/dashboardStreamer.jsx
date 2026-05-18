@@ -1279,7 +1279,7 @@ const AdminWithdrawalPage = () => {
   );
 };
 
-// ─── DurationTiersEditor ──────────────────────────────────────────────────────
+// ─── DurationSettings ──────────────────────────────────────────────────────
 
 const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
   return (
@@ -2855,7 +2855,7 @@ export const DashboardStreamer = () => {
                   <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <SectionHeader icon={<Timer size={20} />} title="Durasi Tampil per Nominal" color="bg-amber-500" />
                     {/* <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-3 mb-6">Atur berapa lama alert muncul berdasarkan nominal donasi.</p> */}
-                    <DurationTiersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
+                    <DurationSettings saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.durationTiers || []} onChange={v => upd('durationTiers', v)} />
                   </div>
 
                   {/* ── Media ── */}
