@@ -167,14 +167,13 @@ export const FeeConfigPage = () => {
   return (
     <motion.div className="w-full space-y-5 pb-10" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
       {/* Header */}
-      <div className="bg-indigo-600 rounded-none p-6 text-white relative overflow-hidden">
+      {/* <div className="bg-indigo-600 rounded-none p-6 text-white relative overflow-hidden">
         <div className="relative z-2">
           <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-2">PENGATURAN BIAYA</p>
           <h2 className="text-3xl font-black tracking-tight">Fee Configuration</h2>
           <p className="text-indigo-200 text-sm mt-1">Atur siapa yang menanggung biaya platform</p>
         </div>
-        {/* <img src="/jellyfish.png" alt="" className="absolute top-3 right-[-20px] md:right-[-40px] w-[15%] md:w-[17%] -rotate-25 opacity-90" /> */}
-      </div>
+      </div> */}
 
       {/* Pilihan Mode */}
       <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">

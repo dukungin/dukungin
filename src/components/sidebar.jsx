@@ -5,16 +5,19 @@ import {
   History,
   Layout,
   LogOut,
+  MessageSquare,
   ReceiptText,
   ShieldAlert,
   Timer,
   TrendingUp,
   Trophy,
   User,
+  Video,
   Vote,
   Wallet,
   X,
-  Zap
+  Zap,
+  ZapIcon
 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -43,6 +46,8 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
   const menuItems = [
     { id: 'settings',    label: 'Editor Overlay',   icon: <Layout size={20} /> },
+    { id: 'alertSettings',  label: 'Alert OBS',      icon: <ZapIcon size={20} /> },
+    { id: 'mediaSettings',  label: 'Media Share',     icon: <Video size={20} /> },
     { id: 'history',     label: 'Riwayat Donasi',   icon: <History size={20} /> },
     { id: 'myDonations', label: 'Berdonasi',        icon: <Heart size={20} /> },   
     { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },
@@ -54,6 +59,11 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     { id: 'subathon',    label: 'Subathon',         icon: <Timer size={20} /> },
     { id: 'milestones',  label: 'Milestones',       icon: <TrendingUp size={20} /> },
     { id: 'leaderboard', label: 'Leaderboard',      icon: <Trophy size={20} /> },
+    ...(isSuperAdmin ? [{
+      id: 'whatsapp', 
+      label: 'WhatsApp', 
+      icon: <MessageSquare size={20} />
+    }] : []),
     ...(isSuperAdmin ? [{
       id: 'ghostAlert',
       icon: <Zap size={20} />,
@@ -109,7 +119,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
       {/* ── SIDEBAR ── */}
       <aside className={`
         fixed lg:sticky top-0 left-0 h-screen overflow-y-auto
-        w-full lg:w-72
+        w-full lg:w-[20.5vw]
         bg-white dark:bg-slate-950
         border-r border-slate-100 dark:border-slate-800
         py-4 px-4 md:px-6 z-[99999] lg:z-[1] flex flex-col

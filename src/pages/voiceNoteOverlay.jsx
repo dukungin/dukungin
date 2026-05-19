@@ -329,7 +329,7 @@ const VoiceNoteOverlay = () => {
 
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 20, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
-                  @{alert.donorName}
+                  {alert.donorName}
                 </div>
                 <div style={{ fontSize: 18, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', marginBottom: 6 }}>
                   {formatRp(alert.amount)}
