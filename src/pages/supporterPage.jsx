@@ -741,7 +741,7 @@ const DonationTabs = ({ activeTab, onTabChange, mediaTriggers, amount, minDonate
       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">
         Tipe Donasi
       </label>
-      <div className="grid grid-cols-3 gap-0 border-2 border-slate-100 dark:border-slate-700 rounded-none overflow-hidden">
+      <div className="grid grid-cols-3 gap-2 rounded-none overflow-hidden">
         {tabs.map((tab, idx) => {
           const isActive = activeTab === tab.id;
           const Icon = tab.icon;
@@ -756,7 +756,6 @@ const DonationTabs = ({ activeTab, onTabChange, mediaTriggers, amount, minDonate
               className={`
                 relative flex flex-col items-center justify-center gap-1 py-3 px-1
                 text-[10px] font-black transition-all cursor-pointer select-none
-                ${idx < tabs.length - 1 ? 'border-r-2 border-slate-100 dark:border-slate-700' : ''}
                 ${isLocked
                   ? 'opacity-40 cursor-not-allowed bg-slate-50 dark:bg-slate-800/50'
                   : isActive
@@ -910,6 +909,19 @@ const SupporterPage = () => {
     const overlaySetting = streamer?.overlaySetting || streamer?.OverlaySetting || {};
     const minDonate = overlaySetting?.minDonate || 1000;
     const maxDonate = overlaySetting?.maxDonate || 10000000;
+    if (!isLoggedIn) {
+      if (!form.donorName?.trim()) {
+        return alert('Nama wajib diisi untuk donasi sebagai tamu');
+      }
+      if (!form.email?.trim()) {
+        return alert('Email wajib diisi untuk donasi sebagai tamu');
+      }
+      // Validasi format email
+      const emailRegex = /^\S+@\S+\.\S+$/;
+      if (!emailRegex.test(form.email.trim())) {
+        return alert('Format email tidak valid');
+      }
+    }
 
     if (!form.amount || form.amount < minDonate)
       return alert(`Minimal donasi Rp ${minDonate.toLocaleString('id-ID')}`);
@@ -1017,7 +1029,13 @@ const SupporterPage = () => {
   const isSubmitDisabled = (() => {
     if (loading) return true;
     if (!form.amount || form.amount < minDonate) return true;
-    if (!form.message.trim() && activeTab !== 'voice') return true; // ← UBAH INI
+    if (!form.message.trim() && activeTab !== 'voice') return true;
+
+    // ⬅️ TAMBAHKAN INI - Validasi nama & email kalau belum login
+    if (!isLoggedIn) {
+      if (!form.donorName?.trim()) return true;
+      if (!form.email?.trim()) return true;
+    }
 
     if (activeTab === 'mediashare') {
       if (!eligibleTrigger) return true;
@@ -1170,6 +1188,40 @@ const SupporterPage = () => {
                   })}
                 </div>
               )}
+            </div>
+
+            {/* ── Nama & Email ── */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
+
+                  Nama 
+                </label>
+                <input
+                  type="text"
+                  disabled={form.isAnonymous || isLoggedIn}
+                  value={form.isAnonymous ? '' : form.donorName}
+                  onChange={(e) => setForm({ ...form, donorName: e.target.value })}
+                  required={!isLoggedIn && !form.isAnonymous}  // ⬅️ TAMBAHKAN INI
+                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
+                  placeholder="Nama kamu"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
+
+                  Email 
+                </label>
+                <input
+                  type="email"
+                  disabled={isLoggedIn}
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  required={!isLoggedIn}  // ⬅️ TAMBAHKAN INI
+                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
+                  placeholder="email@kamu.com"
+                />
+              </div>
             </div>
 
             {/* Message — hide kalau tab voice */}
@@ -1340,35 +1392,6 @@ const SupporterPage = () => {
               )}
 
             </AnimatePresence>
-
-            {/* ── Nama & Email ── */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">Nama</label>
-                <input
-                  type="text"
-                  disabled={form.isAnonymous || isLoggedIn}
-                  value={form.isAnonymous ? '' : form.donorName}
-                  onChange={(e) => setForm({ ...form, donorName: e.target.value })}
-                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
-                  placeholder="Nama kamu"
-                />
-                {isLoggedIn && !form.isAnonymous && (
-                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-1 ml-1">Dari akun kamu</p>
-                )}
-              </div>
-              <div>
-                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">Email (opsional)</label>
-                <input
-                  type="email"
-                  disabled={isLoggedIn}
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
-                  placeholder="email@kamu.com"
-                />
-              </div>
-            </div>
 
             {/* Anonymous toggle */}
             <label className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">
