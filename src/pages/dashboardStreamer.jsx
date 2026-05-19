@@ -1951,10 +1951,10 @@ const HistoryPage = () => {
             /* ==================== RECEIVED TABLE ==================== */
             <>
               {isLoading ? (
-  <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
-    <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />
-    Memuat riwayat...
-  </div>
+                <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
+                  <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />
+                  Memuat riwayat...
+                </div>
                 ) : (
                   <table className="w-full text-left min-w-[700px]">
                     <thead>
@@ -2092,6 +2092,34 @@ const HistoryPage = () => {
                 )}
               </tbody>
             </table>
+          )}
+          {pagination.totalPages > 1 && (
+            <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+              <button
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-4 py-2 rounded-none bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-100 dark:hover:bg-slate-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                ← Sebelumnya
+              </button>
+              
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500">
+                  Halaman <span className="text-indigo-600 dark:text-indigo-400 font-black">{page}</span> dari {pagination.totalPages}
+                </span>
+                <span className="text-xs text-slate-300 dark:text-slate-600">
+                  ({pagination.total} total donasi)
+                </span>
+              </div>
+              
+              <button
+                onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
+                disabled={page === pagination.totalPages}
+                className="px-4 py-2 rounded-none bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-100 dark:hover:bg-slate-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Berikutnya →
+              </button>
+            </div>
           )}
         </div>
       </div>
