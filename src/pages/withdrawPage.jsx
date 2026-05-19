@@ -489,8 +489,8 @@ import { useEffect, useState } from 'react';
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const authHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
 
-const fetchProfile   = async () => (await axios.get(`${BASE_URL}/api/overlay/settings`, { headers: authHeader() })).data;
-const postWithdraw  = async (d) => (await axios.post(`${BASE_URL}/api/midtrans/withdraw`, d, { headers: authHeader() })).data;
+const fetchProfile = async () => (await axios.get(`${BASE_URL}/api/overlay/settings`, { headers: authHeader() })).data;
+const postWithdraw = async (d) => (await axios.post(`${BASE_URL}/api/midtrans/withdraw`, d, { headers: authHeader() })).data;
 const fetchWDHistory = async ({ page = 1 } = {}) =>
   (await axios.get(`${BASE_URL}/api/midtrans/withdraw/history?page=${page}&limit=10`, { headers: authHeader() })).data;
 
@@ -505,47 +505,47 @@ const formatDate = (dateStr) => {
 const formatRupiah = (num) => new Intl.NumberFormat('id-ID').format(Math.round(num));
 
 const STATUS_CONFIG = {
-  PENDING:   { label: 'Menunggu', icon: <Clock size={13} />,       className: 'bg-amber-50 text-amber-600 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800' },
+  PENDING: { label: 'Menunggu', icon: <Clock size={13} />, className: 'bg-amber-50 text-amber-600 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800' },
   COMPLETED: { label: 'Berhasil', icon: <CheckCircle2 size={13} />, className: 'bg-green-50 text-green-600 border border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800' },
-  FAILED:    { label: 'Ditolak',  icon: <XCircle size={13} />,      className: 'bg-red-50 text-red-500 border border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-800' },
+  FAILED: { label: 'Ditolak', icon: <XCircle size={13} />, className: 'bg-red-50 text-red-500 border border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-800' },
 };
 
-const MIN_TARIK   = 20000;
-const MAX_TARIK   = 10000000;
-const MIN_SALDO   = 20000;
-const FEE_PERCENT = 0.025; // 2.5% saja
+const MIN_TARIK = 20000;
+const MAX_TARIK = 10000000;
+const MIN_SALDO = 20000;
+const FEE_PERCENT = 0.025;
+const ADMIN_FEE = 0; // 0 dulu karena gratis
 
 export const WithdrawPage = () => {
   const queryClient = useQueryClient();
-  const [method, setMethod]     = useState('BANK');
+  const [method, setMethod] = useState('BANK');
   const [formData, setFormData] = useState({
     amount: '', formattedAmount: '', channelCode: 'BCA', accountNumber: '', accountName: '',
   });
   const [historyPage, setHistoryPage] = useState(1);
-  const [showBalance, setShowBalance] = useState(() => {
-    return localStorage.getItem('showBalance') === 'true';
-  });
+  const [showBalance, setShowBalance] = useState(() => localStorage.getItem('showBalance') === 'true');
+
   useEffect(() => {
-    const handleStorageChange = () => {
-      setShowBalance(localStorage.getItem('showBalance') === 'true');
-    };
+    const handleStorageChange = () => setShowBalance(localStorage.getItem('showBalance') === 'true');
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const { data: profileData } = useQuery({ 
-    queryKey: ['profile'], 
-    queryFn: fetchProfile, 
-    refetchInterval: 30000 
+  const { data: profileData } = useQuery({
+    queryKey: ['profile'],
+    queryFn: fetchProfile,
+    refetchInterval: 30000
   });
-  
-  // Gunakan availableBalance - saldo yang sudah bisa ditarik (donasi > 1 hari)
-  const availableBalance = parseFloat(profileData?.User?.walletBalance || 0); // GUNAKAN INI DULU
+
+  // Total saldo semua donasi
   const totalWallet = parseFloat(profileData?.User?.walletBalance || profileData?.walletBalance || 0);
   
-  // LOGIKA KUNCI: Total Wallet - Available Balance = Saldo yang belum bisa ditarik
-  const pendingBalance = totalWallet - availableBalance;
-
+  // ⬅️ SEMENTARA: availableBalance = totalWallet (bisa tarik semua)
+  // ⬅️ NANTI: ambil dari availableBalance field kalau cron sudah jalan
+  const availableBalance = totalWallet; 
+  
+  // Untuk sementara pending = 0
+  const pendingBalance = 0;
 
   const { data: historyData, isLoading: historyLoading, refetch: refetchHistory, isFetching: historyFetching } = useQuery({
     queryKey: ['withdrawHistory', historyPage],
@@ -555,11 +555,11 @@ export const WithdrawPage = () => {
   });
 
   const withdrawals = historyData?.withdrawals || [];
-  const pagination  = historyData?.pagination  || {};
+  const pagination = historyData?.pagination || {};
 
-  const statsPending   = withdrawals.filter(w => w.status === 'PENDING').length;
+  const statsPending = withdrawals.filter(w => w.status === 'PENDING').length;
   const statsCompleted = withdrawals.filter(w => w.status === 'COMPLETED').reduce((sum, w) => sum + Number(w.amount || 0), 0);
-  const statsFailed    = withdrawals.filter(w => w.status === 'FAILED').length;
+  const statsFailed = withdrawals.filter(w => w.status === 'FAILED').length;
 
   const withdrawMutation = useMutation({
     mutationFn: postWithdraw,
@@ -574,25 +574,12 @@ export const WithdrawPage = () => {
   const amt = parseFloat(formData.amount) || 0;
 
   const handleSubmit = () => {
-    if (!formData.amount || isNaN(amt) || amt <= 0) 
-      return alert('Masukkan nominal yang valid');
-
-    if (availableBalance < MIN_SALDO) 
-      return alert(`Saldo tersedia minimum Rp ${formatRupiah(MIN_SALDO)}`);
-
-    if (amt < MIN_TARIK)     
-      return alert(`Minimal penarikan Rp ${formatRupiah(MIN_TARIK)}`);
-
-    if (amt > MAX_TARIK)     
-      return alert(`Maksimal penarikan Rp ${formatRupiah(MAX_TARIK)}`);
-
-    // Tidak ada biaya admin 5rb - saldo yang ditarik adalah yang diterima
-    if (amt > availableBalance)       
-      return alert(`Saldo tersedia tidak mencukupi. Saldo tersedia: Rp ${formatRupiah(availableBalance)}`);
-
-    if (!formData.accountNumber || !formData.accountName) 
-      return alert('Lengkapi data rekening / e-wallet');
-
+    if (!formData.amount || isNaN(amt) || amt <= 0) return alert('Masukkan nominal yang valid');
+    if (availableBalance < MIN_SALDO) return alert(`Saldo tersedia minimum Rp ${formatRupiah(MIN_SALDO)}`);
+    if (amt < MIN_TARIK) return alert(`Minimal penarikan Rp ${formatRupiah(MIN_TARIK)}`);
+    if (amt > MAX_TARIK) return alert(`Maksimal penarikan Rp ${formatRupiah(MAX_TARIK)}`);
+    if (amt > availableBalance) return alert(`Saldo tersedia tidak mencukupi. Saldo tersedia: Rp ${formatRupiah(availableBalance)}`);
+    if (!formData.accountNumber || !formData.accountName) return alert('Lengkapi data rekening / e-wallet');
     withdrawMutation.mutate({ ...formData, paymentMethod: method });
   };
 
