@@ -56,6 +56,28 @@ const VoiceNoteOverlay = () => {
   const [audioProgress, setAudioProgress] = useState(0);
 
   const audioRef = useRef(null);
+
+  // ✅ LETAKKAN DI SINI — sebelum conditional return apapun
+  useEffect(() => {
+    const unlock = () => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {});
+        audioRef.current.pause();
+      }
+      document.removeEventListener('click', unlock);
+    };
+    document.addEventListener('click', unlock);
+
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {});
+        audioRef.current.pause();
+      }
+    }, 500);
+
+    return () => document.removeEventListener('click', unlock);
+  }, []);
+
   const configRef = useRef(null);
   const progressIntervalRef = useRef(null);
   const audioProgressRef = useRef(null);
@@ -247,7 +269,7 @@ const VoiceNoteOverlay = () => {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       background: 'transparent', overflow: 'hidden',
     }}>
-      <audio ref={audioRef} crossOrigin="anonymous" />
+      <audio ref={audioRef} />
 
       <AnimatePresence>
         {alert && (
