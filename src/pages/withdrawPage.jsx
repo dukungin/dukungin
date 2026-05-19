@@ -56,11 +56,11 @@ export const WithdrawPage = () => {
   });
 
   // ✅ Ambil dari API response
-  const totalWallet = parseFloat(profileData?.User?.walletBalance || profileData?.walletBalance || 0);
+ const totalWallet      = parseFloat(profileData?.User?.walletBalance    || profileData?.walletBalance    || 0);
   const availableBalance = parseFloat(profileData?.User?.availableBalance || profileData?.availableBalance || 0);
 
-  // Hitung pending (yang belum bisa tarik)
-  const pendingBalance = totalWallet - availableBalance;
+  // ← pakai Math.max agar tidak pernah negatif
+  const pendingBalance   = Math.max(0, totalWallet - availableBalance);
 
   const { data: historyData, isLoading: historyLoading, refetch: refetchHistory, isFetching: historyFetching } = useQuery({
     queryKey: ['withdrawHistory', historyPage],
@@ -127,16 +127,27 @@ export const WithdrawPage = () => {
             </div>
           </div>
           
-          {/* Tampilkan info total & pending */}
-          {showBalance && pendingBalance > 0 && (
-            <div className="flex items-center gap-3 mt-1 text-md">
+          {/* Tampilkan info total & pending — tampil kalau showBalance DAN ada salah satunya */}
+          {showBalance && (
+            <div className="flex flex-wrap items-center gap-3 mt-2 text-xs">
               <span className="text-indigo-200">
-                Total donasi: <span className="font-bold text-white">Rp {totalWallet.toLocaleString('id-ID')}</span>
+                Total masuk:{' '}
+                <span className="font-bold text-white">
+                  Rp {totalWallet.toLocaleString('id-ID')}
+                </span>
               </span>
-              <div className='w-[1px] h-[13px] relative top-[1px] bg-white'></div>
-              <span className="text-amber-200">
-                Belum dapat ditarik: <span className="font-bold text-white">Rp {pendingBalance.toLocaleString('id-ID')}</span>
-              </span>
+
+              {pendingBalance > 0 && (
+                <>
+                  <div className="w-px h-3 bg-white/40" />
+                  <span className="text-amber-200">
+                    ⏳ Menunggu 24 jam:{' '}
+                    <span className="font-bold text-amber-100">
+                      Rp {pendingBalance.toLocaleString('id-ID')}
+                    </span>
+                  </span>
+                </>
+              )}
             </div>
           )}
           
