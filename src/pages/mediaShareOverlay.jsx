@@ -346,7 +346,7 @@ const calculateMediaShareDuration = (config, amount) => {
                 </div>
                 {alert.message && (
                   <div style={{ fontSize: 26, color: fg, lineHeight: 1.4 }}>
-                    "{alert.message}"
+                    {alert.message}
                   </div>
                 )}
               </div>
@@ -381,7 +381,7 @@ const calculateMediaShareDuration = (config, amount) => {
             }}>
               <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIcon(customIcon, 18)}</span>
               <span style={{ fontSize: 26, fontWeight: 900, color: highlight, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Media Share!
+                Media Share
               </span>
             </div>
             
@@ -432,7 +432,7 @@ const calculateMediaShareDuration = (config, amount) => {
 
             {alert.message && (
               <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
-                "{alert.message}"
+                {alert.message}
               </div>
             )}
 

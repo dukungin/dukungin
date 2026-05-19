@@ -293,7 +293,7 @@
                   marginBottom: 6,
                 }}>
                   <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
-                  Dukungan Masuk
+                  Hai Streamer
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
@@ -307,7 +307,7 @@
                 </div> */}
                 {alert.message && (
                   <div style={{ fontSize: 26, color: fg, lineHeight: 1.4 }}>
-                    "{alert.message}"
+                    {alert.message}
                   </div>
                 )}
               </div>
@@ -346,7 +346,7 @@
             }}>
               <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIcon(customIcon, 18)}</span>
               <span style={{ fontSize: 26, fontWeight: 900, color: fg, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Dukungan Masuk!
+                Hai Streamer
               </span>
             </div>
             <div style={{ padding: '12px 14px 10px' }}>
@@ -396,7 +396,7 @@
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </div>
               <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Donasi
+                Dukungan
               </div>
             </div>
 
@@ -406,7 +406,7 @@
 
             {alert.message && (
               <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
-                "{alert.message}"
+                {alert.message}
               </div>
             )}
 

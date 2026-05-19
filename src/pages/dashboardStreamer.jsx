@@ -1566,7 +1566,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
               marginBottom: 6,
             }}>
               <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
-              Donasi Masuk
+              Hai Streamer
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
               @{currentDonor.name} memberi dukungan
@@ -1608,7 +1608,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         </div>
         <div style={{ padding: '12px 14px 10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-            <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>@{currentDonor.name}</div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>@{currentDonor.name} memberi dukungan</div>
             <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px' }}>
               Rp {currentDonor.amount.toLocaleString('id-ID')}
             </div>
