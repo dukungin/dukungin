@@ -93,7 +93,7 @@ const DonationSuccess = () => {
                 transition={{ delay: 0.5 }}
                 className="mt-4 text-2xl font-black text-white"
               >
-                Donasi Berhasil! 🎉
+                Dukungan Berhasil!
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 10 }}

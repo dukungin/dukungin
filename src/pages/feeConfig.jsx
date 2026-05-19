@@ -86,13 +86,13 @@ const FeeSimulator = ({ feeBearer }) => {
               <span className='font-medium'>Rp {formatRupiah(donorPays)}</span>
             </div>
           )}
-          <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
+          <div className="flex justify-between pb-1 text-emerald-600 dark:text-emerald-400 font-bold">
             <span>Streamer menerima</span>
             <span>Rp {formatRupiah(streamerGets)}</span>
           </div>
-        </div>
+        </div>  
 
-        <p className="text-[10px] text-slate-400 pt-2 border-t">
+        <p className="text-[10px] text-slate-400 pt-3 border-t border-slate-200 dark:border-slate-700 ">
           * Biaya tetap Rp 5.000 dibebankan saat penarikan dana (ditanggung streamer)
         </p>
       </div>
