@@ -296,12 +296,15 @@
                   Dukungan Masuk
                 </div>
 
-                <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
-                  @{alert.donorName}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
+                  @{alert.donorName} memberi dukungan 
+                  <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
+                    Rp {Number(alert.amount).toLocaleString('id-ID')}
+                  </div>
                 </div>
-                <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
+                {/* <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
                   Rp {Number(alert.amount).toLocaleString('id-ID')}
-                </div>
+                </div> */}
                 {alert.message && (
                   <div style={{ fontSize: 26, color: fg, lineHeight: 1.4 }}>
                     "{alert.message}"
@@ -348,7 +351,7 @@
             </div>
             <div style={{ padding: '12px 14px 10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-                <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>@{alert.donorName}</div>
+                <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>@{alert.donorName} memberi dukungan</div>
                 <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px' }}>
                   Rp {Number(alert.amount).toLocaleString('id-ID')}
                 </div>

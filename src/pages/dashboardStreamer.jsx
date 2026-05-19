@@ -1568,11 +1568,11 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
               <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
               Donasi Masuk
             </div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
-              @{currentDonor.name}
-            </div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
-              Rp {currentDonor.amount.toLocaleString('id-ID')}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
+              @{currentDonor.name} memberi dukungan
+              <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
+                Rp {currentDonor.amount.toLocaleString('id-ID')}
+              </div>
             </div>
             {currentDonor.msg && (
               <div style={{ fontSize: 26, color: fg, opacity: 0.8, lineHeight: 1.4 }}>
