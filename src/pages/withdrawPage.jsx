@@ -8,7 +8,7 @@ const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const authHeader = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });
 
 const fetchProfile   = async () => (await axios.get(`${BASE_URL}/api/overlay/settings`, { headers: authHeader() })).data;
-const postWithdraw   = async (d) => (await axios.post(`${BASE_URL}/api/midtrans/withdraw`, d, { headers: authHeader() })).data;
+const postWithdraw  = async (d) => (await axios.post(`${BASE_URL}/api/midtrans/withdraw`, d, { headers: authHeader() })).data;
 const fetchWDHistory = async ({ page = 1 } = {}) =>
   (await axios.get(`${BASE_URL}/api/midtrans/withdraw/history?page=${page}&limit=10`, { headers: authHeader() })).data;
 
@@ -31,8 +31,7 @@ const STATUS_CONFIG = {
 const MIN_TARIK   = 20000;
 const MAX_TARIK   = 10000000;
 const MIN_SALDO   = 20000;
-const FEE_PERCENT = 0.025; // 2.5%
-const ADMIN_FEE   = 5000;  // Rp 5.000 tetap
+const FEE_PERCENT = 0.025; // 2.5% saja
 
 export const WithdrawPage = () => {
   const queryClient = useQueryClient();
@@ -52,15 +51,16 @@ export const WithdrawPage = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-   const { data: profileData } = useQuery({ 
-      queryKey: ['profile'], 
-      queryFn: fetchProfile, 
-      refetchInterval: 30000 
-    });
-    
-    // Gunakan availableBalance dari backend
-    const balance = parseFloat(profileData?.availableBalance || profileData?.User?.availableBalance || 0);
-    const totalWallet = parseFloat(profileData?.User?.walletBalance || profileData?.walletBalance || 0);
+  const { data: profileData } = useQuery({ 
+    queryKey: ['profile'], 
+    queryFn: fetchProfile, 
+    refetchInterval: 30000 
+  });
+  
+  // Gunakan availableBalance - saldo yang sudah bisa ditarik (donasi > 1 hari)
+  const availableBalance = parseFloat(profileData?.availableBalance || profileData?.User?.availableBalance || 0);
+  const totalWallet = parseFloat(profileData?.User?.walletBalance || profileData?.walletBalance || 0);
+  const pendingBalance = totalWallet - availableBalance;
 
   const { data: historyData, isLoading: historyLoading, refetch: refetchHistory, isFetching: historyFetching } = useQuery({
     queryKey: ['withdrawHistory', historyPage],
@@ -87,34 +87,31 @@ export const WithdrawPage = () => {
   });
 
   const amt = parseFloat(formData.amount) || 0;
-  const fee = Math.round(amt * FEE_PERCENT); // potongan 2.5%
 
   const handleSubmit = () => {
     if (!formData.amount || isNaN(amt) || amt <= 0) 
       return alert('Masukkan nominal yang valid');
 
-    if (availableBalance < MIN_SALDO)
+    if (availableBalance < MIN_SALDO) 
       return alert(`Saldo tersedia minimum Rp ${formatRupiah(MIN_SALDO)}`);
 
-    if (amt < MIN_TARIK)
+    if (amt < MIN_TARIK)     
       return alert(`Minimal penarikan Rp ${formatRupiah(MIN_TARIK)}`);
 
-    if (amt > MAX_TARIK)
+    if (amt > MAX_TARIK)     
       return alert(`Maksimal penarikan Rp ${formatRupiah(MAX_TARIK)}`);
 
-    // Tidak ada biaya admin 5rb - saldo yang diminta = saldo yang diterima
-    if (amt > availableBalance)
-      return alert(
-        `Saldo tersedia tidak mencukupi. Saldo tersedia: Rp ${formatRupiah(availableBalance)}`
-      );
+    // Tidak ada biaya admin 5rb - saldo yang ditarik adalah yang diterima
+    if (amt > availableBalance)       
+      return alert(`Saldo tersedia tidak mencukupi. Saldo tersedia: Rp ${formatRupiah(availableBalance)}`);
 
-    if (!formData.accountNumber || !formData.accountName)
+    if (!formData.accountNumber || !formData.accountName) 
       return alert('Lengkapi data rekening / e-wallet');
 
     withdrawMutation.mutate({ ...formData, paymentMethod: method });
   };
 
-  const canSubmit = balance >= MIN_SALDO && amt >= MIN_TARIK;
+  const canSubmit = availableBalance >= MIN_SALDO && amt >= MIN_TARIK;
 
   return (
     <motion.div className="w-full mx-auto space-y-5 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
@@ -124,13 +121,13 @@ export const WithdrawPage = () => {
         <div className="absolute top-0 right-0 p-12 opacity-10 md:flex hidden"><Wallet size={120} /></div>
         <div className="relative z-[2]">
           <div className="flex flex-col items-start gap-3 mb-2">
-            <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs">Total Saldo Bisa Ditarik</p>
+            <p className="text-indigo-100 font-bold uppercase tracking-widest text-xs">Saldo Bisa Ditarik</p>
             <div className='flex w-max items-center'>
               <h1 className={`text-3xl font-black`}>
                 Rp
                 <span className={`${!showBalance ? 'relative top-1.5' : ''}`}>
                   {showBalance
-                    ? `${balance.toLocaleString('id-ID')}`
+                    ? `${availableBalance.toLocaleString('id-ID')}`
                     : " *********"}
                 </span>
               </h1>
@@ -147,24 +144,19 @@ export const WithdrawPage = () => {
               </button>
             </div>
           </div>
-
-          {showBalance && totalWallet > 0 && (
+          
+          {/* Tampilkan info total & pending */}
+          {showBalance && pendingBalance > 0 && (
             <div className="flex items-center gap-4 mt-1 text-[10px]">
               <span className="text-indigo-200">
-                Total donasi:{' '}
-                <span className="font-bold text-white">
-                  Rp {totalWallet.toLocaleString('id-ID')}
-                </span>
+                Total donasi: <span className="font-bold text-white">Rp {totalWallet.toLocaleString('id-ID')}</span>
               </span>
               <span className="text-amber-200">
-                Pending:{' '}
-                <span className="font-bold text-white">
-                  Rp {pendingBalance.toLocaleString('id-ID')}
-                </span>
+                Pending: <span className="font-bold text-white">Rp {pendingBalance.toLocaleString('id-ID')}</span>
               </span>
             </div>
           )}
-
+          
           <p className="text-indigo-200 text-xs font-medium mt-2">
             Penarikan diproses manual oleh admin dalam 1×24 jam hari kerja
           </p>
@@ -176,57 +168,26 @@ export const WithdrawPage = () => {
         <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-none px-5 py-4">
           <span className="text-amber-500 text-lg flex-shrink-0">⚠️</span>
           <div>
-            <p className="font-black text-amber-700 dark:text-amber-400 text-sm">
-              Saldo belum mencukupi untuk penarikan
-            </p>
+            <p className="font-black text-amber-700 dark:text-amber-400 text-sm">Saldo belum mencukupi untuk penarikan</p>
             <p className="text-[11px] text-amber-600 dark:text-amber-500 font-medium mt-0.5">
-              Kamu perlu minimal saldo tersedia{' '}
-              <strong>Rp {MIN_SALDO.toLocaleString('id-ID')}</strong> untuk mengajukan
-              penarikan. Saldo tersedia kamu saat ini:{' '}
-              <strong>Rp {availableBalance.toLocaleString('id-ID')}</strong>
+              Kamu perlu minimal saldo tersedia <strong>Rp {MIN_SALDO.toLocaleString('id-ID')}</strong> untuk mengajukan penarikan.
+              Saldo tersedia kamu saat ini: <strong>Rp {availableBalance.toLocaleString('id-ID')}</strong>
             </p>
           </div>
         </div>
       )}
 
-
       {/* ── Stats ringkas ── */}
       {withdrawals.length > 0 && (
         <div className="grid grid-cols-3 gap-3">
           {[
-            {
-              label: 'Menunggu',
-              value: statsPending,
-              unit: 'request',
-              color: 'text-amber-600 dark:text-amber-400',
-              bg: 'bg-amber-100 dark:bg-amber-950/30 border-amber-100 dark:border-amber-900',
-            },
-            {
-              label: 'Berhasil',
-              value: `Rp ${statsCompleted.toLocaleString('id-ID')}`,
-              unit: '',
-              color: 'text-green-600 dark:text-green-400',
-              bg: 'bg-green-100 dark:bg-green-950/30 border-green-100 dark:border-green-900',
-            },
-            {
-              label: 'Ditolak',
-              value: statsFailed,
-              unit: 'request',
-              color: 'text-red-500 dark:text-red-400',
-              bg: 'bg-red-100 dark:bg-red-950/30 border-red-100 dark:border-red-900',
-            },
-          ].map((s) => (
-            <div
-              key={s.label}
-              className={`${s.bg} border rounded-none p-4 text-center`}
-            >
-              <p className={`font-black text-sm ${s.color}`}>
-                {s.value}{' '}
-                <span className="text-xs font-bold">{s.unit}</span>
-              </p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold mt-0.5">
-                {s.label}
-              </p>
+            { label: 'Menunggu', value: statsPending,    unit: 'request', color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-100 dark:bg-amber-950/30 border-amber-100 dark:border-amber-900' },
+            { label: 'Berhasil', value: `Rp ${statsCompleted.toLocaleString('id-ID')}`, unit: '', color: 'text-green-600 dark:text-green-400', bg: 'bg-green-100 dark:bg-green-950/30 border-green-100 dark:border-green-900' },
+            { label: 'Ditolak',  value: statsFailed,     unit: 'request', color: 'text-red-500 dark:text-red-400',    bg: 'bg-red-100 dark:bg-red-950/30 border-red-100 dark:border-red-900'       },
+          ].map(s => (
+            <div key={s.label} className={`${s.bg} border rounded-none p-4 text-center`}>
+              <p className={`font-black text-sm ${s.color}`}>{s.value} <span className="text-xs font-bold">{s.unit}</span></p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold mt-0.5">{s.label}</p>
             </div>
           ))}
         </div>
@@ -235,30 +196,19 @@ export const WithdrawPage = () => {
       {/* ── Form Penarikan ── */}
       <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
         <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-6 flex items-center gap-3">
-          <CreditCard className="text-indigo-600" size={20} /> Ajukan Penarikan
-          Dana
+          <CreditCard className="text-indigo-600" size={20} /> Ajukan Penarikan Dana
         </h2>
 
         {/* Aturan singkat - HAPUS ADMIN FEE 5rb */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
           {[
-            { label: 'Min. Tarik', value: `Rp ${MIN_TARIK.toLocaleString('id-ID')}` },
-            {
-              label: 'Maks. Tarik',
-              value: `Rp ${(MAX_TARIK / 1000000).toFixed(0)}jt`,
-            },
+            { label: 'Min. Tarik',  value: `Rp ${MIN_TARIK.toLocaleString('id-ID')}` },
+            { label: 'Maks. Tarik', value: `Rp ${(MAX_TARIK / 1000000).toFixed(0)}jt` },
             { label: 'Biaya Admin', value: '2.5%' },
-          ].map((r) => (
-            <div
-              key={r.label}
-              className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-none p-3 text-center"
-            >
-              <p className="font-black text-indigo-600 dark:text-white text-sm">
-                {r.value}
-              </p>
-              <p className="text-[10px] text-slate-600 dark:text-slate-400 font-bold mt-0.5">
-                {r.label}
-              </p>
+          ].map(r => (
+            <div key={r.label} className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-none p-3 text-center">
+              <p className="font-black text-indigo-600 dark:text-white text-sm">{r.value}</p>
+              <p className="text-[10px] text-slate-600 dark:text-slate-400 font-bold mt-0.5">{r.label}</p>
             </div>
           ))}
         </div>
@@ -266,34 +216,25 @@ export const WithdrawPage = () => {
         <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-none px-4 py-3 mb-6">
           <p className="text-[11px] text-amber-700 dark:text-amber-400 font-medium leading-relaxed">
             Donasi yang baru masuk minimal menunggu{' '}
-            <span className="font-black">1x24 jam</span> terlebih dahulu agar saldo
-            tersedia dan dapat diproses penarikan dana oleh sistem. Biaya 2.5% sudah
-            dipotong saat donasi masuk.
+            <span className="font-black">1x24 jam</span> terlebih dahulu agar saldo tersedia dan dapat diproses penarikan dana oleh sistem. 
+            Biaya 2.5% sudah dipotong saat donasi masuk.
           </p>
         </div>
 
         {/* Method selector */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
           {[
-            { id: 'BANK', label: 'Transfer Bank', icon: <CreditCard size={18} /> },
-            { id: 'DANA', label: 'E-Wallet DANA', icon: <Smartphone size={18} /> },
+            { id: 'BANK',  label: 'Transfer Bank',  icon: <CreditCard size={18} /> },
+            { id: 'DANA',  label: 'E-Wallet DANA',  icon: <Smartphone size={18} /> },
             { id: 'GOPAY', label: 'E-Wallet GOPAY', icon: <Smartphone size={18} /> },
-          ].map((m) => (
-            <button
-              key={m.id}
-              onClick={() => {
-                setMethod(m.id);
-                setFormData({
-                  ...formData,
-                  channelCode: m.id === 'BANK' ? 'BCA' : m.id,
-                });
-              }}
+          ].map(m => (
+            <button key={m.id}
+              onClick={() => { setMethod(m.id); setFormData({ ...formData, channelCode: m.id === 'BANK' ? 'BCA' : m.id }); }}
               className={`cursor-pointer active:scale-[0.97] flex flex-col items-center gap-2 p-4 rounded-none border-1 transition-all font-black text-sm ${
                 method === m.id
                   ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 shadow-lg shadow-indigo-50 dark:shadow-none'
                   : 'border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:border-slate-200 dark:hover:border-slate-600'
-              }`}
-            >
+              }`}>
               {m.icon} {m.label}
             </button>
           ))}
