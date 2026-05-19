@@ -530,22 +530,19 @@ export const WithdrawPage = () => {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
-
+  
   const { data: profileData } = useQuery({
     queryKey: ['profile'],
     queryFn: fetchProfile,
     refetchInterval: 30000
   });
 
-  // Total saldo semua donasi
+  // ✅ Ambil dari API response
   const totalWallet = parseFloat(profileData?.User?.walletBalance || profileData?.walletBalance || 0);
-  
-  // ⬅️ SEMENTARA: availableBalance = totalWallet (bisa tarik semua)
-  // ⬅️ NANTI: ambil dari availableBalance field kalau cron sudah jalan
-  const availableBalance = totalWallet; 
-  
-  // Untuk sementara pending = 0
-  const pendingBalance = 0;
+  const availableBalance = parseFloat(profileData?.User?.availableBalance || profileData?.availableBalance || 0);
+
+  // Hitung pending (yang belum bisa tarik)
+  const pendingBalance = totalWallet - availableBalance;
 
   const { data: historyData, isLoading: historyLoading, refetch: refetchHistory, isFetching: historyFetching } = useQuery({
     queryKey: ['withdrawHistory', historyPage],
