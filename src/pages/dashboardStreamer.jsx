@@ -4001,8 +4001,6 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
 // ─── StreamerProfileModal ─────────────────────────────────────────────────────
 
 const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
-  const [showFullImage, setShowFullImage] = useState(false);
-
   const { data: streamer, isLoading, error } = useQuery({
     queryKey: ['publicProfile', username],
     queryFn: () => fetchPublicProfile(username),
@@ -4053,9 +4051,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
             <div className="md:w-[40%] p-6 md:p-8 md:border-r border-slate-50 dark:border-slate-800/50 flex flex-col justify-between">
               <div className="relative mt-0 md:mt-0 mb-4">
                 <div className="bg-white dark:bg-slate-900 rounded-none ml-[-5px] mb-4 shadow-xl inline-block">
-                  <div 
-                    onClick={() => setShowFullImage(false)}
-                    className="w-24 h-24 md:w-28 md:h-28 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black text-indigo-600 border-4 border-white dark:border-slate-900 overflow-hidden">
+                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black text-indigo-600 border-4 border-white dark:border-slate-900 overflow-hidden">
                     {streamer?.profilePicture ? (
                       <img src={streamer.profilePicture} alt={username} className="w-full h-full object-cover" />
                     ) : username?.charAt(0).toUpperCase()}

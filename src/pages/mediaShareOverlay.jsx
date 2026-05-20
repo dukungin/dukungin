@@ -20,6 +20,15 @@
 
   const getYouTubeEmbedUrl = (url, startSeconds = 0) => {
     if (!url) return null;
+    
+    // ✅ Return as-is jika sudah embed URL
+    if (url.includes('youtube.com/embed/') || url.includes('youtube-nocookie.com/embed/')) {
+      if (startSeconds > 0 && !url.includes('&start=')) {
+        return url + (url.includes('?') ? '&' : '?') + `start=${Math.floor(startSeconds)}`;
+      }
+      return url;
+    }
+    
     const start = startSeconds > 0 ? `&start=${Math.floor(startSeconds)}` : '';
     
     const watchMatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
@@ -42,7 +51,18 @@
 
   const detectMediaType = (url, mediaType) => {
     if (!url) return null;
-    if (getYouTubeEmbedUrl(url)) return 'youtube';
+    
+    // ✅ Handle YouTube embed URL
+    if (url.includes('youtube.com/embed/') || url.includes('youtube-nocookie.com/embed/')) return 'youtube';
+    
+    // Regular YouTube URLs
+    if (url.match(/youtube\.com\/watch\?v=/) || 
+        url.match(/youtu\.be\//) || 
+        url.match(/youtube\.com\/shorts\//)) {
+      return 'youtube';
+    }
+    
+    // File types
     if (mediaType === 'video') return 'video';
     if (mediaType === 'image') return 'image';
     if (/\.(mp4|webm|mov|ogg)$/i.test(url)) return 'video';
