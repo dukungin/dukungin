@@ -61,7 +61,7 @@ const MaintenancePage = ({ onRetry }) => {
         <div style={{
           width: 72, height: 72, border: '1px solid rgba(253,164,175,0.2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          margin: '20px auto 1.5rem', position: 'relative',
+          margin: '22px auto 1.5rem', position: 'relative',
         }}>
           <div style={{
             width: 52, height: 52, border: '1px solid rgba(253,164,175,0.35)',
