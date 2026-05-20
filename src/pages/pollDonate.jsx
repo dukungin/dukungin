@@ -217,7 +217,7 @@ const PollDonatePage = () => {
       <PollNavbar theme={theme} toggleTheme={toggleTheme} />
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex justify-center items-start p-4 pt-20 md:pt-24 pb-10">
-        <div className="w-full max-w-lg space-y-4">
+        <div className="w-full max-w-xl space-y-4">
 
           {/* Header streamer */}
           <motion.div
