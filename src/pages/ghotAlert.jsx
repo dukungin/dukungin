@@ -520,6 +520,7 @@ import {
   Send,
   ShieldAlert,
   User2,
+  X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { VoiceRecorder } from '../components/voiceOver';
@@ -1101,7 +1102,7 @@ const GhostAlertPage = () => {
               />
               
               {/* Fallback: manual URL input (opsional) */}
-              {form.voiceUrl && (
+              {/* {form.voiceUrl && (
                 <div className="flex items-center gap-2">
                   <audio 
                     controls 
@@ -1117,7 +1118,7 @@ const GhostAlertPage = () => {
                     <X size={14} />
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 
