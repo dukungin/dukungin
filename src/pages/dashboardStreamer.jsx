@@ -5237,7 +5237,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
                 {
                   u.profilePicture ? (
                     <>
-                      <img src={u.profilePicture} alt='profile photo' />
+                      <img src={u.profilePicture} alt='🧐' />
                     </>
                   ):
                   u.username.charAt(0).toUpperCase()
