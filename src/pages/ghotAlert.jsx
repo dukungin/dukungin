@@ -522,6 +522,7 @@ import {
   User2,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { VoiceRecorder } from '../components/voiceOver';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const getTokenPayload = () => {
@@ -834,17 +835,16 @@ const GhostAlertPage = () => {
     setSending(true);
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/midtrans/ghost-alert`,
+      `${import.meta.env.VITE_API_URL}/api/midtrans/ghost-alert`,
         {
           targetUserId: form.targetUserId,
-          donorName:    form.donorName || 'SuperAdmin 👑',
-          amount:       Number(form.amount),
-          message:      form.message,
-          mediaUrl:     form.mediaUrl.trim() || null,
-          mediaType:    form.mediaUrl.trim() ? form.mediaType : null,
-          // ✅ Kirim startTime untuk YouTube
-          startTime:    isYouTubeUrl(form.mediaUrl) ? startTime : 0,
-          voiceUrl:     form.voiceUrl.trim() || null,
+          donorName: form.donorName || 'SuperAdmin 👑',
+          amount: Number(form.amount),
+          message: form.message,
+          mediaUrl: form.mediaUrl.trim() || null,
+          mediaType: form.mediaUrl.trim() ? form.mediaType : null,
+          startTime: isYouTubeUrl(form.mediaUrl) ? startTime : 0,  // ← Sudah dikirim
+          voiceUrl: form.voiceUrl.trim() || null,
         },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
@@ -1084,7 +1084,7 @@ const GhostAlertPage = () => {
               )}
             </AnimatePresence>
 
-            {/* ✅ Voice Note section */}
+            {/* ✅ Voice Note section - Pakai VoiceRecorder kayak SupporterPage */}
             <div className="rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 p-5 space-y-3">
               <div className="flex items-center gap-2">
                 <HeadphonesIcon size={14} className="text-slate-400 dark:text-slate-500" />
@@ -1092,15 +1092,31 @@ const GhostAlertPage = () => {
                   Voice Note (Opsional)
                 </span>
               </div>
-              <input
-                type="url"
-                value={form.voiceUrl}
-                onChange={(e) => setForm({ ...form, voiceUrl: e.target.value })}
-                className="w-full p-3.5 rounded-none bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-600 outline-none font-mono text-xs text-slate-700 dark:text-slate-300 transition-all placeholder:font-sans placeholder:text-slate-400 dark:placeholder:text-slate-600"
-                placeholder="https://... (URL audio .mp3, .ogg, dll)"
+              
+              {/* ✅ Ganti input URL dengan VoiceRecorder */}
+              <VoiceRecorder
+                onVoiceReady={(url) => setForm({ ...form, voiceUrl: url || '' })}
+                maxSeconds={60}
+                disabled={sending}
               />
+              
+              {/* Fallback: manual URL input (opsional) */}
               {form.voiceUrl && (
-                <audio controls src={form.voiceUrl} className="w-full h-8" style={{ borderRadius: 0 }} />
+                <div className="flex items-center gap-2">
+                  <audio 
+                    controls 
+                    src={form.voiceUrl} 
+                    className="w-full h-8" 
+                    style={{ borderRadius: 0 }} 
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, voiceUrl: '' })}
+                    className="p-2 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-500 rounded-none transition-all"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
               )}
             </div>
           </div>
