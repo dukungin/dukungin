@@ -3637,7 +3637,7 @@ const DEFAULT_SETTINGS = {
   borderColor: '#ffffff26',
   primaryColor: '#6366f1',
   textColor: '#ffffff',
-  publicSounds: SOUND_PRESETS.slice(0, 8),
+  publicSounds: [],
   publicSoundDefault: '',  
   animation: 'bounce',
   quickAmounts: [10000, 25000, 50000, 100000, 250000],
