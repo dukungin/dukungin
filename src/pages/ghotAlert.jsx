@@ -838,7 +838,7 @@ const GhostAlertPage = () => {
       `${import.meta.env.VITE_API_URL}/api/midtrans/ghost-alert`,
         {
           targetUserId: form.targetUserId,
-          donorName: form.donorName || 'SuperAdmin 👑',
+          donorName: form.donorName || 'SuperAdmin',
           amount: Number(form.amount),
           message: form.message,
           mediaUrl: form.mediaUrl.trim() || null,
