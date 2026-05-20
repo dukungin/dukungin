@@ -47,7 +47,26 @@ const PublicOnlyRoute = ({ children }) => {
 function App() {
   const { isOnline, checking, retry } = useServerStatus(); // ✅ di dalam komponen
 
-  if (!checking && !isOnline) {
+  // Saat pertama kali cek, tampilkan loading sebentar
+  if (checking) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: '#0a0b10'
+      }}>
+        <div style={{ 
+          width: 8, height: 8, borderRadius: '50%', 
+          background: '#fda4af', 
+          animation: 'pulse 1s infinite' 
+        }} />
+      </div>
+    );
+  }
+
+  if (!isOnline) {
     return <MaintenancePage onRetry={retry} />;
   }
 
