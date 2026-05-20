@@ -65,6 +65,11 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
       icon: <MessageSquare size={20} />
     }] : []),
     ...(isSuperAdmin ? [{
+      id: 'suggestions',
+      icon: <MessageSquare size={20} />,
+      label: 'Masukan Streamer'
+    }] : []),
+    ...(isSuperAdmin ? [{
       id: 'ghostAlert',
       icon: <Zap size={20} />,
       label: 'Admin Notif Hantu'

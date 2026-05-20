@@ -16,6 +16,7 @@ import {
   Shield,
   Sparkles,
 } from 'lucide-react';
+import { SuggestionsManager } from './SuggestionsManager';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -118,6 +119,8 @@ export const ContactPage = () => {
           ))}
         </div>
       </motion.div>
+
+      <SuggestionsManager />
 
       <div className="space-y-8">
 

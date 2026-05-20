@@ -3573,6 +3573,7 @@ import toast from 'react-hot-toast';
 import { MediaShareControl } from '../components/mediaShareController';
 import { FeeConfigPage } from './feeConfig';
 import { WhatsAppPage } from './whatsappPage';
+import { SuggestionsAdmin } from './suggestionAdmin';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -5567,6 +5568,7 @@ export const DashboardStreamer = () => {
     subathon:      'Subathon',
     milestones:    'Milestones',
     whatsapp: 'WhatsApp',
+    suggestions: 'Masukan Streamer',
     leaderboard:   'Leaderboard',
     contact:       'Contact',
     ghostAlert:    'Notif Hantu',
@@ -5755,6 +5757,10 @@ export const DashboardStreamer = () => {
               <motion.div key="community" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <CommunityPage currentUserId={profileData?.user?._id || profileData?.User?._id} onFollowAction={handleFollowAction} />
               </motion.div>
+            )}
+
+            {activeTab === 'suggestions' && isSuperAdmin && (
+              <SuggestionsAdmin />
             )}
 
             {activeTab === 'whatsapp' && (
