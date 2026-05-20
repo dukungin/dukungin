@@ -6,21 +6,21 @@ const MaintenancePage = ({ onRetry }) => {
 
   const handleRetry = () => {
     setLastCheck(new Date().toLocaleTimeString('id-ID'));
-    setCountdown(30);
+    setCountdown(60);
     onRetry();
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCountdown((prev) => {
-        if (prev <= 1) { handleRetry(); return 30; }
+        if (prev <= 1) { handleRetry(); return 60; }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const progress = Math.round((countdown / 30) * 100);
+  const progress = Math.round((countdown / 60) * 100);
 
   const marqueeItems = [
     'Maintenance Mode', 'Server Down', 'Sedang Diperbaiki',
