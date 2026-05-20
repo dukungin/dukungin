@@ -182,10 +182,10 @@ const HeroJellyfish = () => (
     <motion.img className='md:block hidden' src="/jellyfish.png" alt=""
       animate={{ y:[0,-10,0] }} transition={{ duration:4, repeat:Infinity, ease:'easeInOut' }}
       style={{ width:'18%', userSelect:'none', pointerEvents:'none' }} />
-    <motion.img className='md:block md:opacity-[0.45] opacity-[0.20]' src="/jellyfish.png" alt=""
+    {/* <motion.img className='md:block md:opacity-[0.45] opacity-[0.20]' src="/jellyfish.png" alt=""
       animate={{ y:[0,8,0], rotate:[-45,-38,-45] }} 
       transition={{ duration:5.5, repeat:Infinity, ease:'easeInOut', delay:0.8 }}
-      style={{ position:'absolute', top:-60, right:-30, width:'44%', transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} />
+      style={{ position:'absolute', top:-60, right:-30, width:'44%', transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} /> */}
   </div>
 );
 

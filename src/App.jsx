@@ -20,6 +20,15 @@ import ResetPassword from './pages/resetPassword';
 import SupporterPage from './pages/supporterPage';
 import { Toaster } from 'react-hot-toast';
 import VoiceNoteOverlay from './pages/voiceNoteOverlay';
+import { useServerStatus } from './hooks/useServerStatus';
+import MaintenancePage from './pages/maintenancePage';
+
+const { isOnline, checking, retry } = useServerStatus();
+
+// SESUDAH — semua kena maintenance kalau server mati
+if (!checking && !isOnline) {
+  return <MaintenancePage onRetry={retry} />;
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
