@@ -277,7 +277,7 @@
                 background: 'rgba(0,0,0,0.2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 20, flexShrink: 0,
-                marginTop: 7
+                marginTop: 0
               }}>
                 {renderIcon(customIcon, 22)}
               </div>
