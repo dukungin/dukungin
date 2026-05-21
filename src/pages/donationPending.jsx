@@ -245,7 +245,7 @@ const DonationPending = () => {
                     whileTap={{ scale: 0.98 }}
                     onClick={handleReopenPayment}
                     disabled={reopening}
-                    className="cursor-pointer w-full flex items-center justify-center gap-2 py-4 rounded-none bg-indigo-600 text-white font-black text-sm hover:bg-indigo-700 transition-all disabled:opacity-60 shadow-lg shadow-indigo-200 dark:shadow-indigo-900"
+                    className="cursor-pointer w-full flex items-center justify-center gap-2 py-4 rounded-none bg-blue-600 text-white font-black text-sm hover:bg-blue-700 transition-all disabled:opacity-60 shadow-lg shadow-blue-200 dark:shadow-blue-900"
                   >
                     {reopening ? (
                       <>

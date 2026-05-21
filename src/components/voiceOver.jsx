@@ -235,9 +235,9 @@ export const VoiceRecorder = ({ onVoiceReady, maxSeconds = 60, disabled = false 
   // PREVIEW — putar ulang + konfirmasi upload atau ulang
   if (phase === 'preview') {
     return (
-      <div className="rounded-none border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/30 p-4 space-y-3">
+      <div className="rounded-none border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30 p-4 space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
+          <span className="text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">
             Preview Suara
           </span>
           <span className="font-mono text-xs text-slate-400">
@@ -262,7 +262,7 @@ export const VoiceRecorder = ({ onVoiceReady, maxSeconds = 60, disabled = false 
           <button
             type="button"
             onClick={uploadVoice}
-            className="cursor-pointer flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+            className="cursor-pointer flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
           >
             ✓ Pakai Suara Ini
           </button>
@@ -281,9 +281,9 @@ export const VoiceRecorder = ({ onVoiceReady, maxSeconds = 60, disabled = false 
   // UPLOADING
   if (phase === 'uploading') {
     return (
-      <div className="rounded-none border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950/30 p-4 flex items-center gap-3">
-        <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin flex-shrink-0" />
-        <span className="text-sm font-black text-indigo-600 dark:text-indigo-400">Mengupload suara...</span>
+      <div className="rounded-none border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30 p-4 flex items-center gap-3">
+        <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+        <span className="text-sm font-black text-blue-600 dark:text-blue-400">Mengupload suara...</span>
       </div>
     );
   }

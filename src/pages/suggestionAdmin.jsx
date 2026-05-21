@@ -168,7 +168,7 @@ export const SuggestionsAdmin = () => {
         <button
           onClick={() => setStatusFilter('')}
           className={`cursor-pointer px-4 py-2 rounded-none font-black text-xs transition-all ${
-            statusFilter === '' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'
+            statusFilter === '' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'
           }`}
         >
           Semua
@@ -178,7 +178,7 @@ export const SuggestionsAdmin = () => {
             key={s.value}
             onClick={() => setStatusFilter(s.value)}
             className={`cursor-pointer px-4 py-2 rounded-none font-black text-xs transition-all ${
-              statusFilter === s.value ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'
+              statusFilter === s.value ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700'
             }`}
           >
             {s.label}
@@ -205,7 +205,7 @@ export const SuggestionsAdmin = () => {
                 <tr>
                   <td colSpan={6} className="text-center py-16 text-slate-400 font-bold">
                     <div className="flex items-center justify-center gap-3">
-                      <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />Memuat...
+                      <div className="w-5 h-5 border-4 border-slate-200 border-t-blue-600 rounded-none animate-spin" />Memuat...
                     </div>
                   </td>
                 </tr>
@@ -224,7 +224,7 @@ export const SuggestionsAdmin = () => {
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-none text-[10px] font-black ${
-                        s.category === 'feature' ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400' :
+                        s.category === 'feature' ? 'bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400' :
                         s.category === 'bug' ? 'bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400' :
                         s.category === 'improvement' ? 'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400' :
                         'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
@@ -316,7 +316,7 @@ export const SuggestionsAdmin = () => {
                         disabled={updateMutation.isPending}
                         className={`cursor-pointer py-2 rounded-none font-black text-xs transition-all ${
                           selectedSuggestion.status === opt.value
-                            ? 'bg-indigo-600 text-white'
+                            ? 'bg-blue-600 text-white'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'
                         }`}
                       >
@@ -333,14 +333,14 @@ export const SuggestionsAdmin = () => {
                     onChange={(e) => setAdminNote(e.target.value)}
                     placeholder="Tulis catatan untuk streamer..."
                     rows={3}
-                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-medium text-sm text-slate-700 dark:text-slate-200 focus:border-indigo-500 outline-none resize-none"
+                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-medium text-sm text-slate-700 dark:text-slate-200 focus:border-blue-500 outline-none resize-none"
                   />
                 </div>
 
                 <button
                   onClick={() => handleUpdateStatus(selectedSuggestion, selectedSuggestion.status)}
                   disabled={updateMutation.isPending}
-                  className="cursor-pointer w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-sm disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="cursor-pointer w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black text-sm disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {updateMutation.isPending ? (
                     <><Loader2 size={16} className="animate-spin" /> Menyimpan...</>

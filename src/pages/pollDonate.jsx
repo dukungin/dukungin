@@ -47,8 +47,8 @@ const PollNavbar = ({ theme, toggleTheme }) => (
 
 // ─── State: tidak ada poll aktif ──────────────────────────────────────────────
 const NoPollState = ({ username }) => (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4 pt-24">
-    <div className="bg-white dark:bg-slate-900 rounded-none shadow-xl border border-indigo-100 dark:border-slate-800 p-10 text-center max-w-sm w-full">
+  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-violet-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4 pt-24">
+    <div className="bg-white dark:bg-slate-900 rounded-none shadow-xl border border-blue-100 dark:border-slate-800 p-10 text-center max-w-sm w-full">
       <p className="text-5xl mb-4">🗳️</p>
       <h2 className="font-black text-slate-800 dark:text-white text-lg mb-2">Tidak Ada Poll Aktif</h2>
       <p className="text-sm text-slate-400 dark:text-slate-500 font-medium mb-6">
@@ -56,7 +56,7 @@ const NoPollState = ({ username }) => (
       </p>
       <Link
         to={`/donate/${username}`}
-        className="inline-block px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-sm transition-all"
+        className="inline-block px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black text-sm transition-all"
       >
         Donasi Biasa →
       </Link>
@@ -194,7 +194,7 @@ const PollDonatePage = () => {
       <>
         <PollNavbar theme={theme} toggleTheme={toggleTheme} />
         <div className="min-h-screen flex items-center justify-center bg-blue-50 dark:bg-slate-900 pt-16">
-          <Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={28} />
+          <Loader2 className="animate-spin text-blue-600 dark:text-blue-400" size={28} />
         </div>
       </>
     );
@@ -216,17 +216,17 @@ const PollDonatePage = () => {
     <>
       <PollNavbar theme={theme} toggleTheme={toggleTheme} />
 
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-violet-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex justify-center items-start p-4 pt-20 md:pt-24 pb-10">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50 to-violet-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex justify-center items-start p-4 pt-20 md:pt-24 pb-10">
         <div className="w-full max-w-xl space-y-4">
 
           {/* Header streamer */}
           <motion.div
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-slate-900 px-8 py-6 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 text-center border border-indigo-100 dark:border-slate-800 relative overflow-hidden"
+            className="bg-white dark:bg-slate-900 px-8 py-6 rounded-none shadow-xl shadow-blue-100/50 dark:shadow-slate-800/50 text-center border border-blue-100 dark:border-slate-800 relative overflow-hidden"
           >
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500" />
-            <div className="w-16 h-16 mt-2 mx-auto rounded-none bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-2xl font-black shadow-lg mb-3">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-400 via-violet-500 to-purple-500" />
+            <div className="w-16 h-16 mt-2 mx-auto rounded-none bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-2xl font-black shadow-lg mb-3">
               {streamer?.username?.charAt(0).toUpperCase()}
             </div>
             <h1 className="text-xl font-black text-slate-800 dark:text-white">@{streamer?.username}</h1>
@@ -238,12 +238,12 @@ const PollDonatePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="bg-white dark:bg-slate-900 p-6 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800"
+            className="bg-white dark:bg-slate-900 p-6 rounded-none shadow-xl shadow-blue-100/50 dark:shadow-slate-800/50 border border-blue-100 dark:border-slate-800"
           >
             <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Pilih Opsi Poll</p>
 
             {/* Info minimum */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-none text-[10px] font-black text-indigo-600 dark:text-indigo-400 mb-4">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 rounded-none text-[10px] font-black text-blue-600 dark:text-blue-400 mb-4">
               ℹ️ Min. donasi Rp {minVoteAmount.toLocaleString('id-ID')} untuk ikut vote
             </div>
 
@@ -262,14 +262,14 @@ const PollDonatePage = () => {
                     onClick={() => setSelectedOption(isSelected ? null : opt._id)}
                     className={`cursor-pointer active:scale-[0.99] w-full text-left px-4 py-3.5 rounded-none border-2 font-bold text-sm transition-all flex items-center gap-3 ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-indigo-300 dark:hover:border-indigo-700'
+                        ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-blue-300 dark:hover:border-blue-700'
                     }`}
                   >
                     {/* Radio visual */}
                     <span className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-600'
+                        ? 'border-blue-600 bg-blue-600'
                         : 'border-slate-300 dark:border-slate-600'
                     }`}>
                       {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-white block" />}
@@ -286,7 +286,7 @@ const PollDonatePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-slate-900 p-6 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800"
+            className="bg-white dark:bg-slate-900 p-6 rounded-none shadow-xl shadow-blue-100/50 dark:shadow-slate-800/50 border border-blue-100 dark:border-slate-800"
           >
             <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Nominal Donasi</p>
 
@@ -298,8 +298,8 @@ const PollDonatePage = () => {
                   onClick={() => setAmount(val)}
                   className={`cursor-pointer py-3 rounded-none font-black text-xs transition-all border-2 active:scale-[0.99] ${
                     amount === val
-                      ? 'bg-indigo-600 border-indigo-600 text-white'
-                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 text-slate-700 dark:text-slate-300'
+                      ? 'bg-blue-600 border-blue-600 text-white'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-600 text-slate-700 dark:text-slate-300'
                   }`}
                 >
                   Rp {val.toLocaleString('id-ID')}
@@ -309,12 +309,12 @@ const PollDonatePage = () => {
 
             {/* Custom input */}
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-indigo-600 dark:text-indigo-400 text-sm">Rp</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-blue-600 dark:text-blue-400 text-sm">Rp</span>
               <input
                 type="number"
                 value={amount || ''}
                 onChange={e => setAmount(Number(e.target.value))}
-                className="w-full p-4 pl-12 rounded-none font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 outline-none transition-all"
+                className="w-full p-4 pl-12 rounded-none font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 outline-none transition-all"
                 placeholder="Nominal custom..."
               />
             </div>
@@ -331,7 +331,7 @@ const PollDonatePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-white dark:bg-slate-900 p-6 rounded-none shadow-xl shadow-indigo-100/50 dark:shadow-slate-800/50 border border-indigo-100 dark:border-slate-800 space-y-4"
+            className="bg-white dark:bg-slate-900 p-6 rounded-none shadow-xl shadow-blue-100/50 dark:shadow-slate-800/50 border border-blue-100 dark:border-slate-800 space-y-4"
           >
             <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Identitas</p>
 
@@ -344,7 +344,7 @@ const PollDonatePage = () => {
                   value={isAnonymous ? '' : donorName}
                   onChange={e => setDonorName(e.target.value)}
                   placeholder="Nama kamu"
-                  className="w-full p-3.5 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white text-sm font-bold"
+                  className="w-full p-3.5 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white text-sm font-bold"
                 />
               </div>
               <div>
@@ -355,7 +355,7 @@ const PollDonatePage = () => {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="email@kamu.com"
-                  className="w-full p-3.5 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-300 dark:focus:border-indigo-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white text-sm font-bold"
+                  className="w-full p-3.5 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white text-sm font-bold"
                 />
               </div>
             </div>
@@ -365,7 +365,7 @@ const PollDonatePage = () => {
               <div
                 onClick={() => setIsAnonymous(!isAnonymous)}
                 className={`w-10 h-6 rounded-none relative flex-shrink-0 transition-all cursor-pointer ${
-                  isAnonymous ? 'bg-indigo-600' : 'bg-slate-200 dark:bg-slate-700'
+                  isAnonymous ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'
                 }`}
               >
                 <div className={`absolute top-1 w-4 h-4 bg-white rounded-none shadow transition-all ${isAnonymous ? 'left-5' : 'left-1'}`} />
@@ -384,7 +384,7 @@ const PollDonatePage = () => {
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-none px-4 py-3 text-xs font-bold text-indigo-700 dark:text-indigo-400 space-y-1 mb-4">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-none px-4 py-3 text-xs font-bold text-blue-700 dark:text-blue-400 space-y-1 mb-4">
                     <p>✅ Vote: <span className="font-black">"{selectedOptText}"</span></p>
                     <p>💜 Donasi: <span className="font-black">Rp {Number(amount).toLocaleString('id-ID')}</span></p>
                   </div>
@@ -397,7 +397,7 @@ const PollDonatePage = () => {
               whileTap={{ scale: 0.99 }}
               onClick={handleSubmit}
               disabled={submitting || !amount || !selectedOption || amount < minVoteAmount}
-              className="cursor-pointer w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-base disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+              className="cursor-pointer w-full py-4 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-none font-black text-base disabled:opacity-50 flex items-center justify-center gap-2 hover:brightness-110 transition-all"
             >
               {submitting ? (
                 <><Loader2 size={18} className="animate-spin" /> Memproses...</>

@@ -28,7 +28,7 @@ const Badge = ({ type = 'streamer', name, active = true, className = '' }) => {
       '1x': 'bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-700',
       '5x': 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700',
       '10k': 'bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-700',
-      '50k': 'bg-indigo-100 text-indigo-800 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-700',
+      '50k': 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700',
       '100k': 'bg-violet-100 text-violet-800 border-violet-200 dark:bg-violet-900/30 dark:text-violet-300 dark:border-violet-700',
       '1jt': 'bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-700'
     }
@@ -36,7 +36,7 @@ const Badge = ({ type = 'streamer', name, active = true, className = '' }) => {
 
   const icon = icons[type]?.[name] || '🏆';
   const label = labels[type]?.[name] || name.toUpperCase();
-  const colorClass = colors[type]?.[name] || 'bg-indigo-100 text-indigo-800 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-700';
+  const colorClass = colors[type]?.[name] || 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700';
 
   return (
     <div className={`

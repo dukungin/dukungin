@@ -55,7 +55,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     { id: 'feeConfig',   label: 'Konfigurasi Fee',  icon: <ReceiptText size={20} /> }, // ← TAMBAHKAN INI
 
     // Tambahkan property 'mobileOnly' pada profile
-    { id: 'profile',     label: 'Profile Saya',     icon: <User size={20} /> },
+    // { id: 'profile',     label: 'Profile Saya',     icon: <User size={20} /> },
     { id: 'subathon',    label: 'Subathon',         icon: <Timer size={20} /> },
     { id: 'milestones',  label: 'Milestones',       icon: <TrendingUp size={20} /> },
     { id: 'leaderboard', label: 'Leaderboard',      icon: <Trophy size={20} /> },
@@ -167,7 +167,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 ${item.mobileOnly ? 'lg:hidden' : ''} // <--- Tambahkan Baris Ini
                 ${
                 activeTab === item.id
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 dark:shadow-indigo-900/30'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/30'
                   : 'text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
@@ -186,7 +186,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               }}
               className={`cursor-pointer mb-2 w-full flex items-center gap-4 p-4 rounded-none font-black transition-all text-sm ${
                 activeTab === 'admin'
-                  ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 dark:shadow-indigo-900/30'
+                  ? 'bg-blue-600 text-white shadow-xl shadow-blue-100 dark:shadow-blue-900/30'
                   : 'text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >

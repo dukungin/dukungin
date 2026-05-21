@@ -48,13 +48,13 @@ const FilterPanel = ({ settings, onChange }) => {
               <label key={m.id} className={cls(
                 "flex items-start gap-3 p-4 rounded-2xl border-2 cursor-pointer transition-all",
                 settings.filterMode === m.id
-                  ? "border-indigo-600 bg-indigo-50"
+                  ? "border-blue-600 bg-blue-50"
                   : "border-slate-100 hover:border-slate-200"
               )}>
                 <input type="radio" name="filterMode" value={m.id}
                   checked={settings.filterMode === m.id}
                   onChange={() => onChange({ ...settings, filterMode: m.id })}
-                  className="mt-1 accent-indigo-600" />
+                  className="mt-1 accent-blue-600" />
                 <div>
                   <p className="font-black text-sm text-slate-800">{m.label}</p>
                   <p className="text-xs text-slate-500 mt-0.5">{m.desc}</p>
@@ -69,7 +69,7 @@ const FilterPanel = ({ settings, onChange }) => {
               <input value={settings.filterReplacement || ""}
                 onChange={(e) => onChange({ ...settings, filterReplacement: e.target.value })}
                 placeholder="contoh: [dihapus]"
-                className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+                className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
             </div>
           )}
 
@@ -83,9 +83,9 @@ const FilterPanel = ({ settings, onChange }) => {
           <input value={newWord} onChange={(e) => setNewWord(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && addWord()}
             placeholder="Tambah kata terlarang..."
-            className="flex-1 p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+            className="flex-1 p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
           <button onClick={addWord}
-            className="px-5 py-3 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 transition-all active:scale-[0.97]">
+            className="px-5 py-3 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 transition-all active:scale-[0.97]">
             + Tambah
           </button>
         </div>
@@ -153,7 +153,7 @@ const SoundPanel = ({ settings, onChange }) => {
                   className={cls(
                     "flex items-center gap-2 p-3 rounded-2xl border-2 text-sm font-black transition-all text-left",
                     settings.notifSoundPreset === p.id
-                      ? "border-indigo-600 bg-indigo-50 text-indigo-700"
+                      ? "border-blue-600 bg-blue-50 text-blue-700"
                       : "border-slate-100 text-slate-500 hover:border-slate-200"
                   )}>
                   {p.id === "none" ? "🔇" : "🎵"} {p.label}
@@ -167,7 +167,7 @@ const SoundPanel = ({ settings, onChange }) => {
               <input value={settings.notifSoundUrl || ""}
                 onChange={(e) => onChange({ ...settings, notifSoundUrl: e.target.value, notifSoundPreset: "custom" })}
                 placeholder="https://example.com/sound.mp3"
-                className="flex-1 p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500 font-mono" />
+                className="flex-1 p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500 font-mono" />
               <button onClick={() => testSound(settings.notifSoundUrl)}
                 className="px-4 py-3 bg-green-600 text-white rounded-2xl font-black text-sm hover:bg-green-700 transition-all active:scale-[0.97]">
                 ▶ Test
@@ -181,7 +181,7 @@ const SoundPanel = ({ settings, onChange }) => {
             <input type="range" min={0} max={100} step={5}
               value={settings.globalVolume || 100}
               onChange={(e) => onChange({ ...settings, globalVolume: Number(e.target.value) })}
-              className="w-full accent-indigo-600" />
+              className="w-full accent-blue-600" />
           </div>
         </div>
       </SectionCard>
@@ -200,26 +200,26 @@ const SoundPanel = ({ settings, onChange }) => {
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Label</label>
                   <input value={tier.label || ""} onChange={(e) => updateTier(i, "label", e.target.value)}
                     placeholder="Sultan Alert Sound"
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
                 <div>
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Volume (%)</label>
                   <input type="number" min={0} max={100} value={tier.volume || 100}
                     onChange={(e) => updateTier(i, "volume", Number(e.target.value))}
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
                 <div>
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Min (Rp)</label>
                   <input type="number" value={tier.minAmount}
                     onChange={(e) => updateTier(i, "minAmount", Number(e.target.value))}
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
                 <div>
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Max (kosong=∞)</label>
                   <input type="number" value={tier.maxAmount ?? ""}
                     onChange={(e) => updateTier(i, "maxAmount", e.target.value === "" ? null : Number(e.target.value))}
                     placeholder="∞"
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
               </div>
               <div>
@@ -227,7 +227,7 @@ const SoundPanel = ({ settings, onChange }) => {
                 <div className="flex gap-2">
                   <input value={tier.soundUrl || ""} onChange={(e) => updateTier(i, "soundUrl", e.target.value)}
                     placeholder="https://example.com/sultan.mp3"
-                    className="flex-1 p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400 font-mono" />
+                    className="flex-1 p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400 font-mono" />
                   <button onClick={() => testSound(tier.soundUrl)}
                     className="px-3 py-2 bg-green-100 text-green-700 rounded-xl font-black text-xs hover:bg-green-200 transition-all">
                     ▶
@@ -237,7 +237,7 @@ const SoundPanel = ({ settings, onChange }) => {
             </div>
           ))}
           <button onClick={addTier}
-            className="w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
+            className="w-full py-3 border-2 border-dashed border-blue-200 text-blue-500 rounded-2xl font-black text-sm hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center justify-center gap-2">
             + Tambah Sound Tier
           </button>
         </div>
@@ -300,7 +300,7 @@ const TTSPanel = ({ settings, onChange }) => {
                   className={cls(
                     "p-3 rounded-2xl border-2 text-xs font-black transition-all text-left",
                     settings.ttsTemplate === t.id
-                      ? "border-indigo-600 bg-indigo-50 text-indigo-700"
+                      ? "border-blue-600 bg-blue-50 text-blue-700"
                       : "border-slate-100 text-slate-500 hover:border-slate-200"
                   )}>
                   <div className="font-black">{t.label}</div>
@@ -314,7 +314,7 @@ const TTSPanel = ({ settings, onChange }) => {
                 <input value={settings.ttsCustomTemplate || ""}
                   onChange={(e) => onChange({ ...settings, ttsCustomTemplate: e.target.value })}
                   placeholder="{name} donasi {amount}. {message}"
-                  className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-mono text-xs outline-none focus:border-indigo-500" />
+                  className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-mono text-xs outline-none focus:border-blue-500" />
                 <p className="text-[9px] text-slate-400 font-medium mt-1">Variabel: {"{name}"}, {"{amount}"}, {"{message}"}</p>
               </div>
             )}
@@ -335,7 +335,7 @@ const TTSPanel = ({ settings, onChange }) => {
             <input type="number" min={0} max={500}
               value={settings.ttsMaxLength || 150}
               onChange={(e) => onChange({ ...settings, ttsMaxLength: Number(e.target.value) })}
-              className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+              className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
             <p className="text-[9px] text-slate-400 font-medium mt-1">Pesan lebih panjang dari ini akan dipotong. 0 = tidak ada batas</p>
           </div>
 
@@ -344,7 +344,7 @@ const TTSPanel = ({ settings, onChange }) => {
             <div className="flex gap-2">
               <input value={preview} onChange={(e) => setPreview(e.target.value)}
                 placeholder="Ketik teks untuk preview..."
-                className="flex-1 p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+                className="flex-1 p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
               <button onClick={testTTS}
                 className="px-4 py-3 bg-green-600 text-white rounded-2xl font-black text-sm hover:bg-green-700 transition-all active:scale-[0.97]">
                 ▶ Play
@@ -366,7 +366,7 @@ const TTSPanel = ({ settings, onChange }) => {
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Minimal Nominal untuk TTS</label>
             <input type="number" value={settings.ttsMinAmount || 10000}
               onChange={(e) => onChange({ ...settings, ttsMinAmount: Number(e.target.value) })}
-              className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+              className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
           </div>
         )}
       </SectionCard>
@@ -411,7 +411,7 @@ const MilestonePanel = ({ settings, onChange }) => {
           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Total Donasi (Demo)</label>
           <input type="number" value={totalRaised}
             onChange={(e) => onChange({ ...settings, totalRaisedDemo: Number(e.target.value) })}
-            className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+            className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
         </div>
         {milestones.length > 0 && (
           <div className="space-y-3">
@@ -461,7 +461,7 @@ const MilestonePanel = ({ settings, onChange }) => {
                   <button key={ic} onClick={() => updateMilestone(m.id, "icon", ic)}
                     className={cls(
                       "p-2 rounded-xl text-lg border-2 transition-all",
-                      m.icon === ic ? "border-indigo-600 bg-indigo-50" : "border-slate-100 hover:border-slate-200"
+                      m.icon === ic ? "border-blue-600 bg-blue-50" : "border-slate-100 hover:border-slate-200"
                     )}>
                     {ic}
                   </button>
@@ -472,19 +472,19 @@ const MilestonePanel = ({ settings, onChange }) => {
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Label</label>
                   <input value={m.label} onChange={(e) => updateMilestone(m.id, "label", e.target.value)}
                     placeholder="Setup Studio"
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
                 <div>
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Target (Rp)</label>
                   <input type="number" value={m.targetAmount}
                     onChange={(e) => updateMilestone(m.id, "targetAmount", Number(e.target.value))}
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
                 <div className="col-span-2">
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Deskripsi</label>
                   <input value={m.description} onChange={(e) => updateMilestone(m.id, "description", e.target.value)}
                     placeholder="Beli mic baru untuk streaming..."
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
                 <div>
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Warna</label>
@@ -496,7 +496,7 @@ const MilestonePanel = ({ settings, onChange }) => {
             </div>
           ))}
           <button onClick={addMilestone}
-            className="w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
+            className="w-full py-3 border-2 border-dashed border-blue-200 text-blue-500 rounded-2xl font-black text-sm hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center justify-center gap-2">
             + Tambah Milestone
           </button>
         </div>
@@ -552,7 +552,7 @@ const LeaderboardPanel = ({ settings, onChange }) => {
             </label>
             <input type="range" min={3} max={20} step={1} value={maxShow}
               onChange={(e) => onChange({ ...settings, lbMaxEntries: Number(e.target.value) })}
-              className="w-full accent-indigo-600" />
+              className="w-full accent-blue-600" />
             <div className="flex justify-between text-[10px] text-slate-400 font-bold mt-1">
               <span>3</span><span>10</span><span>20</span>
             </div>
@@ -567,7 +567,7 @@ const LeaderboardPanel = ({ settings, onChange }) => {
                   className={cls(
                     "p-3 rounded-2xl border-2 text-xs font-black transition-all",
                     settings.lbPeriod === p.id
-                      ? "border-indigo-600 bg-indigo-50 text-indigo-700"
+                      ? "border-blue-600 bg-blue-50 text-blue-700"
                       : "border-slate-100 text-slate-500 hover:border-slate-200"
                   )}>
                   {p.label}
@@ -577,8 +577,8 @@ const LeaderboardPanel = ({ settings, onChange }) => {
           </div>
 
           {settings.lbPeriod === "stream" && (
-            <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-2xl">
-              <p className="text-xs text-indigo-700 font-bold">💡 Leaderboard "Stream Ini" otomatis reset setiap kali kamu memulai stream baru dari dashboard.</p>
+            <div className="p-3 bg-blue-50 border border-blue-200 rounded-2xl">
+              <p className="text-xs text-blue-700 font-bold">💡 Leaderboard "Stream Ini" otomatis reset setiap kali kamu memulai stream baru dari dashboard.</p>
             </div>
           )}
         </div>
@@ -596,14 +596,14 @@ const LeaderboardPanel = ({ settings, onChange }) => {
                 <p className="font-black text-sm text-slate-800 truncate">{d.name}</p>
                 {settings.lbShowBar && (
                   <div className="h-1.5 bg-slate-200 rounded-full mt-1 overflow-hidden">
-                    <div className="h-full bg-indigo-500 rounded-full"
+                    <div className="h-full bg-blue-500 rounded-full"
                       style={{ width: `${Math.round((d.total / maxAmt) * 100)}%` }} />
                   </div>
                 )}
               </div>
               <div className="text-right">
                 {settings.lbShowAmount !== false && (
-                  <p className="font-black text-sm text-indigo-600">{fmtRp(d.total)}</p>
+                  <p className="font-black text-sm text-blue-600">{fmtRp(d.total)}</p>
                 )}
                 {settings.lbShowCount && (
                   <p className="text-[10px] text-slate-400">{d.count}x donasi</p>
@@ -661,7 +661,7 @@ const QRCodePanel = ({ settings, onChange }) => {
           <div className="flex gap-2">
             <input value={settings.qrCustomUrl || donateUrl}
               onChange={(e) => onChange({ ...settings, qrCustomUrl: e.target.value })}
-              className="flex-1 p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-mono text-sm outline-none focus:border-indigo-500" />
+              className="flex-1 p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-mono text-sm outline-none focus:border-blue-500" />
             <button onClick={() => onChange({ ...settings, qrCustomUrl: donateUrl })}
               className="px-4 py-3 bg-slate-200 text-slate-600 rounded-2xl font-black text-sm hover:bg-slate-300 transition-all">
               Reset
@@ -678,12 +678,12 @@ const QRCodePanel = ({ settings, onChange }) => {
               {styles.map((s) => (
                 <label key={s.id} className={cls(
                   "flex items-start gap-3 p-3 rounded-2xl border-2 cursor-pointer transition-all mb-2",
-                  settings.qrStyle === s.id ? "border-indigo-600 bg-indigo-50" : "border-slate-100"
+                  settings.qrStyle === s.id ? "border-blue-600 bg-blue-50" : "border-slate-100"
                 )}>
                   <input type="radio" name="qrStyle" value={s.id}
                     checked={settings.qrStyle === s.id}
                     onChange={() => onChange({ ...settings, qrStyle: s.id })}
-                    className="mt-0.5 accent-indigo-600" />
+                    className="mt-0.5 accent-blue-600" />
                   <div>
                     <p className="font-black text-sm text-slate-800">{s.label}</p>
                     <p className="text-[10px] text-slate-500">{s.desc}</p>
@@ -699,7 +699,7 @@ const QRCodePanel = ({ settings, onChange }) => {
                     onClick={() => onChange({ ...settings, qrSize: s.id })}
                     className={cls(
                       "p-2.5 rounded-2xl border-2 text-xs font-black transition-all",
-                      settings.qrSize === s.id ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500"
+                      settings.qrSize === s.id ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-100 text-slate-500"
                     )}>
                     {s.label}
                     <div className="text-[9px] font-normal opacity-60">{s.obs}</div>
@@ -715,7 +715,7 @@ const QRCodePanel = ({ settings, onChange }) => {
                     onClick={() => onChange({ ...settings, qrPosition: p.id })}
                     className={cls(
                       "p-2.5 rounded-2xl border-2 text-xs font-black transition-all",
-                      settings.qrPosition === p.id ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-slate-100 text-slate-500"
+                      settings.qrPosition === p.id ? "border-blue-600 bg-blue-50 text-blue-700" : "border-slate-100 text-slate-500"
                     )}>
                     {p.label}
                   </button>
@@ -754,12 +754,12 @@ const QRCodePanel = ({ settings, onChange }) => {
               </div>
             )}
             {settings.qrStyle === "branded" && (
-              <div className="bg-indigo-600 p-4 rounded-2xl flex flex-col items-center gap-2">
+              <div className="bg-blue-600 p-4 rounded-2xl flex flex-col items-center gap-2">
                 <p className="text-white font-black text-sm">@{username}</p>
                 <div className="bg-white p-2 rounded-xl">
                   <img src={qrUrl} alt="QR Preview" style={{ width: 130, height: 130 }} />
                 </div>
-                <p className="text-indigo-200 text-[10px] font-bold">Scan untuk donasi</p>
+                <p className="text-blue-200 text-[10px] font-bold">Scan untuk donasi</p>
               </div>
             )}
             {!settings.qrStyle && (
@@ -767,14 +767,14 @@ const QRCodePanel = ({ settings, onChange }) => {
             )}
             <div className="text-center">
               <p className="text-[10px] text-slate-400 font-bold">URL:</p>
-              <p className="text-xs font-mono text-indigo-600 break-all">{settings.qrCustomUrl || donateUrl}</p>
+              <p className="text-xs font-mono text-blue-600 break-all">{settings.qrCustomUrl || donateUrl}</p>
             </div>
             <ToggleRow label="Tampilkan label di bawah QR" desc=""
               value={settings.qrShowLabel} onChange={(v) => onChange({ ...settings, qrShowLabel: v })} />
             {settings.qrShowLabel && (
               <input value={settings.qrLabel || "Scan untuk donasi!"}
                 onChange={(e) => onChange({ ...settings, qrLabel: e.target.value })}
-                className="w-full p-2.5 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-xs outline-none focus:border-indigo-500 text-center" />
+                className="w-full p-2.5 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-xs outline-none focus:border-blue-500 text-center" />
             )}
           </div>
         </SectionCard>
@@ -815,7 +815,7 @@ const SubathonPanel = ({ settings, onChange }) => {
   const updateTier = (i, key, val) => onChange({ ...settings, subathonTiers: tiers.map((t, idx) => idx === i ? { ...t, [key]: val } : t) });
 
   const pct = Math.round((timeLeft / (settings.subathonMaxTime || 86400)) * 100);
-  const urgency = timeLeft < 300 ? "red" : timeLeft < 900 ? "amber" : "indigo";
+  const urgency = timeLeft < 300 ? "red" : timeLeft < 900 ? "amber" : "blue";
 
   return (
     <div className="space-y-6">
@@ -834,13 +834,13 @@ const SubathonPanel = ({ settings, onChange }) => {
             "w-full p-6 rounded-3xl text-center font-mono",
             urgency === "red" ? "bg-red-50 border-2 border-red-300" :
             urgency === "amber" ? "bg-amber-50 border-2 border-amber-300" :
-            "bg-indigo-50 border-2 border-indigo-200"
+            "bg-blue-50 border-2 border-blue-200"
           )}>
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">SUBATHON TIMER</p>
             <p className={cls(
               "text-5xl font-black tracking-widest",
               urgency === "red" ? "text-red-600" :
-              urgency === "amber" ? "text-amber-600" : "text-indigo-600"
+              urgency === "amber" ? "text-amber-600" : "text-blue-600"
             )}>{fmtTime(timeLeft)}</p>
             {urgency === "red" && <p className="text-red-500 text-xs font-black mt-2 animate-pulse">⚠️ Waktu hampir habis!</p>}
           </div>
@@ -848,7 +848,7 @@ const SubathonPanel = ({ settings, onChange }) => {
           <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
             <div className={cls(
               "h-full rounded-full transition-all duration-1000",
-              urgency === "red" ? "bg-red-500" : urgency === "amber" ? "bg-amber-500" : "bg-indigo-500"
+              urgency === "red" ? "bg-red-500" : urgency === "amber" ? "bg-amber-500" : "bg-blue-500"
             )} style={{ width: `${Math.min(100, pct)}%` }} />
           </div>
 
@@ -873,7 +873,7 @@ const SubathonPanel = ({ settings, onChange }) => {
                 "flex-1 py-3 rounded-2xl font-black text-sm transition-all active:scale-[0.97]",
                 running
                   ? "bg-amber-600 text-white hover:bg-amber-700"
-                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
               )}>
               {running ? "⏸ Pause" : "▶ Mulai"}
             </button>
@@ -892,14 +892,14 @@ const SubathonPanel = ({ settings, onChange }) => {
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Waktu Awal (detik)</label>
               <input type="number" value={settings.subathonBaseTime || 3600}
                 onChange={(e) => onChange({ ...settings, subathonBaseTime: Number(e.target.value) })}
-                className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+                className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
               <p className="text-[9px] text-slate-400 mt-1">{fmtTime(settings.subathonBaseTime || 3600)}</p>
             </div>
             <div>
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Waktu Maksimal (detik)</label>
               <input type="number" value={settings.subathonMaxTime || 86400}
                 onChange={(e) => onChange({ ...settings, subathonMaxTime: Number(e.target.value) })}
-                className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+                className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
               <p className="text-[9px] text-slate-400 mt-1">{fmtTime(settings.subathonMaxTime || 86400)}</p>
             </div>
           </div>
@@ -907,7 +907,7 @@ const SubathonPanel = ({ settings, onChange }) => {
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Pengurangan per Menit (detik)</label>
             <input type="number" value={settings.subathonDecayRate || 60}
               onChange={(e) => onChange({ ...settings, subathonDecayRate: Number(e.target.value) })}
-              className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-indigo-500" />
+              className="w-full p-3 bg-slate-100 border-2 border-slate-50 rounded-2xl font-bold text-sm outline-none focus:border-blue-500" />
             <p className="text-[9px] text-slate-400 mt-1">Default: 60 (realtime). Atur lebih kecil untuk timer lebih lambat berkurang.</p>
           </div>
         </div>
@@ -927,19 +927,19 @@ const SubathonPanel = ({ settings, onChange }) => {
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Min (Rp)</label>
                   <input type="number" value={tier.minAmount}
                     onChange={(e) => updateTier(i, "minAmount", Number(e.target.value))}
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
                 <div>
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">+Waktu (detik)</label>
                   <input type="number" value={tier.addSeconds}
                     onChange={(e) => updateTier(i, "addSeconds", Number(e.target.value))}
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
                 <div>
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Label</label>
                   <input value={tier.label || ""} onChange={(e) => updateTier(i, "label", e.target.value)}
                     placeholder="Sultan"
-                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
               </div>
               <div className="mt-2 px-2 py-1 bg-green-50 rounded-xl">
@@ -950,7 +950,7 @@ const SubathonPanel = ({ settings, onChange }) => {
             </div>
           ))}
           <button onClick={addTier}
-            className="w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
+            className="w-full py-3 border-2 border-dashed border-blue-200 text-blue-500 rounded-2xl font-black text-sm hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center justify-center gap-2">
             + Tambah Tier Waktu
           </button>
         </div>
@@ -1023,9 +1023,9 @@ const PollingPanel = ({ settings, onChange }) => {
 
       <SectionCard icon="🎮" title="Demo Polling Realtime" color="#6366f1">
         <div className="space-y-3">
-          <div className="p-4 bg-indigo-50 rounded-2xl border border-indigo-200 text-center">
-            <p className="font-black text-indigo-800 text-sm mb-1">🗳️ Game apa yang dimainkan berikutnya?</p>
-            <p className="text-[10px] text-indigo-400 font-bold">{totalDemoVotes} votes total</p>
+          <div className="p-4 bg-blue-50 rounded-2xl border border-blue-200 text-center">
+            <p className="font-black text-blue-800 text-sm mb-1">🗳️ Game apa yang dimainkan berikutnya?</p>
+            <p className="text-[10px] text-blue-400 font-bold">{totalDemoVotes} votes total</p>
           </div>
           {demoOptions.map((opt) => {
             const pct = Math.round((opt.votes / totalDemoVotes) * 100);
@@ -1039,14 +1039,14 @@ const PollingPanel = ({ settings, onChange }) => {
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-black text-slate-500">{opt.votes} votes</span>
                     {settings.pollingShowPct !== false && (
-                      <span className="text-xs font-black text-indigo-600">{pct}%</span>
+                      <span className="text-xs font-black text-blue-600">{pct}%</span>
                     )}
                   </div>
                 </div>
                 <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
                   <div className={cls(
                     "h-full rounded-full transition-all duration-500",
-                    isWinning ? "bg-amber-500" : "bg-indigo-400"
+                    isWinning ? "bg-amber-500" : "bg-blue-400"
                   )} style={{ width: `${pct}%` }} />
                 </div>
               </div>
@@ -1056,7 +1056,7 @@ const PollingPanel = ({ settings, onChange }) => {
             {demoOptions.map((opt) => (
               <button key={opt.id}
                 onClick={() => setDemoVotes((v) => ({ ...v, [opt.id]: v[opt.id] + 1 }))}
-                className="flex-1 py-2 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl font-black text-xs transition-all active:scale-[0.97]">
+                className="flex-1 py-2 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-black text-xs transition-all active:scale-[0.97]">
                 +{opt.text.split(" ")[0]}
               </button>
             ))}
@@ -1085,17 +1085,17 @@ const PollingPanel = ({ settings, onChange }) => {
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Pertanyaan</label>
                 <input value={poll.question} onChange={(e) => updatePoll(poll.id, "question", e.target.value)}
                   placeholder="Game apa yang dimainkan berikutnya?"
-                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-indigo-400" />
+                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none focus:border-blue-400" />
               </div>
               <div>
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-2">Opsi Jawaban</label>
                 <div className="space-y-2 mb-2">
                   {poll.options.map((opt) => (
                     <div key={opt.id} className="flex items-center gap-2">
-                      <span className="text-[10px] font-black text-indigo-500 w-5 text-center">{opt.id.toUpperCase()}</span>
+                      <span className="text-[10px] font-black text-blue-500 w-5 text-center">{opt.id.toUpperCase()}</span>
                       <input value={opt.text}
                         onChange={(e) => updatePoll(poll.id, "options", poll.options.map((o) => o.id === opt.id ? { ...o, text: e.target.value } : o))}
-                        className="flex-1 p-2 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                        className="flex-1 p-2 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                       {poll.options.length > 2 && (
                         <button onClick={() => removeOption(poll.id, opt.id)} className="text-red-400 hover:text-red-600">×</button>
                       )}
@@ -1107,9 +1107,9 @@ const PollingPanel = ({ settings, onChange }) => {
                     <input value={newOption} onChange={(e) => setNewOption(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && addOption(poll.id)}
                       placeholder="Tambah opsi baru..."
-                      className="flex-1 p-2 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                      className="flex-1 p-2 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                     <button onClick={() => addOption(poll.id)}
-                      className="px-3 py-2 bg-indigo-100 text-indigo-700 rounded-xl font-black text-xs hover:bg-indigo-200 transition-all">
+                      className="px-3 py-2 bg-blue-100 text-blue-700 rounded-xl font-black text-xs hover:bg-blue-200 transition-all">
                       +
                     </button>
                   </div>
@@ -1119,7 +1119,7 @@ const PollingPanel = ({ settings, onChange }) => {
                 <div>
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Cara Vote</label>
                   <select value={poll.voteMode} onChange={(e) => updatePoll(poll.id, "voteMode", e.target.value)}
-                    className="w-full p-2 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400">
+                    className="w-full p-2 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400">
                     <option value="message">Ketik opsi di pesan</option>
                     <option value="donate">Donasi ke opsi tertentu</option>
                     <option value="amount">Nominal = bobot vote</option>
@@ -1129,7 +1129,7 @@ const PollingPanel = ({ settings, onChange }) => {
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Min Donasi (Rp)</label>
                   <input type="number" value={poll.minAmountToVote || 0}
                     onChange={(e) => updatePoll(poll.id, "minAmountToVote", Number(e.target.value))}
-                    className="w-full p-2 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-indigo-400" />
+                    className="w-full p-2 bg-white border border-slate-200 rounded-xl font-bold text-xs outline-none focus:border-blue-400" />
                 </div>
               </div>
               {poll.voteMode === "message" && (
@@ -1156,7 +1156,7 @@ const PollingPanel = ({ settings, onChange }) => {
             </div>
           ))}
           <button onClick={createNewPoll}
-            className="w-full py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-black text-sm hover:border-indigo-400 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2">
+            className="w-full py-3 border-2 border-dashed border-blue-200 text-blue-500 rounded-2xl font-black text-sm hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center justify-center gap-2">
             + Buat Polling Baru
           </button>
         </div>
@@ -1190,7 +1190,7 @@ const ToggleRow = ({ label, desc, value, onChange }) => (
     <button onClick={() => onChange(!value)}
       className={cls(
         "relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 cursor-pointer flex-shrink-0",
-        value ? "bg-indigo-600" : "bg-slate-300"
+        value ? "bg-blue-600" : "bg-slate-300"
       )}>
       <span className={cls(
         "inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300",
@@ -1204,11 +1204,11 @@ const SliderRow = ({ label, min, max, step, value, suffix, onChange }) => (
   <div>
     <div className="flex justify-between items-center mb-2">
       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{label}</label>
-      <span className="text-sm font-black text-indigo-600">{value}{suffix}</span>
+      <span className="text-sm font-black text-blue-600">{value}{suffix}</span>
     </div>
     <input type="range" min={min} max={max} step={step} value={value}
       onChange={(e) => onChange(Number(e.target.value))}
-      className="w-full accent-indigo-600" />
+      className="w-full accent-blue-600" />
   </div>
 );
 
@@ -1222,7 +1222,7 @@ const SaveBar = ({ settings, onSave, saving }) => (
       <p className="text-[10px] text-slate-400 font-medium">Klik simpan untuk menerapkan ke overlay OBS</p>
     </div>
     <button onClick={onSave} disabled={saving}
-      className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 transition-all active:scale-[0.97] disabled:opacity-70">
+      className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 transition-all active:scale-[0.97] disabled:opacity-70">
       {saving ? (
         <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Menyimpan...</>
       ) : (
@@ -1340,7 +1340,7 @@ export default function StreamerFeatures() {
       <div className="bg-white border-b border-slate-100 sticky top-0 z-40 shadow-sm">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex items-center gap-3 py-4">
-            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black italic text-sm">D</div>
+            <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black italic text-sm">D</div>
             <div>
               <h1 className="font-black text-slate-900 leading-none">Fitur Lanjutan</h1>
               <p className="text-[10px] text-slate-400 font-medium">DUKUNG.IN Dashboard</p>
@@ -1364,7 +1364,7 @@ export default function StreamerFeatures() {
                 className={cls(
                   "flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs transition-all whitespace-nowrap",
                   activeTab === tab.id
-                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-100"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-100"
                     : "text-slate-500 hover:bg-slate-100"
                 )}>
                 <span>{tab.icon}</span>

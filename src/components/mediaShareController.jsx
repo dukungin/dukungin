@@ -88,7 +88,7 @@ export const MediaShareControl = () => {
             type="range" min={0} max={100} step={1}
             value={volume}
             onChange={e => handleVolumeChange(e.target.value)}
-            className="flex-1 accent-indigo-600"
+            className="flex-1 accent-blue-600"
           />
           <Volume2 size={16} className="text-slate-400 flex-shrink-0" />
         </div>
@@ -101,7 +101,7 @@ export const MediaShareControl = () => {
               onClick={() => handleVolumeChange(value)}
               className={`cursor-pointer flex-1 py-2 text-xs font-black rounded-none border transition-all active:scale-[0.97] ${
                 volume === value
-                  ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400'
                   : 'border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 hover:border-slate-400'
               }`}
             >
@@ -113,8 +113,8 @@ export const MediaShareControl = () => {
 
       {/* Status */}
       {status && (
-        <p className="text-[11px] text-indigo-500 dark:text-indigo-400 font-bold flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block" />
+        <p className="text-[11px] text-blue-500 dark:text-blue-400 font-bold flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
           {status}
         </p>
       )}

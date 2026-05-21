@@ -134,15 +134,15 @@ export const SuggestionsManager = () => {
       </AnimatePresence>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-none p-6 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-600 to-violet-600 rounded-none p-6 text-white relative overflow-hidden">
         <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/10 rounded-none" />
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-2">
             <MessageCircle size={20} />
-            <span className="text-indigo-200 text-xs font-black uppercase tracking-widest">Feedback</span>
+            <span className="text-blue-200 text-xs font-black uppercase tracking-widest">Feedback</span>
           </div>
           <h2 className="text-2xl font-black tracking-tight">Saran & Masukan</h2>
-          <p className="text-indigo-200 text-sm font-medium mt-1">Bantu kami improve TapTipTup lebih baik</p>
+          <p className="text-blue-200 text-sm font-medium mt-1">Bantu kami improve TapTipTup lebih baik</p>
         </div>
       </div>
 
@@ -153,7 +153,7 @@ export const SuggestionsManager = () => {
           className="w-full flex items-center justify-between px-6 py-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-950/40 rounded-none flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-950/40 rounded-none flex items-center justify-center text-blue-600 dark:text-blue-400">
               <Send size={18} />
             </div>
             <div className="text-left">
@@ -187,8 +187,8 @@ export const SuggestionsManager = () => {
                       onClick={() => setFormData({ ...formData, category: cat.value })}
                       className={`cursor-pointer py-2.5 rounded-none font-black text-xs transition-all border-2 ${
                         formData.category === cat.value
-                          ? 'bg-indigo-600 border-indigo-600 text-white'
-                          : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-indigo-200'
+                          ? 'bg-blue-600 border-blue-600 text-white'
+                          : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-blue-200'
                       }`}
                     >
                       <span className="flex items-center justify-center gap-1.5">
@@ -211,7 +211,7 @@ export const SuggestionsManager = () => {
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="Contoh: Tambahkan fitur dark mode untuk widget"
                   maxLength={200}
-                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none font-bold text-sm text-slate-700 dark:text-slate-200 transition-all"
+                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-500 dark:focus:border-blue-500 outline-none font-bold text-sm text-slate-700 dark:text-slate-200 transition-all"
                 />
                 <p className="text-[10px] text-slate-400 mt-1 text-right">{formData.title.length}/200</p>
               </div>
@@ -227,7 +227,7 @@ export const SuggestionsManager = () => {
                   placeholder="Jelaskan saran atau masukanmu secara detail..."
                   maxLength={2000}
                   rows={4}
-                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none font-medium text-sm text-slate-700 dark:text-slate-200 transition-all resize-none"
+                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-500 dark:focus:border-blue-500 outline-none font-medium text-sm text-slate-700 dark:text-slate-200 transition-all resize-none"
                 />
                 <p className="text-[10px] text-slate-400 mt-1 text-right">{formData.message.length}/2000</p>
               </div>
@@ -236,7 +236,7 @@ export const SuggestionsManager = () => {
               <button
                 type="submit"
                 disabled={createMutation.isPending || !formData.title.trim() || !formData.message.trim()}
-                className="active:scale-[0.99] cursor-pointer w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black text-sm shadow-lg shadow-indigo-200 dark:shadow-indigo-900/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 transition-all"
+                className="active:scale-[0.99] cursor-pointer w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black text-sm shadow-lg shadow-blue-200 dark:shadow-blue-900/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 transition-all"
               >
                 {createMutation.isPending ? (
                   <>
@@ -267,7 +267,7 @@ export const SuggestionsManager = () => {
 
         {isLoading ? (
           <div className="flex items-center justify-center py-16 text-slate-400 font-bold gap-3">
-            <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-none animate-spin" />Memuat...
+            <div className="w-5 h-5 border-4 border-slate-200 border-t-blue-600 rounded-none animate-spin" />Memuat...
           </div>
         ) : mySuggestions.length === 0 ? (
           <div className="py-16 text-center text-slate-400">
@@ -281,7 +281,7 @@ export const SuggestionsManager = () => {
               <div key={s._id} className="p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
                 <div className="flex items-start gap-4">
                   <div className={`w-10 h-10 rounded-none flex items-center justify-center flex-shrink-0 ${
-                    s.category === 'feature' ? 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600' :
+                    s.category === 'feature' ? 'bg-blue-100 dark:bg-blue-950/40 text-blue-600' :
                     s.category === 'bug' ? 'bg-red-100 dark:bg-red-950/40 text-red-600' :
                     s.category === 'improvement' ? 'bg-amber-100 dark:bg-amber-950/40 text-amber-600' :
                     'bg-slate-100 dark:bg-slate-800 text-slate-600'

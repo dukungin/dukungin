@@ -156,9 +156,9 @@ const AudioManager = ({
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
             <div className={`flex items-center gap-3 p-4 border-2 border-dashed rounded-none transition-all cursor-pointer
-              border-slate-200 dark:border-slate-700 hover:border-indigo-300 bg-white dark:bg-slate-800
+              border-slate-200 dark:border-slate-700 hover:border-blue-300 bg-white dark:bg-slate-800
               ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-              <Upload size={18} className="text-indigo-500" />
+              <Upload size={18} className="text-blue-500" />
               <div className="flex-1 min-w-0">
                 <span className="block text-sm font-medium text-slate-600 dark:text-slate-300">
                   {uploading ? 'Mengupload...' : 'Pilih file audio (.mp3, .wav, .ogg)'}
@@ -194,10 +194,10 @@ const AudioManager = ({
                 layout
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="group flex items-center justify-between p-4 bg-white/80 dark:bg-slate-800/70 border border-slate-200/50 dark:border-slate-700/50 rounded-none hover:shadow-md hover:border-indigo-300 transition-all"
+                className="group flex items-center justify-between p-4 bg-white/80 dark:bg-slate-800/70 border border-slate-200/50 dark:border-slate-700/50 rounded-none hover:shadow-md hover:border-blue-300 transition-all"
               >
                 <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-none flex items-center justify-center shadow-lg flex-shrink-0">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-none flex items-center justify-center shadow-lg flex-shrink-0">
                     <Ear className="text-white" size={20} />
                   </div>
 
@@ -222,7 +222,7 @@ const AudioManager = ({
                         ? 'bg-emerald-500 text-white'
                         : previewError
                           ? 'text-red-500 border-2 border-red-200 cursor-not-allowed'
-                          : 'bg-indigo-500 text-white hover:brightness-90'
+                          : 'bg-blue-500 text-white hover:brightness-90'
                     }`}
                     title={previewError ? 'Audio tidak bisa diputar' : 'Preview suara'}
                     disabled={previewError && playingPreview !== sound.url}

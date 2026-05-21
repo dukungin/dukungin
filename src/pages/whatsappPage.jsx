@@ -107,7 +107,7 @@ export const WhatsAppPage = () => {
         </div>
         <div className="bg-white dark:bg-slate-900 rounded-none p-5 border border-slate-100 dark:border-slate-800">
           <p className="text-xs text-slate-400 font-black uppercase mb-1">Pesan Kirim</p>
-          <p className="font-black text-lg text-indigo-600">
+          <p className="font-black text-lg text-blue-600">
             {stats.sent || 0} / {stats.max || 50}
           </p>
         </div>
@@ -129,7 +129,7 @@ export const WhatsAppPage = () => {
           <button
             onClick={loadQR}
             disabled={isReady || reconnectMutation.isPending}
-            className="flex items-center justify-center gap-3 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-black transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+            className="flex items-center justify-center gap-3 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
           >
             {isReady ? (
               <CheckCircle2 size={20} />
@@ -156,7 +156,7 @@ export const WhatsAppPage = () => {
         {/* Info */}
         <div className="bg-slate-50 dark:bg-slate-800/50 rounded-none p-4 text-sm">
           <p className="font-medium text-slate-600 dark:text-slate-400">
-            ℹ️ Notifikasi akan dikirim ke nomor: <span className="font-black text-indigo-600">089513093406</span>
+            ℹ️ Notifikasi akan dikirim ke nomor: <span className="font-black text-blue-600">089513093406</span>
           </p>
           <p className="text-xs text-slate-400 mt-2">
             Setiap ada request penarikan dana, sistem akan otomatis mengirim notifikasi ke WhatsApp admin.

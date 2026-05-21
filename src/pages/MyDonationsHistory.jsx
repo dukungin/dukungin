@@ -49,7 +49,7 @@ const MyDonationsHistory = () => {
           <button
             onClick={() => refetch()}
             disabled={isFetching}
-            className="text-slate-400 hover:text-indigo-600 disabled:opacity-50 transition-colors"
+            className="text-slate-400 hover:text-blue-600 disabled:opacity-50 transition-colors"
           >
             <RefreshCw size={18} className={isFetching ? 'animate-spin' : ''} />
           </button>

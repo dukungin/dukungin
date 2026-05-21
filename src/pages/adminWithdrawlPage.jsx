@@ -79,8 +79,8 @@ export const AdminWithdrawalPage = () => {
           <button key={f.val} onClick={() => setStatusFilter(f.val)}
             className={`px-4 py-2 rounded-xl font-black text-sm transition-all ${
               statusFilter === f.val
-                ? 'bg-indigo-600 text-white shadow-none'
-                : 'bg-white text-slate-400 border border-slate-100 hover:border-indigo-200 hover:text-indigo-600'
+                ? 'bg-blue-600 text-white shadow-none'
+                : 'bg-white text-slate-400 border border-slate-100 hover:border-blue-200 hover:text-blue-600'
             }`}>
             {f.label}
           </button>
@@ -102,7 +102,7 @@ export const AdminWithdrawalPage = () => {
         {isLoading
           ? (
             <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
-              <div className="w-5 h-5 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
+              <div className="w-5 h-5 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
               Memuat data...
             </div>
           )
@@ -131,7 +131,7 @@ export const AdminWithdrawalPage = () => {
                           <p className="text-[10px] text-slate-400 font-medium">{wd.userId?.email}</p>
                         </td>
                         <td className="px-6 py-5">
-                          <p className="text-indigo-600 font-black text-sm">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
+                          <p className="text-blue-600 font-black text-sm">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
                           <p className="text-[10px] text-slate-400 font-medium">+Rp 5.000 fee</p>
                         </td>
                         <td className="px-6 py-5">

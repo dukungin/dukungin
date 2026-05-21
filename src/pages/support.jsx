@@ -61,9 +61,9 @@ const ContactCard = ({ icon, label, value, href, mono = false }) => (
     href={href || '#'}
     target={href && href !== '#' ? '_blank' : undefined}
     rel="noreferrer"
-    className={`group flex items-start gap-3.5 p-4 rounded-none border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 hover:border-indigo-100 dark:hover:border-indigo-800 hover:shadow-md hover:shadow-indigo-50 dark:hover:shadow-indigo-900/20 transition-all duration-300 ${href && href !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
+    className={`group flex items-start gap-3.5 p-4 rounded-none border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 hover:border-blue-100 dark:hover:border-blue-800 hover:shadow-md hover:shadow-blue-50 dark:hover:shadow-blue-900/20 transition-all duration-300 ${href && href !== '#' ? 'cursor-pointer' : 'cursor-default'}`}
   >
-    <div className="w-9 h-9 rounded-none bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 flex items-center justify-center text-indigo-500 dark:text-indigo-400 flex-shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all duration-300">
+    <div className="w-9 h-9 rounded-none bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 flex items-center justify-center text-blue-500 dark:text-blue-400 flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-300">
       {icon}
     </div>
     <div className="min-w-0">
@@ -71,7 +71,7 @@ const ContactCard = ({ icon, label, value, href, mono = false }) => (
       <p className={`text-sm font-bold text-slate-700 dark:text-slate-200 truncate ${mono ? 'font-mono' : ''}`}>{value}</p>
     </div>
     {href && href !== '#' && (
-      <ExternalLink size={13} className="text-slate-300 dark:text-slate-600 group-hover:text-indigo-400 transition-colors ml-auto flex-shrink-0 mt-1" />
+      <ExternalLink size={13} className="text-slate-300 dark:text-slate-600 group-hover:text-blue-400 transition-colors ml-auto flex-shrink-0 mt-1" />
     )}
   </a>
 );
@@ -87,7 +87,7 @@ export const ContactPage = () => {
       >
         <div className="absolute -top-20 -right-20 w-72 h-72 rounded-none border border-white/5" />
         <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-none border border-white/5" />
-        <div className="absolute top-8 right-40 w-3 h-3 rounded-none bg-indigo-400/30" />
+        <div className="absolute top-8 right-40 w-3 h-3 rounded-none bg-blue-400/30" />
 
         <div className="relative z-[2] max-w-full">
           <div className="flex items-center gap-2 mb-5">
@@ -132,11 +132,11 @@ export const ContactPage = () => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">{DEVELOPER.name}</h3>
-                  <span className="md:px-2.5 py-1 md:bg-indigo-50 dark:md:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 md:rounded-none text-[10px] font-black uppercase tracking-widest">
+                  <span className="md:px-2.5 py-1 md:bg-blue-50 dark:md:bg-blue-950/40 text-blue-600 dark:text-blue-400 md:rounded-none text-[10px] font-black uppercase tracking-widest">
                     Developer
                   </span>
                 </div>
-                <p className="text-xs font-bold text-indigo-500 dark:text-indigo-400 mt-0.5">{DEVELOPER.role}</p>
+                <p className="text-xs font-bold text-blue-500 dark:text-blue-400 mt-0.5">{DEVELOPER.role}</p>
                 <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-2 leading-relaxed max-w-full">{DEVELOPER.bio}</p>
               </div>
             </div>
