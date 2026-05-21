@@ -236,20 +236,22 @@ const LeftPanel = () => (
     display:'flex', flexDirection:'column', justifyContent:'space-between',
     padding:'48px 44px', overflow:'hidden',
   }}>
-    <BgCanvas />
-    <div style={{ position:'relative', zIndex:10 }}>
+    {/* <BgCanvas /> */}
+    <img src="/img.jpg" alt="img" className='absolute top-0 left-0 w-full z-[999]' />
+    <img src="/img2.jpg" alt="img" className='md:hidden absolute top-0 left-0 w-full z-[999]' />
+    <div className='md:px-0 px-4 flex md:hidden' style={{ position:'relative', zIndex:10 }}>
       <BrandLogo />
       <HeroJellyfish />
       <HeroContent />
     </div>
-    <StatsGrid />
+    {/* <StatsGrid /> */}
   </div>
 );
 
 // ─── THEME TOGGLE ─────────────────────────────────────────────────────────────
 const ThemeToggle = ({ isDark, onToggle, T }) => (
   <motion.button onClick={onToggle} whileTap={{ scale:0.90 }} style={{
-    position:'absolute', top:24, right:24, display:'flex', alignItems:'center', gap:7,
+    position:'absolute', top:0, right:0, display:'flex', alignItems:'center', gap:7,
     background: T.toggleBg, padding:'12px 18px', cursor:'pointer', zIndex:20,
     borderRadius:0, transition:'background 0.35s',
   }}>
@@ -279,7 +281,7 @@ const RightPanel = ({ T, isDark, setIsDark, children }) => (
     }}
   >
     <ThemeToggle isDark={isDark} onToggle={() => setIsDark(d => !d)} T={T} />
-    <div style={{ width:'100%', maxWidth: '80%', marginTop: 16 }}>
+    <div style={{ width:'100%', maxWidth: '92%', marginTop: 16 }}>
       {children}
     </div>
   </div>
@@ -310,59 +312,61 @@ const MainAuthForm = ({
           </h2>
           <p style={{ color: T.subtext, fontSize:14, marginTop:8, lineHeight:1.55 }}>
             {isLogin 
-              ? 'Masuk untuk mengelola overlay dan donasi kamu.' 
-              : 'Daftar sekarang dan mulai kustomisasi alert-mu.'
+              ? 'Masuk untuk mengelola overlay mu.' 
+              : 'Daftar mulai kustom alert mu.'
             }
           </p>
         </div>
 
-        <div style={{ 
-          display:'flex', background: T.tabBg, border:`1px solid ${T.tabBorder}`, 
-          borderRadius:0, padding:6, marginBottom:28 
+    <div style={{
+          display: 'flex', border: `1px solid ${T.tabBorder}`,
+          borderRadius: 8, overflow: 'hidden', marginBottom: 28
         }}>
-          {['Masuk','Daftar'].map((label, i) => (
-            <button key={label} className="tab-btn" onClick={() => setIsLogin(i === 0)}
-              style={{ 
-                flex:1, padding:'12px 0', borderRadius:0, fontWeight:800, fontSize:14, 
-                cursor:'pointer', border:'none',
-                background: isTabActive(i) ? 'linear-gradient(135deg, #4f46e5, #7c3aed)' : 'transparent',
-                color: isTabActive(i) ? 'white' : T.tabInactive,
-              }}
-            >
-              {label}
-            </button>
+          {[
+            { label: 'Masuk', icon: '→' },
+            { label: 'Daftar', icon: '+' },
+          ].map(({ label }, i) => (
+            <button key={label} onClick={() => setIsLogin(i === 0)} style={{
+              flex: 1, padding: '12px 0', fontSize: 14, fontWeight: 800,
+              border: 'none', cursor: 'pointer', transition: 'all 0.15s',
+              borderLeft: i > 0 ? `1px solid ${T.tabBorder}` : 'none',
+              background: isTabActive(i) ? '#4f46e5' : 'transparent',
+              color: isTabActive(i) ? 'white' : T.tabInactive,
+            }}>{label}</button>
           ))}
         </div>
 
         <form onSubmit={handleSubmit}>
           <div style={{ display:'flex', flexDirection:'column', gap:16, marginBottom:20 }}>
-            <AnimatePresence>
-              {!isLogin && (
-                <motion.div 
-                  key="username" 
-                  initial={{ opacity:0, height:0, marginBottom:0 }} 
-                  animate={{ opacity:1, height:'auto', marginBottom:16 }} 
-                  exit={{ opacity:0, height:0, marginBottom:0 }}
-                  transition={{ duration:0.2 }}
-                >
-                  <AuthInput 
-                    icon={User} 
-                    placeholder="Username" 
-                    value={formData.username} 
-                    onChange={v => setFormData(f => ({ ...f, username:v }))} 
-                    T={T} 
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <AuthInput 
-              icon={Mail} 
-              type="email" 
-              placeholder="Alamat Email" 
-              value={formData.email} 
-              onChange={v => setFormData(f => ({ ...f, email:v }))} 
-              T={T} 
-            />
+            <div className={`grid ${isLogin ? 'grid-cols-1' : ' grid-cols-1 md:grid-cols-2'} gap-4`}>
+                {!isLogin && (
+                  <motion.div 
+                    key="username" 
+                    initial={{ opacity:0, height:0, marginBottom:0 }} 
+                    animate={{ opacity:1, height:'auto', marginBottom:0 }} 
+                    // exit={{ opacity:0, height:0, marginBottom:0 }}
+                    transition={{ duration:0.2 }}
+                  >
+                    <AuthInput 
+                      icon={User} 
+                      placeholder="Username" 
+                      value={formData.username} 
+                      onChange={v => setFormData(f => ({ ...f, username:v }))} 
+                      T={T} 
+                    />
+                  </motion.div>
+                )}
+              {/* <AnimatePresence>
+              </AnimatePresence> */}
+              <AuthInput 
+                icon={Mail} 
+                type="email" 
+                placeholder="Alamat Email" 
+                value={formData.email} 
+                onChange={v => setFormData(f => ({ ...f, email:v }))} 
+                T={T} 
+              />
+            </div>
             <AuthInput 
               icon={Lock} 
               type="password" 
@@ -373,7 +377,7 @@ const MainAuthForm = ({
             />
           </div>
 
-          {isLogin && (
+          {/* {isLogin && (
             <div style={{ textAlign:'right', marginBottom:24 }}>
               <button type="button" onClick={() => setCurrentPage('forgot-password')}
                 style={{ 
@@ -387,7 +391,7 @@ const MainAuthForm = ({
                 Lupa Password?
               </button>
             </div>
-          )}
+          )} */}
 
           <button type="submit" disabled={!isFormValid || loading} className="submit-btn"
             style={{ 
@@ -829,10 +833,10 @@ const Auth = () => {
       } else {
         // Register → Verify PIN
         setTempEmail(formData.email);
-        notify('Registrasi Berhasil!', 'Cek email kamu untuk PIN verifikasi (berlaku 5 menit)', 'success');
+        notify('Registrasi Berhasil', 'Selamat datang streamer', 'success');
         setTimeout(() => {
           closeNotif();
-          setCurrentPage('verify-pin');
+          setIsLogin(true);           
           setFormData({ username:'', email:'', password:'' });
         }, 2500);
       }
