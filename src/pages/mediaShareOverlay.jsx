@@ -6,18 +6,6 @@
 
   const API_URL = 'https://server-dukungin-production.up.railway.app';
 
-  // ── Helpers (sama persis) ────────────────────────────────────────────────────
-  // const getYouTubeEmbedUrl = (url) => {
-  //   if (!url) return null;
-  //   const watchMatch  = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
-  //   if (watchMatch)  return `https://www.youtube.com/embed/${watchMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${watchMatch[1]}`;
-  //   const shortMatch  = url.match(/youtu\.be\/([\w-]+)/);
-  //   if (shortMatch)  return `https://www.youtube.com/embed/${shortMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortMatch[1]}`;
-  //   const shortsMatch = url.match(/youtube\.com\/shorts\/([\w-]+)/);
-  //   if (shortsMatch) return `https://www.youtube.com/embed/${shortsMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortsMatch[1]}`;
-  //   return null;
-  // };
-
   const getYouTubeEmbedUrl = (url, startSeconds = 0) => {
     if (!url) return null;
     
@@ -326,143 +314,356 @@ const calculateMediaShareDuration = (config, amount) => {
     };
 
     // ── RENDER INNER (SAMA PERSIS OverlayAlert + Media Share label) ─────────────
+    // const renderInner = () => {
+    //   // ── MODERN (SAMA PERSIS + Media Share badge) ───────────────────────────────
+    //   if (theme === 'modern') {
+    //     return (
+    //       <>
+    //         {renderMedia()} {/* ✅ MEDIA DI ATAS */}
+
+    //         <div style={{ height: 4, background: highlight }} />
+    //         <div style={{ padding: '14px 16px 0px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    //           <div style={{
+    //             width: 42, height: 42,
+    //             background: 'rgba(0,0,0,0.2)',
+    //             display: 'flex', alignItems: 'center', justifyContent: 'center',
+    //             fontSize: 20, flexShrink: 0,
+    //             marginTop: 0
+    //           }}>
+    //             {renderIcon(customIcon, 22)}
+    //           </div>
+
+    //           <div style={{ flex: 1, minWidth: 0 }}>
+    //             <div style={{
+    //               display: 'inline-flex', alignItems: 'center', gap: 5,
+    //               background: 'rgba(0,0,0,0.25)',
+    //               padding: '2px 8px',
+    //               fontSize: 26, fontWeight: 900, color: highlight,
+    //               textTransform: 'uppercase', letterSpacing: '0.12em',
+    //               marginBottom: 6,
+    //             }}>
+    //               <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%' }} />
+    //               Media Share
+    //             </div>
+
+    //             <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
+    //               {alert.donorName}
+    //             </div>
+    //             <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
+    //               Rp {Number(alert.amount).toLocaleString('id-ID')}
+    //             </div>
+    //             {alert.message && (
+    //               <div style={{ fontSize: 26, color: fg, lineHeight: 1.4 }}>
+    //                 {alert.message}
+    //               </div>
+    //             )}
+    //           </div>
+    //         </div>
+
+    //         <div style={{
+    //           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    //           padding: '8px 16px 10px',
+    //           background: 'rgba(0,0,0,0.2)',
+    //           marginTop: 10,
+    //         }}>
+    //           {renderTimestamp()}
+    //           <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.15)', marginLeft: 12 }}>
+    //             <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+    //           </div>
+    //         </div>
+    //       </>
+    //     );
+    //   }
+
+    //   // ── CLASSIC (SAMA PERSIS + Media Share header) ─────────────────────────────
+    //   if (theme === 'classic') {
+    //     return (
+    //       <>
+    //         {renderMedia()} {/* ✅ MEDIA DI ATAS */}
+
+    //         <div style={{
+    //           background: 'rgba(0,0,0,0.3)',
+    //           padding: '9px 14px',
+    //           display: 'flex', alignItems: 'center', gap: 9,
+    //           borderBottom: '1px solid rgba(255,255,255,0.1)',
+    //         }}>
+    //           <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIcon(customIcon, 18)}</span>
+    //           <span style={{ fontSize: 26, fontWeight: 900, color: highlight, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+    //             Media Share
+    //           </span>
+    //         </div>
+            
+    //         <div style={{ padding: '12px 14px 10px' }}>
+    //           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+    //             <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>{alert.donorName}</div>
+    //           </div>
+    //           <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px' }}>
+    //             Rp {Number(alert.amount).toLocaleString('id-ID')}
+    //           </div>
+    //           {alert.message && (
+    //             <div style={{
+    //               fontSize: 26, color: fg,
+    //               lineHeight: 1.4, padding: '6px 10px',
+    //               background: 'rgba(0,0,0,0.2)',
+    //               borderLeft: `2px solid ${highlight}`,
+    //             }}>
+    //               {alert.message}
+    //             </div>
+    //           )}
+    //           {renderTimestamp()}
+    //           <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
+    //             <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+    //           </div>
+    //         </div>
+    //       </>
+    //     );
+    //   }
+
+    //   // ── MINIMAL (SAMA PERSIS + Media Share label) ──────────────────────────────
+    //   return (
+    //     <>
+    //       {renderMedia()} {/* ✅ MEDIA DI ATAS */}
+
+    //       <div style={{ padding: '14px 16px 12px' }}>
+    //         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
+    //           <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-1px', lineHeight: 1 }}>
+    //             Rp {Number(alert.amount).toLocaleString('id-ID')}
+    //           </div>
+    //           <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+    //             Media
+    //           </div>
+    //         </div>
+
+    //         <div style={{ fontSize: 26, fontWeight: 900, color: fg, marginBottom: 3 }}>
+    //           {alert.donorName}
+    //         </div>
+
+    //         {alert.message && (
+    //           <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
+    //             {alert.message}
+    //           </div>
+    //         )}
+
+    //         {renderTimestamp()}
+
+    //         <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 10 }}>
+    //           <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+    //         </div>
+    //       </div>
+    //     </>
+    //   );
+    // };
+
     const renderInner = () => {
-      // ── MODERN (SAMA PERSIS + Media Share badge) ───────────────────────────────
+      const hl = highlight;
+      const monospace = "'Courier New', 'Lucida Console', monospace";
+
+      const scanlineStyle = {
+        position: 'absolute', inset: 0,
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px)',
+        pointerEvents: 'none', zIndex: 1,
+      };
+
+      const pixelBorder = `2px solid ${hl}`;
+      const dimBorder = `1px solid ${hl}35`;
+
+      // Media player (sama di semua tema, selalu di atas)
+      const MediaBlock = () => {
+        if (!alert?.mediaUrl) return null;
+        const t = detectMediaType(alert.mediaUrl, alert.mediaType);
+        return (
+          <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
+            {t === 'youtube' && (
+              <iframe src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}
+                width="100%" height="100%" frameBorder="0"
+                allow="autoplay; encrypted-media" allowFullScreen
+                style={{ display: 'block', border: 'none' }} />
+            )}
+            {t === 'video' && (
+              <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            )}
+            {t === 'image' && (
+              <img src={alert.mediaUrl} alt="media"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            )}
+          </div>
+        );
+      };
+
+      // ── MODERN ───────────────────────────────────────────────────────────────────
       if (theme === 'modern') {
         return (
-          <>
-            {renderMedia()} {/* ✅ MEDIA DI ATAS */}
-
-            <div style={{ height: 4, background: highlight }} />
-            <div style={{ padding: '14px 16px 0px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-              <div style={{
-                width: 42, height: 42,
-                background: 'rgba(0,0,0,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 20, flexShrink: 0,
-                marginTop: 0
-              }}>
-                {renderIcon(customIcon, 22)}
-              </div>
-
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 5,
-                  background: 'rgba(0,0,0,0.25)',
-                  padding: '2px 8px',
-                  fontSize: 26, fontWeight: 900, color: highlight,
-                  textTransform: 'uppercase', letterSpacing: '0.12em',
-                  marginBottom: 6,
-                }}>
-                  <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%' }} />
-                  Media Share
-                </div>
-
-                <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
-                  {alert.donorName}
-                </div>
-                <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
-                  Rp {Number(alert.amount).toLocaleString('id-ID')}
-                </div>
-                {alert.message && (
-                  <div style={{ fontSize: 26, color: fg, lineHeight: 1.4 }}>
-                    {alert.message}
-                  </div>
-                )}
-              </div>
-            </div>
+          <div style={{ position: 'relative', overflow: 'hidden' }}>
+            <div style={scanlineStyle} />
+            <MediaBlock />
 
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '8px 16px 10px',
-              background: 'rgba(0,0,0,0.2)',
-              marginTop: 10,
+              background: hl + '18', borderBottom: pixelBorder,
+              padding: '5px 10px', position: 'relative', zIndex: 2,
             }}>
-              {renderTimestamp()}
-              <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.15)', marginLeft: 12 }}>
-                <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontFamily: monospace, fontSize: 11, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+                <span style={{ fontFamily: monospace, fontSize: 9, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>
+                  MEDIA SHARE
+                </span>
+              </div>
+              <div style={{ display: 'flex', gap: 4 }}>
+                {['#ff4444', '#ffaa00', hl].map((c, i) => (
+                  <span key={i} style={{ width: 7, height: 7, background: c, display: 'inline-block', border: '1px solid rgba(255,255,255,0.2)' }} />
+                ))}
               </div>
             </div>
-          </>
-        );
-      }
 
-      // ── CLASSIC (SAMA PERSIS + Media Share header) ─────────────────────────────
-      if (theme === 'classic') {
-        return (
-          <>
-            {renderMedia()} {/* ✅ MEDIA DI ATAS */}
-
-            <div style={{
-              background: 'rgba(0,0,0,0.3)',
-              padding: '9px 14px',
-              display: 'flex', alignItems: 'center', gap: 9,
-              borderBottom: '1px solid rgba(255,255,255,0.1)',
-            }}>
-              <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIcon(customIcon, 18)}</span>
-              <span style={{ fontSize: 26, fontWeight: 900, color: highlight, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Media Share
-              </span>
-            </div>
-            
-            <div style={{ padding: '12px 14px 10px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-                <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>{alert.donorName}</div>
+            <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}>
+                <div style={{
+                  width: 40, height: 40, border: pixelBorder, flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 20, background: hl + '12',
+                }}>
+                  {renderIcon(customIcon, 20)}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.55, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div>
+                  <div style={{ fontFamily: monospace, fontSize: 17, fontWeight: 900, color: fg, lineHeight: 1.1 }}>{alert.donorName}</div>
+                </div>
               </div>
-              <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px' }}>
+
+              <div style={{
+                fontFamily: monospace, fontSize: 24, fontWeight: 900, color: hl,
+                letterSpacing: '-1px', lineHeight: 1, borderLeft: `3px solid ${hl}`,
+                paddingLeft: 8, marginBottom: 6, textShadow: `0 0 10px ${hl}55`,
+              }}>
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </div>
+
               {alert.message && (
                 <div style={{
-                  fontSize: 26, color: fg,
-                  lineHeight: 1.4, padding: '6px 10px',
-                  background: 'rgba(0,0,0,0.2)',
-                  borderLeft: `2px solid ${highlight}`,
+                  fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.75,
+                  background: 'rgba(255,255,255,0.04)', border: dimBorder,
+                  padding: '5px 8px', lineHeight: 1.4, marginBottom: 6,
                 }}>
-                  {alert.message}
+                  {'>> '}{alert.message}
                 </div>
               )}
-              {renderTimestamp()}
-              <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
-                <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 }}>
+                {showTs && alert?.receivedAt
+                  ? <div style={{ fontFamily: monospace, fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                  : <div />
+                }
+                <div style={{ display: 'flex', gap: 2 }}>
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <span key={i} style={{ width: 6, height: 6, display: 'inline-block', background: i < Math.round(progress / 12.5) ? hl : hl + '22' }} />
+                  ))}
+                </div>
               </div>
             </div>
-          </>
+          </div>
         );
       }
 
-      // ── MINIMAL (SAMA PERSIS + Media Share label) ──────────────────────────────
-      return (
-        <>
-          {renderMedia()} {/* ✅ MEDIA DI ATAS */}
+      // ── CLASSIC ──────────────────────────────────────────────────────────────────
+      if (theme === 'classic') {
+        return (
+          <div style={{ position: 'relative', overflow: 'hidden' }}>
+            <div style={scanlineStyle} />
+            <MediaBlock />
+            <div style={{ height: 3, background: hl, position: 'relative', zIndex: 2 }} />
+            <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', position: 'relative', zIndex: 2 }} />
 
-          <div style={{ padding: '14px 16px 12px' }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
-              <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-1px', lineHeight: 1 }}>
+            <div style={{
+              background: hl + '15', borderBottom: `1px solid ${hl}40`,
+              padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              position: 'relative', zIndex: 2,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                <span style={{ fontSize: 16 }}>{renderIcon(customIcon, 16)}</span>
+                <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                  ★ Media Share ★
+                </span>
+              </div>
+              <span style={{ fontFamily: monospace, fontSize: 11, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+            </div>
+
+            <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>
+                <span style={{ fontFamily: monospace, fontSize: 9, color: hl, opacity: 0.65, letterSpacing: '0.12em' }}>NAME</span>
+                <span style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg }}>{alert.donorName}</span>
+              </div>
+
+              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, letterSpacing: '-0.5px', marginBottom: 5, textShadow: `0 0 10px ${hl}50` }}>
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </div>
-              <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Media
+
+              {alert.message && (
+                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.82, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
+                  {alert.message}
+                  <span style={{ color: hl, animation: 'blink 1s step-end infinite' }}>▮</span>
+                </div>
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
+                {showTs && alert?.receivedAt
+                  ? <div style={{ fontFamily: monospace, fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                  : <div />
+                }
+                <div style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.4, letterSpacing: '0.08em' }}>[ PRESS ▲ TO CONTINUE ]</div>
+              </div>
+
+              <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 8 }}>
+                <div style={{ height: '100%', width: `${progress}%`, background: hl, transition: 'width 50ms linear' }} />
               </div>
             </div>
 
-            <div style={{ fontSize: 26, fontWeight: 900, color: fg, marginBottom: 3 }}>
-              {alert.donorName}
+            <div style={{ height: 1, background: 'rgba(255,255,255,0.08)' }} />
+            <div style={{ height: 3, background: hl }} />
+            <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+          </div>
+        );
+      }
+
+      // ── MINIMAL ──────────────────────────────────────────────────────────────────
+      return (
+        <div style={{ position: 'relative', overflow: 'hidden' }}>
+          <div style={scanlineStyle} />
+          <MediaBlock />
+          <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontFamily: monospace, fontSize: 11, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+                <span style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.5, letterSpacing: '0.18em', textTransform: 'uppercase' }}>MEDIA</span>
+              </div>
+              <span style={{ fontFamily: monospace, fontSize: 20, fontWeight: 900, color: hl, letterSpacing: '-1px', textShadow: `0 0 8px ${hl}50` }}>
+                Rp {Number(alert.amount).toLocaleString('id-ID')}
+              </span>
+            </div>
+
+            <div style={{ fontFamily: monospace, fontSize: 15, fontWeight: 900, color: fg, marginBottom: 3, borderBottom: `1px solid ${hl}20`, paddingBottom: 5 }}>
+              {'> '}{alert.donorName}
             </div>
 
             {alert.message && (
-              <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
+              <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.72, lineHeight: 1.4, marginBottom: 4 }}>
                 {alert.message}
               </div>
             )}
 
-            {renderTimestamp()}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              {showTs && alert?.receivedAt
+                ? <div style={{ fontFamily: monospace, fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                : <div />
+              }
+              <div style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.3, letterSpacing: '2px' }}>{'- - - - - - - -'}</div>
+            </div>
 
-            <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 10 }}>
-              <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
+            <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', marginTop: 6 }}>
+              <div style={{ height: '100%', width: `${progress}%`, background: hl, transition: 'width 50ms linear' }} />
             </div>
           </div>
-        </>
+        </div>
       );
     };
 

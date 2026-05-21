@@ -57,6 +57,7 @@ import { MediaShareControl } from '../components/mediaShareController';
 import { FeeConfigPage } from './feeConfig';
 import { WhatsAppPage } from './whatsappPage';
 import { SuggestionsAdmin } from './suggestionAdmin';
+import { ALERT_PRESETS } from '../constants/alertPresets';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -1219,7 +1220,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
 
   const donors = [
     { name: 'Budi Santoso', amount: 50000,  msg: 'Semangat terus ngodingnya bang!' },
-    { name: 'Siti Rahayu',  amount: 150000, msg: 'Mantap kontennya, keep it up!'   },
+    { name: 'Reza Gunawan',  amount: 150000, msg: 'Mantap kontennya, keep it up!'   },
     { name: 'Anonim',       amount: 10000,  msg: 'Good luck!'                       },
     { name: 'RizkyDev',     amount: 200000, msg: 'Dukung terus creator lokal!'      },
   ];
@@ -1263,94 +1264,500 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
 
   const handleFullScreen = () => { testFullScreen(); setIsFullscreen(!isFullscreen); };
   
-  const renderAlert = () => {
-    if (!currentDonor) return null;
-    const hl = settings.highlightColor || '#a5b4fc';
-    const ts = settings.showTimestamp !== false
-      ? <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace' }}>
-          🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
-        </div>
-      : <div />;
+  // const renderAlert = () => {
+  //   if (!currentDonor) return null;
+  //   const hl = settings.highlightColor || '#a5b4fc';
+  //   const ts = settings.showTimestamp !== false
+  //     ? <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace' }}>
+  //         🕐 {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+  //       </div>
+  //     : <div />;
 
-    const modernInner = (
-      <>
-        <div style={{ height: 4, background: hl }} />
-        <div style={{ padding: '14px 16px 0px', display: 'flex', gap: 12, alignItems: 'flex-center' }}>
-          <div style={{ width: 42, height: 42, background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0, marginTop: 0 }}>
-            {renderIconPreview(settings.customIcon, 22)}
+  //   const modernInner = (
+  //     <>
+  //       <div style={{ height: 4, background: hl }} />
+  //       <div style={{ padding: '14px 16px 0px', display: 'flex', gap: 12, alignItems: 'flex-center' }}>
+  //         <div style={{ width: 42, height: 42, background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0, marginTop: 0 }}>
+  //           {renderIconPreview(settings.customIcon, 22)}
+  //         </div>
+  //         <div style={{ flex: 1, minWidth: 0 }}>
+  //           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(0,0,0,0.25)', padding: '2px 8px', fontSize: 26, fontWeight: 900, color: hl, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 6 }}>
+  //             <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
+  //             Hai Streamer
+  //           </div>
+  //           <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
+  //             {currentDonor.name} 
+  //           </div>
+  //           <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
+  //             Rp {currentDonor.amount.toLocaleString('id-ID')}
+  //           </div>
+  //           {currentDonor.msg && (
+  //             <div style={{ fontSize: 26, color: fg, opacity: 0.8, lineHeight: 1.4 }}>{currentDonor.msg}</div>
+  //           )}
+  //         </div>
+  //       </div>
+  //       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px 10px', background: 'rgba(0,0,0,0.2)', marginTop: 10 }}>
+  //         {ts}
+  //         <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.15)', marginLeft: 12 }}>
+  //           <div style={{ height: '100%', width: '60%', background: hl }} />
+  //         </div>
+  //       </div>
+  //     </>
+  //   );
+
+  //   const classicInner = (
+  //     <>
+  //       <div style={{ background: 'rgba(0,0,0,0.3)', padding: '9px 14px', display: 'flex', alignItems: 'center', gap: 9, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+  //         <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIconPreview(settings.customIcon, 18)}</span>
+  //         <span style={{ fontSize: 26, fontWeight: 900, color: fg, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Dukungan Masuk!</span>
+  //       </div>
+  //       <div style={{ padding: '12px 14px 10px' }}>
+  //         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+  //           <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>{currentDonor.name} </div>
+  //         </div>
+  //         <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px' }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
+  //         {currentDonor.msg && (
+  //           <div style={{ fontSize: 26, color: fg, lineHeight: 1.4, padding: '6px 10px', background: 'rgba(0,0,0,0.2)', borderLeft: `2px solid ${hl}` }}>{currentDonor.msg}</div>
+  //         )}
+  //         {ts}
+  //         <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
+  //           <div style={{ height: '100%', width: '45%', background: hl }} />
+  //         </div>
+  //       </div>
+  //     </>
+  //   );
+
+  //   const minimalInner = (
+  //     <>
+  //       <div style={{ padding: '14px 16px 12px' }}>
+  //         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
+  //           <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-1px', lineHeight: 1 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
+  //           <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Donasi</div>
+  //         </div>
+  //         <div style={{ fontSize: 26, fontWeight: 900, color: fg, marginBottom: 3 }}>{currentDonor.name}</div>
+  //         {currentDonor.msg && <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>{currentDonor.msg}</div>}
+  //         {ts}
+  //         <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 10 }}>
+  //           <div style={{ height: '100%', width: '75%', background: hl }} />
+  //         </div>
+  //       </div>
+  //     </>
+  //   );
+
+  //   const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner };
+
+  //   return (
+  //     <div style={{ backgroundColor: bg, color: fg, maxWidth: `${maxW}px`, width: '100%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.45)', border: `1px solid ${settings.borderColor || 'rgba(255,255,255,0.15)'}` }}>
+  //       {innerMap[theme] ?? modernInner}
+  //     </div>
+  //   );
+  // };
+
+  const renderAlert = () => {
+  if (!currentDonor) return null;
+  const hl = settings.highlightColor || '#39ff14';
+  const fg = settings.textColor || '#c8f5c8';
+  const bg = settings.primaryColor || '#0a1f0a';
+
+  // Pixel frog ASCII art kecil sebagai dekorasi
+  const FrogDeco = ({ size = 14 }) => (
+    <span style={{
+      fontFamily: 'monospace',
+      fontSize: size,
+      color: hl,
+      lineHeight: 1,
+      letterSpacing: '-1px',
+      display: 'inline-block',
+      opacity: 0.85,
+    }}>
+      {`(o_o)`}
+    </span>
+  );
+
+  const ts = settings.showTimestamp !== false
+    ? (
+      <div style={{
+        fontSize: 9,
+        color: 'rgba(255,255,255,0.35)',
+        fontFamily: 'monospace',
+        letterSpacing: '0.05em',
+      }}>
+        {`> `}{new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+      </div>
+    )
+    : <div />;
+
+  // ── Scanline overlay style (retro CRT) ──
+  const scanlineStyle = {
+    position: 'absolute',
+    inset: 0,
+    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)',
+    pointerEvents: 'none',
+    zIndex: 1,
+  };
+
+  // ── Pixel border helper ──
+  const pixelBorder = `2px solid ${hl}`;
+  const dimBorder = `1px solid ${hl}40`;
+
+  // ══════════════════════════════════════════
+  // MODERN — Retro terminal HUD
+  // ══════════════════════════════════════════
+  const modernInner = (
+    <div style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={scanlineStyle} />
+      {/* Header bar */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: hl + '18',
+        borderBottom: pixelBorder,
+        padding: '5px 10px',
+        position: 'relative',
+        zIndex: 2,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <FrogDeco size={12} />
+          <span style={{
+            fontFamily: 'monospace',
+            fontSize: 9,
+            color: hl,
+            textTransform: 'uppercase',
+            letterSpacing: '0.18em',
+            fontWeight: 700,
+          }}>DUKUNGAN MASUK</span>
+        </div>
+        <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+          {/* Pixel status dots */}
+          {['#ff4444', '#ffaa00', hl].map((c, i) => (
+            <span key={i} style={{ width: 7, height: 7, background: c, display: 'inline-block', border: '1px solid rgba(255,255,255,0.2)' }} />
+          ))}
+        </div>
+      </div>
+
+      {/* Body */}
+      <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+        {/* Icon + info */}
+        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}>
+          <div style={{
+            width: 40,
+            height: 40,
+            border: pixelBorder,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 20,
+            flexShrink: 0,
+            background: hl + '12',
+            imageRendering: 'pixelated',
+          }}>
+            {renderIconPreview(settings.customIcon, 20)}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(0,0,0,0.25)', padding: '2px 8px', fontSize: 26, fontWeight: 900, color: hl, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 6 }}>
-              <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
-              Hai Streamer
+            <div style={{
+              fontFamily: 'monospace',
+              fontSize: 11,
+              color: fg,
+              opacity: 0.6,
+              marginBottom: 2,
+              letterSpacing: '0.1em',
+            }}>{'> DONOR:'}</div>
+            <div style={{
+              fontFamily: 'monospace',
+              fontSize: 18,
+              fontWeight: 900,
+              color: fg,
+              lineHeight: 1.1,
+              letterSpacing: '-0.5px',
+            }}>
+              {currentDonor.name}
             </div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
-              {currentDonor.name} 
-            </div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
-              Rp {currentDonor.amount.toLocaleString('id-ID')}
-            </div>
-            {currentDonor.msg && (
-              <div style={{ fontSize: 26, color: fg, opacity: 0.8, lineHeight: 1.4 }}>"{currentDonor.msg}"</div>
-            )}
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px 10px', background: 'rgba(0,0,0,0.2)', marginTop: 10 }}>
+
+        {/* Amount — big retro display */}
+        <div style={{
+          fontFamily: 'monospace',
+          fontSize: 28,
+          fontWeight: 900,
+          color: hl,
+          letterSpacing: '-1px',
+          lineHeight: 1,
+          borderLeft: `3px solid ${hl}`,
+          paddingLeft: 8,
+          marginBottom: 6,
+          textShadow: `0 0 12px ${hl}60`,
+        }}>
+          Rp {currentDonor.amount.toLocaleString('id-ID')}
+        </div>
+
+        {/* Message */}
+        {currentDonor.msg && (
+          <div style={{
+            fontFamily: 'monospace',
+            fontSize: 11,
+            color: fg,
+            opacity: 0.75,
+            background: 'rgba(255,255,255,0.04)',
+            border: dimBorder,
+            padding: '5px 8px',
+            lineHeight: 1.4,
+            marginBottom: 6,
+          }}>
+            {'>> '}{currentDonor.msg}
+          </div>
+        )}
+
+        {/* Footer */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 }}>
           {ts}
-          <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.15)', marginLeft: 12 }}>
-            <div style={{ height: '100%', width: '60%', background: hl }} />
+          {/* Pixel progress bar */}
+          <div style={{ display: 'flex', gap: 2 }}>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <span key={i} style={{
+                width: 6,
+                height: 6,
+                background: i < 5 ? hl : hl + '25',
+                display: 'inline-block',
+              }} />
+            ))}
           </div>
         </div>
-      </>
-    );
-
-    const classicInner = (
-      <>
-        <div style={{ background: 'rgba(0,0,0,0.3)', padding: '9px 14px', display: 'flex', alignItems: 'center', gap: 9, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIconPreview(settings.customIcon, 18)}</span>
-          <span style={{ fontSize: 26, fontWeight: 900, color: fg, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Dukungan Masuk!</span>
-        </div>
-        <div style={{ padding: '12px 14px 10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-            <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>{currentDonor.name} </div>
-          </div>
-          <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px' }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
-          {currentDonor.msg && (
-            <div style={{ fontSize: 26, color: fg, lineHeight: 1.4, padding: '6px 10px', background: 'rgba(0,0,0,0.2)', borderLeft: `2px solid ${hl}` }}>{currentDonor.msg}</div>
-          )}
-          {ts}
-          <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
-            <div style={{ height: '100%', width: '45%', background: hl }} />
-          </div>
-        </div>
-      </>
-    );
-
-    const minimalInner = (
-      <>
-        <div style={{ padding: '14px 16px 12px' }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
-            <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-1px', lineHeight: 1 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
-            <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Donasi</div>
-          </div>
-          <div style={{ fontSize: 26, fontWeight: 900, color: fg, marginBottom: 3 }}>{currentDonor.name}</div>
-          {currentDonor.msg && <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>"{currentDonor.msg}"</div>}
-          {ts}
-          <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 10 }}>
-            <div style={{ height: '100%', width: '75%', background: hl }} />
-          </div>
-        </div>
-      </>
-    );
-
-    const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner };
-
-    return (
-      <div style={{ backgroundColor: bg, color: fg, maxWidth: `${maxW}px`, width: '100%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.45)', border: `1px solid ${settings.borderColor || 'rgba(255,255,255,0.15)'}` }}>
-        {innerMap[theme] ?? modernInner}
       </div>
-    );
-  };
+    </div>
+  );
+
+  // ══════════════════════════════════════════
+  // CLASSIC — Retro game dialog box
+  // ══════════════════════════════════════════
+  const classicInner = (
+    <div style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={scanlineStyle} />
+      {/* Double-border pixel frame top */}
+      <div style={{ height: 3, background: hl, position: 'relative', zIndex: 2 }} />
+      <div style={{ height: 1, background: bg, position: 'relative', zIndex: 2 }} />
+      <div style={{ height: 1, background: hl + '60', position: 'relative', zIndex: 2 }} />
+
+      {/* Title bar — RPG style */}
+      <div style={{
+        background: hl + '15',
+        borderBottom: `1px solid ${hl}40`,
+        padding: '7px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'relative',
+        zIndex: 2,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          <span style={{
+            fontFamily: 'monospace',
+            fontSize: 16,
+            lineHeight: 1,
+            display: 'inline-block',
+          }}>
+            {renderIconPreview(settings.customIcon, 16)}
+          </span>
+          <span style={{
+            fontFamily: 'monospace',
+            fontSize: 10,
+            fontWeight: 700,
+            color: hl,
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
+          }}>★ Dukungan Masuk! ★</span>
+        </div>
+        <FrogDeco size={11} />
+      </div>
+
+      {/* Content */}
+      <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+        {/* Name row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          marginBottom: 6,
+          borderBottom: `1px dashed ${hl}30`,
+          paddingBottom: 6,
+        }}>
+          <span style={{
+            fontFamily: 'monospace',
+            fontSize: 9,
+            color: hl,
+            opacity: 0.7,
+            letterSpacing: '0.12em',
+          }}>NAME</span>
+          <span style={{
+            fontFamily: 'monospace',
+            fontSize: 16,
+            fontWeight: 900,
+            color: fg,
+            letterSpacing: '-0.3px',
+          }}>{currentDonor.name}</span>
+        </div>
+
+        {/* Amount */}
+        <div style={{
+          fontFamily: 'monospace',
+          fontSize: 26,
+          fontWeight: 900,
+          color: hl,
+          letterSpacing: '-0.5px',
+          marginBottom: 5,
+          textShadow: `0 0 10px ${hl}50`,
+        }}>
+          Rp {currentDonor.amount.toLocaleString('id-ID')}
+        </div>
+
+        {/* Message */}
+        {currentDonor.msg && (
+          <div style={{
+            fontFamily: 'monospace',
+            fontSize: 11,
+            color: fg,
+            opacity: 0.8,
+            lineHeight: 1.45,
+            borderLeft: `2px solid ${hl}`,
+            paddingLeft: 8,
+            marginBottom: 6,
+          }}>
+            {currentDonor.msg}
+            <span style={{ animation: 'blink 1s step-end infinite', color: hl }}>▮</span>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {ts}
+          <div style={{
+            fontFamily: 'monospace',
+            fontSize: 8,
+            color: hl,
+            opacity: 0.5,
+            letterSpacing: '0.1em',
+          }}>
+            {`[ PRESS ▲ TO CONTINUE ]`}
+          </div>
+        </div>
+      </div>
+
+      {/* Double-border pixel frame bottom */}
+      <div style={{ height: 1, background: hl + '60' }} />
+      <div style={{ height: 1, background: bg }} />
+      <div style={{ height: 3, background: hl }} />
+    </div>
+  );
+
+  // ══════════════════════════════════════════
+  // MINIMAL — Retro ticker tape
+  // ══════════════════════════════════════════
+  const minimalInner = (
+    <div style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={scanlineStyle} />
+      <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+        {/* Top row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 4,
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+          }}>
+            <FrogDeco size={11} />
+            <span style={{
+              fontFamily: 'monospace',
+              fontSize: 8,
+              color: hl,
+              opacity: 0.55,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+            }}>DONASI</span>
+          </div>
+          <span style={{
+            fontFamily: 'monospace',
+            fontSize: 24,
+            fontWeight: 900,
+            color: hl,
+            letterSpacing: '-1px',
+            textShadow: `0 0 8px ${hl}50`,
+          }}>
+            Rp {currentDonor.amount.toLocaleString('id-ID')}
+          </span>
+        </div>
+
+        {/* Name */}
+        <div style={{
+          fontFamily: 'monospace',
+          fontSize: 15,
+          fontWeight: 900,
+          color: fg,
+          marginBottom: 3,
+          borderBottom: `1px solid ${hl}20`,
+          paddingBottom: 5,
+        }}>
+          {'> '}{currentDonor.name}
+        </div>
+
+        {/* Message */}
+        {currentDonor.msg && (
+          <div style={{
+            fontFamily: 'monospace',
+            fontSize: 10,
+            color: fg,
+            opacity: 0.7,
+            lineHeight: 1.4,
+            marginBottom: 4,
+          }}>
+            {currentDonor.msg}
+          </div>
+        )}
+
+        {/* Bottom */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {ts}
+          {/* Pixel dash divider */}
+          <div style={{
+            fontFamily: 'monospace',
+            fontSize: 8,
+            color: hl,
+            opacity: 0.35,
+            letterSpacing: '2px',
+          }}>
+            {'- - - - - - - -'}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner };
+
+  return (
+    <>
+      {/* CSS untuk blink cursor di classic */}
+      <style>{`
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+      `}</style>
+      <div style={{
+        backgroundColor: bg,
+        color: fg,
+        maxWidth: `${settings.maxWidth || 280}px`,
+        width: '100%',
+        overflow: 'hidden',
+        boxShadow: `0 0 0 2px ${hl}30, 0 8px 32px rgba(0,0,0,0.6)`,
+        border: `2px solid ${settings.borderColor || hl + '40'}`,
+        imageRendering: 'pixelated',
+      }}>
+        {innerMap[settings.theme] ?? modernInner}
+      </div>
+    </>
+  );
+};
 
   const FullscreenPreview = () => (
     <AnimatePresence>
@@ -2342,6 +2749,38 @@ export const DashboardStreamer = () => {
                       className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2 mt-8">
                       <Save size={20} />{saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}
                     </button>
+                  </div>
+
+                  {/* Preset Warna Siap Pakai */}
+                  <div className="md:col-span-2">
+                    <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
+                      Preset Warna Siap Pakai
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {ALERT_PRESETS.map(preset => (
+                        <button
+                          key={preset.id}
+                          onClick={() => {
+                            upd('primaryColor',   preset.primaryColor);
+                            upd('highlightColor', preset.highlightColor);
+                            upd('textColor',      preset.textColor);
+                            upd('borderColor',    preset.borderColor);
+                          }}
+                          className="cursor-pointer active:scale-[0.97] py-3 px-2 rounded-none border-2 transition-all text-left"
+                          style={{
+                            borderColor: preset.highlightColor + '60',
+                            background: preset.primaryColor,
+                          }}
+                        >
+                          <div style={{ color: preset.highlightColor, fontFamily: 'monospace', fontSize: 13, fontWeight: 900, marginBottom: 2 }}>
+                            {preset.name}
+                          </div>
+                          <div style={{ color: preset.textColor, fontSize: 9, opacity: 0.7, fontFamily: 'monospace' }}>
+                            {preset.desc}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Quick Nominal */}
