@@ -416,13 +416,13 @@ const MainAuthForm = ({
           </button>
         </form>
 
-        <div style={{ display:'flex', alignItems:'center', gap:12, margin:'28px 0' }}>
+        {/* <div style={{ display:'flex', alignItems:'center', gap:12, margin:'28px 0' }}>
           <div style={{ flex:1, height:1, background: T.divider }} />
           <span style={{ color: T.dividerText, fontSize:12, fontWeight:600 }}>atau</span>
           <div style={{ flex:1, height:1, background: T.divider }} />
-        </div>
+        </div> */}
 
-        <p style={{ textAlign:'center', color: T.switchText, fontSize:14 }}>
+        <p className='mt-6 uppercase' style={{ textAlign:'left', color: T.switchText, fontSize:14 }}>
           {isLogin ? 'Belum punya akun?' : 'Sudah punya akun?'}{' '}
           <button onClick={() => setIsLogin(!isLogin)}
             style={{ 
@@ -432,7 +432,7 @@ const MainAuthForm = ({
             onMouseEnter={e => e.currentTarget.style.color='#7c3aed'}
             onMouseLeave={e => e.currentTarget.style.color=T.switchLink}
           >
-            {isLogin ? 'Daftar Gratis' : 'Masuk Sekarang'}
+            {isLogin ? 'DAFTAR GRATIS' : 'MASUK SEKARANG'}
           </button>
         </p>
       </motion.div>
