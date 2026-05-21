@@ -504,8 +504,8 @@ const calculateMediaShareDuration = (config, amount) => {
               padding: '5px 10px', position: 'relative', zIndex: 2,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontFamily: monospace, fontSize: 11, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
-                <span style={{ fontFamily: monospace, fontSize: 9, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>
+                <span style={{ fontFamily: monospace, fontSize: 20, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+                <span style={{ fontFamily: monospace, fontSize:16, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>
                   MEDIA SHARE
                 </span>
               </div>
@@ -541,7 +541,7 @@ const calculateMediaShareDuration = (config, amount) => {
 
               {alert.message && (
                 <div style={{
-                  fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.75,
+                  fontFamily: monospace, fontSize: 20, color: fg, opacity: 0.75,
                   background: 'rgba(255,255,255,0.04)', border: dimBorder,
                   padding: '5px 8px', lineHeight: 1.4, marginBottom: 6,
                 }}>
@@ -551,7 +551,7 @@ const calculateMediaShareDuration = (config, amount) => {
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 }}>
                 {showTs && alert?.receivedAt
-                  ? <div style={{ fontFamily: monospace, fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                  ? <div style={{ fontFamily: monospace, fontSize:16, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
                   : <div />
                 }
                 <div style={{ display: 'flex', gap: 2 }}>
@@ -585,12 +585,12 @@ const calculateMediaShareDuration = (config, amount) => {
                   ★ Media Share ★
                 </span>
               </div>
-              <span style={{ fontFamily: monospace, fontSize: 11, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+              <span style={{ fontFamily: monospace, fontSize: 20, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
             </div>
 
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>
-                <span style={{ fontFamily: monospace, fontSize: 9, color: hl, opacity: 0.65, letterSpacing: '0.12em' }}>NAME</span>
+                <span style={{ fontFamily: monospace, fontSize:16, color: hl, opacity: 0.65, letterSpacing: '0.12em' }}>NAME</span>
                 <span style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg }}>{alert.donorName}</span>
               </div>
 
@@ -599,7 +599,7 @@ const calculateMediaShareDuration = (config, amount) => {
               </div>
 
               {alert.message && (
-                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.82, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
+                <div style={{ fontFamily: monospace, fontSize: 20, color: fg, opacity: 0.82, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
                   {alert.message}
                   <span style={{ color: hl, animation: 'blink 1s step-end infinite' }}>▮</span>
                 </div>
@@ -607,7 +607,7 @@ const calculateMediaShareDuration = (config, amount) => {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
                 {showTs && alert?.receivedAt
-                  ? <div style={{ fontFamily: monospace, fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                  ? <div style={{ fontFamily: monospace, fontSize:16, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
                   : <div />
                 }
                 <div style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.4, letterSpacing: '0.08em' }}>[ PRESS ▲ TO CONTINUE ]</div>
@@ -633,7 +633,7 @@ const calculateMediaShareDuration = (config, amount) => {
           <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontFamily: monospace, fontSize: 11, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+                <span style={{ fontFamily: monospace, fontSize: 20, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
                 <span style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.5, letterSpacing: '0.18em', textTransform: 'uppercase' }}>MEDIA</span>
               </div>
               <span style={{ fontFamily: monospace, fontSize: 20, fontWeight: 900, color: hl, letterSpacing: '-1px', textShadow: `0 0 8px ${hl}50` }}>
@@ -653,7 +653,7 @@ const calculateMediaShareDuration = (config, amount) => {
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {showTs && alert?.receivedAt
-                ? <div style={{ fontFamily: monospace, fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                ? <div style={{ fontFamily: monospace, fontSize:16, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
                 : <div />
               }
               <div style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.3, letterSpacing: '2px' }}>{'- - - - - - - -'}</div>

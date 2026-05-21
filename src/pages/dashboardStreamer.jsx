@@ -1288,7 +1288,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   const ts = settings.showTimestamp !== false
     ? (
       <div style={{
-        fontSize: 9,
+        fontSize: 20,
         color: 'rgba(255,255,255,0.35)',
         fontFamily: 'monospace',
         letterSpacing: '0.05em',
@@ -1332,7 +1332,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
           <FrogDeco size={12} />
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 9,
+            fontSize: 20,
             color: hl,
             textTransform: 'uppercase',
             letterSpacing: '0.18em',
@@ -1366,19 +1366,20 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             {renderIconPreview(settings.customIcon, 20)}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
+            {/* <div style={{
               fontFamily: 'monospace',
-              fontSize: 11,
+              fontSize: 20,
               color: fg,
               opacity: 0.6,
               marginBottom: 2,
               letterSpacing: '0.1em',
-            }}>{'> DONOR:'}</div>
+            }}>{'> DONOR:'}</div> */}
             <div style={{
               fontFamily: 'monospace',
               fontSize: 18,
               fontWeight: 900,
               color: fg,
+              marginTop: 10,
               lineHeight: 1.1,
               letterSpacing: '-0.5px',
             }}>
@@ -1407,7 +1408,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 11,
+            fontSize: 20,
             color: fg,
             opacity: 0.75,
             background: 'rgba(255,255,255,0.04)',
@@ -1464,7 +1465,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 16,
+            fontSize: 20,
             lineHeight: 1,
             display: 'inline-block',
           }}>
@@ -1493,16 +1494,16 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
           borderBottom: `1px dashed ${hl}30`,
           paddingBottom: 6,
         }}>
-          <span style={{
+          {/* <span style={{
             fontFamily: 'monospace',
-            fontSize: 9,
+            fontSize: 20,
             color: hl,
             opacity: 0.7,
             letterSpacing: '0.12em',
-          }}>NAME</span>
+          }}>NAME</span> */}
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: 900,
             color: fg,
             letterSpacing: '-0.3px',
@@ -1526,7 +1527,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 11,
+            fontSize: 20,
             color: fg,
             opacity: 0.8,
             lineHeight: 1.45,
@@ -1707,9 +1708,9 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   );
 
   return (
-    <div className="sticky top-12 space-y-3">
+    <div className="sticky top-26 space-y-3">
       <FullscreenPreview />
-      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-none shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
+      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-none h-[60vh] w-full shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
         <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(155deg,#1a1a2e 0%,#0d0d1a 60%,#12121f 100%)' }}>
           <span style={{ fontSize: 80, fontWeight: 800, color: 'rgba(255,255,255,0.04)', letterSpacing: -3, userSelect: 'none' }}>LIVE</span>
         </div>
@@ -1721,7 +1722,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         <div className="absolute inset-0 pointer-events-none">
           <AnimatePresence>
             {showAlert && (
-              <motion.div key={animKey} initial={anim.initial} animate={anim.animate} exit={anim.exit} style={{ position: 'absolute', ...pos, zIndex: 10 }}>
+              <motion.div className='ml-4 max-w-[80%]' key={animKey} initial={anim.initial} animate={anim.animate} exit={anim.exit} style={{ position: 'absolute', ...pos, zIndex: 10 }}>
                 {renderAlert()}
               </motion.div>
             )}
@@ -2686,7 +2687,7 @@ export const DashboardStreamer = () => {
                           <div style={{ color: preset.highlightColor, fontFamily: 'monospace', fontSize: 13, fontWeight: 900, marginBottom: 2 }}>
                             {preset.name}
                           </div>
-                          <div style={{ color: preset.textColor, fontSize: 9, opacity: 0.7, fontFamily: 'monospace' }}>
+                          <div style={{ color: preset.textColor, fontSize: 20, opacity: 0.7, fontFamily: 'monospace' }}>
                             {preset.desc}
                           </div>
                         </button>
