@@ -2687,7 +2687,7 @@ export const DashboardStreamer = () => {
                           <div style={{ color: preset.highlightColor, fontFamily: 'monospace', fontSize: 13, fontWeight: 900, marginBottom: 2 }}>
                             {preset.name}
                           </div>
-                          <div style={{ color: preset.textColor, fontSize: 20, opacity: 0.7, fontFamily: 'monospace' }}>
+                          <div style={{ color: preset.textColor, fontSize: 11, opacity: 0.7, fontFamily: 'monospace' }}>
                             {preset.desc}
                           </div>
                         </button>
