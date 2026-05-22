@@ -987,7 +987,8 @@ const SupporterPage = () => {
       }
     } catch (err) {
       console.error(err);
-      alert('Gagal membuat invoice.');
+      const msg = err.response?.data?.message || 'Gagal membuat invoice.';
+      alert(msg);  // Donor akan lihat: "Video tidak dapat ditampilkan: Video dibatasi usia (18+)"
     } finally {
       setLoading(false);
     }

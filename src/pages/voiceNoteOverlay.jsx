@@ -273,128 +273,6 @@ const VoiceNoteOverlay = () => {
 
       <AnimatePresence>
         {alert && (
-          // <motion.div
-          //   key={alert.receivedAt || Date.now()}
-          //   initial={anim.initial}
-          //   animate={anim.animate}
-          //   exit={anim.exit}
-          //   style={{
-          //     backgroundColor: bg,
-          //     color: fg,
-          //     width: `${maxW}px`,
-          //     borderRadius: 0,
-          //     border: `1px solid ${borderColor}`,
-          //     boxShadow: '0 16px 40px rgba(0,0,0,0.6)',
-          //     overflow: 'hidden',
-          //     fontFamily: "'Inter', -apple-system, 'Segoe UI', sans-serif",
-          //   }}
-          // >
-          //   {/* Accent bar atas */}
-          //   <div style={{ height: 4, background: `linear-gradient(90deg, ${highlight}, ${bg})` }} />
-
-          //   {/* Badge Voice Message */}
-          //   <div style={{
-          //     display: 'flex', alignItems: 'center', gap: 8,
-          //     padding: '10px 14px 0',
-          //   }}>
-          //     <div style={{
-          //       display: 'inline-flex', alignItems: 'center', gap: 6,
-          //       background: 'rgba(0,0,0,0.25)',
-          //       padding: '3px 10px',
-          //       fontSize: 11, fontWeight: 900, color: highlight,
-          //       textTransform: 'uppercase', letterSpacing: '0.12em',
-          //     }}>
-          //       <span style={{
-          //         width: 6, height: 6, borderRadius: '50%',
-          //         background: isPlaying ? '#22c55e' : highlight,
-          //         display: 'inline-block',
-          //         boxShadow: isPlaying ? `0 0 6px #22c55e` : 'none',
-          //         transition: 'all 0.3s',
-          //       }} />
-          //       {isPlaying ? '🎙️ Memutar Voice...' : '🎙️ Voice Donation'}
-          //     </div>
-          //   </div>
-
-          //   {/* Konten utama */}
-          //   <div style={{ padding: '10px 14px 6px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-          //     {/* Icon mic */}
-          //     <div style={{
-          //       width: 40, height: 40, flexShrink: 0,
-          //       background: 'rgba(0,0,0,0.25)',
-          //       display: 'flex', alignItems: 'center', justifyContent: 'center',
-          //       fontSize: 20, marginTop: 4,
-          //     }}>
-          //       🎙️
-          //     </div>
-
-          //     <div style={{ flex: 1, minWidth: 0 }}>
-          //       <div style={{ fontSize: 20, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
-          //         {alert.donorName}
-          //       </div>
-          //       <div style={{ fontSize: 18, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', marginBottom: 6 }}>
-          //         {formatRp(alert.amount)}
-          //       </div>
-
-          //       {/* Pesan teks jika ada */}
-          //       {alert.message && (
-          //         <div style={{
-          //           fontSize: 13, color: fg, lineHeight: 1.4,
-          //           opacity: 0.85, marginBottom: 8,
-          //         }}>
-          //           "{alert.message}"
-          //         </div>
-          //       )}
-
-          //       {/* Audio visualizer + progress */}
-          //       <div style={{
-          //         background: 'rgba(0,0,0,0.2)',
-          //         padding: '8px 10px',
-          //         display: 'flex', flexDirection: 'column', gap: 6,
-          //       }}>
-          //         {/* Visualizer bars */}
-          //         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          //           <AudioVisualizer isPlaying={isPlaying} color={highlight} />
-          //           <span style={{
-          //             fontSize: 11, color: isPlaying ? '#22c55e' : 'rgba(255,255,255,0.4)',
-          //             fontFamily: 'monospace', fontWeight: 700,
-          //             transition: 'color 0.3s',
-          //           }}>
-          //             {isPlaying ? 'PLAYING' : 'READY'}
-          //           </span>
-          //         </div>
-
-          //         {/* Audio progress bar */}
-          //         <div style={{ height: 2, background: 'rgba(255,255,255,0.1)' }}>
-          //           <div style={{
-          //             height: '100%',
-          //             width: `${audioProgress}%`,
-          //             background: isPlaying ? '#22c55e' : highlight,
-          //             transition: 'width 100ms linear, background 0.3s',
-          //           }} />
-          //         </div>
-          //       </div>
-          //     </div>
-          //   </div>
-
-          //   {/* Footer + overlay progress */}
-          //   <div style={{
-          //     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          //     padding: '8px 14px 10px',
-          //     background: 'rgba(0,0,0,0.2)',
-          //     marginTop: 6,
-          //   }}>
-          //     <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontFamily: 'monospace' }}>
-          //       VOICE · {alert.receivedAt ? new Date(alert.receivedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : ''}
-          //     </div>
-          //     <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.1)', marginLeft: 10 }}>
-          //       <div style={{
-          //         height: '100%', width: `${progress}%`,
-          //         background: highlight, transition: 'width 50ms linear',
-          //       }} />
-          //     </div>
-          //   </div>
-          // </motion.div>
-
           <motion.div
             key={alert.receivedAt || Date.now()}
             initial={anim.initial}
@@ -404,7 +282,7 @@ const VoiceNoteOverlay = () => {
               backgroundColor: bg,
               color: fg,
               width: `${maxW}px`,
-              borderRadius: 0,
+              borderRadius: config.theme === 'smooth' ? 20 : 0,
               border: `1px solid ${borderColor}`,
               boxShadow: '0 16px 40px rgba(0,0,0,0.6)',
               overflow: 'hidden',
@@ -420,6 +298,85 @@ const VoiceNoteOverlay = () => {
                 backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px)',
                 pointerEvents: 'none', zIndex: 1,
               };
+
+              if (config.theme === 'smooth') {
+                return (
+                  <div style={{ fontFamily: "'Poppins', sans-serif", padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {/* Icon + Nama + Amount */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <div style={{
+                        width: 44, height: 44, borderRadius: 14,
+                        background: hl + '22', border: `1.5px solid ${hl}40`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0,
+                      }}>
+                        🎙️
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
+                          Voice Donation
+                        </div>
+                        <div style={{ fontSize: 15, fontWeight: 700, color: fg }}>{alert.donorName}</div>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: hl, letterSpacing: '-0.5px' }}>
+                          {formatRp(alert.amount)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
+
+                    {/* Pesan */}
+                    {alert.message && (
+                      <div style={{
+                        fontSize: 13, color: fg, opacity: 0.75,
+                        background: hl + '10', borderRadius: 10, padding: '8px 12px',
+                        lineHeight: 1.5, border: `1px solid ${hl}20`,
+                      }}>
+                        {alert.message}
+                      </div>
+                    )}
+
+                    {/* Visualizer smooth */}
+                    <div style={{
+                      background: hl + '0d', borderRadius: 10, padding: '8px 12px',
+                      border: `1px solid ${hl}20`, display: 'flex', flexDirection: 'column', gap: 6,
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 24 }}>
+                        {Array.from({ length: 16 }).map((_, i) => (
+                          <span key={i} style={{
+                            width: 4, display: 'inline-block', borderRadius: 2,
+                            background: isPlaying ? hl : hl + '40',
+                            height: isPlaying ? `${30 + Math.abs(Math.sin(i * 0.7)) * 70}%` : '20%',
+                            animation: isPlaying ? `vbar${i % 5} ${0.35 + (i % 4) * 0.07}s ease-in-out infinite alternate` : 'none',
+                            transition: 'background 0.3s',
+                          }} />
+                        ))}
+                      </div>
+                      <div style={{ height: 3, background: hl + '25', borderRadius: 99, overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${audioProgress}%`, background: isPlaying ? '#22c55e' : hl, borderRadius: 99, transition: 'width 100ms linear' }} />
+                      </div>
+                    </div>
+
+                    {/* Timestamp + overall progress */}
+                    {alert.receivedAt && (
+                      <div style={{ fontSize: 11, color: fg, opacity: 0.35 }}>
+                        {new Date(alert.receivedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    )}
+                    <div style={{ height: 3, background: hl + '20', borderRadius: 99, overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${progress}%`, background: hl, borderRadius: 99, transition: 'width 50ms linear' }} />
+                    </div>
+
+                    <style>{`
+                      @keyframes vbar0 { from{height:20%} to{height:85%} }
+                      @keyframes vbar1 { from{height:35%} to{height:70%} }
+                      @keyframes vbar2 { from{height:50%} to{height:95%} }
+                      @keyframes vbar3 { from{height:25%} to{height:75%} }
+                      @keyframes vbar4 { from{height:40%} to{height:60%} }
+                    `}</style>
+                  </div>
+                );
+              }
 
               return (
                 <div style={{ position: 'relative', overflow: 'hidden' }}>

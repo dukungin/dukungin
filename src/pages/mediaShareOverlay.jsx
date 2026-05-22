@@ -313,147 +313,6 @@ const calculateMediaShareDuration = (config, amount) => {
       );
     };
 
-    // ── RENDER INNER (SAMA PERSIS OverlayAlert + Media Share label) ─────────────
-    // const renderInner = () => {
-    //   // ── MODERN (SAMA PERSIS + Media Share badge) ───────────────────────────────
-    //   if (theme === 'modern') {
-    //     return (
-    //       <>
-    //         {renderMedia()} {/* ✅ MEDIA DI ATAS */}
-
-    //         <div style={{ height: 4, background: highlight }} />
-    //         <div style={{ padding: '14px 16px 0px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-    //           <div style={{
-    //             width: 42, height: 42,
-    //             background: 'rgba(0,0,0,0.2)',
-    //             display: 'flex', alignItems: 'center', justifyContent: 'center',
-    //             fontSize: 20, flexShrink: 0,
-    //             marginTop: 0
-    //           }}>
-    //             {renderIcon(customIcon, 22)}
-    //           </div>
-
-    //           <div style={{ flex: 1, minWidth: 0 }}>
-    //             <div style={{
-    //               display: 'inline-flex', alignItems: 'center', gap: 5,
-    //               background: 'rgba(0,0,0,0.25)',
-    //               padding: '2px 8px',
-    //               fontSize: 26, fontWeight: 900, color: highlight,
-    //               textTransform: 'uppercase', letterSpacing: '0.12em',
-    //               marginBottom: 6,
-    //             }}>
-    //               <span style={{ width: 4, height: 4, background: '#22c55e', borderRadius: '50%' }} />
-    //               Media Share
-    //             </div>
-
-    //             <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2, marginBottom: 2 }}>
-    //               {alert.donorName}
-    //             </div>
-    //             <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 5 }}>
-    //               Rp {Number(alert.amount).toLocaleString('id-ID')}
-    //             </div>
-    //             {alert.message && (
-    //               <div style={{ fontSize: 26, color: fg, lineHeight: 1.4 }}>
-    //                 {alert.message}
-    //               </div>
-    //             )}
-    //           </div>
-    //         </div>
-
-    //         <div style={{
-    //           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    //           padding: '8px 16px 10px',
-    //           background: 'rgba(0,0,0,0.2)',
-    //           marginTop: 10,
-    //         }}>
-    //           {renderTimestamp()}
-    //           <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.15)', marginLeft: 12 }}>
-    //             <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
-    //           </div>
-    //         </div>
-    //       </>
-    //     );
-    //   }
-
-    //   // ── CLASSIC (SAMA PERSIS + Media Share header) ─────────────────────────────
-    //   if (theme === 'classic') {
-    //     return (
-    //       <>
-    //         {renderMedia()} {/* ✅ MEDIA DI ATAS */}
-
-    //         <div style={{
-    //           background: 'rgba(0,0,0,0.3)',
-    //           padding: '9px 14px',
-    //           display: 'flex', alignItems: 'center', gap: 9,
-    //           borderBottom: '1px solid rgba(255,255,255,0.1)',
-    //         }}>
-    //           <span style={{ fontSize: 26, position: 'relative', top: -3 }}>{renderIcon(customIcon, 18)}</span>
-    //           <span style={{ fontSize: 26, fontWeight: 900, color: highlight, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-    //             Media Share
-    //           </span>
-    //         </div>
-            
-    //         <div style={{ padding: '12px 14px 10px' }}>
-    //           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-    //             <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>{alert.donorName}</div>
-    //           </div>
-    //           <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-0.5px' }}>
-    //             Rp {Number(alert.amount).toLocaleString('id-ID')}
-    //           </div>
-    //           {alert.message && (
-    //             <div style={{
-    //               fontSize: 26, color: fg,
-    //               lineHeight: 1.4, padding: '6px 10px',
-    //               background: 'rgba(0,0,0,0.2)',
-    //               borderLeft: `2px solid ${highlight}`,
-    //             }}>
-    //               {alert.message}
-    //             </div>
-    //           )}
-    //           {renderTimestamp()}
-    //           <div style={{ height: 2, background: 'rgba(255,255,255,0.1)', marginTop: 10 }}>
-    //             <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
-    //           </div>
-    //         </div>
-    //       </>
-    //     );
-    //   }
-
-    //   // ── MINIMAL (SAMA PERSIS + Media Share label) ──────────────────────────────
-    //   return (
-    //     <>
-    //       {renderMedia()} {/* ✅ MEDIA DI ATAS */}
-
-    //       <div style={{ padding: '14px 16px 12px' }}>
-    //         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
-    //           <div style={{ fontSize: 26, fontWeight: 900, color: highlight, letterSpacing: '-1px', lineHeight: 1 }}>
-    //             Rp {Number(alert.amount).toLocaleString('id-ID')}
-    //           </div>
-    //           <div style={{ fontSize: 26, fontWeight: 900, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-    //             Media
-    //           </div>
-    //         </div>
-
-    //         <div style={{ fontSize: 26, fontWeight: 900, color: fg, marginBottom: 3 }}>
-    //           {alert.donorName}
-    //         </div>
-
-    //         {alert.message && (
-    //           <div style={{ fontSize: 26, color: fg, lineHeight: 1.35 }}>
-    //             {alert.message}
-    //           </div>
-    //         )}
-
-    //         {renderTimestamp()}
-
-    //         <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 10 }}>
-    //           <div style={{ height: '100%', width: `${progress}%`, background: highlight, transition: 'width 50ms linear' }} />
-    //         </div>
-    //       </div>
-    //     </>
-    //   );
-    // };
-
     const renderInner = () => {
       const hl = highlight;
       const monospace = "'Courier New', 'Lucida Console', monospace";
@@ -559,6 +418,68 @@ const calculateMediaShareDuration = (config, amount) => {
                     <span key={i} style={{ width: 6, height: 6, display: 'inline-block', background: i < Math.round(progress / 12.5) ? hl : hl + '22' }} />
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ── SMOOTH ───────────────────────────────────────────────────────────────────
+      if (theme === 'smooth') {
+        return (
+          <div style={{ fontFamily: "'Poppins', sans-serif", overflow: 'hidden' }}>
+            {/* Media block tanpa border pixel */}
+            <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000' }}>
+              <MediaBlock />
+            </div>
+
+            <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {/* Icon + Nama */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: 10,
+                  background: hl + '22', border: `1.5px solid ${hl}40`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0,
+                }}>
+                  {renderIcon(customIcon, 18)}
+                </div>
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>
+                    Media Share
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: fg }}>
+                    {alert.donorName}
+                  </div>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
+
+              {/* Amount */}
+              <div style={{ fontSize: 22, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
+                Rp {Number(alert.amount).toLocaleString('id-ID')}
+              </div>
+
+              {/* Pesan */}
+              {alert.message && (
+                <div style={{
+                  fontSize: 12, color: fg, opacity: 0.75,
+                  background: hl + '10', borderRadius: 8, padding: '6px 10px',
+                  lineHeight: 1.5, border: `1px solid ${hl}20`,
+                }}>
+                  {alert.message}
+                </div>
+              )}
+
+              {/* Timestamp + Progress */}
+              {showTs && alert?.receivedAt && (
+                <div style={{ fontSize: 11, color: fg, opacity: 0.35 }}>
+                  {formatTimestamp(alert.receivedAt)}
+                </div>
+              )}
+              <div style={{ height: 3, background: hl + '25', borderRadius: 99, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${progress}%`, background: hl, borderRadius: 99, transition: 'width 50ms linear' }} />
               </div>
             </div>
           </div>
@@ -685,7 +606,7 @@ const calculateMediaShareDuration = (config, amount) => {
                 backgroundColor: bg,
                 color: fg,
                 width: `${maxW}px`,
-                borderRadius: 0,
+                borderRadius: theme === 'smooth' ? 20 : 0,
                 border: `1px solid ${borderColor}`,
                 boxShadow: '0 16px 40px rgba(0,0,0,0.55)',
                 overflow: 'hidden',

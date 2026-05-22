@@ -1217,6 +1217,172 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const timerRef = useRef(null);
   const donorIdxRef = useRef(0);
+  const [previewMode, setPreviewMode] = useState('alert'); // 'alert' | 'media'
+  const [mediaUrl, setMediaUrl] = useState('https://picsum.photos/400/300');
+
+  const MEDIA_PRESETS = [
+    { url: 'https://picsum.photos/400/300?random=1', type: 'image', label: 'Foto' },
+    { url: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif', type: 'image', label: 'GIF' },
+    { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', type: 'youtube', label: 'YouTube' },
+  ];
+
+  const getYouTubeEmbedUrl = (url) => {
+    if (!url) return null;
+    const watchMatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
+    if (watchMatch) return `https://www.youtube.com/embed/${watchMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${watchMatch[1]}`;
+    const shortMatch = url.match(/youtu\.be\/([\w-]+)/);
+    if (shortMatch) return `https://www.youtube.com/embed/${shortMatch[1]}?autoplay=1&mute=0&controls=0&loop=1&playlist=${shortMatch[1]}`;
+    return null;
+  };
+
+  const detectMediaType = (url) => {
+    if (!url) return 'image';
+    if (url.match(/youtube\.com\/watch\?v=/) || url.match(/youtu\.be\//)) return 'youtube';
+    if (/\.(mp4|webm|mov)$/i.test(url)) return 'video';
+    return 'image';
+  };
+
+  const renderMediaAlert = () => {
+    if (!currentDonor) return null;
+    const hl = settings.highlightColor || '#39ff14';
+    const fg = settings.textColor || '#c8f5c8';
+    const bg = settings.primaryColor || '#0a1f0a';
+    const monospace = "'Courier New', 'Lucida Console', monospace";
+    const scanlineStyle = {
+      position: 'absolute', inset: 0,
+      backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)',
+      pointerEvents: 'none', zIndex: 1,
+    };
+    const pixelBorder = `2px solid ${hl}`;
+    const dimBorder = `1px solid ${hl}40`;
+    const mType = detectMediaType(mediaUrl);
+
+    const MediaBlock = () => (
+      <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
+        {mType === 'youtube' ? (
+          <iframe src={getYouTubeEmbedUrl(mediaUrl)} width="100%" height="100%" frameBorder="0"
+            allow="autoplay; encrypted-media" allowFullScreen style={{ display: 'block', border: 'none' }} />
+        ) : mType === 'video' ? (
+          <video src={mediaUrl} autoPlay loop muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <img src={mediaUrl} alt="media" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        )}
+      </div>
+    );
+
+    const theme = settings.theme || 'modern';
+
+    if (theme === 'modern') {
+      return (
+        <>
+          <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+          <div style={{ backgroundColor: bg, color: fg, maxWidth: `${settings.maxWidth || 280}px`, width: '100%', overflow: 'hidden', boxShadow: `0 0 0 2px ${hl}30, 0 8px 32px rgba(0,0,0,0.6)`, border: `2px solid ${settings.borderColor || hl + '40'}`, imageRendering: 'pixelated', position: 'relative' }}>
+            <div style={scanlineStyle} />
+            <MediaBlock />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: hl + '18', borderBottom: pixelBorder, padding: '5px 10px', position: 'relative', zIndex: 2 }}>
+              <span style={{ fontFamily: monospace, fontSize: 20, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>MEDIA SHARE</span>
+              <div style={{ display: 'flex', gap: 4 }}>
+                {['#ff4444', '#ffaa00', hl].map((c, i) => <span key={i} style={{ width: 7, height: 7, background: c, display: 'inline-block', border: '1px solid rgba(255,255,255,0.2)' }} />)}
+              </div>
+            </div>
+            <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+              <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 4 }}>{currentDonor.name}</div>
+              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, borderLeft: `3px solid ${hl}`, paddingLeft: 8, marginBottom: 6, textShadow: `0 0 10px ${hl}55` }}>
+                Rp {currentDonor.amount.toLocaleString('id-ID')}
+              </div>
+              {currentDonor.msg && (
+                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.75, border: dimBorder, padding: '5px 8px', lineHeight: 1.4 }}>
+                  {'>> '}{currentDonor.msg}
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    if (theme === 'smooth') {
+      return (
+        <div style={{
+          backgroundColor: bg,
+          color: fg,
+          maxWidth: `${settings.maxWidth || 280}px`,
+          width: '100%',
+          overflow: 'hidden',
+          borderRadius: 20,
+          border: `1.5px solid ${hl}30`,
+          boxShadow: `0 8px 32px ${hl}18`,
+        }}>
+          {/* Media */}
+          <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000' }}>
+            <MediaBlock />
+          </div>
+          {/* Content */}
+          <div style={{ fontFamily: "'Poppins', sans-serif", padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: hl + '22', border: `1.5px solid ${hl}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
+                {renderIconPreview(settings.customIcon, 18)}
+              </div>
+              <div>
+                <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>Media Share</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: fg }}>{currentDonor.name}</div>
+              </div>
+            </div>
+            <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
+            <div style={{ fontSize: 22, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
+              Rp {currentDonor.amount.toLocaleString('id-ID')}
+            </div>
+            {currentDonor.msg && (
+              <div style={{ fontSize: 20, color: fg, opacity: 0.75, background: hl + '10', borderRadius: 8, padding: '6px 10px', lineHeight: 1.5, border: `1px solid ${hl}20` }}>
+                {currentDonor.msg}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    if (theme === 'classic') {
+      return (
+        <>
+          <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+          <div style={{ backgroundColor: bg, color: fg, maxWidth: `${settings.maxWidth || 280}px`, width: '100%', overflow: 'hidden', border: `2px solid ${hl}`, imageRendering: 'pixelated', position: 'relative' }}>
+            <div style={scanlineStyle} />
+            <div style={{ height: 3, background: hl }} />
+            <MediaBlock />
+            <div style={{ background: hl + '15', borderBottom: `1px solid ${hl}40`, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
+              <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>★ Media Share ★</span>
+            </div>
+            <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+              <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>{currentDonor.name}</div>
+              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, marginBottom: 5 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
+              {currentDonor.msg && (
+                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.82, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
+                  {currentDonor.msg}<span style={{ color: hl, animation: 'blink 1s step-end infinite' }}>▮</span>
+                </div>
+              )}
+            </div>
+            <div style={{ height: 3, background: hl }} />
+          </div>
+        </>
+      );
+    }
+
+    // minimal
+    return (
+      <div style={{ backgroundColor: bg, color: fg, maxWidth: `${settings.maxWidth || 280}px`, width: '100%', overflow: 'hidden', border: `2px solid ${hl}40`, position: 'relative' }}>
+        <div style={scanlineStyle} />
+        <MediaBlock />
+        <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontFamily: monospace, fontSize: 11, color: fg, fontWeight: 900 }}>{'> '}{currentDonor.name}</span>
+            <span style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: hl }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</span>
+          </div>
+          {currentDonor.msg && <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.72, lineHeight: 1.4 }}>{currentDonor.msg}</div>}
+        </div>
+      </div>
+    );
+  };
 
   const donors = [
     { name: 'Budi Santoso', amount: 50000,  msg: 'Semangat terus ngodingnya bang!' },
@@ -1441,6 +1607,102 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   );
 
   // ══════════════════════════════════════════
+// SMOOTH — Soft rounded card with Poppins
+// ══════════════════════════════════════════
+const smoothInner = (
+  <div style={{
+    fontFamily: "'Poppins', sans-serif",
+    padding: '14px 16px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+  }}>
+    {/* Icon + Nama */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{
+        width: 44,
+        height: 44,
+        borderRadius: 14,
+        background: hl + '22',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 22,
+        flexShrink: 0,
+        border: `1.5px solid ${hl}40`,
+      }}>
+        {renderIconPreview(settings.customIcon, 22)}
+      </div>
+      <div>
+        <div style={{
+          fontSize: 11,
+          fontWeight: 500,
+          color: fg,
+          opacity: 0.5,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          marginBottom: 2,
+        }}>
+          Dukungan Masuk
+        </div>
+        <div style={{
+          fontSize: 15,
+          fontWeight: 700,
+          color: fg,
+          lineHeight: 1.2,
+        }}>
+          {currentDonor.name}
+        </div>
+      </div>
+    </div>
+
+    {/* Divider tipis */}
+    <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
+
+    {/* Amount */}
+    <div style={{
+      fontSize: 26,
+      fontWeight: 800,
+      color: hl,
+      letterSpacing: '-0.5px',
+      lineHeight: 1,
+    }}>
+      Rp {currentDonor.amount.toLocaleString('id-ID')}
+    </div>
+
+    {/* Pesan */}
+    {currentDonor.msg && (
+      <div style={{
+        fontSize: 20,
+        fontWeight: 400,
+        color: fg,
+        opacity: 0.75,
+        background: hl + '10',
+        borderRadius: 10,
+        padding: '8px 12px',
+        lineHeight: 1.5,
+        border: `1px solid ${hl}20`,
+      }}>
+        {currentDonor.msg}
+      </div>
+    )}
+
+    {/* Timestamp */}
+    {settings.showTimestamp !== false && (
+      <div style={{
+        fontSize: 11,
+        color: fg,
+        opacity: 0.35,
+        fontWeight: 400,
+        letterSpacing: '0.04em',
+      }}>
+        {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+      </div>
+    )}
+  </div>
+);
+
+  // ══════════════════════════════════════════
   // CLASSIC — Retro game dialog box
   // ══════════════════════════════════════════
   const classicInner = (
@@ -1647,7 +1909,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
     </div>
   );
 
-  const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner };
+  const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner, smooth: smoothInner };
 
   return (
     <>
@@ -1658,6 +1920,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
       <div style={{
         backgroundColor: bg,
         color: fg,
+        borderRadius: settings.theme === 'smooth' ? 20 : 0,
         maxWidth: `${settings.maxWidth || 280}px`,
         width: '100%',
         overflow: 'hidden',
@@ -1675,7 +1938,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
     <AnimatePresence>
       {isFullscreen && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed w-[100%] right-0 inset-0 z-[999999999] bg-black flex flex-col">
-          <div className="flex items-center justify-between px-6 py-4 bg-black/80 backdrop-blur-sm border-b border-white/10 flex-shrink-0">
+          <div className="flex items-center justify-between px- py-4 bg-black/80 backdrop-blur-sm border-b border-white/10 flex-shrink-0">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 bg-red-500 rounded-none animate-pulse" />
               <span className="text-white font-black text-sm tracking-wide">LIVE PREVIEW</span>
@@ -1707,48 +1970,93 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
     </AnimatePresence>
   );
 
-  return (
+  const mediaShareDuration = (() => {
+    if (!currentDonor) return 0;
+      const base = Number(settings.mediaShareBaseDuration) || 15;
+      const perAmt = Number(settings.mediaShareExtraPerAmount) || 10000;
+      const extra = Number(settings.mediaShareExtraDuration) || 10;
+      return base + Math.floor(currentDonor.amount / perAmt) * extra;
+    })();
+
+    return (
     <div className="sticky top-26 space-y-3">
       <FullscreenPreview />
-      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-none h-[54vh] w-full shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
+
+      {/* Tab switcher */}
+      <div className="flex gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-none">
+        {[{ id: 'alert', label: '⚡ Alert OBS' }, { id: 'media', label: '🎬 Media Share' }].map(tab => (
+          <button key={tab.id} onClick={() => setPreviewMode(tab.id)}
+            className={`cursor-pointer flex-1 py-2 text-xs font-black rounded-none transition-all ${previewMode === tab.id ? 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="relative overflow-hidden border-[4px] border-slate-800 rounded-none h-[54vh] w-full shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
         <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(155deg,#1a1a2e 0%,#0d0d1a 60%,#12121f 100%)' }}>
           <span style={{ fontSize: 80, fontWeight: 800, color: 'rgba(255,255,255,0.04)', letterSpacing: -3, userSelect: 'none' }}>LIVE</span>
         </div>
-        <div className="absolute top-0 left-0 right-0 flex items-center gap-2 px-3 py-2" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 100%)' }}>
+        {/* <div className="absolute top-0 left-0 right-0 flex items-center gap-2 px-3 py-2" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,.65) 0%,transparent 100%)' }}>
           <div className="w-5 h-5 rounded-none bg-red-600 flex items-center justify-center text-white text-[8px] font-black flex-shrink-0">YT</div>
           <span className="bg-red-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded-none tracking-wide">LIVE</span>
           <span className="text-white text-[9px] font-medium opacity-80 flex-1 truncate">Ngoding Bareng | Demo</span>
-        </div>
+        </div> */}
         <div className="absolute inset-0 pointer-events-none">
           <AnimatePresence>
-            {showAlert && (
+            {showAlert && previewMode === 'alert' && (
               <motion.div className='ml-4 max-w-[80%]' key={animKey} initial={anim.initial} animate={anim.animate} exit={anim.exit} style={{ position: 'absolute', ...pos, zIndex: 10 }}>
                 {renderAlert()}
               </motion.div>
             )}
+            {showAlert && previewMode === 'media' && (
+              <motion.div className='ml-4 max-w-[80%]' key={`media-${animKey}`} initial={anim.initial} animate={anim.animate} exit={anim.exit} style={{ position: 'absolute', ...pos, zIndex: 10, top: 20,   transform: 'scale(0.4) translateX(-50%)', }}>
+                {renderMediaAlert()}
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
-        <div className="absolute top-2 right-3"><span className="w-1.5 h-1.5 bg-red-500 rounded-none animate-pulse block" /></div>
+        {/* <div className="absolute top-2 right-3"><span className="w-1.5 h-1.5 bg-red-500 rounded-none animate-pulse block" /></div> */}
       </div>
+
       <div className="flex items-center justify-between text-[10px] text-slate-400 font-bold px-1 flex-wrap gap-1">
         <span>Lebar: <span className="text-blue-600">{maxW}px</span></span>
         <span>Tema: <span className="text-blue-600">{theme}</span></span>
-        <span>Durasi demo: <span className="text-blue-600">{currentDonor ? dur : '-'}s</span></span>
+        {previewMode === 'alert' && <span>Durasi alert: <span className="text-blue-600">{currentDonor ? dur : '-'}s</span></span>}
+        {previewMode === 'media' && <span>Durasi medser: <span className="text-purple-500">{currentDonor ? mediaShareDuration : '-'}s</span></span>}
       </div>
+
+      {/* Media URL picker — hanya muncul saat tab media aktif */}
+      {previewMode === 'media' && (
+        <div className="space-y-2">
+          <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Media URL (preview)</label>
+          <div className="flex gap-2">
+            {MEDIA_PRESETS.map((p, i) => (
+              <button key={i} onClick={() => setMediaUrl(p.url)}
+                className={`flex-1 py-1.5 text-[10px] font-black rounded-none border-2 transition-all cursor-pointer ${mediaUrl === p.url ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/40 text-purple-600' : 'border-slate-100 dark:border-slate-700 text-slate-400 hover:border-purple-300'}`}>
+                {p.label}
+              </button>
+            ))}
+          </div>
+          {/* <input value={mediaUrl} onChange={e => setMediaUrl(e.target.value)}
+            className="w-full p-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-mono text-[10px] text-slate-600 dark:text-slate-300 outline-none focus:border-purple-400 transition-all"
+            placeholder="https://... (gambar, video, atau YouTube)" /> */}
+        </div>
+      )}
+
       <button onClick={triggerDemo}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-none bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 text-blue-600 dark:text-blue-400 font-black text-sm border-2 border-blue-100 dark:border-blue-900 transition-all flex items-center justify-center gap-2">
-        <span className="w-2 h-2 bg-red-500 rounded-none animate-pulse" /> Simulasi Donasi Masuk
+        <span className="w-2 h-2 bg-red-500 rounded-none animate-pulse" /> {previewMode === 'media' ? 'Simulasi Media Share' : 'Simulasi Donasi Masuk'}
       </button>
-      <button onClick={() => handleFullScreen()}
+      {/* <button onClick={() => handleFullScreen()}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-none bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 text-white font-black text-sm transition-all flex items-center justify-center gap-2 border border-slate-700">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
         </svg>
         Full Screen Preview
-      </button>
+      </button> */}
     </div>
   );
-};
+}
 
 // ─── HistoryPage ──────────────────────────────────────────────────────────────
 
@@ -2623,8 +2931,8 @@ export const DashboardStreamer = () => {
                       <InputField label="Maksimal Donasi" type="number" value={settings.maxDonate} onChange={v => upd('maxDonate', v)} />
                       <div className="md:col-span-2">
                         <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-4 uppercase tracking-widest">Tema Visual</label>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                          {['modern', 'classic', 'minimal'].map(t => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {['modern', 'classic', 'minimal', 'smooth'].map(t => (
                             <button key={t} onClick={() => upd('theme', t)}
                               className={`cursor-pointer active:scale-[0.97] py-4 rounded-none border-2 transition-all font-black text-sm capitalize ${settings.theme === t ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 shadow-md' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'}`}>{t}</button>
                           ))}
