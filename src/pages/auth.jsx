@@ -237,13 +237,13 @@ const LeftPanel = () => (
     padding:'48px 44px', overflow:'hidden',
   }}>
     {/* <BgCanvas /> */}
-    <img src="/img.jpg" alt="img" className='absolute top-0 left-0 w-full z-[999]' />
-    <img src="/img2.jpg" alt="img" className='md:hidden absolute top-0 left-0 w-full z-[999]' />
-    <div className='md:px-0 px-4 flex md:hidden' style={{ position:'relative', zIndex:10 }}>
+    <img src="/img.jpg" alt="img" className='absolute md:flex hidden top-0 left-0 w-full z-[999]' />
+    <img src="/img2.jpg" alt="img" className='md:hidden relative md:absolute h-full w-full z-[999]' />
+    {/* <div className='md:px-0 px-4 hidden md:hidden' style={{ position:'relative', zIndex:10 }}>
       <BrandLogo />
       <HeroJellyfish />
       <HeroContent />
-    </div>
+    </div> */}
     {/* <StatsGrid /> */}
   </div>
 );
@@ -893,7 +893,7 @@ const Auth = () => {
         @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 768px) {
           .auth-root { flex-direction: column !important; }
-          .auth-left { width: 100% !important; min-height: auto !important; padding: 32px 0px !important; }
+          .auth-left { width: 100% !important; min-height: auto !important; padding: 0px 0px !important; }
         }
       `}</style>
 

@@ -1710,7 +1710,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   return (
     <div className="sticky top-26 space-y-3">
       <FullscreenPreview />
-      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-none h-[60vh] w-full shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
+      <div className="relative overflow-hidden border-[10px] border-slate-800 rounded-none h-[54vh] w-full shadow-2xl" style={{ aspectRatio: '16/9', background: '#000' }}>
         <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(155deg,#1a1a2e 0%,#0d0d1a 60%,#12121f 100%)' }}>
           <span style={{ fontSize: 80, fontWeight: 800, color: 'rgba(255,255,255,0.04)', letterSpacing: -3, userSelect: 'none' }}>LIVE</span>
         </div>
