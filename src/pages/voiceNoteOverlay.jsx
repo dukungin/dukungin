@@ -413,7 +413,7 @@ const VoiceNoteOverlay = () => {
                       <div style={{
                         width: 40, height: 40, border: `2px solid ${hl}`, flexShrink: 0,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: 20, background: hl + '12',
+                        fontSize: 26, background: hl + '12',
                       }}>
                         🎙️
                       </div>
@@ -421,7 +421,7 @@ const VoiceNoteOverlay = () => {
                         <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.55, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div>
                         <div style={{ fontFamily: monospace, fontSize: 17, fontWeight: 900, color: fg, lineHeight: 1.1 }}>{alert.donorName}</div>
                         <div style={{
-                          fontFamily: monospace, fontSize: 20, fontWeight: 900, color: hl,
+                          fontFamily: monospace, fontSize: 26, fontWeight: 900, color: hl,
                           letterSpacing: '-0.5px', marginTop: 2, textShadow: `0 0 8px ${hl}55`,
                         }}>
                           {formatRp(alert.amount)}
@@ -431,7 +431,7 @@ const VoiceNoteOverlay = () => {
 
                     {alert.message && (
                       <div style={{
-                        fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.75,
+                        fontFamily: monospace, fontSize: 23, color: fg, opacity: 0.75,
                         background: 'rgba(255,255,255,0.04)', border: `1px solid ${hl}35`,
                         padding: '5px 8px', lineHeight: 1.4, marginBottom: 8,
                       }}>

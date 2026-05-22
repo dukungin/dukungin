@@ -274,7 +274,7 @@
       };
 
       const FrogDeco = () => (
-        <span style={{ fontFamily: monospace, fontSize: 20, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+        <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
       );
 
       const pixelBorder = `2px solid ${hl}`;
@@ -312,7 +312,7 @@
                 <div style={{
                   width: 40, height: 40, border: pixelBorder, flexShrink: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 20, background: hl + '12',
+                  fontSize: 23, background: hl + '12',
                 }}>
                   {renderIcon(customIcon, 20)}
                 </div>
@@ -337,7 +337,7 @@
 
               {alert.message && (
                 <div style={{
-                  fontFamily: monospace, fontSize: 20, color: fg, opacity: 0.75,
+                  fontFamily: monospace, fontSize: 23, color: fg, opacity: 0.75,
                   background: 'rgba(255,255,255,0.04)', border: dimBorder,
                   padding: '5px 8px', lineHeight: 1.4, marginBottom: 6,
                 }}>
@@ -443,7 +443,7 @@
                   textTransform: 'uppercase', letterSpacing: '0.15em',
                 }}>★ Dukungan Masuk! ★</span>
               </div>
-              <span style={{ fontFamily: monospace, fontSize: 20, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+              <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
             </div>
 
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
@@ -464,7 +464,7 @@
 
               {alert.message && (
                 <div style={{
-                  fontFamily: monospace, fontSize: 20, color: fg, opacity: 0.82,
+                  fontFamily: monospace, fontSize: 23, color: fg, opacity: 0.82,
                   lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6,
                 }}>
                   {alert.message}
@@ -503,7 +503,7 @@
           <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                {/* <span style={{ fontFamily: monospace, fontSize: 20, color: hl, letterSpacing: '-1px' }}>(o_o)</span> */}
+                {/* <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span> */}
                 {/* <span style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.5, letterSpacing: '0.18em', textTransform: 'uppercase' }}>DONASI</span> */}
               </div>
               <span style={{

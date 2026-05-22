@@ -866,34 +866,34 @@ const SHARE_TEMPLATES = {
   1: {
     label: "Alert Donasi Real-Time",
     ig: [
-      { platform: "Instagram Caption", text: `🎮 Streamer Indo, dengerin dulu!\n\nTired of potongan donasi gede?\nTapTipTup cuma ambil 2.5% — sisanya buat kamu! 💸\n\n✅ Alert OBS real-time\n✅ QRIS + Transfer langsung\n✅ Sound kustom per tier\n✅ Gratis selamanya (plan basic)\n\nCoba sekarang di taptiptup.id 🔗\n\n#Streamer #StreamingIndonesia #TapTipTup` },
-      { platform: "Instagram Story", text: `Hei streamer! 👋\n\nDonasi kamu dipotong berapa?\n5%? 10%?\n\nTapTipTup: cuma 2.5% ✨\nAlert langsung di OBS-mu!\n\nLink di bio → taptiptup.id` }
+      { platform: "Instagram Caption", text: `🎮 Streamer Indo, dengerin dulu!\n\nTired of potongan donasi gede?\nTapTipTup cuma ambil 2.5% — sisanya buat kamu! 💸\n\n✅ Alert OBS real-time\n✅ QRIS + Transfer langsung\n✅ Sound kustom per tier\n✅ Gratis selamanya (plan basic)\n\nCoba sekarang di taptiptup.com 🔗\n\n#Streamer #StreamingIndonesia #TapTipTup` },
+      { platform: "Instagram Story", text: `Hei streamer! 👋\n\nDonasi kamu dipotong berapa?\n5%? 10%?\n\nTapTipTup: cuma 2.5% ✨\nAlert langsung di OBS-mu!\n\nLink di bio → taptiptup.com` }
     ],
     desktop: [
-      { platform: "Twitter / X", text: `Streamer Indonesia, ini buat kalian 🧵\n\nTapTipTup = platform donasi lokal dengan potongan TERKECIL. Cuma 2.5%.\n\n✅ Alert OBS real-time\n✅ Sound custom per tier\n✅ QRIS & transfer bank\n✅ Gratis untuk mulai\n\nCoba gratis → taptiptup.id` },
-      { platform: "Facebook / Komunitas", text: `Para streamer, pernah ngerasa rugi kena potongan donasi gede?\n\nSaya baru cobain TapTipTup — potongannya cuma 2.5%! Setup OBS-nya juga gampang, kurang dari 5 menit udah live.\n\nCoba gratis di taptiptup.id 🚀` }
+      { platform: "Twitter / X", text: `Streamer Indonesia, ini buat kalian 🧵\n\nTapTipTup = platform donasi lokal dengan potongan TERKECIL. Cuma 2.5%.\n\n✅ Alert OBS real-time\n✅ Sound custom per tier\n✅ QRIS & transfer bank\n✅ Gratis untuk mulai\n\nCoba gratis → taptiptup.com` },
+      { platform: "Facebook / Komunitas", text: `Para streamer, pernah ngerasa rugi kena potongan donasi gede?\n\nSaya baru cobain TapTipTup — potongannya cuma 2.5%! Setup OBS-nya juga gampang, kurang dari 5 menit udah live.\n\nCoba gratis di taptiptup.com 🚀` }
     ]
   },
   2: {
     label: "Dashboard & Fitur Lengkap",
     ig: [
-      { platform: "Instagram Caption", text: `Level up stream kamu dengan TapTipTup! 🚀\n\nBukan cuma terima donasi —\nDashboard lengkap buat manage semuanya:\n📊 Riwayat donasi real-time\n🏆 Leaderboard top donor\n🎯 Milestone & goal tracker\n🗳️ Poll langsung dari penonton\n\nGratis untuk mulai. Pro mulai 49rb/bulan.\n\ntaptiptup.id ✨\n\n#ContentCreator #StreamerIndonesia #TapTipTup` },
-      { platform: "Instagram Story", text: `Dashboard donasi streamer terlengkap 📊\n\n→ Real-time analytics\n→ Top donor leaderboard\n→ Poll & subathon timer\n→ Setup OBS < 5 menit\n\nGratis di taptiptup.id 🔥` }
+      { platform: "Instagram Caption", text: `Level up stream kamu dengan TapTipTup! 🚀\n\nBukan cuma terima donasi —\nDashboard lengkap buat manage semuanya:\n📊 Riwayat donasi real-time\n🏆 Leaderboard top donor\n🎯 Milestone & goal tracker\n🗳️ Poll langsung dari penonton\n\nGratis untuk mulai. Pro mulai 49rb/bulan.\n\ntaptiptup.com ✨\n\n#ContentCreator #StreamerIndonesia #TapTipTup` },
+      { platform: "Instagram Story", text: `Dashboard donasi streamer terlengkap 📊\n\n→ Real-time analytics\n→ Top donor leaderboard\n→ Poll & subathon timer\n→ Setup OBS < 5 menit\n\nGratis di taptiptup.com 🔥` }
     ],
     desktop: [
-      { platform: "Twitter / X", text: `Nggak nyangka ada platform donasi streamer lokal sekeren ini.\n\nTapTipTup punya:\n📊 Dashboard analytics real-time\n🏆 Leaderboard gamifikasi donor\n🎯 Milestone tracker di OBS\n🗳️ Live poll & subathon timer\n🖼️ Media alert dari donor\n\nDan setupnya literally 5 menit.\nGratis untuk mulai → taptiptup.id` },
-      { platform: "Facebook / Komunitas", text: `Sharing pengalaman pakai TapTipTup buat stream:\n\nFitur favoritku? Leaderboard donor langsung muncul di OBS. Penonton jadi kompetitif sendiri, malah bikin donasi naik! 😂\n\nPlus ada poll live yang bisa divotin penonton real-time, dan milestone goal yang keliatan progressnya.\n\ntaptiptup.id` }
+      { platform: "Twitter / X", text: `Nggak nyangka ada platform donasi streamer lokal sekeren ini.\n\nTapTipTup punya:\n📊 Dashboard analytics real-time\n🏆 Leaderboard gamifikasi donor\n🎯 Milestone tracker di OBS\n🗳️ Live poll & subathon timer\n🖼️ Media alert dari donor\n\nDan setupnya literally 5 menit.\nGratis untuk mulai → taptiptup.com` },
+      { platform: "Facebook / Komunitas", text: `Sharing pengalaman pakai TapTipTup buat stream:\n\nFitur favoritku? Leaderboard donor langsung muncul di OBS. Penonton jadi kompetitif sendiri, malah bikin donasi naik! 😂\n\nPlus ada poll live yang bisa divotin penonton real-time, dan milestone goal yang keliatan progressnya.\n\ntaptiptup.com` }
     ]
   },
   3: {
     label: "Community & Streamer Network",
     ig: [
-      { platform: "Instagram Caption", text: `Gabung komunitas streamer Indonesia bareng TapTipTup! 👥\n\nBukan cuma donasi —\nkamu bisa discover & follow sesama streamer,\nbangun network, dan collab bareng!\n\nMulai gratis, tanpa kartu kredit.\nLink di bio → taptiptup.id\n\nTag temen streamer kamu di sini! 👇\n\n#StreamerIndonesia #KomunitasStreamer #TapTipTup` },
-      { platform: "Instagram Story", text: `Streamer Indonesia berkembang bareng! 🤝\n\nTapTipTup punya fitur:\n✅ Temukan sesama streamer\n✅ Bangun network kolaborasi\n✅ Donasi dengan potongan 2.5% aja\n\nTag temen streamer kamu!\ntaptiptup.id` }
+      { platform: "Instagram Caption", text: `Gabung komunitas streamer Indonesia bareng TapTipTup! 👥\n\nBukan cuma donasi —\nkamu bisa discover & follow sesama streamer,\nbangun network, dan collab bareng!\n\nMulai gratis, tanpa kartu kredit.\nLink di bio → taptiptup.com\n\nTag temen streamer kamu di sini! 👇\n\n#StreamerIndonesia #KomunitasStreamer #TapTipTup` },
+      { platform: "Instagram Story", text: `Streamer Indonesia berkembang bareng! 🤝\n\nTapTipTup punya fitur:\n✅ Temukan sesama streamer\n✅ Bangun network kolaborasi\n✅ Donasi dengan potongan 2.5% aja\n\nTag temen streamer kamu!\ntaptiptup.com` }
     ],
     desktop: [
-      { platform: "Twitter / X", text: `Shoutout buat semua streamer Indonesia 🇮🇩\n\nKalian deserve platform donasi yang:\n✅ Buatan lokal, paham kebutuhan kita\n✅ Potongan kecil (cuma 2.5%)\n✅ Ada komunitas sesama streamer\n✅ Setup OBS gampang & cepat\n\nTapTipTup hadir buat itu semua.\nGratis untuk mulai → taptiptup.id\n\nRT kalau bermanfaat! 🙏` },
-      { platform: "Facebook / Komunitas", text: `Buat semua streamer di grup ini —\n\nKalau kalian cari platform donasi yang:\n• Buatan Indonesia (paham ekosistem kita)\n• Potongan paling kecil (2.5%)\n• Ada fitur komunitas streamer\n• Setup simpel dan cepat\n\nTapTipTup jawabannya. Saya udah coba dan rekomendasinya 10/10 untuk streamer lokal.\n\nCoba gratis sekarang di taptiptup.id 🙏` }
+      { platform: "Twitter / X", text: `Shoutout buat semua streamer Indonesia 🇮🇩\n\nKalian deserve platform donasi yang:\n✅ Buatan lokal, paham kebutuhan kita\n✅ Potongan kecil (cuma 2.5%)\n✅ Ada komunitas sesama streamer\n✅ Setup OBS gampang & cepat\n\nTapTipTup hadir buat itu semua.\nGratis untuk mulai → taptiptup.com\n\nRT kalau bermanfaat! 🙏` },
+      { platform: "Facebook / Komunitas", text: `Buat semua streamer di grup ini —\n\nKalau kalian cari platform donasi yang:\n• Buatan Indonesia (paham ekosistem kita)\n• Potongan paling kecil (2.5%)\n• Ada fitur komunitas streamer\n• Setup simpel dan cepat\n\nTapTipTup jawabannya. Saya udah coba dan rekomendasinya 10/10 untuk streamer lokal.\n\nCoba gratis sekarang di taptiptup.com 🙏` }
     ]
   },
 };
@@ -928,7 +928,7 @@ function SharePromo({ C }) {
 
       <div style={{ padding: "48px 30px" }}>
         {/* Format tabs */}
-        <div className="justify-center items-center" style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+        {/* <div className="justify-center items-center" style={{ display: "flex", gap: 8, marginBottom: 24 }}>
           {['ig', 'desktop'].map(f => (
             <button className="active:scale-[0.98]" key={f} onClick={() => setFormat(f)} style={{
               padding: "8px 20px", fontSize: 13, fontWeight: 600,
@@ -940,19 +940,20 @@ function SharePromo({ C }) {
               {f === 'ig' ? '📸 Instagram (1:1)' : '🖥️ Desktop / Twitter (16:9)'}
             </button>
           ))}
-        </div>
+        </div> */}
 
         {/* Image cards */}
-        <div className="grid-cols-1 md:grid-cols-3" style={{ display: "grid", gap: 16, marginBottom: 32 }}>
-          {[1,2,3].map(n => (
+        <div className="grid-cols-1 md:grid-cols-4" style={{ display: "grid", gap: 16, marginBottom: 32 }}>
+          {[2,3, 4, 5].map(n => (
             <div key={n} className="bg-white" onClick={() => setSelectedCard(n)} style={{
               border: `${selectedCard === n ? 2 : 1}px solid ${selectedCard === n ? C.lime : C.line}`,
               cursor: "pointer", overflow: "hidden", transition: "border-color 0.15s",
               position: "relative",
             }}>
               <div style={{ 
-                aspectRatio: format === 'ig' ? '1/1' : '16/9', 
+                // aspectRatio: format === 'ig' ? '1/1' : '16/9', 
                 background: 'white', 
+                height: 500,
                 overflow: "hidden" 
               }}>
                 <img
@@ -961,7 +962,7 @@ function SharePromo({ C }) {
                   style={{ 
                     width: "100%", 
                     height: "100%", 
-                    objectFit: format === 'ig' ? 'contain' : 'cover',
+                    objectFit: format === 'ig' ? 'cover' : 'cover',
                     objectPosition: "center",
                   }}
                 />
@@ -990,24 +991,24 @@ function SharePromo({ C }) {
         </div>
 
         {/* Text templates */}
-        <div style={{ background: C.bg2, border: `1px solid ${C.line}`, padding: 24, marginBottom: 16 }}>
-          <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: C.lime, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>
-            Template Teks — Gambar {selectedCard}
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }} className="feat-list-grid">
-            {tpls.map((t, i) => (
-              <div key={i} style={{ background: C.bg, border: `1px solid ${C.line}`, padding: 16, position: "relative" }}>
-                <div style={{ fontSize: 10, fontFamily: "'Space Mono',monospace", color: C.lime, letterSpacing: "0.06em", marginBottom: 8 }}>{t.platform}</div>
-                <pre style={{ fontSize: 12, lineHeight: 1.65, color: C.muted, whiteSpace: "pre-wrap", fontFamily: "'Space Grotesk',sans-serif" }}>{t.text}</pre>
-                <button onClick={() => navigator.clipboard.writeText(t.text)} style={{
-                  position: "absolute", top: 8, right: 8, padding: "3px 10px",
-                  fontSize: 11, border: `1px solid ${C.line2}`, background: C.bg2,
-                  color: C.muted, cursor: "pointer",
-                }}>Salin</button>
-              </div>
-            ))}
-          </div>
-        </div>
+          {/* <div style={{ background: C.bg2, border: `1px solid ${C.line}`, padding: 24, marginBottom: 16 }}>
+            <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: C.lime, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>
+              Template Teks — Gambar {selectedCard}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }} className="feat-list-grid">
+              {tpls.map((t, i) => (
+                <div key={i} style={{ background: C.bg, border: `1px solid ${C.line}`, padding: 16, position: "relative" }}>
+                  <div style={{ fontSize: 10, fontFamily: "'Space Mono',monospace", color: C.lime, letterSpacing: "0.06em", marginBottom: 8 }}>{t.platform}</div>
+                  <pre style={{ fontSize: 12, lineHeight: 1.65, color: C.muted, whiteSpace: "pre-wrap", fontFamily: "'Space Grotesk',sans-serif" }}>{t.text}</pre>
+                  <button onClick={() => navigator.clipboard.writeText(t.text)} style={{
+                    position: "absolute", top: 8, right: 8, padding: "3px 10px",
+                    fontSize: 11, border: `1px solid ${C.line2}`, background: C.bg2,
+                    color: C.muted, cursor: "pointer",
+                  }}>Salin</button>
+                </div>
+              ))}
+            </div>
+          </div> */}
       </div>
     </section>
   );
