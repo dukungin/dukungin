@@ -381,22 +381,21 @@
                 {renderIcon(customIcon, 22)}
               </div>
               <div>
-                <div style={{ fontSize: 22, fontWeight: 500, color: fg, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>
+                {/* <div style={{ fontSize: 22, fontWeight: 500, color: fg, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>
                   Dukungan Masuk
-                </div>
+                </div> */}
                 <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2 }}>
                   {alert.donorName}
+                </div>
+                {/* Amount */}
+                <div style={{ fontSize: 26, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
+                  Rp {Number(alert.amount).toLocaleString('id-ID')}
                 </div>
               </div>
             </div>
 
             {/* Divider */}
             <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
-
-            {/* Amount */}
-            <div style={{ fontSize: 26, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
-              Rp {Number(alert.amount).toLocaleString('id-ID')}
-            </div>
 
             {/* Pesan */}
             {alert.message && (
