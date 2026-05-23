@@ -789,6 +789,8 @@ const SupporterPage = () => {
   const [startTime, setStartTime] = useState(0);
   const { theme, toggle: toggleTheme } = useTheme();
   const [feeBearer, setFeeBearer] = useState('streamer');
+  const [ytChecking, setYtChecking] = useState(false);
+  const [ytBlockedReason, setYtBlockedReason] = useState(null);
 
   // ── Tab state ──────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState('alert'); // 'alert' | 'mediashare' | 'voice'
@@ -819,6 +821,29 @@ const SupporterPage = () => {
     setAuthProfile(null);
     setForm((prev) => ({ ...prev, donorName: '', email: '' }));
   };
+
+  useEffect(() => {
+    setYtBlockedReason(null);
+    if (!mediaUrl || !isYouTubeUrl(mediaUrl)) return;
+
+    const timeout = setTimeout(async () => {
+      try {
+        setYtChecking(true);
+        const res = await axios.get(`${BASE_URL}/api/youtube-check`, {
+          params: { url: mediaUrl },
+        });
+        if (!res.data.safe) {
+          setYtBlockedReason(res.data.reason || 'Video tidak dapat ditampilkan');
+        }
+      } catch {
+        // gagal check → tidak diblokir
+      } finally {
+        setYtChecking(false);
+      }
+    }, 800); // debounce 800ms
+
+    return () => clearTimeout(timeout);
+  }, [mediaUrl]);
 
   const handleAuthSuccess = async (data) => {
     const newPayload = getPayload();
@@ -884,6 +909,11 @@ const SupporterPage = () => {
   useEffect(() => {
     if (!eligibleTrigger) { setMediaUrl(''); setStartTime(0); }
   }, [eligibleTrigger]);
+
+  useEffect(() => {
+    setYtBlockedReason(null);
+    setYtChecking(false);
+  }, [activeTab]);
 
   useEffect(() => {
     if (streamer) {
@@ -1029,6 +1059,8 @@ const SupporterPage = () => {
   // ── Validasi tombol submit ─────────────────────────────────
   const isSubmitDisabled = (() => {
     if (loading) return true;
+    if (ytChecking) return true;          // ← tambah
+    if (ytBlockedReason) return true;     // ← tambah
     if (!form.amount || form.amount < minDonate) return true;
     if (!form.message.trim() && activeTab !== 'voice') return true;
 
@@ -1052,6 +1084,8 @@ const SupporterPage = () => {
 
   // ── Hint teks kenapa tombol disabled ──────────────────────
   const submitHint = (() => {
+    if (ytChecking) return 'Mengecek video YouTube...';           // ← tambah
+    if (ytBlockedReason) return `Video diblokir: ${ytBlockedReason}`; // ← tambah
     if (!form.amount || form.amount < minDonate)
       return `Masukkan nominal min. Rp ${Number(minDonate).toLocaleString('id-ID')}`;
     if (!form.message.trim() && activeTab !== 'voice') // ← UBAH INI
@@ -1333,14 +1367,62 @@ const SupporterPage = () => {
                       </div>
                     </div>
                   ) : (
-                    // Eligible — tampilkan media input
+                  <>
                     <MediaInputSection
                       trigger={eligibleTrigger}
                       mediaUrl={mediaUrl}
                       setMediaUrl={setMediaUrl}
                       startTime={startTime}
                       setStartTime={setStartTime}
-                    />
+                      />
+
+                      <AnimatePresence>
+                        {isYouTubeUrl(mediaUrl) && (ytChecking || ytBlockedReason) && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -4 }}
+                            className={`flex items-center gap-2.5 px-4 py-3 rounded-none border text-[10px] font-bold ${
+                              ytChecking
+                                ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400'
+                                : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400'
+                            }`}
+                          >
+                            {ytChecking ? (
+                              <><Loader2 size={12} className="animate-spin flex-shrink-0" /> Mengecek video YouTube...</>
+                            ) : (
+                              <><X size={12} className="flex-shrink-0" /> {ytBlockedReason}</>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {/* ── Disclaimer konten tidak terfilter ── */}
+                      <div className="mt-3 rounded-none border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4 space-y-2">
+                        <p className="border-b border-amber-600/30 pb-3 mb-4 text-[10px] font-black text-amber-700 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                          Konten yang diblokir sistem
+                        </p>
+                        {/* <p className="text-[10px] text-amber-600 dark:text-amber-500 font-medium leading-relaxed">
+                          Sistem kami hanya memblokir video private, age-restricted, dan yang dinonaktifkan embed-nya. Konten berikut <span className="font-black">tetap bisa lolos</span> dan menjadi tanggung jawab pengirim:
+                        </p> */}
+                        <ul className="space-y-1.5">
+                          {[
+                            { icon: '🔞', text: 'Konten dewasa yang belum dibatasi usia oleh YouTube' },
+                            { icon: '©️', text: 'Video DMCA / hak cipta (embed diizinkan tapi audio di-mute YouTube)' },
+                            { icon: '🩸', text: 'Konten kekerasan / gore yang tidak dibatasi YouTube' },
+                            { icon: '🚫', text: 'Video spam, scam, atau konten menyesatkan' },
+                          ].map(({ icon, text }) => (
+                            <li key={text} className="flex items-start gap-2 text-[10px] font-bold text-amber-700 dark:text-amber-400">
+                              <span className="flex-shrink-0 mt-px">{icon}</span>
+                              <span>{text}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        {/* <p className="text-[10px] text-amber-500 dark:text-amber-600 font-medium pt-1 border-t border-amber-200 dark:border-amber-800">
+                          Pengirim bertanggung jawab penuh atas konten yang dikirimkan. Pelanggaran dapat berakibat pemblokiran akun.
+                        </p> */}
+                      </div>
+                    </>
                   )}
                 </motion.div>
               )}
