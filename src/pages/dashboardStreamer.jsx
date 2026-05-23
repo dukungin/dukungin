@@ -2384,7 +2384,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-black text-slate-800 dark:text-slate-100 truncate">@{u.username}</p>
-                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{u.email}</p>
+                {/* <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{u.email}</p> */}
               </div>
             </div>
             <div className="flex flex-wrap gap-1.5 p-1 h-[44px] bg-slate-50/50 dark:bg-slate-800/50 rounded-none border border-slate-100/50 dark:border-slate-700/50">
