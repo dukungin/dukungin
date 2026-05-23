@@ -1077,22 +1077,29 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
           <h4 className="font-black text-lg">Alert Biasa</h4>
           <div className="flex flex-col gap-4">
             <div className='w-full'>
-              <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar</label>
+              <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar (detik)</label>
               <div className="flex items-center gap-2">
                 <input type="number" value={settings.alertBaseDuration || ''} onChange={(e) => onChange('alertBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span>
+                {/* <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span> */}
               </div>
             </div>
             <div>
-              <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
-              <div className="flex items-center gap-2">
-                <input type="number" value={settings.alertExtraPerAmount || ''} onChange={(e) => onChange('alertExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                <span className="dark:text-white text-slate-900 font-bold"><Plus /></span>
-                <input type="number" value={settings.alertExtraDuration || ''} onChange={(e) => onChange('alertExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                <span className="text-slate-500 text-sm">detik</span>
+              <div className="w-full md:flex items-center gap-2">
+                <div className='flex-col w-full items-center'>
+                  <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
+                  <div className='md:flex items-center w-full'>
+                    <input type="number" value={settings.alertExtraPerAmount || ''} onChange={(e) => onChange('alertExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
+                      className="flex-1 w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
+                    <span className="md:flex hidden dark:text-white ml-2 text-slate-900 font-bold"><Plus /></span>
+                  </div>
+                </div>
+                <div className='w-full mt-4 md:mt-0'>
+                  <label className="text-xs font-black text-slate-500 flex items-center mb-1.5">(detik)</label>
+                  <input type="number" value={settings.alertExtraDuration || ''} onChange={(e) => onChange('alertExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
+                    className="w-full md:w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
+                </div>
+                {/* <span className="text-slate-500 text-sm">detik</span> */}
               </div>
             </div>
           </div>
@@ -1107,19 +1114,26 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
               <div className="flex items-center gap-2">
                 <input type="number" value={settings.mediaShareBaseDuration || ''} onChange={(e) => onChange('mediaShareBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span>
+                {/* <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span> */}
               </div>
             </div>
             <div>
-              <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
-              <div className="flex items-center gap-2">
-                <input type="number" value={settings.mediaShareExtraPerAmount || ''} onChange={(e) => onChange('mediaShareExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                <span className="dark:text-white text-slate-900 font-bold"><Plus /></span>
-                <input type="number" value={settings.mediaShareExtraDuration || ''} onChange={(e) => onChange('mediaShareExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                <span className="text-slate-500 text-sm">detik</span>
-              </div>
+              <div className="md:flex items-center gap-2">
+                <div className='w-full'>
+                  <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
+                  <div className='md:flex items-center'>
+                    <input type="number" value={settings.mediaShareExtraPerAmount || ''} onChange={(e) => onChange('mediaShareExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
+                      className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
+                    <span className="md:flex hidden dark:text-white ml-2 text-slate-900 font-bold"><Plus /></span>
+                  </div>
+                </div>
+                <div className='md:mt-0 mt-4'>
+                  <label className="text-xs font-black text-slate-500 block mb-1.5">Detik</label>
+                  <input type="number" value={settings.mediaShareExtraDuration || ''} onChange={(e) => onChange('mediaShareExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
+                    className="w-full md:w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
+                  {/* <span className="text-slate-500 text-sm">detik</span> */}
+                </div>
+                </div>
             </div>
           </div>
         </div>
