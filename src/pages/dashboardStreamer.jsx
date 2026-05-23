@@ -1308,18 +1308,18 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             <div style={scanlineStyle} />
             <MediaBlock />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: hl + '18', borderBottom: pixelBorder, padding: '5px 10px', position: 'relative', zIndex: 2 }}>
-              <span style={{ fontFamily: monospace, fontSize: 26, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>MEDIA SHARE</span>
+              <span style={{ fontFamily: monospace, fontSize: 20, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>MEDIA SHARE</span>
               <div style={{ display: 'flex', gap: 4 }}>
                 {['#ff4444', '#ffaa00', hl].map((c, i) => <span key={i} style={{ width: 7, height: 7, background: c, display: 'inline-block', border: '1px solid rgba(255,255,255,0.2)' }} />)}
               </div>
             </div>
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
-              <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: fg, marginBottom: 4 }}>{currentDonor.name}</div>
-              <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: hl, borderLeft: `3px solid ${hl}`, paddingLeft: 8, marginBottom: 6, textShadow: `0 0 10px ${hl}55` }}>
+              <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 4 }}>{currentDonor.name}</div>
+              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, borderLeft: `3px solid ${hl}`, paddingLeft: 8, marginBottom: 6, textShadow: `0 0 10px ${hl}55` }}>
                 Rp {currentDonor.amount.toLocaleString('id-ID')}
               </div>
               {currentDonor.msg && (
-                <div style={{ fontFamily: monospace, fontSize: 26, color: fg, border: dimBorder, padding: '5px 8px', lineHeight: 1.4 }}>
+                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.75, border: dimBorder, padding: '5px 8px', lineHeight: 1.4 }}>
                   {'>> '}{currentDonor.msg}
                 </div>
               )}
@@ -1352,16 +1352,16 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
                 {renderIconPreview(settings.customIcon, 18)}
               </div>
               <div>
-                <div style={{ fontSize: 26, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>Media Share</div>
-                <div style={{ fontSize: 26, fontWeight: 700, color: fg }}>{currentDonor.name}</div>
+                <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>Media Share</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: fg }}>{currentDonor.name}</div>
               </div>
             </div>
             <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
-            <div style={{ fontSize: 26, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
+            <div style={{ fontSize: 22, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
               Rp {currentDonor.amount.toLocaleString('id-ID')}
             </div>
             {currentDonor.msg && (
-              <div style={{ fontSize: 26, color: fg, background: hl + '10', borderRadius: 8, fontWeight: 900, padding: '6px 10px', lineHeight: 1.5, border: `1px solid ${hl}20` }}>
+              <div style={{ fontSize: 20, color: fg, opacity: 0.75, background: hl + '10', borderRadius: 8, padding: '6px 10px', lineHeight: 1.5, border: `1px solid ${hl}20` }}>
                 {currentDonor.msg}
               </div>
             )}
@@ -1379,13 +1379,13 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             <div style={{ height: 3, background: hl }} />
             <MediaBlock />
             <div style={{ background: hl + '15', borderBottom: `1px solid ${hl}40`, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
-              <span style={{ fontFamily: monospace, fontSize: 26, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>★ Media Share ★</span>
+              <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>★ Media Share ★</span>
             </div>
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
-              <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: fg, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>{currentDonor.name}</div>
-              <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: hl, marginBottom: 5 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
+              <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>{currentDonor.name}</div>
+              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, marginBottom: 5 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
               {currentDonor.msg && (
-                <div style={{ fontFamily: monospace, fontSize: 26, color: fg, fontWeight: 900, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
+                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.82, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
                   {currentDonor.msg}<span style={{ color: hl, animation: 'blink 1s step-end infinite' }}>▮</span>
                 </div>
               )}
@@ -1403,10 +1403,10 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         <MediaBlock />
         <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span style={{ fontFamily: monospace, fontSize: 26, color: fg, fontWeight: 900 }}>{'> '}{currentDonor.name}</span>
-            <span style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: hl }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</span>
+            <span style={{ fontFamily: monospace, fontSize: 11, color: fg, fontWeight: 900 }}>{'> '}{currentDonor.name}</span>
+            <span style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: hl }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</span>
           </div>
-          {currentDonor.msg && <div style={{ fontFamily: monospace, fontSize: 26, color: fg, fontWeight: 900, lineHeight: 1.4 }}>{currentDonor.msg}</div>}
+          {currentDonor.msg && <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.72, lineHeight: 1.4 }}>{currentDonor.msg}</div>}
         </div>
       </div>
     );
@@ -1482,7 +1482,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   const ts = settings.showTimestamp !== false
     ? (
       <div style={{
-        fontSize: 26,
+        fontSize: 20,
         color: 'rgba(255,255,255,0.35)',
         fontFamily: 'monospace',
         letterSpacing: '0.05em',
@@ -1526,7 +1526,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
           <FrogDeco size={12} />
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 26,
+            fontSize: 20,
             color: hl,
             textTransform: 'uppercase',
             letterSpacing: '0.18em',
@@ -1552,7 +1552,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: 26,
+            fontSize: 20,
             flexShrink: 0,
             background: hl + '12',
             imageRendering: 'pixelated',
@@ -1562,7 +1562,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
           <div style={{ flex: 1, minWidth: 0 }}>
             {/* <div style={{
               fontFamily: 'monospace',
-              fontSize: 26,
+              fontSize: 20,
               color: fg,
               opacity: 0.6,
               marginBottom: 2,
@@ -1570,7 +1570,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             }}>{'> DONOR:'}</div> */}
             <div style={{
               fontFamily: 'monospace',
-              fontSize: 26,
+              fontSize: 18,
               fontWeight: 900,
               color: fg,
               marginTop: 10,
@@ -1602,9 +1602,9 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 24,
+            fontSize: 20,
             color: fg,
-            fontWeight: 900,
+            opacity: 0.75,
             background: 'rgba(255,255,255,0.04)',
             border: dimBorder,
             padding: '5px 8px',
@@ -1655,25 +1655,26 @@ const smoothInner = (
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 26,
+        fontSize: 22,
         flexShrink: 0,
         border: `1.5px solid ${hl}40`,
       }}>
         {renderIconPreview(settings.customIcon, 22)}
       </div>
       <div>
-        <div style={{
-          fontSize: 26,
+        {/* <div style={{
+          fontSize: 11,
           fontWeight: 500,
           color: fg,
+          opacity: 0.5,
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
           marginBottom: 2,
         }}>
           Dukungan Masuk
-        </div>
+        </div> */}
         <div style={{
-          fontSize: 26,
+          fontSize: 15,
           fontWeight: 700,
           color: fg,
           lineHeight: 1.2,
@@ -1700,10 +1701,10 @@ const smoothInner = (
     {/* Pesan */}
     {currentDonor.msg && (
       <div style={{
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 400,
         color: fg,
-        fontWeight: 900,
+        opacity: 0.75,
         background: hl + '10',
         borderRadius: 10,
         padding: '8px 12px',
@@ -1717,8 +1718,9 @@ const smoothInner = (
     {/* Timestamp */}
     {settings.showTimestamp !== false && (
       <div style={{
-        fontSize: 24,
+        fontSize: 11,
         color: fg,
+        opacity: 0.35,
         fontWeight: 400,
         letterSpacing: '0.04em',
       }}>
@@ -1753,7 +1755,7 @@ const smoothInner = (
         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 26,
+            fontSize: 20,
             lineHeight: 1,
             display: 'inline-block',
           }}>
@@ -1761,7 +1763,7 @@ const smoothInner = (
           </span>
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 26,
+            fontSize: 10,
             fontWeight: 700,
             color: hl,
             textTransform: 'uppercase',
@@ -1784,14 +1786,14 @@ const smoothInner = (
         }}>
           {/* <span style={{
             fontFamily: 'monospace',
-            fontSize: 26,
+            fontSize: 20,
             color: hl,
             opacity: 0.7,
             letterSpacing: '0.12em',
           }}>NAME</span> */}
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 26,
+            fontSize: 20,
             fontWeight: 900,
             color: fg,
             letterSpacing: '-0.3px',
@@ -1815,9 +1817,8 @@ const smoothInner = (
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 26,
+            fontSize: 20,
             color: fg,
-            fontWeight: 900,
             opacity: 0.8,
             lineHeight: 1.45,
             borderLeft: `2px solid ${hl}`,
@@ -1833,9 +1834,9 @@ const smoothInner = (
           {ts}
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 24,
+            fontSize: 8,
             color: hl,
-
+            opacity: 0.5,
             letterSpacing: '0.1em',
           }}>
             {`[ PRESS ▲ TO CONTINUE ]`}
@@ -1872,7 +1873,7 @@ const smoothInner = (
             <FrogDeco size={11} />
             <span style={{
               fontFamily: 'monospace',
-              fontSize: 26,
+              fontSize: 8,
               color: hl,
               opacity: 0.55,
               letterSpacing: '0.18em',
@@ -1881,7 +1882,7 @@ const smoothInner = (
           </div>
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 26,
+            fontSize: 24,
             fontWeight: 900,
             color: hl,
             letterSpacing: '-1px',
@@ -1894,7 +1895,7 @@ const smoothInner = (
         {/* Name */}
         <div style={{
           fontFamily: 'monospace',
-          fontSize: 26,
+          fontSize: 15,
           fontWeight: 900,
           color: fg,
           marginBottom: 3,
@@ -1908,9 +1909,8 @@ const smoothInner = (
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 24,
+            fontSize: 10,
             color: fg,
-            fontWeight: 900,
             opacity: 0.7,
             lineHeight: 1.4,
             marginBottom: 4,
@@ -1925,9 +1925,9 @@ const smoothInner = (
           {/* Pixel dash divider */}
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 22,
+            fontSize: 8,
             color: hl,
-  
+            opacity: 0.35,
             letterSpacing: '2px',
           }}>
             {'- - - - - - - -'}
