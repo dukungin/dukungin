@@ -1382,7 +1382,7 @@ const SupporterPage = () => {
                             initial={{ opacity: 0, y: -4 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -4 }}
-                            className={`flex items-center gap-2.5 px-4 py-3 rounded-none border text-[10px] font-bold ${
+                            className={`flex items-center mt-3 gap-2.5 px-4 py-3 rounded-none border text-[10px] font-bold ${
                               ytChecking
                                 ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400'
                                 : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400'
