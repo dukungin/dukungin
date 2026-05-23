@@ -3004,7 +3004,7 @@ export const DashboardStreamer = () => {
                     <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
                       Preset Warna Siap Pakai
                     </label>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {ALERT_PRESETS.map(preset => (
                         <button
                           key={preset.id}
