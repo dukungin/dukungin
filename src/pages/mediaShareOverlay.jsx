@@ -439,20 +439,16 @@ const calculateMediaShareDuration = (config, amount) => {
                 <div style={{
                   width: 36, height: 36, borderRadius: 10,
                   background: hl + '22', border: `1.5px solid ${hl}40`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0,
                 }}>
                   {renderIcon(customIcon, 18)}
                 </div>
                 <div>
-                  {/* <div style={{ fontSize: 26, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>
-                    Media Share
-                  </div> */}
-                  {/* <div style={{ fontSize: 26, fontWeight: 900, color: fg }}>
+                  <div style={{ fontSize: 26, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>
+                    Media share
+                  </div>
+                  <div style={{ fontSize: 26, fontWeight: 700, color: fg }}>
                     {alert.donorName}
-                  </div> */}
-                  {/* Amount */}
-                  <div style={{ fontSize: 26, fontWeight: 900, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
-                    Rp {Number(alert.amount).toLocaleString('id-ID')}
                   </div>
                 </div>
               </div>
@@ -460,6 +456,10 @@ const calculateMediaShareDuration = (config, amount) => {
               {/* Divider */}
               <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
 
+              {/* Amount */}
+              <div style={{ fontSize: 26, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
+                Rp {Number(alert.amount).toLocaleString('id-ID')}
+              </div>
 
               {/* Pesan */}
               {alert.message && (
@@ -503,7 +503,7 @@ const calculateMediaShareDuration = (config, amount) => {
               <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                 <span style={{ fontSize: 16 }}>{renderIcon(customIcon, 16)}</span>
                 <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-                  Media Share
+                  Media share 
                 </span>
               </div>
               <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span>

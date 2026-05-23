@@ -1070,7 +1070,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly 
     <div className="bg-white dark:bg-slate-900 rounded-none p-5 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-8">
       <SectionHeader
         icon={<Timer size={22} />}
-        title={mediaOnly ? 'Durasi Media Share' : alertOnly ? 'Durasi Alert' : 'Pengaturan Durasi'}
+        title={mediaOnly ? 'Durasi Media share' : alertOnly ? 'Durasi Alert' : 'Pengaturan Durasi'}
         color="bg-amber-500"
       />
       <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
@@ -1113,10 +1113,10 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly 
           </div>
         )}
 
-        {/* Media Share — hanya tampil kalau bukan alertOnly */}
+        {/* Media share — hanya tampil kalau bukan alertOnly */}
         {!alertOnly && (
           <div className="space-y-5">
-            <h4 className="font-black text-lg">Media Share</h4>
+            <h4 className="font-black text-lg">Media share</h4>
             <div className="flex flex-col gap-4">
               <div>
                 <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar (detik)</label>
@@ -1162,7 +1162,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly 
           )}
           {!alertOnly && (
             <div className="flex justify-between">
-              <span>Rp 50.000 — Media Share</span>
+              <span>Rp 50.000 — Media share</span>
               <span className="font-bold text-slate-900 dark:text-white">
                 {(Number(settings.mediaShareBaseDuration) || 0) + Math.floor(50000 / (Number(settings.mediaShareExtraPerAmount) || 1)) * (Number(settings.mediaShareExtraDuration) || 0)} detik
               </span>
@@ -1352,7 +1352,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
                 {renderIconPreview(settings.customIcon, 18)}
               </div>
               <div>
-                <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>Media Share</div>
+                <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>Media share</div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: fg }}>{currentDonor.name}</div>
               </div>
             </div>
@@ -1379,7 +1379,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             <div style={{ height: 3, background: hl }} />
             <MediaBlock />
             <div style={{ background: hl + '15', borderBottom: `1px solid ${hl}40`, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
-              <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>★ Media Share ★</span>
+              <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>★ Media share ★</span>
             </div>
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
               <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>{currentDonor.name}</div>
@@ -2012,7 +2012,7 @@ const smoothInner = (
 
       {/* Tab switcher */}
       <div className="flex gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-none">
-        {[{ id: 'alert', label: '⚡ Alert OBS' }, { id: 'media', label: '🎬 Media Share' }].map(tab => (
+        {[{ id: 'alert', label: '⚡ Alert OBS' }, { id: 'media', label: '🎬 Media share' }].map(tab => (
           <button key={tab.id} onClick={() => setPreviewMode(tab.id)}
             className={`cursor-pointer flex-1 py-2 text-xs font-black rounded-none transition-all ${previewMode === tab.id ? 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}>
             {tab.label}
@@ -2073,7 +2073,7 @@ const smoothInner = (
 
       <button onClick={triggerDemo}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 rounded-none bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 text-blue-600 dark:text-blue-400 font-black text-sm border-2 border-blue-100 dark:border-blue-900 transition-all flex items-center justify-center gap-2">
-        <span className="w-2 h-2 bg-red-500 rounded-none animate-pulse" /> {previewMode === 'media' ? 'Simulasi Media Share' : 'Simulasi Donasi Masuk'}
+        <span className="w-2 h-2 bg-red-500 rounded-none animate-pulse" /> {previewMode === 'media' ? 'Simulasi Media share' : 'Simulasi Donasi Masuk'}
       </button>
       {/* <button onClick={() => handleFullScreen()}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3.5 rounded-none bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 text-white font-black text-sm transition-all flex items-center justify-center gap-2 border border-slate-700">
@@ -2695,7 +2695,7 @@ export const DashboardStreamer = () => {
   const TAB_TITLE = {
     settings:      'Dashboard',
     alertSettings: 'Alert OBS',
-    mediaSettings: 'Media Share',
+    mediaSettings: 'Media share',
     history:       'Riwayat',
     feeConfig:     'Konfigurasi Fee',
     wallet:        'Wallet',
@@ -3136,7 +3136,7 @@ export const DashboardStreamer = () => {
                 {/* <div className="bg-gradient-to-br from-purple-600 to-pink-500 rounded-none p-4 md:p-6 text-white relative overflow-hidden">
                   <div className="relative z-10">
                     <p className="text-purple-200 text-xs font-black uppercase tracking-widest mb-2">Pengaturan</p>
-                    <h2 className="text-3xl font-black tracking-tight">Media Share</h2>
+                    <h2 className="text-3xl font-black tracking-tight">Media share</h2>
                     <p className="text-purple-200 text-sm font-medium mt-1">Test, kontrol, dan izin media dari donatur</p>
                   </div>
                   <div className="absolute top-3 right-4 text-6xl opacity-10">🎬</div>
