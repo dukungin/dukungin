@@ -115,6 +115,7 @@ const calculateMediaShareDuration = (config, amount) => {
     const configRef           = useRef(null);
     const progressIntervalRef = useRef(null);
     const dismissTimerRef     = useRef(null);
+    const [mediaError, setMediaError] = useState(false);
 
     // ── Fetch config ──────────────────────────────────────────────────────────
     useEffect(() => {
@@ -155,6 +156,7 @@ const calculateMediaShareDuration = (config, amount) => {
 
         setAlert(donationWithTime);
         setProgress(100);
+        setMediaError(false); // ← tambah ini
 
         // Sound
         const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
@@ -313,6 +315,93 @@ const calculateMediaShareDuration = (config, amount) => {
       );
     };
 
+    const BlockedPlaceholder = ({ hl }) => (
+      <div style={{
+        width: '100%',
+        aspectRatio: '16/9',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#0a0a0a',
+        gap: 10,
+      }}>
+        <span style={{ fontSize: 34 }}>⚠️</span>
+        <span style={{
+          fontFamily: "'Courier New', monospace",
+          fontSize: 12,
+          fontWeight: 700,
+          color: '#ff4444',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          textAlign: 'center',
+          padding: '0 16px',
+        }}>
+          Video Melanggar Kebijakan
+        </span>
+      </div>
+    );
+
+    const MediaBlock = ({ pixelBorder, hl }) => {
+      if (!alert?.mediaUrl) return null;
+
+      // ← CEK FLAG DARI SOCKET
+      if (alert.videoBlocked || mediaError) {
+        return (
+          <div style={{
+            borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)',
+            position: 'relative', zIndex: 2,
+          }}>
+            <BlockedPlaceholder hl={hl} />
+          </div>
+        );
+      }
+
+      const t = detectMediaType(alert.mediaUrl, alert.mediaType);
+
+      return (
+        <div style={{
+          width: '100%',
+          aspectRatio: '16/9',
+          overflow: 'hidden',
+          background: '#000',
+          borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)',
+          position: 'relative',
+          zIndex: 2,
+        }}>
+          {t === 'youtube' && (
+            <iframe
+              key={alert.mediaUrl}
+              src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}
+              width="100%" height="100%"
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              style={{ display: 'block', border: 'none' }}
+              onError={() => setMediaError(true)}
+            />
+          )}
+          {t === 'video' && (
+            <video
+              ref={videoRef}
+              src={alert.mediaUrl}
+              autoPlay loop muted
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={() => setMediaError(true)}
+            />
+          )}
+          {t === 'image' && (
+            <img
+              src={alert.mediaUrl}
+              alt="media"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={() => setMediaError(true)}
+            />
+          )}
+        </div>
+      );
+    };
+
     const renderInner = () => {
       const hl = highlight;
       const monospace = "'Courier New', 'Lucida Console', monospace";
@@ -327,35 +416,35 @@ const calculateMediaShareDuration = (config, amount) => {
       const dimBorder = `1px solid ${hl}35`;
 
       // Media player (sama di semua tema, selalu di atas)
-      const MediaBlock = () => {
-        if (!alert?.mediaUrl) return null;
-        const t = detectMediaType(alert.mediaUrl, alert.mediaType);
-        return (
-          <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
-            {t === 'youtube' && (
-              <iframe src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}
-                width="100%" height="100%" frameBorder="0"
-                allow="autoplay; encrypted-media" allowFullScreen
-                style={{ display: 'block', border: 'none' }} />
-            )}
-            {t === 'video' && (
-              <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            )}
-            {t === 'image' && (
-              <img src={alert.mediaUrl} alt="media"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            )}
-          </div>
-        );
-      };
+      // const MediaBlock = () => {
+      //   if (!alert?.mediaUrl) return null;
+      //   const t = detectMediaType(alert.mediaUrl, alert.mediaType);
+      //   return (
+      //     <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
+      //       {t === 'youtube' && (
+      //         <iframe src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}
+      //           width="100%" height="100%" frameBorder="0"
+      //           allow="autoplay; encrypted-media" allowFullScreen
+      //           style={{ display: 'block', border: 'none' }} />
+      //       )}
+      //       {t === 'video' && (
+      //         <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
+      //           style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      //       )}
+      //       {t === 'image' && (
+      //         <img src={alert.mediaUrl} alt="media"
+      //           style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      //       )}
+      //     </div>
+      //   );
+      // };
 
       // ── MODERN ───────────────────────────────────────────────────────────────────
       if (theme === 'modern') {
         return (
           <div style={{ position: 'relative', overflow: 'hidden' }}>
             <div style={scanlineStyle} />
-            <MediaBlock />
+            <MediaBlock hl={hl} />
 
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -385,7 +474,7 @@ const calculateMediaShareDuration = (config, amount) => {
                   {renderIcon(customIcon, 20)}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: monospace, fontSize: 10, color: fg5, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div>
+                  <div style={{ fontFamily: monospace, fontSize: 10, color: fg, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div>
                   <div style={{ fontFamily: monospace, fontSize: 17, fontWeight: 900, color: fg, lineHeight: 1.1 }}>{alert.donorName}</div>
                 </div>
               </div>
@@ -429,9 +518,7 @@ const calculateMediaShareDuration = (config, amount) => {
         return (
           <div style={{ fontFamily: "'Poppins', sans-serif", overflow: 'hidden' }}>
             {/* Media block tanpa border pixel */}
-            <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000' }}>
-              <MediaBlock />
-            </div>
+            <MediaBlock hl={hl} />
 
             <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {/* Icon + Nama */}
@@ -491,7 +578,7 @@ const calculateMediaShareDuration = (config, amount) => {
         return (
           <div style={{ position: 'relative', overflow: 'hidden' }}>
             <div style={scanlineStyle} />
-            <MediaBlock />
+            <MediaBlock hl={hl} />
             <div style={{ height: 3, background: hl, position: 'relative', zIndex: 2 }} />
             <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', position: 'relative', zIndex: 2 }} />
 
@@ -531,7 +618,7 @@ const calculateMediaShareDuration = (config, amount) => {
                   ? <div style={{ fontFamily: monospace, fontSize:16, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
                   : <div />
                 }
-                <div style={{ fontFamily: monospace, fontSize: 8, color: h1, letterSpacing: '0.08em' }}>[ PRESS ▲ TO CONTINUE ]</div>
+                <div style={{ fontFamily: monospace, fontSize: 8, color: hl, letterSpacing: '0.08em' }}>[ PRESS ▲ TO CONTINUE ]</div>
               </div>
 
               <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 8 }}>
@@ -550,7 +637,7 @@ const calculateMediaShareDuration = (config, amount) => {
       return (
         <div style={{ position: 'relative', overflow: 'hidden' }}>
           <div style={scanlineStyle} />
-          <MediaBlock />
+          <MediaBlock hl={hl} />
           <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
