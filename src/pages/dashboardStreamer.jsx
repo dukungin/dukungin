@@ -1065,101 +1065,115 @@ const AdminWithdrawalPage = () => {
 
 // ─── DurationSettings ─────────────────────────────────────────────────────────
 
-const DurationSettings = ({ settings, onChange, saveSettingsMutation }) => {
+const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly = false, mediaOnly = false }) => {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-none p-5 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-8">
-      <SectionHeader icon={<Timer size={22} />} title="Pengaturan Durasi Alert" color="bg-amber-500" />
-      <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Atur berapa lama alert muncul berdasarkan nominal donasi.</p>
+      <SectionHeader
+        icon={<Timer size={22} />}
+        title={mediaOnly ? 'Durasi Media Share' : alertOnly ? 'Durasi Alert' : 'Pengaturan Durasi'}
+        color="bg-amber-500"
+      />
+      <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+        Atur berapa lama {mediaOnly ? 'media share' : alertOnly ? 'alert' : 'alert'} muncul berdasarkan nominal donasi.
+      </p>
 
       <div className="space-y-10">
-        {/* Alert Biasa */}
-        <div className="space-y-5">
-          <h4 className="font-black text-lg">Alert Biasa</h4>
-          <div className="flex flex-col gap-4">
-            <div className='w-full'>
-              <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar (detik)</label>
-              <div className="flex items-center gap-2">
-                <input type="number" value={settings.alertBaseDuration || ''} onChange={(e) => onChange('alertBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                {/* <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span> */}
-              </div>
-            </div>
-            <div>
-              <div className="w-full md:flex items-center gap-2">
-                <div className='flex-col w-full items-center'>
-                  <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
-                  <div className='md:flex items-center w-full'>
-                    <input type="number" value={settings.alertExtraPerAmount || ''} onChange={(e) => onChange('alertExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
-                      className="flex-1 w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                    <span className="md:flex hidden dark:text-white ml-2 text-slate-900 font-bold"><Plus /></span>
-                  </div>
-                </div>
-                <div className='w-full mt-4 md:mt-0'>
-                  <label className="text-xs font-black text-slate-500 flex items-center mb-1.5">(detik)</label>
-                  <input type="number" value={settings.alertExtraDuration || ''} onChange={(e) => onChange('alertExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                    className="w-full md:w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                </div>
-                {/* <span className="text-slate-500 text-sm">detik</span> */}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Media Share */}
-        <div className="space-y-5">
-          <h4 className="font-black text-lg">Media Share</h4>
-          <div className="flex flex-col gap-4">
-            <div>
-              <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar</label>
-              <div className="flex items-center gap-2">
-                <input type="number" value={settings.mediaShareBaseDuration || ''} onChange={(e) => onChange('mediaShareBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-2xl font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                {/* <span className="text-slate-500 text-sm font-medium whitespace-nowrap">detik</span> */}
+        {/* Alert Biasa — hanya tampil kalau bukan mediaOnly */}
+        {!mediaOnly && (
+          <div className="space-y-5">
+            <h4 className="font-black text-lg">Alert Biasa</h4>
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar (detik)</label>
+                <input type="number" value={settings.alertBaseDuration || ''}
+                  onChange={(e) => onChange('alertBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
+                  className="w-full text-lg font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
               </div>
-            </div>
-            <div>
-              <div className="md:flex items-center gap-2">
-                <div className='w-full'>
-                  <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
-                  <div className='md:flex items-center'>
-                    <input type="number" value={settings.mediaShareExtraPerAmount || ''} onChange={(e) => onChange('mediaShareExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
-                      className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                    <span className="md:flex hidden dark:text-white ml-2 text-slate-900 font-bold"><Plus /></span>
+              <div>
+                <div className="md:flex items-center gap-2">
+                  <div className='w-full'>
+                    <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
+                    <div className='md:flex items-center'>
+                      <input type="number" value={settings.alertExtraPerAmount || ''}
+                        onChange={(e) => onChange('alertExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
+                        className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
+                      <span className="md:flex hidden dark:text-white ml-2 text-slate-900 font-bold"><Plus /></span>
+                    </div>
+                  </div>
+                  <div className='md:mt-0 mt-4'>
+                    <label className="text-xs font-black text-slate-500 block mb-1.5">Detik</label>
+                    <input type="number" value={settings.alertExtraDuration || ''}
+                      onChange={(e) => onChange('mediaShareExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
+                      className="w-full md:w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
                   </div>
                 </div>
-                <div className='md:mt-0 mt-4'>
-                  <label className="text-xs font-black text-slate-500 block mb-1.5">Detik</label>
-                  <input type="number" value={settings.mediaShareExtraDuration || ''} onChange={(e) => onChange('mediaShareExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
-                    className="w-full md:w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
-                  {/* <span className="text-slate-500 text-sm">detik</span> */}
-                </div>
-                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Media Share — hanya tampil kalau bukan alertOnly */}
+        {!alertOnly && (
+          <div className="space-y-5">
+            <h4 className="font-black text-lg">Media Share</h4>
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="text-xs font-black text-slate-500 block mb-1.5">Durasi Dasar (detik)</label>
+                <input type="number" value={settings.mediaShareBaseDuration || ''}
+                  onChange={(e) => onChange('mediaShareBaseDuration', e.target.value === '' ? '' : Number(e.target.value))}
+                  className="w-full text-lg font-black text-center bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
+              </div>
+              <div>
+                <div className="md:flex items-center gap-2">
+                  <div className='w-full'>
+                    <label className="text-xs font-black text-slate-500 block mb-1.5">Tambahan tiap Rp</label>
+                    <div className='md:flex items-center'>
+                      <input type="number" value={settings.mediaShareExtraPerAmount || ''}
+                        onChange={(e) => onChange('mediaShareExtraPerAmount', e.target.value === '' ? '' : Number(e.target.value))}
+                        className="w-full text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
+                      <span className="md:flex hidden dark:text-white ml-2 text-slate-900 font-bold"><Plus /></span>
+                    </div>
+                  </div>
+                  <div className='md:mt-0 mt-4'>
+                    <label className="text-xs font-black text-slate-500 block mb-1.5">Detik</label>
+                    <input type="number" value={settings.mediaShareExtraDuration || ''}
+                      onChange={(e) => onChange('mediaShareExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
+                      className="w-full md:w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
+      {/* Preview kalkulasi */}
       <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-none text-sm border border-dashed border-slate-200 dark:border-slate-700">
         <p className="font-black text-xs text-slate-400 mb-3">DURASI SAAT INI</p>
         <div className="space-y-2">
-          <div className="flex justify-between">
-            <span>Rp25.000 — Alert Biasa</span>
-            <span className="font-bold text-slate-900 dark:text-white">
-              {(Number(settings.alertBaseDuration) || 0) + Math.floor(25000 / (Number(settings.alertExtraPerAmount) || 1)) * (Number(settings.alertExtraDuration) || 0)} detik
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span>Rp50.000 — Media Share</span>
-            <span className="font-bold text-slate-900 dark:text-white">
-              {(Number(settings.mediaShareBaseDuration) || 0) + Math.floor(50000 / (Number(settings.mediaShareExtraPerAmount) || 1)) * (Number(settings.mediaShareExtraDuration) || 0)} detik
-            </span>
-          </div>
+          {!mediaOnly && (
+            <div className="flex justify-between">
+              <span>Rp 25.000 — Alert Biasa</span>
+              <span className="font-bold text-slate-900 dark:text-white">
+                {(Number(settings.alertBaseDuration) || 0) + Math.floor(25000 / (Number(settings.alertExtraPerAmount) || 1)) * (Number(settings.alertExtraDuration) || 0)} detik
+              </span>
+            </div>
+          )}
+          {!alertOnly && (
+            <div className="flex justify-between">
+              <span>Rp 50.000 — Media Share</span>
+              <span className="font-bold text-slate-900 dark:text-white">
+                {(Number(settings.mediaShareBaseDuration) || 0) + Math.floor(50000 / (Number(settings.mediaShareExtraPerAmount) || 1)) * (Number(settings.mediaShareExtraDuration) || 0)} detik
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
-        {saveSettingsMutation.isPending ? "Menyimpan..." : "💾 Simpan Pengaturan Durasi"}
+        {saveSettingsMutation.isPending ? 'Menyimpan...' : '💾 Simpan Pengaturan Durasi'}
       </button>
     </div>
   );
@@ -1294,18 +1308,18 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             <div style={scanlineStyle} />
             <MediaBlock />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: hl + '18', borderBottom: pixelBorder, padding: '5px 10px', position: 'relative', zIndex: 2 }}>
-              <span style={{ fontFamily: monospace, fontSize: 20, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>MEDIA SHARE</span>
+              <span style={{ fontFamily: monospace, fontSize: 26, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>MEDIA SHARE</span>
               <div style={{ display: 'flex', gap: 4 }}>
                 {['#ff4444', '#ffaa00', hl].map((c, i) => <span key={i} style={{ width: 7, height: 7, background: c, display: 'inline-block', border: '1px solid rgba(255,255,255,0.2)' }} />)}
               </div>
             </div>
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
-              <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 4 }}>{currentDonor.name}</div>
-              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, borderLeft: `3px solid ${hl}`, paddingLeft: 8, marginBottom: 6, textShadow: `0 0 10px ${hl}55` }}>
+              <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: fg, marginBottom: 4 }}>{currentDonor.name}</div>
+              <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: hl, borderLeft: `3px solid ${hl}`, paddingLeft: 8, marginBottom: 6, textShadow: `0 0 10px ${hl}55` }}>
                 Rp {currentDonor.amount.toLocaleString('id-ID')}
               </div>
               {currentDonor.msg && (
-                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.75, border: dimBorder, padding: '5px 8px', lineHeight: 1.4 }}>
+                <div style={{ fontFamily: monospace, fontSize: 26, color: fg, border: dimBorder, padding: '5px 8px', lineHeight: 1.4 }}>
                   {'>> '}{currentDonor.msg}
                 </div>
               )}
@@ -1338,16 +1352,16 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
                 {renderIconPreview(settings.customIcon, 18)}
               </div>
               <div>
-                <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>Media Share</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: fg }}>{currentDonor.name}</div>
+                <div style={{ fontSize: 26, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>Media Share</div>
+                <div style={{ fontSize: 26, fontWeight: 700, color: fg }}>{currentDonor.name}</div>
               </div>
             </div>
             <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
-            <div style={{ fontSize: 22, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
+            <div style={{ fontSize: 26, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
               Rp {currentDonor.amount.toLocaleString('id-ID')}
             </div>
             {currentDonor.msg && (
-              <div style={{ fontSize: 20, color: fg, opacity: 0.75, background: hl + '10', borderRadius: 8, padding: '6px 10px', lineHeight: 1.5, border: `1px solid ${hl}20` }}>
+              <div style={{ fontSize: 26, color: fg, background: hl + '10', borderRadius: 8, fontWeight: 900, padding: '6px 10px', lineHeight: 1.5, border: `1px solid ${hl}20` }}>
                 {currentDonor.msg}
               </div>
             )}
@@ -1365,13 +1379,13 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             <div style={{ height: 3, background: hl }} />
             <MediaBlock />
             <div style={{ background: hl + '15', borderBottom: `1px solid ${hl}40`, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
-              <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>★ Media Share ★</span>
+              <span style={{ fontFamily: monospace, fontSize: 26, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>★ Media Share ★</span>
             </div>
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
-              <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>{currentDonor.name}</div>
-              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, marginBottom: 5 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
+              <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: fg, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>{currentDonor.name}</div>
+              <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: hl, marginBottom: 5 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
               {currentDonor.msg && (
-                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.82, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
+                <div style={{ fontFamily: monospace, fontSize: 26, color: fg, fontWeight: 900, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
                   {currentDonor.msg}<span style={{ color: hl, animation: 'blink 1s step-end infinite' }}>▮</span>
                 </div>
               )}
@@ -1389,10 +1403,10 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         <MediaBlock />
         <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span style={{ fontFamily: monospace, fontSize: 11, color: fg, fontWeight: 900 }}>{'> '}{currentDonor.name}</span>
-            <span style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: hl }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</span>
+            <span style={{ fontFamily: monospace, fontSize: 26, color: fg, fontWeight: 900 }}>{'> '}{currentDonor.name}</span>
+            <span style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: hl }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</span>
           </div>
-          {currentDonor.msg && <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.72, lineHeight: 1.4 }}>{currentDonor.msg}</div>}
+          {currentDonor.msg && <div style={{ fontFamily: monospace, fontSize: 26, color: fg, fontWeight: 900, lineHeight: 1.4 }}>{currentDonor.msg}</div>}
         </div>
       </div>
     );
@@ -1468,7 +1482,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   const ts = settings.showTimestamp !== false
     ? (
       <div style={{
-        fontSize: 20,
+        fontSize: 26,
         color: 'rgba(255,255,255,0.35)',
         fontFamily: 'monospace',
         letterSpacing: '0.05em',
@@ -1512,7 +1526,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
           <FrogDeco size={12} />
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 20,
+            fontSize: 26,
             color: hl,
             textTransform: 'uppercase',
             letterSpacing: '0.18em',
@@ -1538,7 +1552,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: 20,
+            fontSize: 26,
             flexShrink: 0,
             background: hl + '12',
             imageRendering: 'pixelated',
@@ -1548,7 +1562,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
           <div style={{ flex: 1, minWidth: 0 }}>
             {/* <div style={{
               fontFamily: 'monospace',
-              fontSize: 20,
+              fontSize: 26,
               color: fg,
               opacity: 0.6,
               marginBottom: 2,
@@ -1556,7 +1570,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             }}>{'> DONOR:'}</div> */}
             <div style={{
               fontFamily: 'monospace',
-              fontSize: 18,
+              fontSize: 26,
               fontWeight: 900,
               color: fg,
               marginTop: 10,
@@ -1588,9 +1602,9 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 20,
+            fontSize: 24,
             color: fg,
-            opacity: 0.75,
+            fontWeight: 900,
             background: 'rgba(255,255,255,0.04)',
             border: dimBorder,
             padding: '5px 8px',
@@ -1641,7 +1655,7 @@ const smoothInner = (
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 22,
+        fontSize: 26,
         flexShrink: 0,
         border: `1.5px solid ${hl}40`,
       }}>
@@ -1649,10 +1663,9 @@ const smoothInner = (
       </div>
       <div>
         <div style={{
-          fontSize: 11,
+          fontSize: 26,
           fontWeight: 500,
           color: fg,
-          opacity: 0.5,
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
           marginBottom: 2,
@@ -1660,7 +1673,7 @@ const smoothInner = (
           Dukungan Masuk
         </div>
         <div style={{
-          fontSize: 15,
+          fontSize: 26,
           fontWeight: 700,
           color: fg,
           lineHeight: 1.2,
@@ -1687,10 +1700,10 @@ const smoothInner = (
     {/* Pesan */}
     {currentDonor.msg && (
       <div style={{
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 400,
         color: fg,
-        opacity: 0.75,
+        fontWeight: 900,
         background: hl + '10',
         borderRadius: 10,
         padding: '8px 12px',
@@ -1704,9 +1717,8 @@ const smoothInner = (
     {/* Timestamp */}
     {settings.showTimestamp !== false && (
       <div style={{
-        fontSize: 11,
+        fontSize: 24,
         color: fg,
-        opacity: 0.35,
         fontWeight: 400,
         letterSpacing: '0.04em',
       }}>
@@ -1741,7 +1753,7 @@ const smoothInner = (
         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 20,
+            fontSize: 26,
             lineHeight: 1,
             display: 'inline-block',
           }}>
@@ -1749,7 +1761,7 @@ const smoothInner = (
           </span>
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 10,
+            fontSize: 26,
             fontWeight: 700,
             color: hl,
             textTransform: 'uppercase',
@@ -1772,14 +1784,14 @@ const smoothInner = (
         }}>
           {/* <span style={{
             fontFamily: 'monospace',
-            fontSize: 20,
+            fontSize: 26,
             color: hl,
             opacity: 0.7,
             letterSpacing: '0.12em',
           }}>NAME</span> */}
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 20,
+            fontSize: 26,
             fontWeight: 900,
             color: fg,
             letterSpacing: '-0.3px',
@@ -1803,8 +1815,9 @@ const smoothInner = (
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 20,
+            fontSize: 26,
             color: fg,
+            fontWeight: 900,
             opacity: 0.8,
             lineHeight: 1.45,
             borderLeft: `2px solid ${hl}`,
@@ -1820,9 +1833,9 @@ const smoothInner = (
           {ts}
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 8,
+            fontSize: 24,
             color: hl,
-            opacity: 0.5,
+
             letterSpacing: '0.1em',
           }}>
             {`[ PRESS ▲ TO CONTINUE ]`}
@@ -1859,7 +1872,7 @@ const smoothInner = (
             <FrogDeco size={11} />
             <span style={{
               fontFamily: 'monospace',
-              fontSize: 8,
+              fontSize: 26,
               color: hl,
               opacity: 0.55,
               letterSpacing: '0.18em',
@@ -1868,7 +1881,7 @@ const smoothInner = (
           </div>
           <span style={{
             fontFamily: 'monospace',
-            fontSize: 24,
+            fontSize: 26,
             fontWeight: 900,
             color: hl,
             letterSpacing: '-1px',
@@ -1881,7 +1894,7 @@ const smoothInner = (
         {/* Name */}
         <div style={{
           fontFamily: 'monospace',
-          fontSize: 15,
+          fontSize: 26,
           fontWeight: 900,
           color: fg,
           marginBottom: 3,
@@ -1895,8 +1908,9 @@ const smoothInner = (
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 10,
+            fontSize: 24,
             color: fg,
+            fontWeight: 900,
             opacity: 0.7,
             lineHeight: 1.4,
             marginBottom: 4,
@@ -1911,9 +1925,9 @@ const smoothInner = (
           {/* Pixel dash divider */}
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 8,
+            fontSize: 22,
             color: hl,
-            opacity: 0.35,
+  
             letterSpacing: '2px',
           }}>
             {'- - - - - - - -'}
@@ -3101,7 +3115,7 @@ export const DashboardStreamer = () => {
                 <InstantTestAlert overlayToken={user.overlayToken} settings={settings} user={user} />
 
                 {/* Durasi */}
-                <DurationSettings settings={settings} onChange={upd} saveSettingsMutation={saveSettingsMutation} />
+                <DurationSettings alertOnly={true} settings={settings} onChange={upd} saveSettingsMutation={saveSettingsMutation} />
 
                 {/* Suara */}
                 <SoundSection />
@@ -3133,6 +3147,13 @@ export const DashboardStreamer = () => {
 
                 {/* MediaShare Control */}
                 <MediaShareControl />
+
+                  <DurationSettings
+                    settings={settings}
+                    onChange={upd}
+                    saveSettingsMutation={saveSettingsMutation}
+                    mediaOnly={true}   
+                  />
 
                 {/* Izin Media */}
                 <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">

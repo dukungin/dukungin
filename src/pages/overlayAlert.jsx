@@ -274,7 +274,7 @@
       };
 
       const FrogDeco = () => (
-        <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+        <span style={{ fontFamily: monospace, fontSize: 24, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
       );
 
       const pixelBorder = `2px solid ${hl}`;
@@ -295,8 +295,8 @@
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <FrogDeco />
                 <span style={{
-                  fontFamily: monospace, fontSize: 16, color: hl,
-                  textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700,
+                  fontFamily: monospace, fontSize: 26, color: hl,
+                  textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 900,
                 }}>DUKUNGAN MASUK</span>
               </div>
               <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
@@ -312,12 +312,12 @@
                 <div style={{
                   width: 40, height: 40, border: pixelBorder, flexShrink: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 23, background: hl + '12',
+                  fontSize: 24, background: hl + '12',
                 }}>
                   {renderIcon(customIcon, 20)}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  {/* <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.55, marginBottom: 2, letterSpacing: '0.1em' }}>
+                  {/* <div style={{ fontFamily: monospace, fontSize: 10, color: fg5, marginBottom: 2, letterSpacing: '0.1em' }}>
                     {'> DONOR:'}
                   </div> */}
                   <div style={{ marginTop: 10, fontFamily: monospace, fontSize: 18, fontWeight: 900, color: fg, lineHeight: 1.1 }}>
@@ -337,7 +337,8 @@
 
               {alert.message && (
                 <div style={{
-                  fontFamily: monospace, fontSize: 23, color: fg, opacity: 0.75,
+                  fontFamily: monospace, fontSize: 24, color: fg,
+                  fontWeight: 900,
                   background: 'rgba(255,255,255,0.04)', border: dimBorder,
                   padding: '5px 8px', lineHeight: 1.4, marginBottom: 6,
                 }}>
@@ -347,7 +348,7 @@
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 }}>
                 {showTs && alert?.receivedAt
-                  ? <div style={{ fontFamily: monospace, fontSize: 16, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>
+                  ? <div style={{ fontFamily: monospace, fontSize: 26, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>
                       {'> '}{formatTimestamp(alert.receivedAt)}
                     </div>
                   : <div />
@@ -380,10 +381,10 @@
                 {renderIcon(customIcon, 22)}
               </div>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 500, color: fg, opacity: 0.5, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>
+                <div style={{ fontSize: 22, fontWeight: 500, color: fg, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>
                   Dukungan Masuk
                 </div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: fg, lineHeight: 1.2 }}>
+                <div style={{ fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.2 }}>
                   {alert.donorName}
                 </div>
               </div>
@@ -400,7 +401,8 @@
             {/* Pesan */}
             {alert.message && (
               <div style={{
-                fontSize: 13, fontWeight: 400, color: fg, opacity: 0.75,
+                fontSize: 24, fontWeight: 400, color: fg,
+                fontWeight: 900,
                 background: hl + '10', borderRadius: 10, padding: '8px 12px',
                 lineHeight: 1.5, border: `1px solid ${hl}20`,
               }}>
@@ -410,7 +412,7 @@
 
             {/* Timestamp */}
             {showTs && alert?.receivedAt && (
-              <div style={{ fontSize: 11, color: fg, opacity: 0.35, fontWeight: 400, letterSpacing: '0.04em' }}>
+              <div style={{ fontSize: 22, color: fg, fontWeight: 400, letterSpacing: '0.04em' }}>
                 {formatTimestamp(alert.receivedAt)}
               </div>
             )}
@@ -437,13 +439,13 @@
               position: 'relative', zIndex: 2,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                <span style={{ fontSize: 16, lineHeight: 1 }}>{renderIcon(customIcon, 16)}</span>
+                <span style={{ fontSize: 26, lineHeight: 1 }}>{renderIcon(customIcon, 16)}</span>
                 <span style={{
-                  fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl,
+                  fontFamily: monospace, fontSize: 10, fontWeight: 900, color: hl,
                   textTransform: 'uppercase', letterSpacing: '0.15em',
                 }}>★ Dukungan Masuk! ★</span>
               </div>
-              <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+              <span style={{ fontFamily: monospace, fontSize: 24, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
             </div>
 
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
@@ -451,8 +453,8 @@
                 display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6,
                 borderBottom: `1px dashed ${hl}30`, paddingBottom: 6,
               }}>
-                {/* <span style={{ fontFamily: monospace, fontSize: 16, color: hl, opacity: 0.65, letterSpacing: '0.12em' }}>NAME</span> */}
-                <span style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg }}>{alert.donorName}</span>
+                {/* <span style={{ fontFamily: monospace, fontSize: 26, color: hl, opacity: 0.65, letterSpacing: '0.12em' }}>NAME</span> */}
+                <span style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: fg }}>{alert.donorName}</span>
               </div>
 
               <div style={{
@@ -464,7 +466,7 @@
 
               {alert.message && (
                 <div style={{
-                  fontFamily: monospace, fontSize: 23, color: fg, opacity: 0.82,
+                  fontFamily: monospace, fontSize: 24, color: fg,
                   lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6,
                 }}>
                   {alert.message}
@@ -474,12 +476,12 @@
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
                 {showTs && alert?.receivedAt
-                  ? <div style={{ fontFamily: monospace, fontSize: 16, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>
+                  ? <div style={{ fontFamily: monospace, fontSize: 26, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>
                       {'> '}{formatTimestamp(alert.receivedAt)}
                     </div>
                   : <div />
                 }
-                <div style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.4, letterSpacing: '0.08em' }}>
+                <div style={{ fontFamily: monospace, fontSize: 8, color: hl, letterSpacing: '0.08em' }}>
                   [ PRESS ▲ TO CONTINUE ]
                 </div>
               </div>
@@ -503,8 +505,8 @@
           <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                {/* <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span> */}
-                {/* <span style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.5, letterSpacing: '0.18em', textTransform: 'uppercase' }}>DONASI</span> */}
+                {/* <span style={{ fontFamily: monospace, fontSize: 24, color: hl, letterSpacing: '-1px' }}>(o_o)</span> */}
+                {/* <span style={{ fontFamily: monospace, fontSize: 8, color: hl, letterSpacing: '0.18em', textTransform: 'uppercase' }}>DONASI</span> */}
               </div>
               <span style={{
                 fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl,
@@ -515,7 +517,7 @@
             </div>
 
             <div style={{
-              fontFamily: monospace, fontSize: 15, fontWeight: 900, color: fg,
+              fontFamily: monospace, fontSize: 26, fontWeight: 900, color: fg,
               marginBottom: 3, borderBottom: `1px solid ${hl}20`, paddingBottom: 5,
             }}>
               {'> '}{alert.donorName}
@@ -524,7 +526,7 @@
             {alert.message && (
               <div style={{
                 fontFamily: monospace, fontSize: 10, color: fg,
-                opacity: 0.72, lineHeight: 1.4, marginBottom: 4,
+                lineHeight: 1.4, marginBottom: 4,
               }}>
                 {alert.message}
               </div>
@@ -532,12 +534,12 @@
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {showTs && alert?.receivedAt
-                ? <div style={{ fontFamily: monospace, fontSize: 16, color: 'rgba(255,255,255,0.35)' }}>
+                ? <div style={{ fontFamily: monospace, fontSize: 26, color: 'rgba(255,255,255,0.35)' }}>
                     {'> '}{formatTimestamp(alert.receivedAt)}
                   </div>
                 : <div />
               }
-              <div style={{ fontFamily: monospace, fontSize: 8, color: hl, opacity: 0.3, letterSpacing: '2px' }}>
+              <div style={{ fontFamily: monospace, fontSize: 8, color: hl, letterSpacing: '2px' }}>
                 {'- - - - - - - -'}
               </div>
             </div>

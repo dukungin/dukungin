@@ -312,7 +312,7 @@ const VoiceNoteOverlay = () => {
                         🎙️
                       </div>
                       <div>
-                        <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
+                        <div style={{ fontSize: 10, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
                           Voice Donation
                         </div>
                         <div style={{ fontSize: 15, fontWeight: 700, color: fg }}>{alert.donorName}</div>
@@ -328,7 +328,7 @@ const VoiceNoteOverlay = () => {
                     {/* Pesan */}
                     {alert.message && (
                       <div style={{
-                        fontSize: 13, color: fg, opacity: 0.75,
+                        fontSize: 13, color: fg,
                         background: hl + '10', borderRadius: 10, padding: '8px 12px',
                         lineHeight: 1.5, border: `1px solid ${hl}20`,
                       }}>
@@ -359,7 +359,7 @@ const VoiceNoteOverlay = () => {
 
                     {/* Timestamp + overall progress */}
                     {alert.receivedAt && (
-                      <div style={{ fontSize: 11, color: fg, opacity: 0.35 }}>
+                      <div style={{ fontSize: 11, color: fg}}>
                         {new Date(alert.receivedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     )}
@@ -418,8 +418,8 @@ const VoiceNoteOverlay = () => {
                         🎙️
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.55, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div>
-                        <div style={{ fontFamily: monospace, fontSize: 17, fontWeight: 900, color: fg, lineHeight: 1.1 }}>{alert.donorName}</div>
+                        <div style={{ fontFamily: monospace, fontSize: 26, color: fg, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div>
+                        <div style={{ fontFamily: monospace, fontSize: 26, fontWeight: 900, color: fg, lineHeight: 1.1 }}>{alert.donorName}</div>
                         <div style={{
                           fontFamily: monospace, fontSize: 26, fontWeight: 900, color: hl,
                           letterSpacing: '-0.5px', marginTop: 2, textShadow: `0 0 8px ${hl}55`,
@@ -431,7 +431,7 @@ const VoiceNoteOverlay = () => {
 
                     {alert.message && (
                       <div style={{
-                        fontFamily: monospace, fontSize: 23, color: fg, opacity: 0.75,
+                        fontFamily: monospace, fontSize: 23, color: fg,
                         background: 'rgba(255,255,255,0.04)', border: `1px solid ${hl}35`,
                         padding: '5px 8px', lineHeight: 1.4, marginBottom: 8,
                       }}>
