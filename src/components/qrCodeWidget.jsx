@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import QRCode from 'qrcode';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 
@@ -8,6 +9,7 @@ const QrCodeWidget = () => {
   const { token } = useParams();
   const [username, setUsername] = useState('');
   const [donateUrl, setDonateUrl] = useState('');
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     if (!token) return;
@@ -17,14 +19,25 @@ const QrCodeWidget = () => {
       .then(res => {
         const uname = res.data?.username || '';
         setUsername(uname);
-        setDonateUrl(`https://taptiptup.vercel.app/donate/${uname}`);
+        setDonateUrl(`https://sawer-in.vercel.app/donate/${uname}`);
       })
       .catch(() => console.error('Failed to fetch qrcode data'));
   }, [token]);
 
-  if (!donateUrl) return null;
+  useEffect(() => {
+    if (!donateUrl || !canvasRef.current) return;
+    QRCode.toCanvas(canvasRef.current, donateUrl, {
+      width: 160,
+      margin: 2,
+      errorCorrectionLevel: 'H',
+      color: {
+        dark: '#000000',
+        light: '#ffffff',
+      },
+    });
+  }, [donateUrl]);
 
-  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(donateUrl)}&color=000000&bgcolor=ffffff&format=svg&margin=10&ecc=H`;
+  if (!donateUrl) return null;
 
   return (
     <div style={{
@@ -38,7 +51,6 @@ const QrCodeWidget = () => {
       <div style={{
         background: 'rgba(15, 15, 25, 0.9)',
         padding: '20px',
-        borderRadius: '0',
         border: '1.5px solid rgba(255,255,255,0.1)',
         boxShadow: '0 10px 40px rgba(0,0,0,0.4)',
         display: 'flex',
@@ -50,28 +62,22 @@ const QrCodeWidget = () => {
           position: 'relative',
           background: '#ffffff',
           padding: '12px',
-          borderRadius: '0',
           lineHeight: 0,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          <img
-            src={qrApiUrl}
-            alt="QR Code"
-            style={{ width: '160px', height: '160px', display: 'block' }}
-          />
+          <canvas ref={canvasRef} />
           <div style={{
             position: 'absolute',
-            width: '28px',
-            height: '28px',
+            width: '36px',
+            height: '36px',
             background: 'white',
-            borderRadius: '0',
-            padding: '4px',
+            padding: '3px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+            border: '2px solid #eee',
           }}>
             <img
               src="/jellyfish.png"
