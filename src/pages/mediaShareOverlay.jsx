@@ -261,7 +261,11 @@ const calculateMediaShareDuration = (config, amount) => {
       });
 
       socket.on('new-media-donation', (data) => {
-        console.log('[MediaShare] 🎬 RECEIVED:', data.donorName, 'Rp', data.amount, '| mediaUrl:', data.mediaUrl);
+        
+        console.log('[MediaShare] RAW DATA:', JSON.stringify(data, null, 2));
+        console.log('[MediaShare] mediaUrl:', data.mediaUrl);
+        console.log('[MediaShare] detectType:', detectMediaType(data.mediaUrl, data.mediaType));
+        console.log('[MediaShare] embedUrl:', getYouTubeEmbedUrl(data.mediaUrl, data.startTime));
 
         if (configRef.current?.overlayEnabled === false) return;
 
