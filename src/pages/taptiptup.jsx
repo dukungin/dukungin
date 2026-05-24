@@ -945,17 +945,26 @@ function SharePromo({ C }) {
         {/* Image cards */}
         <div className="grid-cols-1 md:grid-cols-4" style={{ display: "grid", gap: 16, marginBottom: 32 }}>
           {[2,3, 4, 5].map(n => (
-            <div key={n} className="bg-white" onClick={() => setSelectedCard(n)} style={{
-              border: `${selectedCard === n ? 2 : 1}px solid ${selectedCard === n ? C.lime : C.line}`,
-              cursor: "pointer", overflow: "hidden", transition: "border-color 0.15s",
-              position: "relative",
-            }}>
-              <div style={{ 
-                // aspectRatio: format === 'ig' ? '1/1' : '16/9', 
-                background: 'white', 
-                height: 500,
-                overflow: "hidden" 
-              }}>
+            <div 
+              key={n} 
+              className="bg-white" 
+              // onClick={() => setSelectedCard(n)} 
+              style={{
+                border: `${selectedCard === n ? 2 : 1}px solid ${selectedCard === n ? C.lime : C.line}`,
+                // cursor: "pointer", 
+                overflow: "hidden", 
+                transition: "border-color 0.15s",
+                position: "relative",
+              }}
+            >
+              <div 
+                className="flex items-center justify-center"
+                style={{ 
+                  // aspectRatio: format === 'ig' ? '1/1' : '16/9', 
+                  background: 'white', 
+                  height: 500,
+                  overflow: "hidden" 
+                }}>
                 <img
                   src={`/share-${format === 'ig' ? 'ig' : 'desktop'}-${n}.jpg`}
                   alt={`Template ${n}`}
@@ -970,18 +979,20 @@ function SharePromo({ C }) {
 
               {/* Tombol Download */}
               <a
-                href={`/share-${format === 'ig' ? 'ig' : 'desktop'}-${n}.jpg`}
+                href={`/share-ig-${n}.jpg`}
                 download={`taptiptup-${format}-${n}.jpg`}
-                className="active:scale-[0.98]"
+                className="w-full text-center mx-auto active:scale-[0.98] hover:brightness-90"
                 onClick={e => e.stopPropagation()}
                 style={{
-                  position: "absolute", bottom: 8, right: 8,
-                  padding: "5px 12px", fontSize: 11, fontWeight: 600,
+                  position: "absolute", 
+                  bottom: 0, 
+                  right: 0,
+                  padding: "11px 12px", fontSize: 16, fontWeight: 600,
                   background: C.lime, color: C.bg,
                   border: "none", cursor: "pointer",
                   textDecoration: "none", display: "inline-block",
                   letterSpacing: "0.04em", textTransform: "uppercase",
-                  opacity: 0.92,
+                  // opacity: 0.92,
                 }}
               >
                 ⬇ Download

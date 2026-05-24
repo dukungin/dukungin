@@ -3080,7 +3080,7 @@ export const DashboardStreamer = () => {
                             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{desc}</p>
                             <p className="text-[10px] font-mono text-blue-500 dark:text-blue-400 truncate mt-0.5">{widgetUrl}</p>
                           </div>
-                          <button onClick={() => copyToClipboard(widgetUrl, label)} className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-blue-950/40 hover:text-blue-600 text-slate-500 rounded-none transition-all flex-shrink-0">
+                          <button onClick={() => copyToClipboard(widgetUrl, label)} className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-blue-800 hover:text-blue-300 text-slate-300 rounded-none transition-all flex-shrink-0">
                             <Copy size={15} />
                           </button>
                         </div>
