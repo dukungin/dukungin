@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import QRCode from 'qrcode';
@@ -9,7 +9,6 @@ const QrCodeWidget = () => {
   const { token } = useParams();
   const [username, setUsername] = useState('');
   const [donateUrl, setDonateUrl] = useState('');
-  const canvasRef = useRef(null);
 
   useEffect(() => {
     if (!token) return;
@@ -24,16 +23,13 @@ const QrCodeWidget = () => {
       .catch(() => console.error('Failed to fetch qrcode data'));
   }, [token]);
 
-  useEffect(() => {
-    if (!donateUrl || !canvasRef.current) return;
-    QRCode.toCanvas(canvasRef.current, donateUrl, {
-      width: 160,
-      margin: 2,
-      errorCorrectionLevel: 'H',
-      color: {
-        dark: '#000000',
-        light: '#ffffff',
-      },
+  const canvasCallbackRef = useCallback((node) => {
+    if (!node || !donateUrl) return;
+    QRCode.toCanvas(node, donateUrl, {
+      width: 220,        // naikan dari 160 → 220
+      margin: 3, 
+      errorCorrectionLevel: 'M',
+      color: { dark: '#000000', light: '#ffffff' },
     });
   }, [donateUrl]);
 
@@ -67,7 +63,8 @@ const QrCodeWidget = () => {
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          <canvas ref={canvasRef} />
+          {/* Pakai canvasCallbackRef, bukan canvasRef */}
+          <canvas ref={canvasCallbackRef} />
           <div style={{
             position: 'absolute',
             width: '36px',
