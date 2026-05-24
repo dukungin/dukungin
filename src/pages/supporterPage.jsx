@@ -520,7 +520,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
       {/* Input URL */}
       <div className="space-y-1.5">
         <label className="block text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest ml-1">
-          Link Media (YouTube & External didukung)
+          Link Media (YouTube)
         </label>
         <input
           type="url"

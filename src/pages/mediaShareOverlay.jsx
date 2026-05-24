@@ -127,6 +127,103 @@ const calculateMediaShareDuration = (config, amount) => {
     }, [token]);
 
     // ── Socket (FIXED - join kedua room) ────────────────────────────────────────
+    // useEffect(() => {
+    //   if (!token) return;
+
+    //   const socket = io(API_URL, {
+    //     reconnection: true,
+    //     reconnectionAttempts: Infinity,
+    //     reconnectionDelay: 2000,
+    //     reconnectionDelayMax: 10000,
+    //     timeout: 10000,
+    //   });
+
+    //   // ✅ JOIN KEDUA ROOM
+    //   socket.emit('join-room', token);
+    //   socket.emit('join-room', `${token}-mediashare`);
+      
+    //   console.log(`[MediaShare] Joined: ${token}, ${token}-mediashare`);
+
+    //   socket.on('new-media-donation', (data) => {
+    //     console.log('[MediaShare] RECEIVED:', data.donorName, 'Rp', data.amount);
+
+    //     if (configRef.current?.overlayEnabled === false) return;
+
+    //     const donationWithTime = {
+    //       ...data,
+    //       receivedAt: data.receivedAt || new Date().toISOString(),
+    //     };
+
+    //     setAlert(donationWithTime);
+    //     setProgress(100);
+    //     setMediaError(false); // ← tambah ini
+
+    //     // Sound
+    //     const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
+    //     if (soundToPlay && audioRef.current) {
+    //       audioRef.current.src = soundToPlay;
+    //       audioRef.current.play().catch(() => {});
+    //     }
+
+    //     // ✅ DURASI
+    //     const duration = calculateMediaShareDuration(configRef.current, Number(donationWithTime.amount));
+
+    //     // Clear timer lama
+    //     if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    //     if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+
+    //     const startTime = Date.now();
+
+    //     progressIntervalRef.current = setInterval(() => {
+    //       const elapsed = Date.now() - startTime;
+    //       const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
+    //       setProgress(remaining);
+    //       if (remaining <= 0) clearInterval(progressIntervalRef.current);
+    //     }, 40); // lebih smooth
+
+    //     dismissTimerRef.current = setTimeout(() => {
+    //       setAlert(null);
+    //       setProgress(100);
+    //     }, duration);
+    //   });
+
+    //   socket.on('mediashare-control', ({ action, volume }) => {
+    //     if (action === 'skip') {
+    //       // Langsung dismiss alert
+    //       setAlert(null);
+    //       setProgress(100);
+    //       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    //       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+    //       if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
+    //       // Set volume di video/iframe via ref
+    //       if (videoRef.current) videoRef.current.src = '';
+    //     }
+    //     if (action === 'volume' && typeof volume === 'number') {
+    //       if (audioRef.current) audioRef.current.volume = volume / 100;
+    //       if (videoRef.current) videoRef.current.volume = volume / 100;
+    //     }
+    //   });
+
+    //   socket.on('settings-updated', (newConfig) => {
+    //     setConfig(newConfig);
+    //     configRef.current = newConfig;
+    //     if (newConfig.overlayEnabled === false) {
+    //       setAlert(null);
+    //       setProgress(100);
+    //       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    //       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+    //     }
+    //   });
+
+    //   return () => {
+    //     socket.off('new-media-donation');
+    //     socket.off('settings-updated');
+    //     socket.disconnect();
+    //     if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    //     if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+    //   };
+    // }, [token]);
+
     useEffect(() => {
       if (!token) return;
 
@@ -138,14 +235,33 @@ const calculateMediaShareDuration = (config, amount) => {
         timeout: 10000,
       });
 
-      // ✅ JOIN KEDUA ROOM
-      socket.emit('join-room', token);
-      socket.emit('join-room', `${token}-mediashare`);
-      
-      console.log(`[MediaShare] Joined: ${token}, ${token}-mediashare`);
+      const joinRooms = () => {
+        socket.emit('join-room', token);
+        socket.emit('join-room', `${token}-mediashare`);
+        console.log(`[MediaShare] ✅ Joined rooms: ${token} | ${token}-mediashare`);
+      };
+
+      // ✅ Join setelah connect & reconnect
+      socket.on('connect', () => {
+        console.log(`[MediaShare] 🔌 Connected: ${socket.id}`);
+        joinRooms();
+      });
+
+      socket.on('reconnect', (attempt) => {
+        console.log(`[MediaShare] 🔄 Reconnected setelah ${attempt} percobaan`);
+        joinRooms();
+      });
+
+      socket.on('disconnect', (reason) => {
+        console.warn(`[MediaShare] ❌ Disconnected: ${reason}`);
+      });
+
+      socket.on('connect_error', (err) => {
+        console.error(`[MediaShare] ⚠️ Connect error: ${err.message}`);
+      });
 
       socket.on('new-media-donation', (data) => {
-        console.log('[MediaShare] RECEIVED:', data.donorName, 'Rp', data.amount);
+        console.log('[MediaShare] 🎬 RECEIVED:', data.donorName, 'Rp', data.amount, '| mediaUrl:', data.mediaUrl);
 
         if (configRef.current?.overlayEnabled === false) return;
 
@@ -156,19 +272,16 @@ const calculateMediaShareDuration = (config, amount) => {
 
         setAlert(donationWithTime);
         setProgress(100);
-        setMediaError(false); // ← tambah ini
+        setMediaError(false);
 
-        // Sound
-        const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
+        const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
         if (soundToPlay && audioRef.current) {
           audioRef.current.src = soundToPlay;
           audioRef.current.play().catch(() => {});
         }
 
-        // ✅ DURASI
         const duration = calculateMediaShareDuration(configRef.current, Number(donationWithTime.amount));
 
-        // Clear timer lama
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
         if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
 
@@ -179,7 +292,7 @@ const calculateMediaShareDuration = (config, amount) => {
           const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
           setProgress(remaining);
           if (remaining <= 0) clearInterval(progressIntervalRef.current);
-        }, 40); // lebih smooth
+        }, 40);
 
         dismissTimerRef.current = setTimeout(() => {
           setAlert(null);
@@ -189,13 +302,11 @@ const calculateMediaShareDuration = (config, amount) => {
 
       socket.on('mediashare-control', ({ action, volume }) => {
         if (action === 'skip') {
-          // Langsung dismiss alert
           setAlert(null);
           setProgress(100);
           if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
           if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
           if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
-          // Set volume di video/iframe via ref
           if (videoRef.current) videoRef.current.src = '';
         }
         if (action === 'volume' && typeof volume === 'number') {
@@ -216,7 +327,12 @@ const calculateMediaShareDuration = (config, amount) => {
       });
 
       return () => {
+        socket.off('connect');
+        socket.off('reconnect');
+        socket.off('disconnect');
+        socket.off('connect_error');
         socket.off('new-media-donation');
+        socket.off('mediashare-control');
         socket.off('settings-updated');
         socket.disconnect();
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
