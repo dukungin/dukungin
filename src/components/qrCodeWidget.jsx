@@ -19,7 +19,7 @@ const QrCodeWidget = () => {
       .then(res => {
         const uname = res.data?.username || '';
         setUsername(uname);
-        setDonateUrl(`https://sawer-in.vercel.app/donate/${uname}`);
+        setDonateUrl(`https://taptiptup.vercel.app/donate/${uname}`);
       })
       .catch(() => console.error('Failed to fetch qrcode data'));
   }, [token]);
