@@ -49,7 +49,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     { id: 'alertSettings',  label: 'Alert OBS',      icon: <ZapIcon size={20} /> },
     { id: 'mediaSettings',  label: 'Media Share',     icon: <Video size={20} /> },
     { id: 'history',     label: 'Riwayat Donasi',   icon: <History size={20} /> },
-    { id: 'myDonations', label: 'Berdonasi',        icon: <Heart size={20} /> },   
+    // { id: 'myDonations', label: 'Berdonasi',        icon: <Heart size={20} /> },   
     { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },
     { id: 'poll',        label: 'Poll & Voting',    icon: <Vote size={20} /> },
     { id: 'feeConfig',   label: 'Konfigurasi Fee',  icon: <ReceiptText size={20} /> }, // ← TAMBAHKAN INI

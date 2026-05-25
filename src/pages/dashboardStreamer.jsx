@@ -2173,9 +2173,9 @@ const HistoryPage = () => {
             <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Riwayat Donasi</p>
           </div>
           <div className="flex gap-2">
-            {[{ id: 'received', label: '📥 Donasi Diterima' }, { id: 'sent', label: '📤 Donasi Terkirim' }].map((t) => (
+            {[{ id: 'received', label: '📥 Diterima' }, { id: 'sent', label: '📤 Terkirim' }].map((t) => (
               <button key={t.id} onClick={() => { setHistoryTab(t.id); setPage(1); setStatusFilter(''); }}
-                className={`px-5 py-2.5 rounded-2xl font-black text-sm transition-all ${historyTab === t.id ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:border-blue-200'}`}>
+                className={`px-5 py-2.5 rounded-none font-black text-sm transition-all ${historyTab === t.id ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:border-blue-200'}`}>
                 {t.label}
               </button>
             ))}
