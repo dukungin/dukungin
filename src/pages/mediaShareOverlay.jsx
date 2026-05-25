@@ -586,9 +586,9 @@ const calculateMediaShareDuration = (config, amount) => {
                   {renderIcon(customIcon, 18)}
                 </div>
                 <div>
-                  <div style={{ fontSize: 26, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>
+                  {/* <div style={{ fontSize: 26, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>
                     Media share
-                  </div>
+                  </div> */}
                   <div style={{ fontSize: 26, fontWeight: 700, color: fg }}>
                     {alert.donorName}
                   </div>
