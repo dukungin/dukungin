@@ -489,21 +489,30 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
   const isYouTube = isYouTubeUrl(mediaUrl);
 
   useEffect(() => { setPreviewError(false); }, [mediaUrl]);
-
-  // ← TAMBAH: auto-resolve TikTok short URL
+  
   useEffect(() => {
+    // Kalau sudah full URL dengan video ID, tidak perlu resolve lagi
+    if (extractTikTokVideoId(mediaUrl)) {
+      setResolveError('');
+      setResolving(false);
+      return;
+    }
+
     const isTikTokShort = /^https?:\/\/(vt|vm)\.tiktok\.com\//i.test(mediaUrl);
-    if (!isTikTokShort) return;
+    if (!isTikTokShort) {
+      setResolveError('');
+      return;
+    }
 
     const timeout = setTimeout(async () => {
       try {
         setResolving(true);
         setResolveError('');
-        const res = await axios.get(`${BASE_URL}/api/midtrans/tiktok-resolve`, {
+        const res = await axios.get(`${BASE_URL}/api/tiktok-resolve`, {
           params: { url: mediaUrl },
         });
         if (res.data.resolved) {
-          setMediaUrl(res.data.fullUrl); // ← ganti ke full URL otomatis
+          setMediaUrl(res.data.fullUrl);
         } else {
           setResolveError(res.data.reason || 'Gagal resolve URL TikTok');
         }
@@ -654,11 +663,21 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
             className="rounded-none overflow-hidden border border-blue-100 dark:border-blue-800 bg-slate-900 relative"
             style={{ maxHeight: 200 }}
           >
-            {mediaType === 'youtube' ? (
+           {mediaType === 'youtube' ? (
               <iframe
                 src={getYouTubeEmbedUrlWithTime(mediaUrl, startTime)}
                 className="w-full aspect-video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                onError={() => setPreviewError(true)}
+              />
+            ) : mediaType === 'tiktok' ? (
+              // TikTok embed — aspect ratio 9/16 (portrait)
+              <iframe
+                src={getTikTokEmbedUrl(mediaUrl)}
+                className="w-full"
+                style={{ aspectRatio: '9/16', maxHeight: 200 }}
+                allow="autoplay"
                 allowFullScreen
                 onError={() => setPreviewError(true)}
               />
