@@ -57,7 +57,7 @@ const StoreManager = ({ overlayToken }) => {
       price: 0,
       imageUrl: '',
       link: '',
-      description: ''
+      description: 'Link di deskripsi 👇'
     }]);
   };
 
@@ -165,7 +165,7 @@ const StoreManager = ({ overlayToken }) => {
           <button
             onClick={() => saveMutation.mutate(products)}
             disabled={saveMutation.isPending}
-            className="mt-10 w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-none transition-all flex items-center justify-center gap-2"
+            className="cursor-pointer active:scale-[0.99] mt-10 w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-none transition-all flex items-center justify-center gap-2"
           >
             <Save size={20} />
             {saveMutation.isPending ? 'Menyimpan...' : 'Simpan Produk ke Toko OBS'}

@@ -32,111 +32,82 @@ const StoreWidget = () => {
     );
   }
 
+  const p = products[0]; // Hanya 1 produk
+
   return (
     <div style={{
       width: '100%',
-      minHeight: '100vh',
-      background: 'rgba(10, 10, 20, 0.98)',
-      padding: '25px 20px',
+      minHeight: 'max-content',
+      // background: 'rgba(10, 10, 20, 0.98)',
+      padding: '0px',
       fontFamily: "'Inter', system-ui, sans-serif",
       color: 'white',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}>
-      <h2 style={{
-        textAlign: 'center',
-        fontSize: '28px',
-        fontWeight: 800,
-        marginBottom: '30px',
-        letterSpacing: '1px',
-        opacity: 0.95
-      }}>
-        🛍️ TOKO
-      </h2>
-
       <div style={{
         display: 'flex',
-        flexDirection: 'column',
-        gap: '18px',
-        maxWidth: '520px',
-        margin: '0 auto'
+        background: 'rgba(10, 10, 20, 0.98)',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        maxWidth: 'max-content',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
       }}>
-        {products.map((p, i) => (
-          <a
-            key={i}
-            href={p.link || '#'}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'flex',
-              background: 'rgba(255,255,255,0.08)',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              textDecoration: 'none',
-              color: 'inherit',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-            }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-          >
-            {/* Gambar */}
-            <div style={{ width: '140px', height: '140px', flexShrink: 0, background: '#1e2937' }}>
-              {p.imageUrl ? (
-                <img
-                  src={p.imageUrl}
-                  alt={p.name}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                  onError={(e) => e.target.style.display = 'none'}
-                />
-              ) : (
-                <div style={{
-                  width: '100%', height: '100%', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center', fontSize: '40px', opacity: 0.3
-                }}>
-                  🖼️
-                </div>
-              )}
-            </div>
+        {/* Gambar Kiri */}
+        <div style={{ 
+          width: 'max-content', 
+          height: '220px', 
+          flexShrink: 0,
+          padding: 20,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden'
+        }}>
+          {p.imageUrl ? (
+            <img
+              src={p.imageUrl}
+              alt={p.name}
+              style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '10px' }}
+              onError={(e) => e.target.style.display = 'none'}
+            />
+          ) : (
+            <div style={{ fontSize: '90px', opacity: 0.3 }}>🖼️</div>
+          )}
+        </div>
 
-            {/* Info Produk */}
-            <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <h3 style={{
-                fontSize: '18px',
-                fontWeight: 700,
-                marginBottom: '6px',
-                lineHeight: 1.3
-              }}>
-                {p.name}
-              </h3>
+        {/* Informasi Kanan */}
+        <div style={{ padding: '20px 30px 10px 6px', minWidth: '380px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h3 style={{ 
+            fontSize: '36px', 
+            fontWeight: 700, 
+            marginBottom: '12px',
+            lineHeight: 1.3 
+          }}>
+            {p.name}
+          </h3>
 
-              <p style={{
-                fontSize: '24px',
-                fontWeight: 800,
-                color: '#4ade80',
-                marginBottom: '4px'
-              }}>
-                Rp {Number(p.price).toLocaleString('id-ID')}
-              </p>
+          <p style={{ 
+            fontSize: '32px', 
+            fontWeight: 800, 
+            color: '#4ade80',
+            marginBottom: '20px'
+          }}>
+            Rp {Number(p.price).toLocaleString('id-ID')}
+          </p>
 
-              {p.description && (
-                <p style={{
-                  fontSize: '13px',
-                  opacity: 0.75,
-                  lineHeight: 1.4,
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden'
-                }}>
-                  {p.description}
-                </p>
-              )}
-            </div>
-          </a>
-        ))}
+          {p.description && (
+            <p style={{ 
+              fontSize: '24px', 
+              opacity: 0.85,
+              lineHeight: 1.6,
+              marginBottom: '24px'
+            }}>
+              {p.description}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
