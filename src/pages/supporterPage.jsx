@@ -53,38 +53,6 @@ const authHeader = () => ({ Authorization: `Bearer ${getToken()}` });
 // HELPER — Media Detection
 // ============================================================
 
-// ============================================================
-// IMPROVED TIKTOK HANDLER
-// ============================================================
-
-const isTikTokUrl = (url) => {
-  if (!url) return false;
-  return /tiktok\.com/i.test(url) || /vt\.tiktok\.com/i.test(url) || /vm\.tiktok\.com/i.test(url);
-};
-
-const extractTikTokVideoId = (url) => {
-  if (!url) return null;
-
-  // 1. Full URL: tiktok.com/@user/video/1234567890
-  let match = url.match(/tiktok\.com\/@[\w.]+\/video\/(\d+)/);
-  if (match) return match[1];
-
-  // 2. Short URL: vt.tiktok.com/XXXXXX/ atau vm.tiktok.com/XXXXXX/
-  match = url.match(/vt\.tiktok\.com\/([a-zA-Z0-9]+)/);
-  if (match) return match[1];
-
-  match = url.match(/vm\.tiktok\.com\/([a-zA-Z0-9]+)/);
-  if (match) return match[1];
-
-  return null;
-};
-
-const getTikTokEmbedUrl = (url) => {
-  const videoId = extractTikTokVideoId(url);
-  if (!videoId) return null;
-  return `https://www.tiktok.com/embed/v2/${videoId}`;
-};
-
 const isDirectVideoUrl = (url) => /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
 
 const isYouTubeUrl = (url) => {
@@ -496,96 +464,166 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
 // ============================================================
 const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStartTime }) => {
   const [previewError, setPreviewError] = useState(false);
-  const [resolving, setResolving] = useState(false);
-  const [resolveError, setResolveError] = useState('');
-
+  const videoRef = useRef(null);
   const isYouTube = isYouTubeUrl(mediaUrl);
-  const isTikTok  = isTikTokUrl(mediaUrl);
 
-  // Hanya resolve jika short link dan belum ada video ID
-  useEffect(() => {
-    if (!mediaUrl || !isTikTokUrl(mediaUrl)) return;
-
-    const videoId = extractTikTokVideoId(mediaUrl);
-    if (videoId && videoId.length > 10) return; // sudah punya ID panjang
-
-    const timeout = setTimeout(() => {
-      setResolveError('Gunakan link TikTok full jika short link tidak berfungsi');
-    }, 1200);
-
-    return () => clearTimeout(timeout);
-  }, [mediaUrl]);
+  useEffect(() => { setPreviewError(false); }, [mediaUrl]);
 
   const mediaType = getMediaType(mediaUrl);
+  const hasPreview = mediaUrl && !previewError;
+  const allowImage = trigger.mediaType === 'image' || trigger.mediaType === 'both';
+  const allowVideo = trigger.mediaType === 'video' || trigger.mediaType === 'both';
+
+  const placeholderText =
+    allowImage && allowVideo
+      ? 'https://youtu.be/xxxx atau https://i.imgur.com/xxxx.jpg'
+      : allowVideo
+        ? 'https://youtu.be/xxxx atau https://example.com/video.mp4'
+        : 'https://i.imgur.com/contoh-gambar.jpg';
+
+  const getYouTubeEmbedUrlWithTime = (url, startSeconds = 0) => {
+    if (!url) return '';
+    // Live — jangan append start
+    if (/youtube\.com\/live\//i.test(url)) return getYouTubeEmbedUrl(url);
+    let embedUrl = getYouTubeEmbedUrl(url);
+    if (startSeconds > 0) {
+      const separator = embedUrl.includes('?') ? '&' : '?';
+      embedUrl += `${separator}start=${startSeconds}&autoplay=1&mute=1`;
+    }
+    return embedUrl;
+  };
+
+  const isYouTubeLive = isYouTubeUrl(mediaUrl) && /youtube\.com\/live\//i.test(mediaUrl);
 
   return (
     <div className="rounded-none border-2 border-blue-200 dark:border-blue-800 bg-blue-50/60 dark:bg-blue-900/30 p-5 space-y-4">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-none bg-blue-600 flex items-center justify-center text-white text-lg">
-            {isTikTok ? '🎵' : isYouTube ? '▶️' : '🖼️'}
+          <div className="w-7 h-7 rounded-none bg-blue-600 flex items-center justify-center text-white flex-shrink-0">
+            {allowVideo && allowImage
+              ? <span className="flex items-center gap-0.5"><ImageIcon size={9} /><Video size={9} /></span>
+              : allowVideo ? <Video size={13} /> : <ImageIcon size={13} />}
           </div>
           <div>
-            <p className="text-xs font-black text-blue-700 dark:text-blue-400">Media Share</p>
-            <p className="text-[10px] text-blue-400">Minimal Rp {Number(trigger.minAmount).toLocaleString('id-ID')}</p>
+            <p className="text-xs font-black text-blue-700 dark:text-blue-400 leading-none">
+              🎉 {trigger.label || 'Media Alert'} Unlocked!
+            </p>
+            <p className="text-[10px] text-blue-400 dark:text-blue-500 font-medium mt-0.5">
+              Tersedia mulai Rp {Number(trigger.minAmount).toLocaleString('id-ID')}
+            </p>
           </div>
         </div>
+        {mediaUrl && (
+          <button onClick={() => { setMediaUrl(''); setStartTime(0); }}
+            className="w-6 h-6 rounded-none bg-blue-100 dark:bg-blue-900 hover:bg-red-100 dark:hover:bg-red-900 text-blue-400 flex items-center justify-center transition-all hover:text-red-500">
+            <X size={12} />
+          </button>
+        )}
       </div>
 
-      <div>
-        <label className="block text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-2">
-          Link Media
+      {/* Badge tipe media */}
+      <div className="flex items-center gap-2">
+        {allowImage && (
+          <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-800 rounded-none text-[10px] font-bold text-blue-600 dark:text-blue-400">
+            <ImageIcon size={10} /> Animasi GIF
+          </span>
+        )}
+        {allowVideo && (
+          <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-purple-800 rounded-none text-[10px] font-bold text-purple-600 dark:text-purple-400">
+            <Video size={10} /> Video YouTube
+          </span>
+        )}
+      </div>
+
+      {/* Input URL */}
+      <div className="space-y-1.5">
+        <label className="block text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest ml-1">
+          Link Media (YouTube)
         </label>
         <input
           type="url"
           value={mediaUrl}
-          onChange={(e) => { 
-            setMediaUrl(e.target.value); 
-            setPreviewError(false); 
-            setResolveError(''); 
-          }}
-          className="text-slate-900 dark:text-white w-full p-4 rounded-none bg-white dark:bg-slate-900 border-2 border-blue-100 dark:border-blue-800 focus:border-blue-400 outline-none font-mono text-sm"
-          placeholder="https://vt.tiktok.com/... atau https://youtu.be/..."
+          onChange={(e) => { setMediaUrl(e.target.value); setStartTime(0); }}
+          className="w-full p-4 rounded-none bg-white dark:bg-slate-900 border-2 border-blue-100 dark:border-blue-800 focus:border-blue-400 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400"
+          placeholder={placeholderText}
         />
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium ml-1">
+          * Opsional — Gambar (jpg, gif, png), Video (.mp4), atau YouTube
+        </p>
       </div>
 
-      {/* {resolveError && <p className="text-amber-600 text-xs mt-1">{resolveError}</p>} */}
+      {/* YouTube time picker */}
+      <AnimatePresence>
+        {isYouTube && mediaUrl && !isYouTubeLive && (
+          <YouTubeTimePicker startTime={startTime} onChange={setStartTime} />
+        )}
+      </AnimatePresence>
 
-      {/* PREVIEW AREA */}
-      {mediaUrl && (
-        <div className="mt-4 border border-blue-100 dark:border-blue-800 focus:border-blue-400 rounded-none overflow-hidden bg-slate-900">
-          {isYouTube ? (
-            <iframe
-              src={getYouTubeEmbedUrl(mediaUrl)}
-              className="w-full aspect-video"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            />
-          ) : isTikTok ? (
-            <div className="p-6 text-center bg-transparent">
-              <p className="text-slate-900 dark:text-white text-lg mb-4">🎵 TikTok Video</p>
-              <a 
-                href={mediaUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center bg-[#ff0050] hover:bg-[#e6004d] text-white font-bold px-4 pr-[18.2px] active:scale-[0.98] py-3 rounded-none text-base"
-              >
-                Buka Video TikTok
-              </a>
-              <p className="text-xs text-slate-400 mt-5">
-                Klik tombol di atas untuk membuka video.
+      <AnimatePresence>
+        {isYouTubeLive && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-3 px-3 py-2.5 bg-amber-900/30 border-amber-200 dark:border-amber-800 border border-amber-200 dark:border-amber-800 rounded-none flex items-center gap-2"
+          >
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
+            <p className="text-[10px] font-black text-amber-600 dark:text-amber-400">
+              YouTube Live — akan diputar dari waktu terkini
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Preview */}
+      <AnimatePresence>
+        {hasPreview && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.25 }}
+            className="rounded-none overflow-hidden border border-blue-100 dark:border-blue-800 bg-slate-900 relative"
+            style={{ maxHeight: 200 }}
+          >
+            {mediaType === 'youtube' ? (
+              <iframe
+                src={getYouTubeEmbedUrlWithTime(mediaUrl, startTime)}
+                className="w-full aspect-video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                onError={() => setPreviewError(true)}
+              />
+            ) : mediaType === 'video' ? (
+              <video ref={videoRef} src={mediaUrl} autoPlay muted loop playsInline
+                className="w-full object-cover" style={{ maxHeight: 200 }}
+                onError={() => setPreviewError(true)} />
+            ) : (
+              <img src={mediaUrl} alt="Media preview" className="w-full object-cover"
+                style={{ maxHeight: 200 }} onError={() => setPreviewError(true)} />
+            )}
+            <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-black/60 backdrop-blur-sm">
+              <p className="text-[10px] text-white/90 font-bold">
+                {mediaType === 'youtube' ? (
+                  <>▶️ YouTube {startTime > 0 && (
+                    <span className="ml-1 bg-yellow-500/30 px-1 py-0.5 text-[9px]">
+                      {Math.floor(startTime / 60).toString().padStart(2, '0')}:{(startTime % 60).toString().padStart(2, '0')}
+                    </span>
+                  )}</>
+                ) : mediaType === 'video' ? '🎬 Direct Video' : '🖼️ Gambar'}
+                {' '}— Preview
               </p>
             </div>
-          ) : (
-            <img 
-              src={mediaUrl} 
-              alt="preview" 
-              className="w-full max-h-[260px] object-contain mx-auto" 
-              onError={() => setPreviewError(true)} 
-            />
-          )}
-        </div>
-      )}
+          </motion.div>
+        )}
+        {previewError && mediaUrl && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            className="rounded-none border border-red-100 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-xs text-red-500 font-bold flex items-center gap-2">
+            <X size={14} /> URL tidak valid atau media tidak dapat dimuat.
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -947,20 +985,6 @@ const SupporterPage = () => {
       const emailRegex = /^\S+@\S+\.\S+$/;
       if (!emailRegex.test(form.email.trim())) {
         return alert('Format email tidak valid');
-      }
-    }
-
-    // if (mediaUrl && isTikTokUrl(mediaUrl) && !extractTikTokVideoId(mediaUrl)) {
-    //   return alert('Gunakan URL TikTok lengkap: tiktok.com/@username/video/ID');
-    // }
-
-    if (mediaUrl && isTikTokUrl(mediaUrl)) {
-      const shortMatch = mediaUrl.match(/vt\.tiktok\.com|vm\.tiktok\.com/);
-      if (shortMatch) {
-        const res = await axios.get(`${BASE_URL}/api/midtrans/tiktok-resolve?url=${encodeURIComponent(mediaUrl)}`);
-        if (res.data.resolved) {
-          setMediaUrl(res.data.fullUrl); // ganti ke full URL sebelum submit
-        }
       }
     }
 
