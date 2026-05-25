@@ -10,6 +10,39 @@ import axios from 'axios';
 
 const API_URL = 'https://server-dukungin-production.up.railway.app';
 
+// Buat helper function di dalam component
+const clearMediaDisplay = useCallback(() => {
+
+    // Stop audio
+    if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+    }
+
+    // Stop video jika ada
+    if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.src = '';
+        videoRef.current.load();
+    }
+
+    // Stop iframe YouTube — cara paling reliable: 
+    // postMessage pause ke iframe
+    const iframe = document.querySelector('iframe[src*="youtube"]');
+    if (iframe) {
+        // Pause dulu via postMessage
+        iframe.contentWindow?.postMessage(
+            JSON.stringify({ event: 'command', func: 'pauseVideo' }),
+            '*'
+        );
+        // Kemudian kosongkan src biar benar-benar stop
+        setTimeout(() => { iframe.src = ''; }, 100);
+        }
+
+    clearMediaDisplay();
+    setMediaProgress(100);
+    }, []);
+
 // ── Helpers (sama persis dari kedua file) ────────────────────────────────────
 
 const isTikTokUrl = (url) => {
@@ -51,17 +84,17 @@ const getYouTubeEmbedUrl = (url, startSeconds = 0) => {
   const watchMatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
   if (watchMatch) {
     const id = watchMatch[1];
-    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}&enablejsapi=1${start}`;
   }
   const shortMatch = url.match(/youtu\.be\/([\w-]+)/);
   if (shortMatch) {
     const id = shortMatch[1];
-    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}&enablejsapi=1${start}`;
   }
   const shortsMatch = url.match(/youtube\.com\/shorts\/([\w-]+)/);
   if (shortsMatch) {
     const id = shortsMatch[1];
-    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}&enablejsapi=1${start}`;
   }
   return null;
 };
@@ -604,7 +637,7 @@ const CombinedOverlay = () => {
 
 
       // ← clear mediashare dulu
-      setMediaData(null);
+      clearMediaDisplay();
       setMediaProgress(100);
       if (mediaIntervalRef.current) clearInterval(mediaIntervalRef.current);
       if (mediaTimerRef.current)    clearTimeout(mediaTimerRef.current);
@@ -671,7 +704,7 @@ const CombinedOverlay = () => {
         if (remaining <= 0) clearInterval(mediaIntervalRef.current);
       }, 40);
       mediaTimerRef.current = setTimeout(() => {
-        setMediaData(null);
+        clearMediaDisplay();
         setMediaProgress(100);
       }, duration);
     });
@@ -679,7 +712,7 @@ const CombinedOverlay = () => {
     // ── MediaShare control (skip/volume) ──────────────────────────────────────
     socket.on('mediashare-control', ({ action, volume }) => {
       if (action === 'skip') {
-        setMediaData(null);
+        clearMediaDisplay();
         setMediaProgress(100);
         if (mediaIntervalRef.current) clearInterval(mediaIntervalRef.current);
         if (mediaTimerRef.current)    clearTimeout(mediaTimerRef.current);
@@ -696,7 +729,7 @@ const CombinedOverlay = () => {
       setConfig(newConfig);
       configRef.current = newConfig;
       if (newConfig.overlayEnabled === false) {
-        setAlertData(null); setMediaData(null);
+        setAlertData(null); clearMediaDisplay();
         setAlertProgress(100); setMediaProgress(100);
         [alertIntervalRef, mediaIntervalRef].forEach(r => clearInterval(r.current));
         [alertTimerRef, mediaTimerRef].forEach(r => clearTimeout(r.current));
