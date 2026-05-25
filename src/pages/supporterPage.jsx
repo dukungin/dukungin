@@ -61,15 +61,28 @@ const isYouTubeUrl = (url) => {
 
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return '';
+
+  // youtu.be/ID
   if (url.includes('youtu.be')) {
     const videoId = url.split('youtu.be/')[1]?.split(/[?&]/)[0];
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
   }
+
   try {
     const urlObj = new URL(url);
+
+    // /live/ID  ← TAMBAH INI
+    const liveMatch = urlObj.pathname.match(/\/live\/([a-zA-Z0-9_-]+)/);
+    if (liveMatch) {
+      return `https://www.youtube.com/embed/${liveMatch[1]}?autoplay=1&mute=1`;
+    }
+
+    // watch?v=ID
     const videoId = urlObj.searchParams.get('v');
     if (videoId) return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+
   } catch { /* fallback */ }
+
   return url;
 };
 
