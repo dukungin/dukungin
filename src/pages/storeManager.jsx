@@ -92,18 +92,17 @@ const StoreManager = ({ overlayToken }) => {
 
         <div className="mt-8">
           {products.map((p, i) => (
-            <div key={i} className="border-2 border-slate-200 dark:border-slate-700 p-6 bg-slate-50 dark:bg-slate-800 rounded-none">
-              <div className="flex justify-between mb-4">
-                <h4 className="font-black text-lg">Produk Toko</h4>
+            <div key={i} className="border-2 border-slate-200 dark:border-slate-700 p-6 py-4.5 bg-slate-50 dark:bg-slate-800 rounded-none">
+              {/* <div className="flex justify-between mb-4">
                 <button onClick={() => removeProduct(i)} className="text-red-500 hover:text-red-700">
                   <Trash2 size={20} />
                 </button>
-              </div>
+              </div> */}
 
               {/* Upload Gambar */}
               <div className="mb-4">
                 <label className="block text-sm font-bold mb-2">Gambar Produk</label>
-                <div className="flex gap-4 items-center">
+                <div className="md:flex gap-4 items-center">
                   <label className="cursor-pointer flex-1">
                     <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 h-52 flex flex-col items-center justify-center hover:border-blue-400 transition-all">
                       <Upload size={32} className="text-slate-400 mb-2" />
@@ -122,7 +121,7 @@ const StoreManager = ({ overlayToken }) => {
                     <img
                       src={p.imageUrl}
                       alt="preview"
-                      className="h-52 w-52 object-cover border border-slate-300 rounded"
+                      className="mt-4 h-max md:h-52 w-full md:w-52 object-cover border border-slate-300 rounded"
                     />
                   )}
                 </div>
