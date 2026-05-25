@@ -95,22 +95,56 @@
     const progressIntervalRef = useRef(null);
     const dismissTimerRef     = useRef(null);
 
-    // ==================== TEXT TO SPEECH ====================
-    const speakDonation = useCallback((donation) => {
-      if (!('speechSynthesis' in window)) return;
+    // ==================== TEXT TO SPEECH (edge-tts via backend) ====================
+    const speakDonation = useCallback(async (donation) => {
       if (!configRef.current?.ttsEnabled) return;
 
       const text = `${donation.donorName || 'Seseorang'} memberikan donasi Rp ${Number(donation.amount).toLocaleString('id-ID')}. ${donation.message || ''}`;
 
-      const utterance = new SpeechSynthesisUtterance(text);
+      // Konversi nilai slider (0.5–2.0) ke format edge-tts
+      const rateVal   = configRef.current.ttsRate   || 1.0;
+      const pitchVal  = configRef.current.ttsPitch  || 1.0;
+      const volumeVal = configRef.current.ttsVolume || 1.0;
 
-      utterance.rate = configRef.current.ttsRate || 1.0;
-      utterance.pitch = configRef.current.ttsPitch || 1.0;
-      utterance.volume = configRef.current.ttsVolume || 1.0;
+      // rate: 1.0 → '+0%', 1.5 → '+50%', 0.5 → '-50%'
+      const rateStr   = rateVal >= 1
+        ? `+${Math.round((rateVal - 1) * 100)}%`
+        : `-${Math.round((1 - rateVal) * 100)}%`;
 
-      // Stop speech sebelumnya (agar tidak tumpuk)
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
+      // pitch: 1.0 → '+0Hz', 1.5 → '+10Hz', 0.5 → '-10Hz'
+      const pitchStr  = pitchVal >= 1
+        ? `+${Math.round((pitchVal - 1) * 20)}Hz`
+        : `-${Math.round((1 - pitchVal) * 20)}Hz`;
+
+      // volume: 1.0 → '+0%', max → '+50%'
+      const volumeStr = volumeVal >= 1
+        ? `+${Math.round((volumeVal - 1) * 100)}%`
+        : `-${Math.round((1 - volumeVal) * 100)}%`;
+
+      try {
+        const res = await fetch('https://server-dukungin-production.up.railway.app/api/overlay/tts/speak', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text,
+            voiceName:  configRef.current.ttsVoiceName    || 'id-ID-GadisNeural',
+            rate:       rateStr,
+            pitch:      pitchStr,
+            volume:     volumeStr,
+          }),
+        });
+
+        if (!res.ok) throw new Error(`TTS HTTP ${res.status}`);
+
+        const blob = await res.blob();
+        const url  = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.onended = () => URL.revokeObjectURL(url);
+        audio.onerror = () => URL.revokeObjectURL(url);
+        await audio.play();
+      } catch (err) {
+        console.error('[TTS]', err);
+      }
     }, []);
 
     useEffect(() => {
