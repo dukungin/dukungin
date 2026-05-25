@@ -484,6 +484,8 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
 const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStartTime }) => {
   const [previewError, setPreviewError] = useState(false);
   const videoRef = useRef(null);
+  const [resolving, setResolving] = useState(false);      // ← PINDAH KE SINI
+  const [resolveError, setResolveError] = useState('');   // 
   const isYouTube = isYouTubeUrl(mediaUrl);
 
   useEffect(() => { setPreviewError(false); }, [mediaUrl]);
