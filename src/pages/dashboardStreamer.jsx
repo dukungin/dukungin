@@ -2094,8 +2094,20 @@ const HistoryPage = () => {
   const [historyTab, setHistoryTab] = useState('received');
   const [replayLoading, setReplayLoading] = useState(new Set());
   const [lastReplayTime, setLastReplayTime] = useState({});
-  const [showAmounts, setShowAmounts] = useState(true);
+  const [showAmounts, setShowAmounts] = useState(() => {
+    const saved = localStorage.getItem('showBalance');
+    return saved === null ? true : saved === 'true'; // default true kalau belum ada
+  });
   const [showEmails, setShowEmails] = useState(false);
+
+  useEffect(() => {
+    const handler = () => {
+      const saved = localStorage.getItem('showBalance');
+      setShowAmounts(saved === null ? true : saved === 'true');
+    };
+    window.addEventListener('storage', handler);
+    return () => window.removeEventListener('storage', handler);
+  }, []);
 
   const { data: sentData, isLoading: sentLoading } = useQuery({
     queryKey: ['sentDonations', page],
@@ -2185,7 +2197,11 @@ const HistoryPage = () => {
         {historyTab === 'received' && (
           <div className="px-6 md:px-10 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-3">
             <div className="flex gap-1.5">
-              <button onClick={() => setShowAmounts(v => !v)}
+              <button onClick={() => {
+                const next = !showAmounts;
+                setShowAmounts(next);
+                localStorage.setItem('showBalance', String(next)); // ← sync ke localStorage
+              }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black transition-all border-2 ${showAmounts ? 'bg-blue-600 border-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 text-slate-400'}`}>
                 {showAmounts ? <Eye size={12} /> : <EyeOff size={12} />} Nominal
               </button>
@@ -3166,7 +3182,7 @@ export const DashboardStreamer = () => {
             {/* ══════════════════════ HISTORY ══════════════════════ */}
             {activeTab === 'history' && (
               <motion.div key="history" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <HistoryPage />
+                <HistoryPage  key={localStorage.getItem('showBalance')} />
               </motion.div>
             )}
 

@@ -156,7 +156,12 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
   }, [showBalance]);
 
   const handleShowBalance = () => {
-    setShowBalance(prev => !prev); // Toggle state
+    const next = !showBalance;
+    setShowBalance(next);
+    localStorage.setItem('showBalance', String(next));
+
+    // 🔥 Ini yang penting
+    window.dispatchEvent(new Event('storage'));
   };
 
   return (
