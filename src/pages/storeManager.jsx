@@ -121,7 +121,7 @@ const StoreManager = ({ overlayToken }) => {
                     <img
                       src={p.imageUrl}
                       alt="preview"
-                      className="mt-4 h-max md:h-52 w-full md:w-52 object-cover border border-slate-300 rounded"
+                      className="h-max md:h-52 w-full md:w-52 object-cover border border-dashed border-slate-200/20"
                     />
                   )}
                 </div>
