@@ -132,8 +132,6 @@ const YouTubeTimePicker = ({ startTime, onChange }) => {
     onChange(hours * 3600 + minutes * 60 + seconds);
   }, [hours, minutes, seconds]);
 
-  const isYouTubeLive = isYouTubeUrl(mediaUrl) && /youtube\.com\/live\//i.test(mediaUrl);
-
   return (
     <motion.div
       initial={{ opacity: 0, height: 0 }}
@@ -493,6 +491,8 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
     }
     return embedUrl;
   };
+
+  const isYouTubeLive = isYouTubeUrl(mediaUrl) && /youtube\.com\/live\//i.test(mediaUrl);
 
   return (
     <div className="rounded-none border-2 border-blue-200 dark:border-blue-800 bg-blue-50/60 dark:bg-blue-900/30 p-5 space-y-4">
