@@ -397,10 +397,21 @@ const calculateMediaShareDuration = (config, amount) => {
         if (alert.videoBlocked) {
           return (
             <div style={{ borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
-              <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', gap: 10 }}>
+              <div style={{
+                width: '100%', aspectRatio: '16/9',
+                display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+                background: '#0a0a0a', gap: 10,
+              }}>
                 <span style={{ fontSize: 34 }}>⚠️</span>
-                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 12, fontWeight: 700, color: '#ff4444', letterSpacing: '0.1em', textTransform: 'uppercase', textAlign: 'center', padding: '0 16px' }}>
-                  Video Melanggar Kebijakan
+                <span style={{
+                  fontFamily: "'Courier New', monospace",
+                  fontSize: 12, fontWeight: 700, color: '#ff4444',
+                  letterSpacing: '0.1em', textTransform: 'uppercase',
+                  textAlign: 'center', padding: '0 16px',
+                }}>
+                  {/* ← Pakai blockReason dari payload, fallback ke pesan default */}
+                  {alert.blockReason || 'Video Melanggar Kebijakan'}
                 </span>
               </div>
             </div>
