@@ -126,7 +126,6 @@ const calculateMediaShareDuration = (config, amount) => {
         .catch(() => console.error('[MediaShare] Invalid token'));
     }, [token]);
 
-    // ── Socket (FIXED - join kedua room) ────────────────────────────────────────
     useEffect(() => {
       if (!token) return;
 
@@ -138,14 +137,37 @@ const calculateMediaShareDuration = (config, amount) => {
         timeout: 10000,
       });
 
-      // ✅ JOIN KEDUA ROOM
-      socket.emit('join-room', token);
-      socket.emit('join-room', `${token}-mediashare`);
-      
-      console.log(`[MediaShare] Joined: ${token}, ${token}-mediashare`);
+      const joinRooms = () => {
+        socket.emit('join-room', token);
+        socket.emit('join-room', `${token}-mediashare`);
+        console.log(`[MediaShare] ✅ Joined rooms: ${token} | ${token}-mediashare`);
+      };
+
+      // ✅ Join setelah connect & reconnect
+      socket.on('connect', () => {
+        console.log(`[MediaShare] 🔌 Connected: ${socket.id}`);
+        joinRooms();
+      });
+
+      socket.on('reconnect', (attempt) => {
+        console.log(`[MediaShare] 🔄 Reconnected setelah ${attempt} percobaan`);
+        joinRooms();
+      });
+
+      socket.on('disconnect', (reason) => {
+        console.warn(`[MediaShare] ❌ Disconnected: ${reason}`);
+      });
+
+      socket.on('connect_error', (err) => {
+        console.error(`[MediaShare] ⚠️ Connect error: ${err.message}`);
+      });
 
       socket.on('new-media-donation', (data) => {
-        console.log('[MediaShare] RECEIVED:', data.donorName, 'Rp', data.amount);
+        
+        console.log('[MediaShare] RAW DATA:', JSON.stringify(data, null, 2));
+        console.log('[MediaShare] mediaUrl:', data.mediaUrl);
+        console.log('[MediaShare] detectType:', detectMediaType(data.mediaUrl, data.mediaType));
+        console.log('[MediaShare] embedUrl:', getYouTubeEmbedUrl(data.mediaUrl, data.startTime));
 
         if (configRef.current?.overlayEnabled === false) return;
 
@@ -156,19 +178,16 @@ const calculateMediaShareDuration = (config, amount) => {
 
         setAlert(donationWithTime);
         setProgress(100);
-        setMediaError(false); // ← tambah ini
+        setMediaError(false);
 
-        // Sound
-        const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
+        const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
         if (soundToPlay && audioRef.current) {
           audioRef.current.src = soundToPlay;
           audioRef.current.play().catch(() => {});
         }
 
-        // ✅ DURASI
         const duration = calculateMediaShareDuration(configRef.current, Number(donationWithTime.amount));
 
-        // Clear timer lama
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
         if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
 
@@ -179,7 +198,7 @@ const calculateMediaShareDuration = (config, amount) => {
           const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
           setProgress(remaining);
           if (remaining <= 0) clearInterval(progressIntervalRef.current);
-        }, 40); // lebih smooth
+        }, 40);
 
         dismissTimerRef.current = setTimeout(() => {
           setAlert(null);
@@ -189,13 +208,11 @@ const calculateMediaShareDuration = (config, amount) => {
 
       socket.on('mediashare-control', ({ action, volume }) => {
         if (action === 'skip') {
-          // Langsung dismiss alert
           setAlert(null);
           setProgress(100);
           if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
           if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
           if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
-          // Set volume di video/iframe via ref
           if (videoRef.current) videoRef.current.src = '';
         }
         if (action === 'volume' && typeof volume === 'number') {
@@ -216,7 +233,12 @@ const calculateMediaShareDuration = (config, amount) => {
       });
 
       return () => {
+        socket.off('connect');
+        socket.off('reconnect');
+        socket.off('disconnect');
+        socket.off('connect_error');
         socket.off('new-media-donation');
+        socket.off('mediashare-control');
         socket.off('settings-updated');
         socket.disconnect();
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
@@ -344,35 +366,33 @@ const calculateMediaShareDuration = (config, amount) => {
 
     const MediaBlock = ({ pixelBorder, hl }) => {
       if (!alert?.mediaUrl) return null;
-
-      // ← CEK FLAG DARI SOCKET
       if (alert.videoBlocked || mediaError) {
         return (
-          <div style={{
-            borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)',
-            position: 'relative', zIndex: 2,
-          }}>
+          <div style={{ borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 2 }}>
             <BlockedPlaceholder hl={hl} />
           </div>
         );
       }
 
+      // ← detect dari raw URL
       const t = detectMediaType(alert.mediaUrl, alert.mediaType);
+      // ← startTime dari payload
+      const embedUrl = t === 'youtube'
+        ? getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)
+        : null;
+
+      console.log('[MediaBlock] type:', t, '| url:', alert.mediaUrl, '| embed:', embedUrl);
 
       return (
         <div style={{
-          width: '100%',
-          aspectRatio: '16/9',
-          overflow: 'hidden',
-          background: '#000',
+          width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000',
           borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)',
-          position: 'relative',
-          zIndex: 2,
+          position: 'relative', zIndex: 2,
         }}>
-          {t === 'youtube' && (
+          {t === 'youtube' && embedUrl && (
             <iframe
-              key={alert.mediaUrl}
-              src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}
+              key={embedUrl}   // ← key berubah kalau URL berubah → force remount
+              src={embedUrl}
               width="100%" height="100%"
               frameBorder="0"
               allow="autoplay; encrypted-media"
@@ -382,21 +402,14 @@ const calculateMediaShareDuration = (config, amount) => {
             />
           )}
           {t === 'video' && (
-            <video
-              ref={videoRef}
-              src={alert.mediaUrl}
-              autoPlay loop muted
+            <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              onError={() => setMediaError(true)}
-            />
+              onError={() => setMediaError(true)} />
           )}
           {t === 'image' && (
-            <img
-              src={alert.mediaUrl}
-              alt="media"
+            <img src={alert.mediaUrl} alt="media"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              onError={() => setMediaError(true)}
-            />
+              onError={() => setMediaError(true)} />
           )}
         </div>
       );

@@ -412,7 +412,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
           <Video size={20} />
         </div>
         <div>
-          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Instant Test Medser</h3>
+          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Instant Test Mediashare</h3>
           <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Test lengkap: media + nama + nominal + pesan</p>
         </div>
       </div>
