@@ -508,7 +508,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
       try {
         setResolving(true);
         setResolveError('');
-        const res = await axios.get(`${BASE_URL}/api/tiktok-resolve`, {
+        const res = await axios.get(`${BASE_URL}/api/midtrans/tiktok-resolve`, {
           params: { url: mediaUrl },
         });
         if (res.data.resolved) {
