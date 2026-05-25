@@ -24,17 +24,17 @@
     const watchMatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
     if (watchMatch) {
       const id = watchMatch[1];
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}${start}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
     }
     const shortMatch = url.match(/youtu\.be\/([\w-]+)/);
     if (shortMatch) {
       const id = shortMatch[1];
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}${start}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
     }
     const shortsMatch = url.match(/youtube\.com\/shorts\/([\w-]+)/);
     if (shortsMatch) {
       const id = shortsMatch[1];
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}${start}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
     }
     return null;
   };
