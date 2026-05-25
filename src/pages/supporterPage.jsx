@@ -950,8 +950,18 @@ const SupporterPage = () => {
       }
     }
 
-    if (mediaUrl && isTikTokUrl(mediaUrl) && !extractTikTokVideoId(mediaUrl)) {
-      return alert('Gunakan URL TikTok lengkap: tiktok.com/@username/video/ID');
+    // if (mediaUrl && isTikTokUrl(mediaUrl) && !extractTikTokVideoId(mediaUrl)) {
+    //   return alert('Gunakan URL TikTok lengkap: tiktok.com/@username/video/ID');
+    // }
+
+    if (mediaUrl && isTikTokUrl(mediaUrl)) {
+      const shortMatch = mediaUrl.match(/vt\.tiktok\.com|vm\.tiktok\.com/);
+      if (shortMatch) {
+        const res = await axios.get(`${BASE_URL}/api/midtrans/tiktok-resolve?url=${encodeURIComponent(mediaUrl)}`);
+        if (res.data.resolved) {
+          setMediaUrl(res.data.fullUrl); // ganti ke full URL sebelum submit
+        }
+      }
     }
 
     if (!form.amount || form.amount < minDonate)

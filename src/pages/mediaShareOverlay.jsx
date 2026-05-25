@@ -19,10 +19,12 @@
     return match ? match[1] : null;
   };
 
+
   const getTikTokEmbedUrl = (url) => {
     const videoId = extractTikTokVideoId(url);
     if (!videoId) return null;
-    return `https://www.tiktok.com/embed/v2/${videoId}`;
+    // Tambah autoplay=1, loop=1, muted=1
+    return `https://www.tiktok.com/embed/v2/${videoId}?autoplay=1&loop=1&muted=1`;
   };
 
   const isYouTubeLiveUrl = (url) => {
@@ -436,13 +438,25 @@ const calculateMediaShareDuration = (config, amount) => {
 
         return (
           <div style={{ width: '100%', aspectRatio: t === 'tiktok' ? '9/16' : '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
-            {(t === 'youtube' || t === 'tiktok') && embedUrl && (
+            {t === 'youtube' && embedUrl && (
               <iframe
                 key={embedUrl}
                 src={embedUrl}
                 width="100%" height="100%"
                 frameBorder="0"
                 allow="autoplay; encrypted-media"
+                allowFullScreen
+                style={{ display: 'block', border: 'none' }}
+              />
+            )}
+
+            {t === 'tiktok' && embedUrl && (
+              <iframe
+                key={embedUrl}
+                src={embedUrl}
+                width="100%" height="100%"
+                frameBorder="0"
+                allow="autoplay; fullscreen; picture-in-picture; encrypted-media"  // ← tambah ini
                 allowFullScreen
                 style={{ display: 'block', border: 'none' }}
               />
