@@ -2593,8 +2593,7 @@ const TTSSection = ({ settings, upd, saveSettingsMutation, api }) => {
             ))}
           </div>
 
-          <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 rounded-none p-4 space-y-3">
-            <label className="text-[10px] font-black text-rose-500 uppercase tracking-widest block">🧪 Test Suara</label>
+          <div className="space-y-3">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -2602,7 +2601,7 @@ const TTSSection = ({ settings, upd, saveSettingsMutation, api }) => {
                 onChange={e => setTestText(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && !isTesting && handleTest()}
                 placeholder="Developer berdonasi Rp 50.000. Semangat terus kak!"
-                className="flex-1 px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none text-sm font-medium outline-none focus:border-rose-400 dark:text-slate-100 transition-all"
+                className="flex-1 px-4 py-3 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none text-sm font-medium outline-none focus:border-rose-400 dark:text-slate-100 transition-all"
               />
               <button onClick={handleTest} disabled={isTesting}
                 className="cursor-pointer px-5 py-2.5 bg-rose-500 hover:brightness-90 disabled:opacity-60 text-white font-black rounded-none transition-all active:scale-[0.97] flex items-center gap-2 whitespace-nowrap">
