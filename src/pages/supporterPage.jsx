@@ -525,12 +525,12 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
       <div className="flex items-center gap-2">
         {allowImage && (
           <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-800 rounded-none text-[10px] font-bold text-blue-600 dark:text-blue-400">
-            <ImageIcon size={10} /> Gambar / GIF
+            <ImageIcon size={10} /> Animasi GIF
           </span>
         )}
         {allowVideo && (
           <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-purple-800 rounded-none text-[10px] font-bold text-purple-600 dark:text-purple-400">
-            <Video size={10} /> Video + YouTube
+            <Video size={10} /> Video YouTube
           </span>
         )}
       </div>
@@ -569,7 +569,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
           >
             <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
             <p className="text-[10px] font-black text-amber-600 dark:text-amber-400">
-              YouTube Live — akan diputar dari timestamp terkini secara otomatis
+              YouTube Live — akan diputar dari waktu terkini
             </p>
           </motion.div>
         )}
