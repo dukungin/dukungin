@@ -568,12 +568,11 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
                 href={mediaUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#ff0050] hover:bg-[#e6004d] text-white font-bold px-8 py-4 rounded-none text-base transition-all"
+                className="inline-flex items-center bg-[#ff0050] hover:bg-[#e6004d] text-white font-bold px-4 pr-[18.2px] active:scale-[0.98] py-3 rounded-none text-base"
               >
-                ▶️ Buka Video TikTok
+                Buka Video TikTok
               </a>
               <p className="text-xs text-slate-400 mt-5">
-                TikTok tidak bisa di-embed langsung.<br />
                 Klik tombol di atas untuk membuka video.
               </p>
             </div>
