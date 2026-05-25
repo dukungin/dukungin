@@ -2890,7 +2890,7 @@ export const DashboardStreamer = () => {
                   value={testText}
                   onChange={e => setTestText(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && !isTesting && handleTest()}
-                  placeholder={`${user.username || 'Budi'} berdonasi Rp 50.000. Semangat terus kak!`}
+                  placeholder={`${'Developer'} berdonasi Rp 10.000. Semangat terus kak!`}
                   className="flex-1 px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none text-sm font-medium outline-none focus:border-rose-400 dark:text-slate-100 transition-all"
                 />
                 <button
