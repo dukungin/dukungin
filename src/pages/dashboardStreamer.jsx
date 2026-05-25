@@ -294,7 +294,6 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
         </div>
         <div>
           <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Instant Test Alert</h3>
-          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">Kirim notif donasi test ke OBS tanpa perlu bayar</p>
         </div>
       </div>
 
@@ -415,7 +414,6 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
         </div>
         <div>
           <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Instant Test Mediashare</h3>
-          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Test lengkap: media + nama + nominal + pesan</p>
         </div>
       </div>
 
@@ -1175,7 +1173,8 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly 
 
       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
         className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
-        {saveSettingsMutation.isPending ? 'Menyimpan...' : '💾 Simpan Pengaturan Durasi'}
+        <Save size={20} />
+        {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Pengaturan Durasi'}
       </button>
     </div>
   );

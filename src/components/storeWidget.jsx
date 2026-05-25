@@ -7,33 +7,27 @@ const BASE_URL = 'https://server-dukungin-production.up.railway.app';
 const StoreWidget = () => {
   const { token } = useParams();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!token) return;
 
     axios.get(`${BASE_URL}/api/overlay/store/${token}`)
-      .then(res => {
-        setProducts(res.data.products || []);
-      })
-      .catch(err => {
-        console.error("Gagal mengambil data toko:", err);
-        setProducts([]);
-      });
+      .then(res => setProducts(res.data.products || []))
+      .catch(err => console.error("Gagal load toko:", err))
+      .finally(() => setLoading(false));
   }, [token]);
+
+  if (loading) return <div style={{ width: '100%', height: '100vh', background: 'transparent' }} />;
 
   if (products.length === 0) {
     return (
-      <div style={{ 
-        width: '100%', 
-        height: '100vh', 
-        background: 'transparent',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontSize: '18px'
+      <div style={{
+        width: '100%', height: '100vh', background: 'rgba(15,23,42,0.95)',
+        color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '18px', fontWeight: 500
       }}>
-        Belum ada produk di toko
+        🛍️ Toko masih kosong
       </div>
     );
   }
@@ -42,25 +36,28 @@ const StoreWidget = () => {
     <div style={{
       width: '100%',
       minHeight: '100vh',
-      background: 'rgba(15, 23, 42, 0.95)',
+      background: 'rgba(10, 10, 20, 0.98)',
+      padding: '25px 20px',
+      fontFamily: "'Inter', system-ui, sans-serif",
       color: 'white',
-      padding: '24px',
-      fontFamily: 'Inter, sans-serif',
     }}>
       <h2 style={{
-        fontSize: '32px',
-        fontWeight: 900,
         textAlign: 'center',
-        marginBottom: '32px',
-        letterSpacing: '0.05em'
+        fontSize: '28px',
+        fontWeight: 800,
+        marginBottom: '30px',
+        letterSpacing: '1px',
+        opacity: 0.95
       }}>
-        🛍️ TOKO STREAMER
+        🛍️ TOKO
       </h2>
 
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-        gap: '24px' 
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '18px',
+        maxWidth: '520px',
+        margin: '0 auto'
       }}>
         {products.map((p, i) => (
           <a
@@ -69,50 +66,70 @@ const StoreWidget = () => {
             target="_blank"
             rel="noopener noreferrer"
             style={{
+              display: 'flex',
               background: 'rgba(255,255,255,0.08)',
-              borderRadius: '8px',
+              borderRadius: '12px',
               overflow: 'hidden',
               textDecoration: 'none',
               color: 'inherit',
-              transition: 'all 0.2s',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
             }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
           >
-            {p.imageUrl && (
-              <img
-                src={p.imageUrl}
-                alt={p.name}
-                style={{ 
-                  width: '100%', 
-                  height: '200px', 
-                  objectFit: 'cover',
-                  borderBottom: '1px solid rgba(255,255,255,0.1)'
-                }}
-              />
-            )}
-            <div style={{ padding: '20px' }}>
-              <h3 style={{ 
-                fontSize: '22px', 
-                fontWeight: 700, 
-                marginBottom: '8px',
+            {/* Gambar */}
+            <div style={{ width: '140px', height: '140px', flexShrink: 0, background: '#1e2937' }}>
+              {p.imageUrl ? (
+                <img
+                  src={p.imageUrl}
+                  alt={p.name}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                  onError={(e) => e.target.style.display = 'none'}
+                />
+              ) : (
+                <div style={{
+                  width: '100%', height: '100%', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', fontSize: '40px', opacity: 0.3
+                }}>
+                  🖼️
+                </div>
+              )}
+            </div>
+
+            {/* Info Produk */}
+            <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <h3 style={{
+                fontSize: '18px',
+                fontWeight: 700,
+                marginBottom: '6px',
                 lineHeight: 1.3
               }}>
                 {p.name}
               </h3>
-              
-              <p style={{ 
-                fontSize: '28px', 
-                fontWeight: 900, 
-                color: '#22c55e',
-                marginBottom: '8px'
+
+              <p style={{
+                fontSize: '24px',
+                fontWeight: 800,
+                color: '#4ade80',
+                marginBottom: '4px'
               }}>
                 Rp {Number(p.price).toLocaleString('id-ID')}
               </p>
 
               {p.description && (
-                <p style={{ 
-                  fontSize: '15px', 
-                  opacity: 0.85,
-                  lineHeight: 1.5 
+                <p style={{
+                  fontSize: '13px',
+                  opacity: 0.75,
+                  lineHeight: 1.4,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden'
                 }}>
                   {p.description}
                 </p>
