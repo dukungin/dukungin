@@ -52,6 +52,26 @@ const authHeader = () => ({ Authorization: `Bearer ${getToken()}` });
 // ============================================================
 // HELPER — Media Detection
 // ============================================================
+
+const isTikTokUrl = (url) => {
+  if (!url) return false;
+  return /tiktok\.com/i.test(url);
+};
+
+const extractTikTokVideoId = (url) => {
+  if (!url) return null;
+  // Format: https://www.tiktok.com/@user/video/1234567890
+  // Format: https://vm.tiktok.com/XXXXXX/ (short URL — perlu resolve dulu)
+  const match = url.match(/tiktok\.com\/@[\w.]+\/video\/(\d+)/);
+  return match ? match[1] : null;
+};
+
+const getTikTokEmbedUrl = (url) => {
+  const videoId = extractTikTokVideoId(url);
+  if (!videoId) return null;
+  return `https://www.tiktok.com/embed/v2/${videoId}`;
+};
+
 const isDirectVideoUrl = (url) => /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
 
 const isYouTubeUrl = (url) => {
@@ -468,6 +488,33 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
 
   useEffect(() => { setPreviewError(false); }, [mediaUrl]);
 
+  // ← TAMBAH: auto-resolve TikTok short URL
+  useEffect(() => {
+    const isTikTokShort = /^https?:\/\/(vt|vm)\.tiktok\.com\//i.test(mediaUrl);
+    if (!isTikTokShort) return;
+
+    const timeout = setTimeout(async () => {
+      try {
+        setResolving(true);
+        setResolveError('');
+        const res = await axios.get(`${BASE_URL}/api/midtrans/tiktok-resolve`, {
+          params: { url: mediaUrl },
+        });
+        if (res.data.resolved) {
+          setMediaUrl(res.data.fullUrl); // ← ganti ke full URL otomatis
+        } else {
+          setResolveError(res.data.reason || 'Gagal resolve URL TikTok');
+        }
+      } catch {
+        setResolveError('Gagal resolve URL TikTok');
+      } finally {
+        setResolving(false);
+      }
+    }, 600);
+
+    return () => clearTimeout(timeout);
+  }, [mediaUrl]);
+
   const mediaType = getMediaType(mediaUrl);
   const hasPreview = mediaUrl && !previewError;
   const allowImage = trigger.mediaType === 'image' || trigger.mediaType === 'both';
@@ -551,6 +598,25 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
           * Opsional — Gambar (jpg, gif, png), Video (.mp4), atau YouTube
         </p>
       </div>
+
+      <AnimatePresence>
+        {resolving && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex items-center gap-2 text-[10px] font-bold text-blue-500"
+          >
+            <Loader2 size={11} className="animate-spin" /> Mengambil video TikTok...
+          </motion.div>
+        )}
+        {resolveError && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex items-center gap-2 text-[10px] font-bold text-red-500"
+          >
+            <X size={11} /> {resolveError}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* YouTube time picker */}
       <AnimatePresence>
@@ -985,6 +1051,10 @@ const SupporterPage = () => {
       if (!emailRegex.test(form.email.trim())) {
         return alert('Format email tidak valid');
       }
+    }
+
+    if (mediaUrl && isTikTokUrl(mediaUrl) && !extractTikTokVideoId(mediaUrl)) {
+      return alert('Gunakan URL TikTok lengkap: tiktok.com/@username/video/ID');
     }
 
     if (!form.amount || form.amount < minDonate)

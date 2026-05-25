@@ -6,6 +6,25 @@
 
   const API_URL = 'https://server-dukungin-production.up.railway.app';
 
+  const isTikTokUrl = (url) => {
+    if (!url) return false;
+    return /tiktok\.com/i.test(url);
+  };
+
+  const extractTikTokVideoId = (url) => {
+    if (!url) return null;
+    // Format: https://www.tiktok.com/@user/video/1234567890
+    // Format: https://vm.tiktok.com/XXXXXX/ (short URL — perlu resolve dulu)
+    const match = url.match(/tiktok\.com\/@[\w.]+\/video\/(\d+)/);
+    return match ? match[1] : null;
+  };
+
+  const getTikTokEmbedUrl = (url) => {
+    const videoId = extractTikTokVideoId(url);
+    if (!videoId) return null;
+    return `https://www.tiktok.com/embed/v2/${videoId}`;
+  };
+
   const isYouTubeLiveUrl = (url) => {
     if (!url) return false;
     return /youtube\.com\/live\//i.test(url);
@@ -54,20 +73,18 @@
   const detectMediaType = (url, mediaType) => {
     if (!url) return null;
     
-    // Handle YouTube embed URL
     if (url.includes('youtube.com/embed/') || url.includes('youtube-nocookie.com/embed/')) return 'youtube';
     
-    // Semua format YouTube URL termasuk /live/
     if (
-      url.match(/youtube\.com\/watch\?v=/) || 
-      url.match(/youtu\.be\//) || 
+      url.match(/youtube\.com\/watch\?v=/) ||
+      url.match(/youtu\.be\//) ||
       url.match(/youtube\.com\/shorts\//) ||
-      url.match(/youtube\.com\/live\//)    // ← TAMBAH INI
-    ) {
-      return 'youtube';
-    }
-    
-    // File types
+      url.match(/youtube\.com\/live\//)
+    ) return 'youtube';
+
+    // ← TAMBAH INI
+    if (isTikTokUrl(url)) return 'tiktok';
+
     if (mediaType === 'video') return 'video';
     if (mediaType === 'image') return 'image';
     if (/\.(mp4|webm|mov|ogg)$/i.test(url)) return 'video';
@@ -400,20 +417,9 @@ const calculateMediaShareDuration = (config, amount) => {
         if (alert.videoBlocked) {
           return (
             <div style={{ borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
-              <div style={{
-                width: '100%', aspectRatio: '16/9',
-                display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'center',
-                background: '#0a0a0a', gap: 10,
-              }}>
+              <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', gap: 10 }}>
                 <span style={{ fontSize: 34 }}>⚠️</span>
-                <span style={{
-                  fontFamily: "'Courier New', monospace",
-                  fontSize: 12, fontWeight: 700, color: '#ff4444',
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                  textAlign: 'center', padding: '0 16px',
-                }}>
-                  {/* ← Pakai blockReason dari payload, fallback ke pesan default */}
+                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 12, fontWeight: 700, color: '#ff4444', letterSpacing: '0.1em', textTransform: 'uppercase', textAlign: 'center', padding: '0 16px' }}>
                   {alert.blockReason || 'Video Melanggar Kebijakan'}
                 </span>
               </div>
@@ -424,13 +430,13 @@ const calculateMediaShareDuration = (config, amount) => {
         const t = detectMediaType(alert.mediaUrl, alert.mediaType);
         const embedUrl = t === 'youtube'
           ? getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)
-          : null;
-
-        console.log('[MediaBlock] type:', t, '| url:', alert.mediaUrl, '| embed:', embedUrl);
+          : t === 'tiktok'
+            ? getTikTokEmbedUrl(alert.mediaUrl)
+            : null;
 
         return (
-          <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
-            {t === 'youtube' && embedUrl && (
+          <div style={{ width: '100%', aspectRatio: t === 'tiktok' ? '9/16' : '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
+            {(t === 'youtube' || t === 'tiktok') && embedUrl && (
               <iframe
                 key={embedUrl}
                 src={embedUrl}
