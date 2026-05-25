@@ -22,6 +22,7 @@ import VoiceNoteOverlay from './pages/voiceNoteOverlay';
 import { useServerStatus } from './hooks/useServerStatus';
 import MaintenancePage from './pages/maintenancePage';
 import StoreWidget from './components/storeWidget';
+import CombinedOverlay from './pages/combinedOverlay';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -186,6 +187,7 @@ if (checking) {
 
           <Route path="/overlay/:token" element={<OverlayAlert />} />
           <Route path="/overlay/:token/voice" element={<VoiceNoteOverlay />} />
+          <Route path="/overlay/:token/combined"   element={<CombinedOverlay />} />  
           <Route path="/overlay/:token/mediashare" element={<MediaShareOverlay />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -3115,9 +3115,10 @@ export const DashboardStreamer = () => {
                   {/* OBS URLs */}
                   <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     {[
-                      { label: 'URL ALERT - OBS',       url: user.overlayUrl },
-                      { label: 'URL MEDIASHARE - OBS',  url: `${window.location.origin}/overlay/${user.overlayToken}/mediashare` },
-                      { label: 'URL VOICE NOTE - OBS',  url: `${window.location.origin}/overlay/${user.overlayToken}/voice` },
+                      { label: 'URL ALERT - OBS',           url: user.overlayUrl },
+                      { label: 'URL MEDIASHARE - OBS',      url: `${window.location.origin}/overlay/${user.overlayToken}/mediashare` },
+                      { label: 'URL VOICE NOTE - OBS',      url: `${window.location.origin}/overlay/${user.overlayToken}/voice` },
+                      { label: 'URL COMBINED (ALL-IN-ONE)', url: `${window.location.origin}/overlay/${user.overlayToken}/combined` },  // ← BARU
                     ].map(({ label, url }) => (
                       <div key={label} className="bg-slate-100 dark:bg-slate-800 p-6 rounded-none border-2 border-dashed border-slate-200 dark:border-slate-700 mb-8">
                         <div className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">{label}</div>
