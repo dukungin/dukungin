@@ -136,7 +136,6 @@ const VoiceNoteOverlay = () => {
       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
       stopAudioProgress();
 
-      // FIX: pastikan voiceUrl absolute
       const absoluteVoiceUrl = data.voiceUrl?.startsWith('http')
         ? data.voiceUrl
         : data.voiceUrl ? `${BASE_URL}${data.voiceUrl}` : null;
@@ -152,7 +151,32 @@ const VoiceNoteOverlay = () => {
       setAudioProgress(0);
       setIsPlaying(false);
 
-      const TOTAL_DURATION = 33000;
+      const INTRO_DELAY = 1000;  // delay sebelum play
+      const OUTRO_BUFFER = 3000; // buffer setelah audio selesai sebelum dismiss
+
+      const startCountdownAndDismiss = (audioDurationMs) => {
+        const TOTAL_DURATION = INTRO_DELAY + audioDurationMs + OUTRO_BUFFER;
+
+        const startTime = Date.now();
+        progressIntervalRef.current = setInterval(() => {
+          const elapsed = Date.now() - startTime;
+          const remaining = Math.max(0, 100 - (elapsed / TOTAL_DURATION) * 100);
+          setProgress(remaining);
+          if (remaining <= 0) clearInterval(progressIntervalRef.current);
+        }, 50);
+
+        dismissTimerRef.current = setTimeout(() => {
+          setAlert(null);
+          setProgress(100);
+          setAudioProgress(0);
+          setIsPlaying(false);
+          stopAudioProgress();
+          if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = '';
+          }
+        }, TOTAL_DURATION);
+      };
 
       setTimeout(() => {
         if (absoluteVoiceUrl && audioRef.current) {
@@ -160,55 +184,40 @@ const VoiceNoteOverlay = () => {
           audioRef.current.load();
 
           audioRef.current.onloadedmetadata = () => {
-            setAudioDuration(Math.min(audioRef.current.duration, 30));
+            // ✅ Pakai durasi asli audio, bukan hardcode
+            const realDuration = audioRef.current.duration;
+            const clampedDuration = Math.min(realDuration, 60); // max 60 detik
+            setAudioDuration(clampedDuration);
+
+            // ✅ Start countdown berdasarkan durasi asli
+            startCountdownAndDismiss(clampedDuration * 1000);
           };
+
           audioRef.current.onplay = () => {
             setIsPlaying(true);
             startAudioProgress();
           };
+
           audioRef.current.onended = () => {
             stopAudioProgress();
             setIsPlaying(false);
+            // ✅ Tidak perlu stop paksa — biarkan dismissTimer yang handle
           };
+
           audioRef.current.onerror = () => {
             stopAudioProgress();
             setIsPlaying(false);
+            // Fallback kalau audio gagal load: dismiss setelah 5 detik
+            startCountdownAndDismiss(5000);
           };
 
           audioRef.current.play().catch(() => setIsPlaying(false));
 
-          setTimeout(() => {
-            if (audioRef.current) {
-              audioRef.current.pause();
-              audioRef.current.currentTime = 0;
-            }
-            stopAudioProgress();
-            setIsPlaying(false);
-          }, 30000);
+        } else {
+          // Tidak ada voice URL — dismiss setelah 5 detik
+          startCountdownAndDismiss(5000);
         }
-      }, 1000);
-
-      // Progress bar countdown
-      const startTime = Date.now();
-      progressIntervalRef.current = setInterval(() => {
-        const elapsed = Date.now() - startTime;
-        const remaining = Math.max(0, 100 - (elapsed / TOTAL_DURATION) * 100);
-        setProgress(remaining);
-        if (remaining <= 0) clearInterval(progressIntervalRef.current);
-      }, 50);
-
-      // Auto dismiss
-      dismissTimerRef.current = setTimeout(() => {
-        setAlert(null);
-        setProgress(100);
-        setAudioProgress(0);
-        setIsPlaying(false);
-        stopAudioProgress();
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.src = '';
-        }
-      }, TOTAL_DURATION);
+      }, INTRO_DELAY);
     });
 
     socket.on('settings-updated', (newConfig) => {
