@@ -450,17 +450,22 @@ const calculateMediaShareDuration = (config, amount) => {
               />
             )}
 
-            {t === 'tiktok' && embedUrl && (
-              <iframe
-                key={embedUrl}
-                src={embedUrl}
-                width="100%" height="100%"
-                frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture; encrypted-media"  // ← tambah ini
-                allowFullScreen
-                style={{ display: 'block', border: 'none' }}
-              />
-            )}
+            {t === 'tiktok' && (() => {
+              const streamUrl = `${API_URL}/api/midtrans/tiktok-stream?url=${encodeURIComponent(alert.mediaUrl)}`;
+              return (
+                <video
+                  key={streamUrl}
+                  src={streamUrl}
+                  autoPlay
+                  loop
+                  muted={false}   // biar ada suara
+                  playsInline
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={() => setMediaError(true)}
+                />
+              );
+            })()}
+
             {t === 'video' && (
               <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
