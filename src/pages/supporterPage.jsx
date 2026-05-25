@@ -776,7 +776,7 @@ const DonationTabs = ({ activeTab, onTabChange, mediaTriggers, amount, minDonate
       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">
         Tipe Donasi
       </label>
-      <div className="grid grid-cols-3 gap-2 rounded-none overflow-hidden">
+      <div className="grid grid-cols-3 border border-slate-300/20 rounded-none overflow-hidden">
         {tabs.map((tab, idx) => {
           const isActive = activeTab === tab.id;
           const Icon = tab.icon;
