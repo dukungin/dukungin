@@ -54,13 +54,16 @@
   const detectMediaType = (url, mediaType) => {
     if (!url) return null;
     
-    // ✅ Handle YouTube embed URL
+    // Handle YouTube embed URL
     if (url.includes('youtube.com/embed/') || url.includes('youtube-nocookie.com/embed/')) return 'youtube';
     
-    // Regular YouTube URLs
-    if (url.match(/youtube\.com\/watch\?v=/) || 
-        url.match(/youtu\.be\//) || 
-        url.match(/youtube\.com\/shorts\//)) {
+    // Semua format YouTube URL termasuk /live/
+    if (
+      url.match(/youtube\.com\/watch\?v=/) || 
+      url.match(/youtu\.be\//) || 
+      url.match(/youtube\.com\/shorts\//) ||
+      url.match(/youtube\.com\/live\//)    // ← TAMBAH INI
+    ) {
       return 'youtube';
     }
     
