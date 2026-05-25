@@ -378,57 +378,6 @@ const calculateMediaShareDuration = (config, amount) => {
       </div>
     );
 
-    // const MediaBlock = ({ pixelBorder, hl }) => {
-    //   if (!alert?.mediaUrl) return null;
-    //   if (alert.videoBlocked || mediaError) {
-    //     return (
-    //       <div style={{ borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 2 }}>
-    //         <BlockedPlaceholder hl={hl} />
-    //       </div>
-    //     );
-    //   }
-
-    //   // ← detect dari raw URL
-    //   const t = detectMediaType(alert.mediaUrl, alert.mediaType);
-    //   // ← startTime dari payload
-    //   const embedUrl = t === 'youtube'
-    //     ? getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)
-    //     : null;
-
-    //   console.log('[MediaBlock] type:', t, '| url:', alert.mediaUrl, '| embed:', embedUrl);
-
-    //   return (
-    //     <div style={{
-    //       width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000',
-    //       borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)',
-    //       position: 'relative', zIndex: 2,
-    //     }}>
-    //       {t === 'youtube' && embedUrl && (
-    //         <iframe
-    //           key={embedUrl}   // ← key berubah kalau URL berubah → force remount
-    //           src={embedUrl}
-    //           width="100%" height="100%"
-    //           frameBorder="0"
-    //           allow="autoplay; encrypted-media"
-    //           allowFullScreen
-    //           style={{ display: 'block', border: 'none' }}
-    //           onError={() => setMediaError(true)}
-    //         />
-    //       )}
-    //       {t === 'video' && (
-    //         <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
-    //           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-    //           onError={() => setMediaError(true)} />
-    //       )}
-    //       {t === 'image' && (
-    //         <img src={alert.mediaUrl} alt="media"
-    //           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-    //           onError={() => setMediaError(true)} />
-    //       )}
-    //     </div>
-    //   );
-    // };
-
     const renderInner = () => {
       const hl = highlight;
       const monospace = "'Courier New', 'Lucida Console', monospace";
@@ -445,7 +394,7 @@ const calculateMediaShareDuration = (config, amount) => {
       const mediaBlock = (() => {
         if (!alert?.mediaUrl) return null;
 
-        if (alert.videoBlocked || mediaError) {
+        if (alert.videoBlocked) {
           return (
             <div style={{ borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
               <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', gap: 10 }}>
@@ -476,7 +425,6 @@ const calculateMediaShareDuration = (config, amount) => {
                 allow="autoplay; encrypted-media"
                 allowFullScreen
                 style={{ display: 'block', border: 'none' }}
-                onError={() => setMediaError(true)}
               />
             )}
             {t === 'video' && (
