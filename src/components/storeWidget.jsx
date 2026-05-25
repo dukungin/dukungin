@@ -10,13 +10,32 @@ const StoreWidget = () => {
 
   useEffect(() => {
     if (!token) return;
-    axios.get(`${BASE_URL}/widget/${token}/store`)
-      .then(res => setProducts(res.data.products || []))
-      .catch(() => {});
+
+    axios.get(`${BASE_URL}/api/overlay/store/${token}`)
+      .then(res => {
+        setProducts(res.data.products || []);
+      })
+      .catch(err => {
+        console.error("Gagal mengambil data toko:", err);
+        setProducts([]);
+      });
   }, [token]);
 
   if (products.length === 0) {
-    return <div style={{ width: '100%', height: '100vh', background: 'transparent' }} />;
+    return (
+      <div style={{ 
+        width: '100%', 
+        height: '100vh', 
+        background: 'transparent',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        fontSize: '18px'
+      }}>
+        Belum ada produk di toko
+      </div>
+    );
   }
 
   return (
@@ -25,21 +44,24 @@ const StoreWidget = () => {
       minHeight: '100vh',
       background: 'rgba(15, 23, 42, 0.95)',
       color: 'white',
-      padding: '20px',
+      padding: '24px',
       fontFamily: 'Inter, sans-serif',
-      overflow: 'hidden'
     }}>
       <h2 style={{
-        fontSize: '28px',
+        fontSize: '32px',
         fontWeight: 900,
         textAlign: 'center',
-        marginBottom: '24px',
+        marginBottom: '32px',
         letterSpacing: '0.05em'
       }}>
         🛍️ TOKO STREAMER
       </h2>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+        gap: '24px' 
+      }}>
         {products.map((p, i) => (
           <a
             key={i}
@@ -48,29 +70,52 @@ const StoreWidget = () => {
             rel="noopener noreferrer"
             style={{
               background: 'rgba(255,255,255,0.08)',
-              borderRadius: '4px',
+              borderRadius: '8px',
               overflow: 'hidden',
               textDecoration: 'none',
               color: 'inherit',
-              transition: 'transform 0.2s'
+              transition: 'all 0.2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
           >
             {p.imageUrl && (
               <img
                 src={p.imageUrl}
                 alt={p.name}
-                style={{ width: '100%', height: '180px', objectFit: 'cover' }}
+                style={{ 
+                  width: '100%', 
+                  height: '200px', 
+                  objectFit: 'cover',
+                  borderBottom: '1px solid rgba(255,255,255,0.1)'
+                }}
               />
             )}
-            <div style={{ padding: '16px' }}>
-              <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>{p.name}</h3>
-              <p style={{ fontSize: '28px', fontWeight: 900, color: '#22c55e' }}>
+            <div style={{ padding: '20px' }}>
+              <h3 style={{ 
+                fontSize: '22px', 
+                fontWeight: 700, 
+                marginBottom: '8px',
+                lineHeight: 1.3
+              }}>
+                {p.name}
+              </h3>
+              
+              <p style={{ 
+                fontSize: '28px', 
+                fontWeight: 900, 
+                color: '#22c55e',
+                marginBottom: '8px'
+              }}>
                 Rp {Number(p.price).toLocaleString('id-ID')}
               </p>
+
               {p.description && (
-                <p style={{ fontSize: '14px', opacity: 0.8, marginTop: '8px' }}>{p.description}</p>
+                <p style={{ 
+                  fontSize: '15px', 
+                  opacity: 0.85,
+                  lineHeight: 1.5 
+                }}>
+                  {p.description}
+                </p>
               )}
             </div>
           </a>
