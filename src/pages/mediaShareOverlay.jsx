@@ -6,21 +6,33 @@
 
   const API_URL = 'https://server-dukungin-production.up.railway.app';
 
+  const isYouTubeLiveUrl = (url) => {
+    if (!url) return false;
+    return /youtube\.com\/live\//i.test(url);
+  };
+
   const getYouTubeEmbedUrl = (url, startSeconds = 0) => {
     if (!url) return null;
     
-    // ✅ Return as-is jika sudah embed URL
+    // Sudah embed URL
     if (url.includes('youtube.com/embed/') || url.includes('youtube-nocookie.com/embed/')) {
+      // Live embed jangan tambah start
+      if (isYouTubeLiveUrl(url)) return url;
       if (startSeconds > 0 && !url.includes('&start=')) {
         return url + (url.includes('?') ? '&' : '?') + `start=${Math.floor(startSeconds)}`;
       }
       return url;
     }
-    
+
+    // ✅ Handle /live/ID — JANGAN tambah start, JANGAN loop
+    const liveMatch = url.match(/youtube\.com\/live\/([\w-]+)/);
+    if (liveMatch) {
+      return `https://www.youtube.com/embed/${liveMatch[1]}?autoplay=1&mute=0&controls=0`;
+      // Tidak ada &loop, tidak ada &start — selalu dari live terkini
+    }
+
     const start = startSeconds > 0 ? `&start=${Math.floor(startSeconds)}` : '';
 
-    console.log('url yt', url)
-    
     const watchMatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
     if (watchMatch) {
       const id = watchMatch[1];

@@ -74,6 +74,7 @@ const getYouTubeEmbedUrl = (url) => {
     // /live/ID  ← TAMBAH INI
     const liveMatch = urlObj.pathname.match(/\/live\/([a-zA-Z0-9_-]+)/);
     if (liveMatch) {
+      // ✅ Live — tanpa start, tanpa loop
       return `https://www.youtube.com/embed/${liveMatch[1]}?autoplay=1&mute=1`;
     }
 
@@ -130,6 +131,8 @@ const YouTubeTimePicker = ({ startTime, onChange }) => {
   useEffect(() => {
     onChange(hours * 3600 + minutes * 60 + seconds);
   }, [hours, minutes, seconds]);
+
+  const isYouTubeLive = isYouTubeUrl(mediaUrl) && /youtube\.com\/live\//i.test(mediaUrl);
 
   return (
     <motion.div
@@ -481,6 +484,8 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
 
   const getYouTubeEmbedUrlWithTime = (url, startSeconds = 0) => {
     if (!url) return '';
+    // Live — jangan append start
+    if (/youtube\.com\/live\//i.test(url)) return getYouTubeEmbedUrl(url);
     let embedUrl = getYouTubeEmbedUrl(url);
     if (startSeconds > 0) {
       const separator = embedUrl.includes('?') ? '&' : '?';
@@ -549,8 +554,24 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
 
       {/* YouTube time picker */}
       <AnimatePresence>
-        {isYouTube && mediaUrl && (
+        {isYouTube && mediaUrl && !isYouTubeLive && (
           <YouTubeTimePicker startTime={startTime} onChange={setStartTime} />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isYouTubeLive && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-3 px-3 py-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-none flex items-center gap-2"
+          >
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
+            <p className="text-[10px] font-black text-red-600 dark:text-red-400">
+              YouTube Live — akan diputar dari timestamp terkini secara otomatis
+            </p>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -1011,7 +1032,9 @@ const SupporterPage = () => {
         mediaUrl:     hasMedia ? mediaUrl.trim() : null,
         mediaType:    detectedMediaType,
         isMediaShare: isMediaShareTab,
-        startTime:    hasMedia && isYouTubeUrl(mediaUrl) ? startTime : 0,
+        startTime: hasMedia && isYouTubeUrl(mediaUrl) && !/youtube\.com\/live\//i.test(mediaUrl)
+          ? startTime
+          : 0,
         soundUrl:     activeTab === 'alert' ? (form.soundUrl || null) : null,
         voiceUrl:     activeTab === 'voice' ? (form.voiceUrl || null) : null,
       };
