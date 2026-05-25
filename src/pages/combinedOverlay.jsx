@@ -544,38 +544,46 @@ const CombinedOverlay = () => {
   const mediaIntervalRef    = useRef(null);
   const mediaTimerRef       = useRef(null);
 
-  // Buat helper function di dalam component
-    const clearMediaDisplay = useCallback(() => {
+  const clearMediaDisplay = useCallback(() => {
+    // Stop audio
+    if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+    }
 
-        // Stop audio
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-        }
+    // Stop video (local)
+    if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.src = '';
+        videoRef.current.load();
+    }
 
-        // Stop video jika ada
-        if (videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.src = '';
-            videoRef.current.load();
-        }
-
-        // Stop iframe YouTube — cara paling reliable: 
-        // postMessage pause ke iframe
-        const iframe = document.querySelector('iframe[src*="youtube"]');
-        if (iframe) {
-            // Pause dulu via postMessage
-            iframe.contentWindow?.postMessage(
+    // Stop YouTube iframe
+    const youtubeIframe = document.querySelector('iframe[src*="youtube"]');
+    if (youtubeIframe) {
+        try {
+            youtubeIframe.contentWindow?.postMessage(
                 JSON.stringify({ event: 'command', func: 'pauseVideo' }),
                 '*'
             );
-            // Kemudian kosongkan src biar benar-benar stop
-            setTimeout(() => { iframe.src = ''; }, 100);
-            }
+        } catch (e) {}
+        // Kosongkan src agar benar-benar stop
+        setTimeout(() => {
+            youtubeIframe.src = '';
+        }, 100);
+    }
 
-        clearMediaDisplay();
-        setMediaProgress(100);
-    }, []);
+    // Stop TikTok / video stream
+    const allVideos = document.querySelectorAll('video');
+    allVideos.forEach(v => {
+        v.pause();
+        v.src = '';
+        v.load();
+    });
+
+    setMediaData(null);        // ← Penting!
+    setMediaProgress(100);
+  }, []);
 
   // TTS
   const speakDonation = useCallback(async (donation) => {
@@ -672,41 +680,45 @@ const CombinedOverlay = () => {
 
     // ── MediaShare ────────────────────────────────────────────────────────────
     socket.on('new-media-donation', (data) => {
-      if (configRef.current?.overlayEnabled === false) return;
+        if (configRef.current?.overlayEnabled === false) return;
 
-     
-        // ← clear alert dulu
+        // Clear alert dulu
         setAlertData(null);
         setAlertProgress(100);
         if (alertIntervalRef.current) clearInterval(alertIntervalRef.current);
-        if (alertTimerRef.current)    clearTimeout(alertTimerRef.current);
+        if (alertTimerRef.current) clearTimeout(alertTimerRef.current);
 
         const donation = { ...data, receivedAt: data.receivedAt || new Date().toISOString() };
+        
         setMediaData(donation);
-      setMediaProgress(100);
-      setMediaError(false);
-
-      const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
-      if (soundToPlay && audioRef.current) {
-        audioRef.current.src = soundToPlay;
-        audioRef.current.play().catch(() => {});
-      }
-
-      const duration = calculateMediaShareDuration(configRef.current, Number(donation.amount));
-      if (mediaIntervalRef.current) clearInterval(mediaIntervalRef.current);
-      if (mediaTimerRef.current)    clearTimeout(mediaTimerRef.current);
-
-      const startTime = Date.now();
-      mediaIntervalRef.current = setInterval(() => {
-        const elapsed   = Date.now() - startTime;
-        const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
-        setMediaProgress(remaining);
-        if (remaining <= 0) clearInterval(mediaIntervalRef.current);
-      }, 40);
-      mediaTimerRef.current = setTimeout(() => {
-        clearMediaDisplay();
         setMediaProgress(100);
-      }, duration);
+        setMediaError(false);
+
+        // Play sound
+        const soundToPlay = data.soundUrl || configRef.current?.soundUrl;
+        if (soundToPlay && audioRef.current) {
+            audioRef.current.src = soundToPlay;
+            audioRef.current.play().catch(() => {});
+        }
+
+        const duration = calculateMediaShareDuration(configRef.current, Number(donation.amount));
+
+        // Clear previous timers
+        if (mediaIntervalRef.current) clearInterval(mediaIntervalRef.current);
+        if (mediaTimerRef.current) clearTimeout(mediaTimerRef.current);
+
+        const startTime = Date.now();
+        mediaIntervalRef.current = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
+            setMediaProgress(remaining);
+            if (remaining <= 0) clearInterval(mediaIntervalRef.current);
+        }, 40);
+
+        // Timer untuk menghilangkan overlay + media
+        mediaTimerRef.current = setTimeout(() => {
+            clearMediaDisplay();
+        }, duration);
     });
 
     // ── MediaShare control (skip/volume) ──────────────────────────────────────
@@ -742,6 +754,7 @@ const CombinedOverlay = () => {
       socket.disconnect();
       [alertIntervalRef, mediaIntervalRef].forEach(r => clearInterval(r.current));
       [alertTimerRef, mediaTimerRef].forEach(r => clearTimeout(r.current));
+      clearMediaDisplay();
     };
   }, [token, speakDonation]);
 
