@@ -18,21 +18,23 @@
     }
     
     const start = startSeconds > 0 ? `&start=${Math.floor(startSeconds)}` : '';
+
+    console.log('url yt', url)
     
     const watchMatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
     if (watchMatch) {
       const id = watchMatch[1];
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}${start}`;
     }
     const shortMatch = url.match(/youtu\.be\/([\w-]+)/);
     if (shortMatch) {
       const id = shortMatch[1];
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}${start}`;
     }
     const shortsMatch = url.match(/youtube\.com\/shorts\/([\w-]+)/);
     if (shortsMatch) {
       const id = shortsMatch[1];
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&loop=1&playlist=${id}${start}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}${start}`;
     }
     return null;
   };
@@ -364,60 +366,62 @@ const calculateMediaShareDuration = (config, amount) => {
       </div>
     );
 
-    const MediaBlock = ({ pixelBorder, hl }) => {
-      if (!alert?.mediaUrl) return null;
-      if (alert.videoBlocked || mediaError) {
-        return (
-          <div style={{ borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 2 }}>
-            <BlockedPlaceholder hl={hl} />
-          </div>
-        );
-      }
+    // const MediaBlock = ({ pixelBorder, hl }) => {
+    //   if (!alert?.mediaUrl) return null;
+    //   if (alert.videoBlocked || mediaError) {
+    //     return (
+    //       <div style={{ borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 2 }}>
+    //         <BlockedPlaceholder hl={hl} />
+    //       </div>
+    //     );
+    //   }
 
-      // ← detect dari raw URL
-      const t = detectMediaType(alert.mediaUrl, alert.mediaType);
-      // ← startTime dari payload
-      const embedUrl = t === 'youtube'
-        ? getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)
-        : null;
+    //   // ← detect dari raw URL
+    //   const t = detectMediaType(alert.mediaUrl, alert.mediaType);
+    //   // ← startTime dari payload
+    //   const embedUrl = t === 'youtube'
+    //     ? getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)
+    //     : null;
 
-      console.log('[MediaBlock] type:', t, '| url:', alert.mediaUrl, '| embed:', embedUrl);
+    //   console.log('[MediaBlock] type:', t, '| url:', alert.mediaUrl, '| embed:', embedUrl);
 
-      return (
-        <div style={{
-          width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000',
-          borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)',
-          position: 'relative', zIndex: 2,
-        }}>
-          {t === 'youtube' && embedUrl && (
-            <iframe
-              key={embedUrl}   // ← key berubah kalau URL berubah → force remount
-              src={embedUrl}
-              width="100%" height="100%"
-              frameBorder="0"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              style={{ display: 'block', border: 'none' }}
-              onError={() => setMediaError(true)}
-            />
-          )}
-          {t === 'video' && (
-            <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              onError={() => setMediaError(true)} />
-          )}
-          {t === 'image' && (
-            <img src={alert.mediaUrl} alt="media"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              onError={() => setMediaError(true)} />
-          )}
-        </div>
-      );
-    };
+    //   return (
+    //     <div style={{
+    //       width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000',
+    //       borderBottom: pixelBorder || '1px solid rgba(255,255,255,0.05)',
+    //       position: 'relative', zIndex: 2,
+    //     }}>
+    //       {t === 'youtube' && embedUrl && (
+    //         <iframe
+    //           key={embedUrl}   // ← key berubah kalau URL berubah → force remount
+    //           src={embedUrl}
+    //           width="100%" height="100%"
+    //           frameBorder="0"
+    //           allow="autoplay; encrypted-media"
+    //           allowFullScreen
+    //           style={{ display: 'block', border: 'none' }}
+    //           onError={() => setMediaError(true)}
+    //         />
+    //       )}
+    //       {t === 'video' && (
+    //         <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
+    //           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    //           onError={() => setMediaError(true)} />
+    //       )}
+    //       {t === 'image' && (
+    //         <img src={alert.mediaUrl} alt="media"
+    //           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    //           onError={() => setMediaError(true)} />
+    //       )}
+    //     </div>
+    //   );
+    // };
 
     const renderInner = () => {
       const hl = highlight;
       const monospace = "'Courier New', 'Lucida Console', monospace";
+      const pixelBorder = `2px solid ${hl}`;
+      const dimBorder = `1px solid ${hl}35`;
 
       const scanlineStyle = {
         position: 'absolute', inset: 0,
@@ -425,39 +429,65 @@ const calculateMediaShareDuration = (config, amount) => {
         pointerEvents: 'none', zIndex: 1,
       };
 
-      const pixelBorder = `2px solid ${hl}`;
-      const dimBorder = `1px solid ${hl}35`;
+      // ── Media block — sebagai elemen JSX langsung, bukan component ──
+      const mediaBlock = (() => {
+        if (!alert?.mediaUrl) return null;
 
-      // Media player (sama di semua tema, selalu di atas)
-      // const MediaBlock = () => {
-      //   if (!alert?.mediaUrl) return null;
-      //   const t = detectMediaType(alert.mediaUrl, alert.mediaType);
-      //   return (
-      //     <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
-      //       {t === 'youtube' && (
-      //         <iframe src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}
-      //           width="100%" height="100%" frameBorder="0"
-      //           allow="autoplay; encrypted-media" allowFullScreen
-      //           style={{ display: 'block', border: 'none' }} />
-      //       )}
-      //       {t === 'video' && (
-      //         <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
-      //           style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-      //       )}
-      //       {t === 'image' && (
-      //         <img src={alert.mediaUrl} alt="media"
-      //           style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-      //       )}
-      //     </div>
-      //   );
-      // };
+        if (alert.videoBlocked || mediaError) {
+          return (
+            <div style={{ borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
+              <div style={{ width: '100%', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', gap: 10 }}>
+                <span style={{ fontSize: 34 }}>⚠️</span>
+                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 12, fontWeight: 700, color: '#ff4444', letterSpacing: '0.1em', textTransform: 'uppercase', textAlign: 'center', padding: '0 16px' }}>
+                  Video Melanggar Kebijakan
+                </span>
+              </div>
+            </div>
+          );
+        }
+
+        const t = detectMediaType(alert.mediaUrl, alert.mediaType);
+        const embedUrl = t === 'youtube'
+          ? getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)
+          : null;
+
+        console.log('[MediaBlock] type:', t, '| url:', alert.mediaUrl, '| embed:', embedUrl);
+
+        return (
+          <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
+            {t === 'youtube' && embedUrl && (
+              <iframe
+                key={embedUrl}
+                src={embedUrl}
+                width="100%" height="100%"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                style={{ display: 'block', border: 'none' }}
+                onError={() => setMediaError(true)}
+              />
+            )}
+            {t === 'video' && (
+              <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={() => setMediaError(true)} />
+            )}
+            {t === 'image' && (
+              <img src={alert.mediaUrl} alt="media"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={() => setMediaError(true)} />
+            )}
+          </div>
+        );
+      })();
+
 
       // ── MODERN ───────────────────────────────────────────────────────────────────
       if (theme === 'modern') {
         return (
           <div style={{ position: 'relative', overflow: 'hidden' }}>
             <div style={scanlineStyle} />
-            <MediaBlock hl={hl} />
+            {mediaBlock}
 
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -531,7 +561,7 @@ const calculateMediaShareDuration = (config, amount) => {
         return (
           <div style={{ fontFamily: "'Poppins', sans-serif", overflow: 'hidden' }}>
             {/* Media block tanpa border pixel */}
-            <MediaBlock hl={hl} />
+            {mediaBlock}
 
             <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {/* Icon + Nama */}
@@ -591,7 +621,7 @@ const calculateMediaShareDuration = (config, amount) => {
         return (
           <div style={{ position: 'relative', overflow: 'hidden' }}>
             <div style={scanlineStyle} />
-            <MediaBlock hl={hl} />
+            {mediaBlock}
             <div style={{ height: 3, background: hl, position: 'relative', zIndex: 2 }} />
             <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', position: 'relative', zIndex: 2 }} />
 
@@ -650,7 +680,7 @@ const calculateMediaShareDuration = (config, amount) => {
       return (
         <div style={{ position: 'relative', overflow: 'hidden' }}>
           <div style={scanlineStyle} />
-          <MediaBlock hl={hl} />
+          {mediaBlock}
           <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
