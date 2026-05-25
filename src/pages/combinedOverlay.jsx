@@ -602,6 +602,13 @@ const CombinedOverlay = () => {
     socket.on('new-donation', (data) => {
       if (configRef.current?.overlayEnabled === false) return;
 
+
+      // ← clear mediashare dulu
+      setMediaData(null);
+      setMediaProgress(100);
+      if (mediaIntervalRef.current) clearInterval(mediaIntervalRef.current);
+      if (mediaTimerRef.current)    clearTimeout(mediaTimerRef.current);
+
       const donation = { ...data, receivedAt: data.receivedAt || new Date().toISOString() };
       setAlertData(donation);
       setAlertProgress(100);
@@ -634,8 +641,15 @@ const CombinedOverlay = () => {
     socket.on('new-media-donation', (data) => {
       if (configRef.current?.overlayEnabled === false) return;
 
-      const donation = { ...data, receivedAt: data.receivedAt || new Date().toISOString() };
-      setMediaData(donation);
+     
+        // ← clear alert dulu
+        setAlertData(null);
+        setAlertProgress(100);
+        if (alertIntervalRef.current) clearInterval(alertIntervalRef.current);
+        if (alertTimerRef.current)    clearTimeout(alertTimerRef.current);
+
+        const donation = { ...data, receivedAt: data.receivedAt || new Date().toISOString() };
+        setMediaData(donation);
       setMediaProgress(100);
       setMediaError(false);
 
