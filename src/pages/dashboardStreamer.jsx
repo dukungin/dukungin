@@ -2535,6 +2535,94 @@ const ColorInput = React.memo(({ label, value, onChange, allowAlpha = false, id 
 });
 ColorInput.displayName = 'ColorInput';
 
+const TTSSection = ({ settings, upd, saveSettingsMutation, api }) => {
+  const [testText, setTestText] = useState('');
+  const [isTesting, setIsTesting] = useState(false);
+
+  const handleTest = async () => {
+    const text = testText.trim() || `Developer berdonasi Rp 50.000. Semangat terus kak!`;
+    setIsTesting(true);
+    try {
+      const res = await api.post('/api/overlay/tts/speak', {
+        text,
+        voiceName: 'id-ID-GadisNeural',
+      }, { responseType: 'blob' });
+
+      const url   = URL.createObjectURL(res.data);
+      const audio = new Audio(url);
+      audio.onended = () => { setIsTesting(false); URL.revokeObjectURL(url); };
+      audio.onerror = () => { setIsTesting(false); URL.revokeObjectURL(url); };
+      await audio.play();
+    } catch (err) {
+      setIsTesting(false);
+    }
+  };
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
+      <SectionHeader icon={<span className="text-2xl">🔊</span>} title="Text-to-Speech Alert" color="bg-rose-500" />
+
+      <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-100 dark:border-slate-700">
+        <div>
+          <p className="font-black text-slate-700 dark:text-slate-200">Aktifkan Text-to-Speech</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">
+            Otomatis membaca: Nama + Nominal + Pesan donasi
+          </p>
+        </div>
+        <button onClick={() => upd('ttsEnabled', !settings.ttsEnabled)}
+          className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${settings.ttsEnabled ? 'bg-rose-500' : 'bg-slate-300 dark:bg-slate-600'}`}>
+          <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform ${settings.ttsEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
+        </button>
+      </div>
+
+      {settings.ttsEnabled && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              { label: 'Kecepatan', key: 'ttsRate',   min: 0.5, max: 2, step: 0.1, fmt: v => v.toFixed(1) + 'x' },
+              { label: 'Volume',    key: 'ttsVolume', min: 0.1, max: 1, step: 0.1, fmt: v => Math.round(v*100) + '%' },
+            ].map(({ label, key, min, max, step, fmt }) => (
+              <div key={key}>
+                <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block">{label}</label>
+                <input type="range" min={min} max={max} step={step}
+                  value={settings[key] || 1}
+                  onChange={e => upd(key, parseFloat(e.target.value))}
+                  className="w-full accent-rose-500" />
+                <div className="text-center text-xs text-slate-400 mt-1 font-mono">{fmt(settings[key] || 1)}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 rounded-none p-4 space-y-3">
+            <label className="text-[10px] font-black text-rose-500 uppercase tracking-widest block">🧪 Test Suara</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={testText}
+                onChange={e => setTestText(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && !isTesting && handleTest()}
+                placeholder="Developer berdonasi Rp 50.000. Semangat terus kak!"
+                className="flex-1 px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none text-sm font-medium outline-none focus:border-rose-400 dark:text-slate-100 transition-all"
+              />
+              <button onClick={handleTest} disabled={isTesting}
+                className="cursor-pointer px-5 py-2.5 bg-rose-500 hover:brightness-90 disabled:opacity-60 text-white font-black rounded-none transition-all active:scale-[0.97] flex items-center gap-2 whitespace-nowrap">
+                {isTesting ? <><span className="animate-spin inline-block">⏳</span> Memutar...</> : <>▶ Test</>}
+              </button>
+            </div>
+          </div>
+
+          <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+            className="cursor-pointer active:scale-[0.99] w-full py-3 bg-gradient-to-r from-rose-500 to-orange-500 hover:brightness-90 text-white font-black rounded-none transition-all disabled:opacity-60 flex items-center justify-center gap-2">
+            <Save size={18} />
+            {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Pengaturan TTS'}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
 // ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
 
 export const DashboardStreamer = () => {
@@ -2764,99 +2852,6 @@ export const DashboardStreamer = () => {
       </div>
     </div>
   );
-  
-  const TTSSection = () => {
-    const [testText, setTestText] = useState('');
-    const [isTesting, setIsTesting]= useState(false);
-
-    const handleTest = async () => {
-      const text = testText.trim() || `Developer berdonasi Rp 50.000. Semangat terus kak!`;
-      setIsTesting(true);
-      try {
-        const res = await api.post('/api/overlay/tts/speak', {
-          text,
-          voiceName: 'id-ID-GadisNeural',
-        }, { responseType: 'blob' });
-
-        const url   = URL.createObjectURL(res.data);
-        const audio = new Audio(url);
-        audio.onended = () => { setIsTesting(false); URL.revokeObjectURL(url); };
-        audio.onerror = () => { setIsTesting(false); URL.revokeObjectURL(url); };
-        await audio.play();
-      } catch (err) {
-        toast.error('❌ TTS gagal');
-        setIsTesting(false);
-      }
-    };
-
-    return (
-      <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
-        <SectionHeader icon={<span className="text-2xl">🔊</span>} title="Text-to-Speech Alert" color="bg-rose-500" />
-
-        {/* Toggle */}
-        <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-100 dark:border-slate-700">
-          <div>
-            <p className="font-black text-slate-700 dark:text-slate-200">Aktifkan Text-to-Speech</p>
-            <p className="text-xs text-slate-400 dark:text-slate-500">
-              Otomatis membaca: Nama + Nominal + Pesan donasi
-            </p>
-          </div>
-          <button onClick={() => upd('ttsEnabled', !settings.ttsEnabled)}
-            className={`relative inline-flex h-7 w-14 items-center rounded-none transition-colors duration-300 cursor-pointer ${settings.ttsEnabled ? 'bg-rose-500' : 'bg-slate-300 dark:bg-slate-600'}`}>
-            <span className={`inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition-transform ${settings.ttsEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
-          </button>
-        </div>
-
-        {settings.ttsEnabled && (
-          <div className="space-y-6">
-
-            {/* Sliders */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { label: 'Kecepatan', key: 'ttsRate',   min: 0.5, max: 2, step: 0.1, fmt: v => v.toFixed(1) + 'x' },
-                { label: 'Volume',    key: 'ttsVolume', min: 0.1, max: 1, step: 0.1, fmt: v => Math.round(v*100) + '%' },
-              ].map(({ label, key, min, max, step, fmt }) => (
-                <div key={key}>
-                  <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block">{label}</label>
-                  <input type="range" min={min} max={max} step={step}
-                    value={settings[key] || 1}
-                    onChange={e => upd(key, parseFloat(e.target.value))}
-                    className="w-full accent-rose-500" />
-                  <div className="text-center text-xs text-slate-400 mt-1 font-mono">{fmt(settings[key] || 1)}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Test */}
-            <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 rounded-none p-4 space-y-3">
-              <label className="text-[10px] font-black text-rose-500 uppercase tracking-widest block">🧪 Test Suara</label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={testText}
-                  onChange={e => setTestText(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && !isTesting && handleTest()}
-                  placeholder="Developer berdonasi Rp 10.000. Semangat terus kak!"
-                  className="flex-1 px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none text-sm font-medium outline-none focus:border-rose-400 dark:text-slate-100 transition-all"
-                />
-                <button onClick={handleTest} disabled={isTesting}
-                  className="cursor-pointer px-5 py-2.5 bg-rose-500 hover:brightness-90 disabled:opacity-60 text-white font-black rounded-none transition-all active:scale-[0.97] flex items-center gap-2 whitespace-nowrap">
-                  {isTesting ? <><span className="animate-spin inline-block">⏳</span> Memutar...</> : <>▶ Test</>}
-                </button>
-              </div>
-            </div>
-
-            {/* Save */}
-            <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-              className="cursor-pointer active:scale-[0.99] w-full py-3 bg-gradient-to-r from-rose-500 to-orange-500 hover:brightness-90 text-white font-black rounded-none transition-all disabled:opacity-60 flex items-center justify-center gap-2">
-              <Save size={18} />
-              {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Pengaturan TTS'}
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  };
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
@@ -3197,7 +3192,12 @@ export const DashboardStreamer = () => {
                 <SoundSection />
 
                 {/* TTS */}
-                <TTSSection />
+                 <TTSSection
+                  settings={settings}
+                  upd={upd}
+                  saveSettingsMutation={saveSettingsMutation}
+                  api={api}
+                />
 
                 {/* Filter kata */}
                 <BannedWordsEditor saveSettingsMutation={saveSettingsMutation} settings={settings} />
