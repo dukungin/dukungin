@@ -437,15 +437,37 @@ const calculateMediaShareDuration = (config, amount) => {
         return (
           <div style={{ width: '100%', aspectRatio: t === 'tiktok' ? '9/16' : '16/9', overflow: 'hidden', background: '#000', borderBottom: pixelBorder, position: 'relative', zIndex: 2 }}>
             {(t === 'youtube' || t === 'tiktok') && embedUrl && (
-              <iframe
-                key={embedUrl}
-                src={embedUrl}
-                width="100%" height="100%"
-                frameBorder="0"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                style={{ display: 'block', border: 'none' }}
-              />
+              <div style={{
+                width: '100%',
+                height: '100%',
+                position: 'relative',
+                overflow: 'hidden',
+                // Kalau TikTok, crop header/footer dengan clip
+                ...(t === 'tiktok' ? {
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                } : {}),
+              }}>
+                <iframe
+                  key={embedUrl}
+                  src={embedUrl}
+                  width={t === 'tiktok' ? '100%' : '100%'}
+                  height={t === 'tiktok' ? '160%' : '100%'} // ← lebih tinggi dari container
+                  frameBorder="0"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                  style={{
+                    display: 'block',
+                    border: 'none',
+                    // TikTok: geser ke atas untuk crop header
+                    ...(t === 'tiktok' ? {
+                      marginTop: '-15%',   // crop header (judul, avatar)
+                      marginBottom: '-15%', // crop footer (like, comment button)
+                    } : {}),
+                  }}
+                />
+              </div>
             )}
             {t === 'video' && (
               <video ref={videoRef} src={alert.mediaUrl} autoPlay loop muted
