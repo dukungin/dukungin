@@ -565,10 +565,10 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mt-3 px-3 py-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-none flex items-center gap-2"
+            className="mt-3 px-3 py-2.5 bg-amber-900/30 border-amber-200 dark:border-amber-800 border border-amber-200 dark:border-amber-800 rounded-none flex items-center gap-2"
           >
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
-            <p className="text-[10px] font-black text-red-600 dark:text-red-400">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
+            <p className="text-[10px] font-black text-amber-600 dark:text-amber-400">
               YouTube Live — akan diputar dari timestamp terkini secara otomatis
             </p>
           </motion.div>
