@@ -146,7 +146,7 @@ const YouTubeTimePicker = ({ startTime, onChange }) => {
               max={max}
               value={value}
               onChange={(e) => set(Math.max(0, Math.min(max, parseInt(e.target.value) || 0)))}
-              className="w-full p-2 text-center rounded-none bg-white dark:bg-slate-800 border border-yellow-200 dark:border-yellow-700 focus:border-yellow-400 font-mono text-sm font-bold text-slate-700 dark:text-white outline-none"
+              className="w-full p-2 text-center rounded-none bg-white dark:bg-slate-900 border border-yellow-200 dark:border-yellow-700 focus:border-yellow-400 font-mono text-sm font-bold text-slate-700 dark:text-white outline-none"
             />
           </div>
         ))}
@@ -238,7 +238,7 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                   </div>
                   <button
                     onClick={onClose}
-                    className="absolute top-0 right-0 cursor-pointer w-10 h-10 bg-red-200 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-700/80 hover:text-white text-red-700 dark:text-slate-500 flex items-center justify-center transition-all"
+                    className="absolute top-0 right-0 cursor-pointer w-10 h-10 bg-red-200 dark:bg-slate-900 hover:bg-red-50 dark:hover:bg-red-700/80 hover:text-white text-red-700 dark:text-slate-500 flex items-center justify-center transition-all"
                   >
                     <X size={15} />
                   </button>
@@ -269,14 +269,14 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                         <input type="email" placeholder="Email kamu" value={loginForm.email}
                           onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
                           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
+                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
                       </div>
                       <div className="relative">
                         <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" />
                         <input type={showPass ? 'text' : 'password'} placeholder="Password" value={loginForm.password}
                           onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-                          className="w-full pl-10 pr-10 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
+                          className="w-full pl-10 pr-10 py-3.5 bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
                         <button onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-500 hover:text-slate-500 transition-all">
                           {showPass ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
@@ -292,19 +292,19 @@ const AuthModal = ({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) => 
                         <AtSign size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" />
                         <input type="text" placeholder="Username" value={registerForm.username}
                           onChange={(e) => setRegisterForm({ ...registerForm, username: e.target.value })}
-                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
+                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
                       </div>
                       <div className="relative">
                         <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" />
                         <input type="email" placeholder="Email kamu" value={registerForm.email}
                           onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
-                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
+                          className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
                       </div>
                       <div className="relative">
                         <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" />
                         <input type={showPass ? 'text' : 'password'} placeholder="Password (min. 6 karakter)" value={registerForm.password}
                           onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
-                          className="w-full pl-10 pr-10 py-3.5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
+                          className="w-full pl-10 pr-10 py-3.5 bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 rounded-none text-sm font-bold text-slate-700 dark:text-white outline-none transition-all" />
                         <button onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-all">
                           {showPass ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
@@ -369,13 +369,13 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
         </Link>
         <div className="flex items-center gap-2">
           <button onClick={toggleTheme}
-            className="cursor-pointer h-[40px] w-[40px] flex items-center justify-center rounded-none border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-50 transition-all shadow-sm">
+            className="cursor-pointer h-[40px] w-[40px] flex items-center justify-center rounded-none border bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-50 transition-all shadow-sm">
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           {isLoggedIn ? (
             <div className="relative" ref={dropRef}>
               <button onClick={() => setDropdownOpen((v) => !v)}
-                className="flex items-center gap-2 px-2 h-[40px] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none transition-all cursor-pointer border border-slate-200 dark:border-slate-700">
+                className="flex items-center gap-2 px-2 h-[40px] bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none transition-all cursor-pointer border border-slate-200 dark:border-slate-700">
                 <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-violet-600 rounded-none flex items-center justify-center text-white font-black text-xs flex-shrink-0 overflow-hidden">
                   {profile?.profilePicture ? (
                     <img src={profile.profilePicture} alt={displayName} className="w-full h-full object-cover"
@@ -506,12 +506,12 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
       {/* Badge tipe media */}
       <div className="flex items-center gap-2">
         {allowImage && (
-          <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-800 border border-blue-100 dark:border-blue-800 rounded-none text-[10px] font-bold text-blue-600 dark:text-blue-400">
+          <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-800 rounded-none text-[10px] font-bold text-blue-600 dark:text-blue-400">
             <ImageIcon size={10} /> Gambar / GIF
           </span>
         )}
         {allowVideo && (
-          <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-800 border border-blue-100 dark:border-purple-800 rounded-none text-[10px] font-bold text-purple-600 dark:text-purple-400">
+          <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-purple-800 rounded-none text-[10px] font-bold text-purple-600 dark:text-purple-400">
             <Video size={10} /> Video + YouTube
           </span>
         )}
@@ -526,7 +526,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
           type="url"
           value={mediaUrl}
           onChange={(e) => { setMediaUrl(e.target.value); setStartTime(0); }}
-          className="w-full p-4 rounded-none bg-white dark:bg-slate-800 border-2 border-blue-100 dark:border-blue-800 focus:border-blue-400 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400"
+          className="w-full p-4 rounded-none bg-white dark:bg-slate-900 border-2 border-blue-100 dark:border-blue-800 focus:border-blue-400 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400"
           placeholder={placeholderText}
         />
         <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium ml-1">
@@ -650,7 +650,7 @@ const QuickAudioSection = ({ publicSounds = [], selectedSound, onSoundChange, am
           className={`group p-2.5 rounded-none border-2 font-bold text-xs flex flex-col items-center gap-1 transition-all cursor-pointer active:scale-[0.99] hover:bg-slate-900 ${
             !selectedSound
               ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-700 shadow-sm'
-              : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-blue-300'
+              : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-blue-300'
           }`}
         >
           <span className="text-lg">🔇</span>
@@ -669,7 +669,7 @@ const QuickAudioSection = ({ publicSounds = [], selectedSound, onSoundChange, am
                   ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-700 shadow-sm'
                   : hasError
                     ? 'border-red-200 dark:border-red-700 bg-red-50 dark:bg-red-900/20 text-red-500'
-                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30'
+                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30'
               }`}
             >
               {isPlaying && (
@@ -757,10 +757,10 @@ const DonationTabs = ({ activeTab, onTabChange, mediaTriggers, amount, minDonate
                 relative flex flex-col items-center justify-center gap-1 py-3 px-1
                 text-[10px] font-black transition-all cursor-pointer select-none
                 ${isLocked
-                  ? 'opacity-40 cursor-not-allowed bg-slate-50 dark:bg-slate-800/50'
+                  ? 'opacity-40 cursor-not-allowed bg-slate-50 dark:bg-slate-900/50'
                   : isActive
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }
               `}
             >
@@ -1158,7 +1158,7 @@ const SupporterPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-slate-900 p-7 rounded-none shadow-xl shadow-blue-100/50 dark:shadow-slate-800/50 border border-blue-100 dark:border-slate-800 space-y-5"
+            className="bg-transparent md:bg-white dark:md:bg-slate-900 p-0 md:p-7 rounded-none shadow-xl shadow-blue-100/50 dark:shadow-slate-800/50 md:border border-blue-100 dark:border-slate-800 space-y-5"
           >
 
             {/* Quick Amounts */}
@@ -1175,7 +1175,7 @@ const SupporterPage = () => {
                       className={`cursor-pointer py-4 rounded-none font-black text-sm transition-all border-2 active:scale-[0.99] ${
                         form.amount === val
                           ? 'bg-blue-600 border-blue-600 text-white shadow-lg'
-                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 text-slate-700 dark:text-slate-300'
+                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       Rp {val.toLocaleString('id-ID')}
@@ -1196,7 +1196,7 @@ const SupporterPage = () => {
                   type="number"
                   value={form.amount || ''}
                   onChange={(e) => setForm({ ...form, amount: Number(e.target.value) })}
-                  className="w-full p-4 pl-12 rounded-none font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 outline-none transition-all"
+                  className="w-full p-4 pl-12 rounded-none font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 outline-none transition-all"
                   placeholder="Nominal Kustom..."
                 />
               </div>
@@ -1210,7 +1210,7 @@ const SupporterPage = () => {
                     if (!reached && !isNext) return null;
                     return (
                       <div key={i} className={`flex items-center gap-2 text-[10px] font-bold px-2 py-1.5 rounded-none ${
-                        reached ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'bg-slate-50 dark:bg-slate-800/50 text-slate-400 dark:text-slate-500'
+                        reached ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'bg-slate-50 dark:bg-slate-900/50 text-slate-400 dark:text-slate-500'
                       }`}>
                         <span>{reached ? '✅' : '🔒'}</span>
                         <span>
@@ -1226,53 +1226,43 @@ const SupporterPage = () => {
             </div>
 
             {/* ── Nama & Email ── */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
+            {
+              !isLoggedIn && (
 
-                  Nama 
-                </label>
-                <input
-                  type="text"
-                  disabled={form.isAnonymous || isLoggedIn}
-                  value={form.isAnonymous ? '' : form.donorName}
-                  onChange={(e) => setForm({ ...form, donorName: e.target.value })}
-                  required={!isLoggedIn && !form.isAnonymous}  // ⬅️ TAMBAHKAN INI
-                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
-                  placeholder="Nama kamu"
-                />
-              </div>
-              <div>
-                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
 
-                  Email 
-                </label>
-                <input
-                  type="email"
-                  disabled={isLoggedIn}
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  required={!isLoggedIn}  // ⬅️ TAMBAHKAN INI
-                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
-                  placeholder="email@kamu.com"
-                />
-              </div>
-            </div>
+                      Nama 
+                    </label>
+                    <input
+                      type="text"
+                      disabled={form.isAnonymous || isLoggedIn}
+                      value={form.isAnonymous ? '' : form.donorName}
+                      onChange={(e) => setForm({ ...form, donorName: e.target.value })}
+                      required={!isLoggedIn && !form.isAnonymous}  // ⬅️ TAMBAHKAN INI
+                      className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
+                      placeholder="Nama kamu"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
 
-            {/* Message — hide kalau tab voice */}
-            {activeTab !== 'voice' && (
-              <div>
-                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
-                  Pesan Dukungan
-                </label>
-                <textarea
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 min-h-[90px] outline-none transition-all resize-none text-slate-700 dark:text-white dark:placeholder:text-slate-500"
-                  placeholder="Semangat terus bang! 🔥"
-                />
-              </div>
-            )}
+                      Email 
+                    </label>
+                    <input
+                      type="email"
+                      disabled={isLoggedIn}
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      required={!isLoggedIn}  // ⬅️ TAMBAHKAN INI
+                      className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 disabled:opacity-40 outline-none transition-all text-slate-700 dark:text-white"
+                      placeholder="email@kamu.com"
+                    />
+                  </div>
+                </div>
+              )
+            }
 
             {/* ═══════════════════════════════════════════════
                 TAB SELECTOR
@@ -1284,6 +1274,22 @@ const SupporterPage = () => {
               amount={form.amount}
               minDonate={minDonate}
             />
+
+            {/* Message — hide kalau tab voice */}
+            {activeTab !== 'voice' && (
+              <div>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 ml-1">
+                  Pesan Dukungan
+                </label>
+                <textarea
+                  value={form.message}
+                  rows={4}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="w-full p-4 rounded-none bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-300 dark:focus:border-blue-500 min-h-[90px] outline-none transition-all resize-none text-slate-700 dark:text-white dark:placeholder:text-slate-500"
+                  placeholder="Semangat terus bang! 🔥"
+                />
+              </div>
+            )}
 
             {/* TAB CONTENT */}
             <AnimatePresence mode="wait">
@@ -1305,7 +1311,7 @@ const SupporterPage = () => {
                       amount={form.amount}
                     />
                   ) : form.amount > 0 && form.amount < minDonate ? (
-                    <div className="flex items-center gap-3 px-4 py-4 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-700 rounded-none">
+                    <div className="flex items-center gap-3 px-4 py-4 bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-100 dark:border-slate-700 rounded-none">
                       <Bell size={18} className="text-slate-300 dark:text-slate-600 flex-shrink-0" />
                       <div>
                         <p className="text-xs font-black text-slate-500 dark:text-slate-400">Donasi Alert Biasa</p>
@@ -1315,7 +1321,7 @@ const SupporterPage = () => {
                       </div>
                     </div>
                   ) : publicSounds.length === 0 ? (
-                    <div className="flex items-center gap-3 px-4 py-4 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-700 rounded-none">
+                    <div className="flex items-center gap-3 px-4 py-4 bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-100 dark:border-slate-700 rounded-none">
                       <Bell size={18} className="text-slate-300 dark:text-slate-600 flex-shrink-0" />
                       <div>
                         <p className="text-xs font-black text-slate-500 dark:text-slate-400">Donasi Alert Biasa</p>
@@ -1338,7 +1344,7 @@ const SupporterPage = () => {
                   transition={{ duration: 0.2 }}
                 >
                   {mediaTriggers.length === 0 ? (
-                    <div className="flex items-center gap-3 px-4 py-4 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-700 rounded-none">
+                    <div className="flex items-center gap-3 px-4 py-4 bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-100 dark:border-slate-700 rounded-none">
                       <Film size={18} className="text-slate-300 dark:text-slate-600 flex-shrink-0" />
                       <div>
                         <p className="text-xs font-black text-slate-500 dark:text-slate-400">Media Share Tidak Tersedia</p>
@@ -1398,7 +1404,7 @@ const SupporterPage = () => {
                       </AnimatePresence>
 
                       {/* ── Disclaimer konten tidak terfilter ── */}
-                      <div className="mt-3 rounded-none border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4 space-y-2">
+                      <div className="mt-8 md:mt-3 rounded-none border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4 space-y-2">
                         <p className="border-b border-amber-600/30 pb-3 mb-4 text-[10px] font-black text-amber-700 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                           Konten yang diblokir sistem
                         </p>
@@ -1503,7 +1509,7 @@ const SupporterPage = () => {
                     </div>
                     <button
                       onClick={() => openAuth('login')}
-                      className="ml-3 flex-shrink-0 px-3 py-1.5 text-[10px] font-black text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-700 rounded-none hover:bg-blue-50 transition-all cursor-pointer"
+                      className="ml-3 flex-shrink-0 px-3 py-1.5 text-[10px] font-black text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-700 rounded-none hover:bg-blue-50 transition-all cursor-pointer"
                     >
                       Masuk
                     </button>
@@ -1521,7 +1527,7 @@ const SupporterPage = () => {
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
-                  className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-none"
+                  className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-none"
                 >
                   <span className="text-slate-300 dark:text-slate-600 flex-shrink-0">⚠️</span>
                   <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500">{submitHint}</p>
@@ -1536,7 +1542,7 @@ const SupporterPage = () => {
               disabled={isSubmitDisabled}
               className={`w-full py-4 rounded-none font-black text-sm flex items-center justify-center gap-2 transition-all ${
                 isSubmitDisabled
-                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                  ? 'bg-slate-200 dark:bg-slate-900 text-slate-400 cursor-not-allowed'
                   : 'active:scale-[0.99] cursor-pointer bg-gradient-to-r from-violet-600 to-blue-600 text-white hover:brightness-110'
               }`}
             >
