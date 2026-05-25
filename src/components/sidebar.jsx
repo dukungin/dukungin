@@ -8,6 +8,7 @@ import {
   MessageSquare,
   ReceiptText,
   ShieldAlert,
+  ShoppingBag,
   Timer,
   TrendingUp,
   Trophy,
@@ -48,6 +49,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     { id: 'settings',    label: 'Editor Overlay',   icon: <Layout size={20} /> },
     { id: 'alertSettings',  label: 'Alert OBS',      icon: <ZapIcon size={20} /> },
     { id: 'mediaSettings',  label: 'Media Share',     icon: <Video size={20} /> },
+    { id: 'store',         label: 'Toko OBS',         icon: <ShoppingBag size={20} /> }, // ← BARU
     { id: 'history',     label: 'Riwayat Donasi',   icon: <History size={20} /> },
     // { id: 'myDonations', label: 'Berdonasi',        icon: <Heart size={20} /> },   
     { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },

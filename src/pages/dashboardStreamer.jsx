@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
+import StoreManager from './storeManager';           // buat file baru
+import StoreWidget from '../components/storeWidget'; // widget OBS
 import {
   Calendar,
   Check,
@@ -2799,6 +2801,7 @@ export const DashboardStreamer = () => {
     settings:      'Dashboard',
     alertSettings: 'Alert OBS',
     mediaSettings: 'Media share',
+    store: 'Toko OBS',
     history:       'Riwayat',
     feeConfig:     'Konfigurasi Fee',
     wallet:        'Wallet',
@@ -2964,6 +2967,12 @@ export const DashboardStreamer = () => {
             {activeTab === 'community' && (
               <motion.div key="community" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <CommunityPage currentUserId={profileData?.user?._id || profileData?.User?._id} onFollowAction={handleFollowAction} />
+              </motion.div>
+            )}
+
+            {activeTab === 'store' && (
+              <motion.div key="store" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <StoreManager overlayToken={user.overlayToken} />
               </motion.div>
             )}
 
@@ -3137,6 +3146,13 @@ export const DashboardStreamer = () => {
                       { label: 'QR Code',      emoji: '◼',  path: 'qrcode',      desc: 'QR scan ke halaman donasi',          size: '280×320px' },
                       { label: 'Poll',         emoji: '🗳️', path: 'poll',        desc: 'Voting poll live',                   size: '420×300px' },
                       { label: 'Subathon',     emoji: '⏱',  path: 'subathon',    desc: 'Timer subathon',                     size: '360×180px' },
+                      { 
+                        label: 'Toko OBS', 
+                        emoji: '🛍️', 
+                        path: 'store', 
+                        desc: 'Produk jualan streamer (gambar + harga + link)', 
+                        size: '800×600px' 
+                      },
                     ].map(({ label, emoji, path, desc, size }) => {
                       const widgetUrl = `${window.location.origin}/widget/${user.overlayToken}/${path}`;
                       return (

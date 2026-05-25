@@ -21,6 +21,7 @@ import { Toaster } from 'react-hot-toast';
 import VoiceNoteOverlay from './pages/voiceNoteOverlay';
 import { useServerStatus } from './hooks/useServerStatus';
 import MaintenancePage from './pages/maintenancePage';
+import StoreWidget from './components/storeWidget';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -175,6 +176,7 @@ if (checking) {
           <Route path="/donation/failed"  element={<DonationFailed />} />
           <Route path="/donation/pending" element={<DonationPending />} />
 
+          <Route path="/widget/:token/store"       element={<StoreWidget />} />
           <Route path="/widget/:token/subathon"   element={<SubathonWidget />} />
           <Route path="/widget/:token/poll"        element={<PollWidget />} />
           <Route path="/widget/:token/leaderboard" element={<LeaderboardWidget />} />
