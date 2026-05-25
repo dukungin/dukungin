@@ -1450,9 +1450,8 @@ const SupporterPage = () => {
                         <ul className="space-y-1.5">
                           {[
                             { icon: '🔞', text: 'Konten dewasa yang belum dibatasi usia oleh YouTube' },
-                            { icon: '©️', text: 'Video DMCA / hak cipta (embed diizinkan tapi audio di-mute YouTube)' },
                             { icon: '🩸', text: 'Konten kekerasan / gore yang tidak dibatasi YouTube' },
-                            { icon: '🚫', text: 'Video spam, scam, atau konten menyesatkan' },
+                            { icon: '🚫', text: 'Video yang di blokir oleh negara' },
                           ].map(({ icon, text }) => (
                             <li key={text} className="flex items-start gap-2 text-[10px] font-bold text-amber-700 dark:text-amber-400">
                               <span className="flex-shrink-0 mt-px">{icon}</span>
