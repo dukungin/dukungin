@@ -323,41 +323,106 @@ const calculateMediaShareDuration = (config, amount) => {
     // ── RENDER MEDIA (BARU - di atas content) ───────────────────────────────────
     const renderMedia = () => {
       if (!alert?.mediaUrl) return null;
+
       const t = detectMediaType(alert.mediaUrl, alert.mediaType);
 
-      return (
-        <div style={{ 
-          width: '100%', 
-          aspectRatio: '16/9', 
-          overflow: 'hidden', 
-          background: '#000',
-          borderBottom: '1px solid rgba(255,255,255,0.05)'
-        }}>
-          {t === 'youtube' && (
+      if (t === 'youtube') {
+        return (
+          <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <iframe
-              src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}  // ← pakai startTime dari data donasi
+              src={getYouTubeEmbedUrl(alert.mediaUrl, alert.startTime || 0)}
               width="100%" height="100%"
               frameBorder="0"
               allow="autoplay; encrypted-media"
               allowFullScreen
               style={{ display: 'block', border: 'none' }}
             />
-          )}
-          {t === 'video' && (
+          </div>
+        );
+      }
+
+      if (t === 'video') {
+        return (
+          <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <video
               ref={videoRef}
               src={alert.mediaUrl}
               autoPlay loop muted
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={() => setMediaError(true)}
             />
-          )}
-          {t === 'image' && (
-            <img
-              src={alert.mediaUrl}
-              alt="media"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          </div>
+        );
+      }
+
+      // ── TIKTOK ── Gunakan fallback (paling stabil)
+      if (t === 'tiktok') {
+        const videoId = extractTikTokVideoId(alert.mediaUrl);
+        const embedUrl = videoId 
+          ? `https://www.tiktok.com/embed/v2/${videoId}?autoplay=1&mute=1` 
+          : alert.mediaUrl;
+
+        return (
+          <div style={{ 
+            width: '100%', 
+            aspectRatio: '9/16', 
+            background: '#0a0a0a', 
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <iframe
+              src={embedUrl}
+              width="100%" 
+              height="100%"
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              style={{ display: 'block', border: 'none' }}
+              onError={() => console.log("TikTok embed failed")}
             />
-          )}
+            
+            {/* Fallback jika embed gagal */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'rgba(0,0,0,0.85)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: 0.95,
+              zIndex: 10
+            }}>
+              <p style={{ fontSize: '18px', marginBottom: '12px' }}>🎵 TikTok Video</p>
+              <a 
+                href={alert.mediaUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{
+                  background: '#ff0050',
+                  color: 'white',
+                  padding: '12px 28px',
+                  borderRadius: '10px',
+                  fontWeight: 700,
+                  textDecoration: 'none'
+                }}
+              >
+                ▶️ Buka Video
+              </a>
+            </div>
+          </div>
+        );
+      }
+
+      // Image fallback
+      return (
+        <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+          <img 
+            src={alert.mediaUrl} 
+            alt="media" 
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            onError={() => setMediaError(true)} 
+          />
         </div>
       );
     };
