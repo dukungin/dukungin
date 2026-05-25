@@ -10,39 +10,6 @@ import axios from 'axios';
 
 const API_URL = 'https://server-dukungin-production.up.railway.app';
 
-// Buat helper function di dalam component
-const clearMediaDisplay = useCallback(() => {
-
-    // Stop audio
-    if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-    }
-
-    // Stop video jika ada
-    if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.src = '';
-        videoRef.current.load();
-    }
-
-    // Stop iframe YouTube — cara paling reliable: 
-    // postMessage pause ke iframe
-    const iframe = document.querySelector('iframe[src*="youtube"]');
-    if (iframe) {
-        // Pause dulu via postMessage
-        iframe.contentWindow?.postMessage(
-            JSON.stringify({ event: 'command', func: 'pauseVideo' }),
-            '*'
-        );
-        // Kemudian kosongkan src biar benar-benar stop
-        setTimeout(() => { iframe.src = ''; }, 100);
-        }
-
-    clearMediaDisplay();
-    setMediaProgress(100);
-    }, []);
-
 // ── Helpers (sama persis dari kedua file) ────────────────────────────────────
 
 const isTikTokUrl = (url) => {
@@ -576,6 +543,39 @@ const CombinedOverlay = () => {
   const alertTimerRef       = useRef(null);
   const mediaIntervalRef    = useRef(null);
   const mediaTimerRef       = useRef(null);
+
+  // Buat helper function di dalam component
+    const clearMediaDisplay = useCallback(() => {
+
+        // Stop audio
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+        }
+
+        // Stop video jika ada
+        if (videoRef.current) {
+            videoRef.current.pause();
+            videoRef.current.src = '';
+            videoRef.current.load();
+        }
+
+        // Stop iframe YouTube — cara paling reliable: 
+        // postMessage pause ke iframe
+        const iframe = document.querySelector('iframe[src*="youtube"]');
+        if (iframe) {
+            // Pause dulu via postMessage
+            iframe.contentWindow?.postMessage(
+                JSON.stringify({ event: 'command', func: 'pauseVideo' }),
+                '*'
+            );
+            // Kemudian kosongkan src biar benar-benar stop
+            setTimeout(() => { iframe.src = ''; }, 100);
+            }
+
+        clearMediaDisplay();
+        setMediaProgress(100);
+    }, []);
 
   // TTS
   const speakDonation = useCallback(async (donation) => {
