@@ -2764,36 +2764,18 @@ export const DashboardStreamer = () => {
       </div>
     </div>
   );
-
+  
   const TTSSection = () => {
     const [testText, setTestText] = useState('');
-    const [isTesting, setIsTesting] = useState(false);
-
-    const VOICES = [
-      { name: 'id-ID-GadisNeural',  label: '🇮🇩 Gadis – Perempuan (Neural)', lang: 'id-ID' },
-      { name: 'id-ID-ArdiNeural',   label: '🇮🇩 Ardi – Laki-laki (Neural)',  lang: 'id-ID' },
-      { name: 'en-US-JennyNeural',  label: '🇺🇸 Jenny – Perempuan (Neural)', lang: 'en-US' },
-      { name: 'en-US-GuyNeural',    label: '🇺🇸 Guy – Laki-laki (Neural)',   lang: 'en-US' },
-      { name: 'en-GB-SoniaNeural',  label: '🇬🇧 Sonia – Perempuan (Neural)', lang: 'en-GB' },
-      { name: 'ja-JP-NanamiNeural', label: '🇯🇵 Nanami – Perempuan (Neural)',lang: 'ja-JP' },
-      { name: 'ko-KR-SunHiNeural',  label: '🇰🇷 SunHi – Perempuan (Neural)', lang: 'ko-KR' },
-    ];
-
-    // Konversi slider (0.5–2.0) → format edge-tts string
-    const toRateStr   = v => v >= 1 ? `+${Math.round((v-1)*100)}%`   : `-${Math.round((1-v)*100)}%`;
-    const toPitchStr  = v => v >= 1 ? `+${Math.round((v-1)*20)}Hz`   : `-${Math.round((1-v)*20)}Hz`;
-    const toVolumeStr = v => v >= 1 ? `+${Math.round((v-1)*100)}%`   : `-${Math.round((1-v)*100)}%`;
+    const [isTesting, setIsTesting]= useState(false);
 
     const handleTest = async () => {
-      const text = testText.trim() || `${user.username} berdonasi Rp 50.000. Semangat terus kak!`;
+      const text = testText.trim() || `Developer berdonasi Rp 50.000. Semangat terus kak!`;
       setIsTesting(true);
       try {
         const res = await api.post('/api/overlay/tts/speak', {
           text,
-          voiceName: settings.ttsVoiceName || 'id-ID-GadisNeural',
-          rate:      toRateStr(settings.ttsRate     || 1.0),
-          pitch:     toPitchStr(settings.ttsPitch   || 1.0),
-          volume:    toVolumeStr(settings.ttsVolume || 1.0),
+          voiceName: 'id-ID-GadisNeural',
         }, { responseType: 'blob' });
 
         const url   = URL.createObjectURL(res.data);
@@ -2802,7 +2784,7 @@ export const DashboardStreamer = () => {
         audio.onerror = () => { setIsTesting(false); URL.revokeObjectURL(url); };
         await audio.play();
       } catch (err) {
-        toast.error('❌ TTS gagal: ' + (err.response?.data?.message || err.message));
+        toast.error('❌ TTS gagal');
         setIsTesting(false);
       }
     };
@@ -2816,7 +2798,7 @@ export const DashboardStreamer = () => {
           <div>
             <p className="font-black text-slate-700 dark:text-slate-200">Aktifkan Text-to-Speech</p>
             <p className="text-xs text-slate-400 dark:text-slate-500">
-              Otomatis membaca: Nama + Nominal + Pesan donasi · Powered by Microsoft Edge Neural TTS
+              Otomatis membaca: Nama + Nominal + Pesan donasi
             </p>
           </div>
           <button onClick={() => upd('ttsEnabled', !settings.ttsEnabled)}
@@ -2828,47 +2810,11 @@ export const DashboardStreamer = () => {
         {settings.ttsEnabled && (
           <div className="space-y-6">
 
-            {/* Pilih Voice */}
-            <div>
-              <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block">
-                Pilih Suara (Voice)
-              </label>
-              <select
-                value={settings.ttsVoiceName || 'id-ID-GadisNeural'}
-                onChange={e => {
-                  const v = VOICES.find(x => x.name === e.target.value);
-                  upd('ttsVoiceName', e.target.value);
-                  upd('ttsLanguageCode', v?.lang || 'id-ID');
-                }}
-                className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-rose-500 transition-all"
-              >
-                <optgroup label="🇮🇩 Bahasa Indonesia">
-                  {VOICES.filter(v => v.lang === 'id-ID').map(v => (
-                    <option key={v.name} value={v.name}>{v.label}</option>
-                  ))}
-                </optgroup>
-                <optgroup label="🇺🇸 English (US)">
-                  {VOICES.filter(v => v.lang === 'en-US').map(v => (
-                    <option key={v.name} value={v.name}>{v.label}</option>
-                  ))}
-                </optgroup>
-                <optgroup label="Bahasa Lainnya">
-                  {VOICES.filter(v => !['id-ID','en-US'].includes(v.lang)).map(v => (
-                    <option key={v.name} value={v.name}>{v.label}</option>
-                  ))}
-                </optgroup>
-              </select>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1.5 ml-1">
-                💡 Semua voice adalah <strong>Neural</strong> — kualitas alami, gratis, tanpa API key
-              </p>
-            </div>
-
             {/* Sliders */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { label: 'Kecepatan', key: 'ttsRate',   min: 0.5, max: 2, step: 0.1, fmt: v => toRateStr(v) },
-                { label: 'Nada Suara', key: 'ttsPitch', min: 0.5, max: 2, step: 0.1, fmt: v => toPitchStr(v) },
-                { label: 'Volume',    key: 'ttsVolume', min: 0.5, max: 2, step: 0.1, fmt: v => toVolumeStr(v) },
+                { label: 'Kecepatan', key: 'ttsRate',   min: 0.5, max: 2, step: 0.1, fmt: v => v.toFixed(1) + 'x' },
+                { label: 'Volume',    key: 'ttsVolume', min: 0.1, max: 1, step: 0.1, fmt: v => Math.round(v*100) + '%' },
               ].map(({ label, key, min, max, step, fmt }) => (
                 <div key={key}>
                   <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block">{label}</label>
@@ -2883,32 +2829,26 @@ export const DashboardStreamer = () => {
 
             {/* Test */}
             <div className="bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 rounded-none p-4 space-y-3">
-              <label className="text-[10px] font-black text-rose-500 uppercase tracking-widest block">🧪 Test Suara Langsung</label>
+              <label className="text-[10px] font-black text-rose-500 uppercase tracking-widest block">🧪 Test Suara</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={testText}
                   onChange={e => setTestText(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && !isTesting && handleTest()}
-                  placeholder={`${'Developer'} berdonasi Rp 10.000. Semangat terus kak!`}
+                  placeholder="Developer berdonasi Rp 10.000. Semangat terus kak!"
                   className="flex-1 px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-none text-sm font-medium outline-none focus:border-rose-400 dark:text-slate-100 transition-all"
                 />
-                <button
-                  onClick={handleTest}
-                  disabled={isTesting}
-                  className="cursor-pointer px-5 py-2.5 bg-rose-500 hover:brightness-90 disabled:opacity-60 text-white font-black rounded-none transition-all active:scale-[0.97] flex items-center gap-2 whitespace-nowrap"
-                >
+                <button onClick={handleTest} disabled={isTesting}
+                  className="cursor-pointer px-5 py-2.5 bg-rose-500 hover:brightness-90 disabled:opacity-60 text-white font-black rounded-none transition-all active:scale-[0.97] flex items-center gap-2 whitespace-nowrap">
                   {isTesting ? <><span className="animate-spin inline-block">⏳</span> Memutar...</> : <>▶ Test</>}
                 </button>
               </div>
             </div>
 
             {/* Save */}
-            <button
-              onClick={() => saveSettingsMutation.mutate(settings)}
-              disabled={saveSettingsMutation.isPending}
-              className="cursor-pointer active:scale-[0.99] w-full py-3 bg-gradient-to-r from-rose-500 to-orange-500 hover:brightness-90 text-white font-black rounded-none transition-all disabled:opacity-60 flex items-center justify-center gap-2"
-            >
+            <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+              className="cursor-pointer active:scale-[0.99] w-full py-3 bg-gradient-to-r from-rose-500 to-orange-500 hover:brightness-90 text-white font-black rounded-none transition-all disabled:opacity-60 flex items-center justify-center gap-2">
               <Save size={18} />
               {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Pengaturan TTS'}
             </button>
