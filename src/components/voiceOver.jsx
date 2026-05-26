@@ -48,7 +48,7 @@ export const VoiceRecorder = ({ onVoiceReady, maxSeconds = 60, disabled = false 
   const [phase, setPhase] = useState('idle'); // idle | recording | preview | uploading | done | error
   const [elapsed, setElapsed] = useState(0);
   const [blobUrl, setBlobUrl] = useState(null);
-//   const [uploadedUrl, setUploadedUrl] = useState(null);
+  const [uploadedUrl, setUploadedUrl] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
   const mediaRecorderRef = useRef(null);
