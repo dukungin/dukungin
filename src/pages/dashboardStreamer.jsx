@@ -2952,7 +2952,7 @@ export const DashboardStreamer = () => {
           activeTab={activeTab} setActiveTab={setActiveTab}
         />
 
-        <div className="relative md:mt-[-14px] px-3 md:px-7 lg:py-11 w-full">
+        <div className="relative md:mt-[-14px] px-0 md:px-7 lg:py-11 w-full">
           <AnimatePresence mode="wait">
 
             {/* ══════════════════════ COMMUNITY ══════════════════════ */}

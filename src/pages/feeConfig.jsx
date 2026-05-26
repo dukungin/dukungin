@@ -9,7 +9,7 @@ const fetchFeeConfig = async () => (await api.get('/api/overlay/settings')).data
 const saveFeeConfig  = async (d) => (await api.put('/api/overlay/settings', d)).data;
 
 const FEE_PERCENT = 0.025; // 2.5%
-const ADMIN_FEE   = 5000;  // Rp 5.000 tetap ditanggung streamer
+const ADMIN_FEE   = 5000;  // Rp 1.500 tetap ditanggung streamer
 
 const formatRupiah = (num) =>
   new Intl.NumberFormat('id-ID').format(Math.round(num));
@@ -93,7 +93,7 @@ const FeeSimulator = ({ feeBearer }) => {
         </div>  
 
         <p className="text-[10px] text-slate-400 pt-3 border-t border-slate-200 dark:border-slate-700 ">
-          * Biaya tetap Rp 5.000 dibebankan saat penarikan dana (ditanggung streamer)
+          * Biaya tetap Rp 1.500 dibebankan saat penarikan dana (ditanggung streamer)
         </p>
       </div>
     </div>
@@ -143,7 +143,7 @@ export const FeeConfigPage = () => {
       icon: <Wallet size={22} />,
       title: 'Streamer Menanggung',
       subtitle: '2.5% dipotong dari saldo streamer',
-      desc: 'Donor hanya membayar sesuai nominal yang diketik. Biaya 2.5% akan dipotong otomatis dari saldo kamu saat donasi masuk. Biaya tetap Rp5.000 dibebankan saat penarikan.',
+      desc: 'Donor hanya membayar sesuai nominal yang diketik. Biaya 2.5% akan dipotong otomatis dari saldo kamu saat donasi masuk. Biaya tetap Rp1.500 dibebankan saat penarikan.',
       badge: 'Ramah Donor',
       badgeColor: 'bg-indigo-100 dark:bg-white text-slate-900',
       borderActive: 'border-indigo-600',
@@ -155,7 +155,7 @@ export const FeeConfigPage = () => {
       icon: <Users size={22} />,
       title: 'Donatur Menanggung',
       subtitle: '2.5% ditambahkan ke nominal donasi',
-      desc: 'Donor akan membayar nominal + 2.5%. Streamer menerima persis sesuai nominal yang diinput donor. Biaya tetap Rp5.000 tetap ditanggung streamer saat penarikan.',
+      desc: 'Donor akan membayar nominal + 2.5%. Streamer menerima persis sesuai nominal yang diinput donor. Biaya tetap Rp1.500 tetap ditanggung streamer saat penarikan.',
       badge: 'Saldo Penuh',
       badgeColor: 'bg-emerald-100 dark:bg-white text-slate-900',
       borderActive: 'border-emerald-500',
@@ -236,7 +236,7 @@ export const FeeConfigPage = () => {
               ? 'Donor bayar Rp100.000 → Streamer terima Rp97.500' 
               : 'Donor bayar Rp102.500 → Streamer terima Rp100.000'}
           </p>
-          <p className="text-[10px] text-slate-400 mt-2">* Rp5.000 selalu dipotong saat penarikan dana</p>
+          <p className="text-[10px] text-slate-400 mt-2">* Rp1.500 selalu dipotong saat penarikan dana</p>
         </div>
 
         <button
