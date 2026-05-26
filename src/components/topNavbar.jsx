@@ -296,7 +296,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                         <div className="w-5 h-5 rounded-none bg-blue-600 flex items-center justify-center text-white font-bold text-[10px]">
                           {user.username.charAt(0).toUpperCase()}
                         </div>
-                        My Profile
+                        Profil saya
                       </button>
                       <div className="w-[92%] mx-auto h-[0.5px] bg-slate-100 dark:bg-slate-800" />
                       <button
@@ -304,7 +304,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                         className="cursor-pointer w-full flex items-center gap-3 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 font-bold rounded-none text-sm transition-all active:scale-[0.97]"
                       >
                         <LogOut size={15} />
-                        Logout
+                        Keluar
                       </button>
                     </div>
                   </motion.div>

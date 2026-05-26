@@ -127,7 +127,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
       <aside className={`
         fixed lg:sticky top-0 left-0 h-screen overflow-y-auto
         w-full lg:w-[20.5vw]
-        bg-white dark:bg-slate-900/5
+        bg-white/5 dark:bg-slate-900/5
         backdrop-blur-sm
         border-r border-slate-100 dark:border-slate-800
         py-4 px-4 md:px-6 z-[99999] lg:z-[1] flex flex-col
@@ -171,7 +171,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 ${
                 activeTab === item.id
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/30'
-                  : 'text-slate-400 dark:text-white bg-slate-100 dark:bg-white/20 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
+                  : 'text-slate-900 dark:text-white bg-slate-100 dark:bg-white/20 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
               {item.icon}
