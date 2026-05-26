@@ -60,6 +60,7 @@ import { FeeConfigPage } from './feeConfig';
 import { WhatsAppPage } from './whatsappPage';
 import { SuggestionsAdmin } from './suggestionAdmin';
 import { ALERT_PRESETS } from '../constants/alertPresets';
+import CustomerServiceWidget from '../components/customerWidget';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -3430,6 +3431,8 @@ export const DashboardStreamer = () => {
       {isSidebarOpen && (
         <div onClick={() => setIsSidebarOpen(false)} className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-50 lg:hidden" />
       )}
+
+      <CustomerServiceWidget />
     </div>
   );
 };
