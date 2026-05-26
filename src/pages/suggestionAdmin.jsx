@@ -164,7 +164,7 @@ export const SuggestionsAdmin = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap px-6 md:px-0">
         <button
           onClick={() => setStatusFilter('')}
           className={`cursor-pointer px-4 py-2 rounded-none font-black text-xs transition-all ${

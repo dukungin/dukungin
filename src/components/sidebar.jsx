@@ -108,25 +108,25 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-none p-10 z-[9999] shadow-2xl text-center overflow-hidden border border-slate-100 dark:border-slate-800"
+              className="relative w-full md:max-w-md bg-white dark:bg-slate-900 rounded-none p-10 z-[9999] shadow-2xl text-center overflow-hidden border border-slate-100 dark:border-slate-800"
             >
               <div className="w-20 h-20 mx-auto mb-6 bg-red-100 dark:bg-red-950/40 text-red-600 rounded-none flex items-center justify-center">
                 <AlertCircle size={40} />
               </div>
               <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Keluar</h3>
-              <p className="text-slate-500 dark:text-slate-400 font-medium mb-8">
+              <p className="text-slate-500 dark:text-slate-400 text-sm md:text-md font-medium mb-8">
                 Apakah kamu yakin ingin mengakhiri sesi ini?
               </p>
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleLogout}
-                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-none font-black text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
+                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-none font-black text-md md:text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
                 >
                   Ya, Keluar
                 </button>
                 <button
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-black text-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                  className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-black text-md md:text-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
                 >
                   Batal
                 </button>
@@ -191,6 +191,14 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               <span>{item.label}</span>
             </button>
           ))}
+          {/* Logout button (mobile only) */}
+          <button
+            onClick={() => setShowLogoutConfirm(true)}
+            className="md:hidden w-full flex items-center gap-4 p-4 bg-red-100 dark:bg-red-900 text-white hover:bg-red-50 dark:hover:bg-red-950 rounded-none cursor-pointer active:scale-[0.98] font-black transition-all"
+          >
+            <LogOut size={18} />
+            <span className="text-sm ml-[3px]">Keluar</span>
+          </button>
 
           <div className="w-full h-[1px] my-5 bg-slate-200 dark:bg-slate-800" />
 
@@ -212,14 +220,6 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
           )}
         </nav>
 
-        {/* Logout button (mobile only) */}
-        <button
-          onClick={() => setShowLogoutConfirm(true)}
-          className="md:hidden flex items-center gap-4 p-4 bg-red-100 dark:bg-red-950/40 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/60 rounded-none cursor-pointer active:scale-[0.98] font-black transition-all mt-4"
-        >
-          <LogOut size={18} />
-          <span className="text-sm ml-[3px]">Keluar</span>
-        </button>
       </aside>
     </>
   );

@@ -890,7 +890,7 @@ const GhostAlertPage = () => {
 
   // ── Main UI ───────────────────────────────────────────────────────────────
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-0 py-0 space-y-6">
+    <div className="max-w-7xl mx-auto px-0 md:px-0 py-0 space-y-6">
 
       {/* Toast */}
       <div className="fixed bottom-6 right-6 z-[9999] pointer-events-none">
@@ -1147,7 +1147,7 @@ const GhostAlertPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-none p-6 text-white shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30"
+            className="md:flex flex-col hidden bg-gradient-to-br from-indigo-600 to-violet-700 rounded-none p-6 text-white shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30"
           >
             <div className="flex items-center gap-2.5 mb-4">
               <Radio size={16} className="text-indigo-200" />

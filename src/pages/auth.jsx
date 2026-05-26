@@ -95,10 +95,10 @@ const NotifModal = ({ notification, onClose }) => (
             <p style={{ fontSize:14, color:'#64748b', lineHeight:1.6, marginBottom:24 }}>
               {notification.message}
             </p>
-            <button onClick={onClose}
+            <button className='cursor-pointer active:scale-[0.99]' onClick={onClose}
               style={{ 
                 width:'100%', padding:'14px 0', borderRadius:0, fontWeight:900, fontSize:14, 
-                border:'none', cursor:'pointer', 
+                border:'none',  
                 background: notification.type==='success' ? '#4f46e5' : '#e11d48', 
                 color:'white', transition:'opacity 0.2s' 
               }}

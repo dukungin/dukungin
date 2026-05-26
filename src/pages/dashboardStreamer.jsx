@@ -971,7 +971,7 @@ const AdminWithdrawalPage = () => {
           </div>
         </div>
       </div>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex px-6 md:px-0 gap-2 flex-wrap">
         {[{ val: 'PENDING', label: '⏳ Pending' }, { val: 'COMPLETED', label: '✅ Selesai' }, { val: 'FAILED', label: '❌ Ditolak' }, { val: '', label: '📋 Semua' }].map(f => (
           <button key={f.val} onClick={() => setStatusFilter(f.val)}
             className={`cursor-pointer active:scale-[0.98] px-4 py-2 rounded-none font-black text-sm transition-all ${statusFilter === f.val ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700'}`}>
