@@ -619,6 +619,7 @@ const ForgotPasswordPage = ({
     >
       <button 
         onClick={() => setCurrentPage('main')}
+        className='active:scale-[0.99] hover:brightness-80'
         style={{ 
           position: 'absolute', top: 40, marginLeft: -3,
           background:'none', border:'none', cursor:'pointer', 
@@ -629,9 +630,9 @@ const ForgotPasswordPage = ({
         <ArrowLeft size={18} /> Kembali
       </button>
 
-      <div style={{ textAlign: 'center', marginBottom: 32 }}>
+      <div style={{ textAlign: 'left', marginBottom: 32 }}>
         <div style={{ 
-          width: 72, height: 72, margin: '0 auto 20px', 
+          width: 72, height: 72, margin: '50px 0 20px 0px', 
           background: '#fef3c7', borderRadius: 20, 
           display: 'flex', alignItems: 'center', justifyContent: 'center' 
         }}>
@@ -772,9 +773,9 @@ const VerifyPinPage = ({ T, notify, closeNotif, navigate, email }) => {
       animate={{ opacity:1, y:0 }} 
       exit={{ opacity:0, y:-20 }}
     >
-      <div style={{ textAlign: 'center', marginBottom: 32 }}>
+      <div style={{ textAlign: 'left', marginBottom: 32 }}>
         <div style={{ 
-          width: 80, height: 80, margin: '0 auto 24px', background: '#eff6ff', 
+          width: 80, height: 80, margin: '50px 0 24px 0px', background: '#eff6ff', 
           borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center' 
         }}>
           <ShieldCheck size={36} style={{ color: '#4f46e5' }} />
@@ -851,14 +852,16 @@ const VerifyPinPage = ({ T, notify, closeNotif, navigate, email }) => {
 };
 
 // ─── RESET PASSWORD PAGE ─────────────────────────────────────────────────────
-const ResetPasswordPage = ({ T, notify, closeNotif, navigate }) => {
+const ResetPasswordPage = ({ T, notify, closeNotif, navigate, emailProp, tokenProp, setCurrentPage, setIsLogin }) => {
   const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({ password: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [passwordStrength, setPasswordStrength] = useState({ strength: 0, message: '' });
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
+
+  // ← Prioritas: dari props dulu, fallback ke URL params
+  const token = tokenProp || searchParams.get('token');
+  const email = emailProp || searchParams.get('email');
 
   // Update handler untuk password dengan validasi
   const handlePasswordChange = (password) => {
@@ -913,7 +916,10 @@ const ResetPasswordPage = ({ T, notify, closeNotif, navigate }) => {
         newPassword: formData.password
       });
       notify('Password Berhasil Diubah!', res.data.message, 'success');
-      setTimeout(() => navigate('/auth'), 2500);
+      // setTimeout(() => navigate('/login'), 2500);
+      setCurrentPage('main');
+      setIsLogin(true);
+
     } catch (err) {
       setError(err.response?.data?.message || 'Token tidak valid atau sudah kadaluarsa');
     } finally {
@@ -923,7 +929,9 @@ const ResetPasswordPage = ({ T, notify, closeNotif, navigate }) => {
 
   useEffect(() => {
     if (!token || !email) {
-      navigate('/auth');
+      setCurrentPage('main');
+      setIsLogin(true);
+      // navigate('/login');
     }
   }, [token, email, navigate]);
 
@@ -936,9 +944,21 @@ const ResetPasswordPage = ({ T, notify, closeNotif, navigate }) => {
       animate={{ opacity:1, y:0 }} 
       exit={{ opacity:0, y:-20 }}
     >
-      <div style={{ textAlign: 'center', marginBottom: 32 }}>
+      <button 
+        onClick={() => setCurrentPage('main')}
+        className='active:scale-[0.99] hover:brightness-80'
+        style={{ 
+          position: 'absolute', top: 40, marginLeft: -3,
+          background:'none', border:'none', cursor:'pointer', 
+          color: T.backBtn, fontSize:14, fontWeight:700, 
+          display:'flex', alignItems:'center', gap:6 
+        }}
+      >
+        <ArrowLeft size={18} /> Kembali
+      </button>
+      <div style={{ textAlign: 'left', marginBottom: 32 }}>
         <div style={{ 
-          width: 80, height: 80, margin: '0 auto 24px', background: '#ecfdf5', 
+          width: 80, height: 80, margin: '50px 0 24px 0px', background: '#ecfdf5', 
           borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center' 
         }}>
           <ShieldCheck size={36} style={{ color: '#059669' }} />
@@ -992,8 +1012,9 @@ const ResetPasswordPage = ({ T, notify, closeNotif, navigate }) => {
             type="submit" 
             disabled={loading}
             className="submit-btn"
+            className="flex justify-center items-center text-center"
             style={{ 
-              width: '100%', padding: '18px 0', borderRadius: 16, fontWeight: 900, fontSize: 15, 
+              width: '100%', padding: '16px 0', borderRadius: 0, fontWeight: 900, fontSize: 14, 
               border: 'none', cursor: 'pointer', 
               background: 'linear-gradient(135deg, #10b981, #059669)', color: 'white', 
               opacity: loading ? 0.7 : 1 
@@ -1208,7 +1229,16 @@ const Auth = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'reset-password':
-        return <ResetPasswordPage T={T} notify={notify} closeNotif={closeNotif} navigate={navigate} />;
+        return <ResetPasswordPage 
+          T={T} 
+          notify={notify} 
+          closeNotif={closeNotif} 
+          navigate={navigate}
+          emailProp={tempEmail}    // ← tambah ini
+          tokenProp={tempToken}    // ← tambah ini
+          setCurrentPage={setCurrentPage}   // ← tambah ini
+          setIsLogin={setIsLogin}  
+      />;
       
       case 'verify-pin':
         return <VerifyPinPage T={T} notify={notify} closeNotif={closeNotif} navigate={navigate} email={tempEmail} />;
