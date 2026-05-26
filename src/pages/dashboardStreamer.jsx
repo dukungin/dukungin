@@ -225,7 +225,7 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
       <SectionHeader icon={<Plus size={20} />} title="Quick Nominal" color="bg-emerald-500" />
       <div className="gap-4 grid grid-cols-1 mt-5 md:grid-cols-2">
         {amounts.map((amt, i) => (
@@ -234,7 +234,7 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
               type="number"
               value={amt}
               onChange={e => update(i, e.target.value)}
-              className="flex-1 p-3 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold"
+              className="flex-1 p-3 w-full bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold"
             />
             <button onClick={() => remove(i)} className="cursor-pointer active:scale-[0.99] hover:text-red-600 text-red-500">
               <Trash2 size={18} />
@@ -288,7 +288,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
       <div className="flex items-center gap-4">
         <div className="bg-rose-500 p-3 rounded-none text-white shadow-lg">
           <Zap size={20} />
@@ -408,7 +408,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
   const updateForm = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xl border border-slate-100 dark:border-slate-800 space-y-4">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xl border border-slate-100 dark:border-slate-800 space-y-4">
       <div className="flex items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-700">
         <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-none text-white shadow-lg">
           <Video size={20} />
@@ -504,7 +504,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
           className="fixed inset-0 bg-black/70 backdrop-blur-md z-[300] flex items-center justify-center p-4"
           onClick={onClose}>
           <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-            className="bg-white dark:bg-slate-900 rounded-none p-8 text-center max-w-sm w-full"
+            className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-8 text-center max-w-sm w-full"
             onClick={e => e.stopPropagation()}>
             <p className="text-red-500 text-4xl mb-4">⚠️</p>
             <p className="font-black text-xl">Gagal memuat profil</p>
@@ -524,7 +524,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }}
-          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900 rounded-none h-[70vh] pb-4 md:h-max overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
+          className="z-[999999] mt-auto md:mt-0 bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none h-[70vh] pb-4 md:h-max overflow-y-auto max-w-5xl w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 relative"
           onClick={e => e.stopPropagation()}
         >
           <div className="h-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 relative">
@@ -536,7 +536,7 @@ const StreamerProfileModal = ({ username, currentUserId, onClose }) => {
           <div className="flex flex-col md:flex-row">
             <div className="md:w-[40%] p-6 md:p-8 md:border-r border-slate-50 dark:border-slate-800/50 flex flex-col justify-between">
               <div className="relative mt-0 md:mt-0 mb-4">
-                <div className="bg-white dark:bg-slate-900 rounded-none ml-[-5px] mb-4 shadow-xl inline-block">
+                <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none ml-[-5px] mb-4 shadow-xl inline-block">
                   <div className="w-24 h-24 md:w-28 md:h-28 rounded-none bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl font-black text-blue-600 border-4 border-white dark:border-slate-900 overflow-hidden">
                     {streamer?.profilePicture ? (
                       <img src={streamer.profilePicture} alt={username} className="w-full h-full object-cover" />
@@ -654,7 +654,7 @@ const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
       <SectionHeader icon={<ShieldCheck size={20} />} title="Filter Kata Terlarang" color="bg-red-500" />
       <div className="space-y-3">
         <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Aksi saat kata terlarang terdeteksi</label>
@@ -733,7 +733,7 @@ const MilestonesEditor = () => {
   const upd    = (i, key, val) => setLocal(list.map((m, idx) => idx === i ? { ...m, [key]: val } : m));
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-6">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-6">
       <SectionHeader icon={<TrendingUp size={20} />} title="Milestones" color="bg-green-500" />
       <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Tampilkan progress target donasi di halaman publik kamu.</p>
       {isLoading ? <div className="text-slate-400 text-sm font-bold animate-pulse">Memuat...</div> : (
@@ -751,7 +751,7 @@ const MilestonesEditor = () => {
                     <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
                     <input type={type} value={val} placeholder={ph}
                       onChange={e => upd(i, key, type === 'number' ? Number(e.target.value) : e.target.value)}
-                      className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-green-400" />
+                      className="w-full p-2.5 bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-green-400" />
                   </div>
                 ))}
               </div>
@@ -846,14 +846,14 @@ const SoundTiersEditor = ({ tiers = [], onChange, saveSettingsMutation, settings
               <div key={key} className="flex flex-col gap-1">
                 <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
                 <input type="number" value={val} placeholder={key === 'maxAmount' ? '∞' : ''} onChange={e => upd(i, key, e.target.value)}
-                  className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
+                  className="w-full p-2.5 bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
               </div>
             ))}
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Label (opsional)</label>
             <input value={t.label} placeholder="contoh: Sultan Alert Sound" onChange={e => upd(i, 'label', e.target.value)}
-              className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
+              className="w-full p-2.5 bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
           </div>
           <SoundPicker value={t.soundUrl} onChange={v => upd(i, 'soundUrl', v)} />
         </div>
@@ -877,7 +877,7 @@ const QrCodeCard = ({ username }) => {
   const [copied, setCopied] = useState(false);
   const copy = () => { navigator.clipboard.writeText(donateUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); };
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
       <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Tampilkan QR ini di stream / sosmed. Scan langsung ke halaman donasi kamu.</p>
       <div className="flex flex-col items-start gap-4">
         <div className="p-4 bg-white rounded-none border-4 border-slate-900 shadow-xl inline-block">
@@ -906,7 +906,7 @@ const LeaderboardCard = ({ stats }) => {
   if (!topDonors.length) return null;
   const medals = ['🥇', '🥈', '🥉'];
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none pb-1.5 shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none pb-1.5 shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
       <div className="px-6 py-5 dark:border-slate-800 flex items-center gap-3">
         <div className="w-9 h-9 bg-amber-500 rounded-none flex items-center justify-center text-lg">🏆</div>
         <div><p className="font-black text-slate-800 dark:text-slate-100">Leaderboard Donor</p><p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Semua waktu</p></div>
@@ -979,7 +979,7 @@ const AdminWithdrawalPage = () => {
           </button>
         ))}
       </div>
-      <div className="bg-white dark:bg-slate-900 w-full rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm w-full rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
           <div>
             <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{statusFilter ? `Request ${statusFilter}` : 'Semua Request'}</p>
@@ -1025,7 +1025,7 @@ const AdminWithdrawalPage = () => {
                 <AnimatePresence>
                   {showApproveModal && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowApproveModal(false)}>
-                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-none max-w-md w-full p-8 text-center border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none max-w-md w-full p-8 text-center border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
                         <div className="w-20 h-20 mx-auto mb-6 bg-green-100 dark:bg-green-950/40 rounded-none flex items-center justify-center text-5xl">✅</div>
                         <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Approve</h3>
                         <p className="text-slate-600 dark:text-slate-400 mb-8">Apakah Anda yakin sudah mentransfer dana ke streamer ini?</p>
@@ -1042,7 +1042,7 @@ const AdminWithdrawalPage = () => {
                 <AnimatePresence>
                   {showRejectModal && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowRejectModal(false)}>
-                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-none max-w-md w-full p-8 border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none max-w-md w-full p-8 border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
                         <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2 text-center">Tolak Penarikan</h3>
                         <p className="text-slate-600 dark:text-slate-400 text-center mb-6">Berikan alasan penolakan (opsional)</p>
                         <textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Contoh: Rekening tidak valid..." className="w-full h-32 p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-none focus:border-red-400 outline-none resize-y font-medium" />
@@ -1068,7 +1068,7 @@ const AdminWithdrawalPage = () => {
 
 const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly = false, mediaOnly = false }) => {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-5 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-8">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-5 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-8">
       <SectionHeader
         icon={<Timer size={22} />}
         title={mediaOnly ? 'Durasi Media share' : alertOnly ? 'Durasi Alert' : 'Pengaturan Durasi'}
@@ -1211,7 +1211,7 @@ const MediaTriggersEditor = ({ triggers, onChange, saveSettingsMutation, setting
               <div key={key} className="flex flex-col gap-1.5">
                 <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
                 <input type={type} value={val} placeholder={ph} onChange={e => update(i, key, type === 'number' ? Number(e.target.value) : e.target.value)}
-                  className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400 transition-all" />
+                  className="w-full p-3 bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400 transition-all" />
               </div>
             ))}
           </div>
@@ -2006,7 +2006,7 @@ const smoothInner = (
       <div className="flex gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-none">
         {[{ id: 'alert', label: '⚡ Alert OBS' }, { id: 'media', label: '🎬 Media share' }].map(tab => (
           <button key={tab.id} onClick={() => setPreviewMode(tab.id)}
-            className={`cursor-pointer flex-1 py-2 text-xs font-black rounded-none transition-all ${previewMode === tab.id ? 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}>
+            className={`cursor-pointer flex-1 py-2 text-xs font-black rounded-none transition-all ${previewMode === tab.id ? 'bg-white dark:bg-slate-900/60 backdrop-blur-sm text-slate-800 dark:text-slate-100 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}>
             {tab.label}
           </button>
         ))}
@@ -2171,7 +2171,7 @@ const HistoryPage = () => {
 
       {stats && <LeaderboardCard stats={stats} />}
 
-      <div className="bg-white dark:bg-slate-900 rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 md:px-10 py-5 border-b border-slate-100 dark:border-slate-800 gap-4">
           <div>
             <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Riwayat Donasi</p>
@@ -2378,7 +2378,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map(u => (
-          <div key={u._id} className="bg-white dark:bg-slate-900 rounded-none p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4 hover:shadow-md hover:border-slate-200 dark:hover:border-slate-700 transition-all">
+          <div key={u._id} className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4 hover:shadow-md hover:border-slate-200 dark:hover:border-slate-700 transition-all">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-none bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0 shadow-lg">
                 {
@@ -2551,7 +2551,7 @@ const TTSSection = ({ settings, upd, saveSettingsMutation, api }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-5">
       <SectionHeader icon={<span className="text-2xl">🔊</span>} title="Text-to-Speech Alert" color="bg-rose-500" />
 
       <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-100 dark:border-slate-700">
@@ -2813,7 +2813,7 @@ export const DashboardStreamer = () => {
 
   // ── Shared Sound Section (dipakai di alertSettings) ──────────────────────────
   const SoundSection = () => (
-    <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
+    <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
       <SectionHeader icon={<Music size={20} />} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-blue-500" />
       <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-none border border-slate-200 dark:border-slate-700">
         <h4 className="font-black text-sm text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">📢 Suara Default (Semua Donasi)</h4>
@@ -2848,11 +2848,13 @@ export const DashboardStreamer = () => {
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
 
+      {/* <video src="/glass.mp4" className='absolute z-[1]' autoplay={true}></video> */}
+      <img src="/glass.jpg" className='opacity-[20%] fixed top-0 left-0 w-screen h-screen z-[1]' autoplay={true}></img>
       {/* ── Modal Copy URL ── */}
       <AnimatePresence>
         {showCopyModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowCopyModal(false)}>
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-none md:max-w-sm max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none md:max-w-sm max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
               <div className="p-4 text-center">
                 <div className="w-16 h-16 mx-auto mb-6 mt-1 md:mt-2 bg-green-100 dark:bg-green-950/40 rounded-none flex items-center justify-center">
                   <CheckCircle2 size={40} className="text-green-600 dark:text-green-400" />
@@ -2870,7 +2872,7 @@ export const DashboardStreamer = () => {
       <AnimatePresence>
         {showFollowModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-4" onClick={() => setShowFollowModal(false)}>
-            <motion.div initial={{ scale: 0.88, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.88, opacity: 0 }} className="bg-white dark:bg-slate-900 rounded-none max-w-sm w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
+            <motion.div initial={{ scale: 0.88, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.88, opacity: 0 }} className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none max-w-sm w-full overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800" onClick={e => e.stopPropagation()}>
               <div className="p-8 text-center">
                 <div className={`w-20 h-20 mx-auto mb-6 rounded-none flex items-center justify-center text-5xl ${followAction.type === 'follow' ? 'bg-green-100 dark:bg-green-950/40' : 'bg-orange-100 dark:bg-orange-950/40'}`}>
                   {followAction.type === 'follow' ? '🤝' : '👋'}
@@ -2982,7 +2984,7 @@ export const DashboardStreamer = () => {
                 <section className="xl:col-span-7 space-y-6">
 
                   {/* Konfigurasi Alert */}
-                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+                  <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     <SectionHeader icon={<Settings size={20} />} title="Konfigurasi Alert" color="bg-blue-500" />
                     <div className="mt-8 space-y-6">
                       {[
@@ -3104,7 +3106,7 @@ export const DashboardStreamer = () => {
                   <QuickAmountsEditor amounts={settings.quickAmounts || DEFAULT_SETTINGS.quickAmounts} onChange={v => upd('quickAmounts', v)} saveSettingsMutation={saveSettingsMutation} settings={settings} />
 
                   {/* OBS URLs */}
-                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
+                  <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800">
                     {[
                       { label: 'URL ALERT - OBS',           url: user.overlayUrl },
                       { label: 'URL MEDIASHARE - OBS',      url: `${window.location.origin}/overlay/${user.overlayToken}/mediashare` },
@@ -3126,7 +3128,7 @@ export const DashboardStreamer = () => {
                   </div>
 
                   {/* Widget URLs */}
-                  <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
+                  <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
                     <div className="flex justify-between items-center gap-2 mb-5">
                       <span className="text-xl font-black text-slate-900 dark:text-slate-100">Widget URLs untuk OBS</span>
                       <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-none text-[9px] font-black uppercase tracking-widest">Browser Source</span>
@@ -3238,7 +3240,7 @@ export const DashboardStreamer = () => {
                   />
 
                 {/* Izin Media */}
-                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
+                <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
                   <SectionHeader icon={<ImageIcon size={20} />} title="Izinkan Donor Kirim Media" color="bg-purple-500" />
                   <MediaTriggersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} triggers={settings.mediaTriggers || []} onChange={v => upd('mediaTriggers', v)} />
                 </div>
@@ -3286,7 +3288,7 @@ export const DashboardStreamer = () => {
                   ))}
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
+                <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
                   <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-blue-500" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
                     <div className="md:col-span-2">
@@ -3393,7 +3395,7 @@ export const DashboardStreamer = () => {
             {/* ══════════════════════ POLL ══════════════════════ */}
             {activeTab === 'poll' && (
               <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
+                <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
                   <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
                   <PollManager overlayToken={user.overlayToken} username={user.username} />
                 </div>
@@ -3406,7 +3408,7 @@ export const DashboardStreamer = () => {
             {/* ══════════════════════ SUBATHON ══════════════════════ */}
             {activeTab === 'subathon' && (
               <motion.div key="subathon" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
+                <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
                   <SubathonManager overlayToken={user.overlayToken} />
                 </div>
               </motion.div>
@@ -3415,7 +3417,7 @@ export const DashboardStreamer = () => {
             {/* ══════════════════════ LEADERBOARD ══════════════════════ */}
             {activeTab === 'leaderboard' && (
               <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
+                <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
                   <LeaderboardSettings overlayToken={user?.overlayToken} />
                 </div>
               </motion.div>
