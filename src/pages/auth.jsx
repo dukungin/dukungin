@@ -4,8 +4,9 @@ import {
   AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff, Lock, Mail, Moon, Sun, User, 
   ShieldCheck, ArrowLeft, Clock, Loader2 
 } from 'lucide-react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { sanitizeInput, isValidEmail, isValidUsername, validatePassword, detectXSS, safeText } from '../utils/xssProtection';
 
 // ─── Theme tokens ──────────────────────────────────────────────────────────────
 const getTheme = (dark) => ({
@@ -35,24 +36,24 @@ const getTheme = (dark) => ({
 });
 
 // ─── Background Canvas ─────────────────────────────────────────────────────────
-const BgCanvas = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <div style={{ 
-      position:'absolute', top:'-80px', left:'-60px', width:'420px', height:'420px', 
-      borderRadius:'0%', background:'radial-gradient(circle, rgba(99,102,241,0.28) 0%, transparent 70%)' 
-    }} />
-    <div style={{ 
-      position:'absolute', bottom:'-100px', right:'-80px', width:'360px', height:'360px', 
-      borderRadius:'0%', background:'radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)' 
-    }} />
-    <svg width="100%" height="100%" style={{ opacity:0.06 }}>
-      <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
-        <circle cx="1.5" cy="1.5" r="1.5" fill="white" />
-      </pattern>
-      <rect width="100%" height="100%" fill="url(#dots)" />
-    </svg>
-  </div>
-);
+// const BgCanvas = () => (
+//   <div className="absolute inset-0 overflow-hidden pointer-events-none">
+//     <div style={{ 
+//       position:'absolute', top:'-80px', left:'-60px', width:'420px', height:'420px', 
+//       borderRadius:'0%', background:'radial-gradient(circle, rgba(99,102,241,0.28) 0%, transparent 70%)' 
+//     }} />
+//     <div style={{ 
+//       position:'absolute', bottom:'-100px', right:'-80px', width:'360px', height:'360px', 
+//       borderRadius:'0%', background:'radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)' 
+//     }} />
+//     <svg width="100%" height="100%" style={{ opacity:0.06 }}>
+//       <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+//         <circle cx="1.5" cy="1.5" r="1.5" fill="white" />
+//       </pattern>
+//       <rect width="100%" height="100%" fill="url(#dots)" />
+//     </svg>
+//   </div>
+// );
 
 // ─── Notification Modal ────────────────────────────────────────────────────────
 const NotifModal = ({ notification, onClose }) => (
@@ -118,6 +119,13 @@ const AuthInput = ({ icon: Icon, type='text', value, onChange, placeholder, T, c
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState(false);
   const isPassword = type === 'password';
+  
+  // Handler untuk input change dengan sanitasi
+  const handleChange = (inputValue) => {
+    // Sanitasi input untuk mencegah XSS
+    const sanitized = sanitizeInput(inputValue);
+    onChange(sanitized);
+  };
 
   return (
     <div style={{ position:'relative' }}>
@@ -131,7 +139,7 @@ const AuthInput = ({ icon: Icon, type='text', value, onChange, placeholder, T, c
       <input
         type={isPassword ? (showPassword ? 'text' : 'password') : type}
         value={value}
-        onChange={e => onChange(e.target.value.replace(/<script.*?>.*?<\/script>/gi, ''))}
+        onChange={e => handleChange(e.target.value)}
         placeholder={placeholder}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
@@ -161,72 +169,72 @@ const AuthInput = ({ icon: Icon, type='text', value, onChange, placeholder, T, c
 };
 
 // ─── Left Panel Components ────────────────────────────────────────────────────
-const BrandLogo = () => (
-  <div className='md:mb-[48px] mb-0 inline-flex' style={{ 
-    alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', 
-    border:'1px solid rgba(255,255,255,0.2)', borderRadius:0, padding:'8px 16px' 
-  }}>
-    <div style={{ width:26, height:26, background:'white', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center' }}>
-      <span className='flex justify-center items-center' style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>
-        <img src="/jellyfish.png" alt="icon" className='w-[70%] h-[70%]' />
-      </span>
-    </div>
-    <span style={{ color:'white', fontWeight:800, fontSize:13, letterSpacing:'-0.01em' }}>
-      TAPTIPTUP From Indonesia 🚀
-    </span>
-  </div>
-);
+// const BrandLogo = () => (
+//   <div className='md:mb-[48px] mb-0 inline-flex' style={{ 
+//     alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', 
+//     border:'1px solid rgba(255,255,255,0.2)', borderRadius:0, padding:'8px 16px' 
+//   }}>
+//     <div style={{ width:26, height:26, background:'white', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center' }}>
+//       <span className='flex justify-center items-center' style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>
+//         <img src="/jellyfish.png" alt="icon" className='w-[70%] h-[70%]' />
+//       </span>
+//     </div>
+//     <span style={{ color:'white', fontWeight:800, fontSize:13, letterSpacing:'-0.01em' }}>
+//       TAPTIPTUP From Indonesia 🚀
+//     </span>
+//   </div>
+// );
 
-const HeroJellyfish = () => (
-  <div style={{ position:'relative' }} className='md:mb-[32px] mt-0 md:mt-[-10px] mb-[16px]'>
-    <motion.img className='md:block hidden' src="/jellyfish.png" alt=""
-      animate={{ y:[0,-10,0] }} transition={{ duration:4, repeat:Infinity, ease:'easeInOut' }}
-      style={{ width:'18%', userSelect:'none', pointerEvents:'none' }} />
-    {/* <motion.img className='md:block md:opacity-[0.45] opacity-[0.20]' src="/jellyfish.png" alt=""
-      animate={{ y:[0,8,0], rotate:[-45,-38,-45] }} 
-      transition={{ duration:5.5, repeat:Infinity, ease:'easeInOut', delay:0.8 }}
-      style={{ position:'absolute', top:-60, right:-30, width:'44%', transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} /> */}
-  </div>
-);
+// const HeroJellyfish = () => (
+//   <div style={{ position:'relative' }} className='md:mb-[32px] mt-0 md:mt-[-10px] mb-[16px]'>
+//     <motion.img className='md:block hidden' src="/jellyfish.png" alt=""
+//       animate={{ y:[0,-10,0] }} transition={{ duration:4, repeat:Infinity, ease:'easeInOut' }}
+//       style={{ width:'18%', userSelect:'none', pointerEvents:'none' }} />
+//     {/* <motion.img className='md:block md:opacity-[0.45] opacity-[0.20]' src="/jellyfish.png" alt=""
+//       animate={{ y:[0,8,0], rotate:[-45,-38,-45] }} 
+//       transition={{ duration:5.5, repeat:Infinity, ease:'easeInOut', delay:0.8 }}
+//       style={{ position:'absolute', top:-60, right:-30, width:'44%', transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} /> */}
+//   </div>
+// );
 
-const HeroContent = () => (
-  <>
-    <h1 style={{ 
-      fontSize:'clamp(28px,3.2vw,40px)', fontWeight:900, color:'white', 
-      lineHeight:1.20, letterSpacing:'-0.02em', marginBottom:14 
-    }}>
-      Mulai Terima<br />
-      <span style={{ color:'#a5b4fc' }}>Dukungan</span> Real-time.
-    </h1>
-    <p style={{ color:'rgba(199,210,254,0.8)', lineHeight:1.65 }} 
-       className='md:text-[15px] text-[13px] md:w-[90%] w-[98%]'>
-      Platform donasi real-time untuk streamer Indonesia dengan overlay OBS custom, 
-      pembayaran lokal, dan pencairan cepat.
-    </p>
-  </>
-);
+// const HeroContent = () => (
+//   <>
+//     <h1 style={{ 
+//       fontSize:'clamp(28px,3.2vw,40px)', fontWeight:900, color:'white', 
+//       lineHeight:1.20, letterSpacing:'-0.02em', marginBottom:14 
+//     }}>
+//       Mulai Terima<br />
+//       <span style={{ color:'#a5b4fc' }}>Dukungan</span> Real-time.
+//     </h1>
+//     <p style={{ color:'rgba(199,210,254,0.8)', lineHeight:1.65 }} 
+//        className='md:text-[15px] text-[13px] md:w-[90%] w-[98%]'>
+//       Platform donasi real-time untuk streamer Indonesia dengan overlay OBS custom, 
+//       pembayaran lokal, dan pencairan cepat.
+//     </p>
+//   </>
+// );
 
-const StatBadge = ({ value, label }) => (
-  <div style={{ 
-    background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', 
-    padding:'14px 20px', textAlign:'center' 
-  }}>
-    <div style={{ fontSize:22, fontWeight:900, color:'white', lineHeight:1 }}>{value}</div>
-    <div style={{ fontSize:11, color:'rgba(255,255,255,0.5)', marginTop:4, fontWeight:600 }}>
-      {label}
-    </div>
-  </div>
-);
+// const StatBadge = ({ value, label }) => (
+//   <div style={{ 
+//     background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', 
+//     padding:'14px 20px', textAlign:'center' 
+//   }}>
+//     <div style={{ fontSize:22, fontWeight:900, color:'white', lineHeight:1 }}>{value}</div>
+//     <div style={{ fontSize:11, color:'rgba(255,255,255,0.5)', marginTop:4, fontWeight:600 }}>
+//       {label}
+//     </div>
+//   </div>
+// );
 
-const StatsGrid = () => (
-  <div className='md:inline hidden' style={{ position:'relative', zIndex:10 }}>
-    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:28 }}>
-      <StatBadge value="2.5%" label="Potongan" />
-      <StatBadge value="99.9%" label="Uptime" />
-      <StatBadge value="<2det" label="Notif Alert" />
-    </div>
-  </div>
-);
+// const StatsGrid = () => (
+//   <div className='md:inline hidden' style={{ position:'relative', zIndex:10 }}>
+//     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:28 }}>
+//       <StatBadge value="2.5%" label="Potongan" />
+//       <StatBadge value="99.9%" label="Uptime" />
+//       <StatBadge value="<2det" label="Notif Alert" />
+//     </div>
+//   </div>
+// );
 
 // ─── LEFT PANEL ───────────────────────────────────────────────────────────────
 const LeftPanel = () => (
@@ -289,9 +297,78 @@ const RightPanel = ({ T, isDark, setIsDark, children }) => (
 
 // ─── MAIN AUTH FORM ───────────────────────────────────────────────────────────
 const MainAuthForm = ({ 
-  T, isLogin, setIsLogin, loading, formData, setFormData, 
-  isTabActive, handleSubmit, setCurrentPage 
-}) => {
+    T, isLogin, setIsLogin, loading, formData, setFormData, 
+    isTabActive, handleSubmit, setCurrentPage 
+  }) => {
+    // State untuk error messages
+    const [errors, setErrors] = useState({ username: '', email: '', password: '' });
+    
+    useEffect(() => {
+      setErrors({ username: '', email: '', password: '' });
+    }, [isLogin]);
+
+    // Validasi form sebelum submit
+    const validateForm = () => {
+      const newErrors = { username: '', email: '', password: '' };
+      let isValid = true;
+      
+      if (!isLogin) {
+        // Validasi username
+        if (!formData.username) {
+          newErrors.username = 'Username wajib diisi';
+          isValid = false;
+        } else if (!isValidUsername(formData.username)) {
+          newErrors.username = 'Username 3-20 karakter (huruf, angka, _, -)';
+          isValid = false;
+        }
+        
+        // Cek XSS di username
+        if (detectXSS(formData.username)) {
+          newErrors.username = 'Username tidak valid';
+          isValid = false;
+        }
+      }
+      
+      // Validasi email
+      if (!formData.email) {
+        newErrors.email = 'Email wajib diisi';
+        isValid = false;
+      } else if (!isValidEmail(formData.email)) {
+        newErrors.email = 'Format email tidak valid';
+        isValid = false;
+      }
+      
+      // Cek XSS di email
+      if (detectXSS(formData.email)) {
+        newErrors.email = 'Email tidak valid';
+        isValid = false;
+      }
+      
+      // Validasi password
+      if (!formData.password) {
+        newErrors.password = 'Password wajib diisi';
+        isValid = false;
+      } else if (formData.password.length < 6) {
+        newErrors.password = 'Password minimal 6 karakter';
+        isValid = false;
+      }
+      
+      // Cek XSS di password
+      if (detectXSS(formData.password)) {
+        newErrors.password = 'Password tidak valid';
+        isValid = false;
+      }
+      
+      setErrors(newErrors);
+      return isValid;
+  };
+    
+  // Wrapper handleSubmit dengan validasi
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;     // ← Perbaikan
+    handleSubmit(e);
+  };
   const isFormValid = formData.email && formData.password && (isLogin || formData.username);
 
   return (
@@ -336,7 +413,7 @@ const MainAuthForm = ({
           ))}
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleFormSubmit}>
           <div style={{ display:'flex', flexDirection:'column', gap:16, marginBottom:20 }}>
             <div className={`grid ${isLogin ? 'grid-cols-1' : ' grid-cols-1 md:grid-cols-2'} gap-4`}>
                 {!isLogin && (
@@ -355,9 +432,7 @@ const MainAuthForm = ({
                       T={T} 
                     />
                   </motion.div>
-                )}
-              {/* <AnimatePresence>
-              </AnimatePresence> */}
+              )}
               <AuthInput 
                 icon={Mail} 
                 type="email" 
@@ -365,8 +440,13 @@ const MainAuthForm = ({
                 value={formData.email} 
                 onChange={v => setFormData(f => ({ ...f, email:v }))} 
                 T={T} 
-              />
+                />
             </div>
+            {errors.username && (
+              <p style={{ color: '#ef4444', fontSize: 12, marginTop: -12, marginBottom: 12 }}>
+                {errors.username}
+              </p>
+            )}
             <AuthInput 
               icon={Lock} 
               type="password" 
@@ -442,13 +522,35 @@ const MainAuthForm = ({
 
 // ─── FORGOT PASSWORD PAGE ────────────────────────────────────────────────────
 const ForgotPasswordPage = ({ T, setCurrentPage, emailReset, setEmailReset, loading, setLoading, notify, closeNotif }) => {
+  const [error, setError] = useState('');
+  
   const handleForgotPassword = async () => {
-    if (!emailReset) return;
+    setError('');
+    
+    // Validasi email
+    if (!emailReset) {
+      setError('Email wajib diisi');
+      return;
+    }
+    
+    if (!isValidEmail(emailReset)) {
+      setError('Format email tidak valid');
+      return;
+    }
+    
+    // Cek XSS
+    if (detectXSS(emailReset)) {
+      setError('Email tidak valid');
+      return;
+    }
+    
+    // Sanitasi sebelum发送
+    const sanitizedEmail = sanitizeInput(emailReset);
     
     setLoading(true);
     try {
       const res = await axios.post('https://server-dukungin-production.up.railway.app/api/auth/forgot-password', { 
-        email: emailReset 
+        email: sanitizedEmail 
       });
       notify('Link Reset Dikirim!', res.data.message, 'success');
       setTimeout(() => {
@@ -499,6 +601,16 @@ const ForgotPasswordPage = ({ T, setCurrentPage, emailReset, setEmailReset, load
           Masukkan email kamu dan kami akan kirim link reset password.
         </p>
       </div>
+
+      {error && (
+        <div style={{ 
+          background: '#fee2e2', border: '1px solid #fecaca', borderRadius: 8, 
+          padding: '12px 16px', marginBottom: 16, display: 'flex', alignItems: 'center' 
+        }}>
+          <AlertCircle size={16} style={{ color: '#ef4444', marginRight: 8 }} />
+          <span style={{ color: '#dc2626', fontSize: 13 }}>{error}</span>
+        </div>
+      )}
 
       <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
         <AuthInput 
@@ -669,27 +781,61 @@ const ResetPasswordPage = ({ T, notify, closeNotif, navigate }) => {
   const [formData, setFormData] = useState({ password: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState({ strength: 0, message: '' });
   const token = searchParams.get('token');
   const email = searchParams.get('email');
 
+  // Update handler untuk password dengan validasi
+  const handlePasswordChange = (password) => {
+    const sanitized = sanitizeInput(password);
+    setFormData(f => ({ ...f, password: sanitized }));
+    
+    // Update password strength
+    if (sanitized) {
+      setPasswordStrength(validatePassword(sanitized));
+    } else {
+      setPasswordStrength({ strength: 0, message: '' });
+    }
+  };
+
+
+  
   const handleReset = async (e) => {
     e.preventDefault();
+    setError('');
     
-    if (formData.password !== formData.confirmPassword) {
-      setError('Password konfirmasi tidak cocok');
+    // Validasi password
+    if (!formData.password) {
+      setError('Password wajib diisi');
       return;
     }
-    if (formData.password.length < 6) {
+    
+    // Validasi password strength
+    const pwdValidation = validatePassword(formData.password);
+    if (!pwdValidation.isValid) {
       setError('Password minimal 6 karakter');
       return;
     }
     
-    setError('');
+    // Cek XSS
+    if (detectXSS(formData.password)) {
+      setError('Password tidak valid');
+      return;
+    }
+    
+    // Validasi konfirmasi password
+    if (formData.password !== formData.confirmPassword) {
+      setError('Password konfirmasi tidak cocok');
+      return;
+    }
+    
     setLoading(true);
 
     try {
       const res = await axios.post('https://server-dukungin-production.up.railway.app/api/auth/reset-password', {
-        email, token, newPassword: formData.password
+        email: sanitizeInput(email),
+        token: sanitizeInput(token),
+        newPassword: formData.password
       });
       notify('Password Berhasil Diubah!', res.data.message, 'success');
       setTimeout(() => navigate('/auth'), 2500);
@@ -751,9 +897,14 @@ const ResetPasswordPage = ({ T, notify, closeNotif, navigate }) => {
             type="password" 
             placeholder="Password baru (min 6 karakter)" 
             value={formData.password}
-            onChange={v => setFormData(f => ({ ...f, password: v }))}
+            onChange={handlePasswordChange}   // ← GANTI INI (jangan inline)
             T={T}
           />
+          {passwordStrength.message && (
+            <p style={{ fontSize:13, marginTop:4, color: passwordStrength.strength >= 4 ? '#10b981' : '#eab308' }}>
+              {passwordStrength.message}
+            </p>
+          )}
           <AuthInput 
             icon={Lock} 
             type="password" 
@@ -797,6 +948,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ username:'', email:'', password:'' });
   const [emailReset, setEmailReset] = useState('');
+  // const [validationErrors, setValidationErrors] = useState({});
 
   // Notification
   const [notification, setNotification] = useState({ show:false, title:'', message:'', type:'success' });
@@ -812,27 +964,92 @@ const Auth = () => {
     }
   }, [searchParams]);
 
-  // Main form submit handler
+  // Reset form ketika pindah tab
+  useEffect(() => {
+    if (isLogin) {
+      // Saat di Login → hapus username
+      setFormData(prev => ({ ...prev, username: '' }));
+    } else {
+      // Saat di Register → boleh kosong semua atau reset full
+      setFormData({ username: '', email: '', password: '' });
+    }
+  }, [isLogin]);
+
+  // Main form submit handler dengan XSS protection
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const isFormValid = formData.email && formData.password && (isLogin || formData.username);
     
-    if (!isFormValid) return;
+    // Validasi awal - sanitasi semua input dulu
+    const sanitizedData = {
+      username: sanitizeInput(formData.username),
+      email: sanitizeInput(formData.email),
+      password: formData.password // Jangan sanitize password, tapi validasi
+    };
+    
+    const isFormValid = sanitizedData.email && formData.password && (isLogin || sanitizedData.username);
+    
+    if (!isFormValid) {
+      notify('Validasi Gagal', 'Mohon lengkapi semua field', 'error');
+      return;
+    }
+    
+    // CEK XSS sebelum submit
+    if (detectXSS(sanitizedData.username) || detectXSS(sanitizedData.email) || detectXSS(formData.password)) {
+      notify('Peringatan', 'Input mengandung karakter berbahaya', 'error');
+      return;
+    }
+    
+    // Validasi username jika register
+    if (!isLogin && sanitizedData.username) {
+      if (!isValidUsername(sanitizedData.username)) {
+        notify('Validasi Gagal', 'Username harus 3-20 karakter, alphanumeric saja', 'error');
+        return;
+      }
+    }
+    
+    // Validasi email format
+    if (!isValidEmail(sanitizedData.email)) {
+      notify('Validasi Gagal', 'Format email tidak valid', 'error');
+      return;
+    }
     
     setLoading(true);
     
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-      const res = await axios.post(`https://server-dukungin-production.up.railway.app${endpoint}`, formData);
+      
+      // Kirim data yang sudah disanitasi
+      const payload = isLogin 
+        ? { 
+            email: sanitizedData.email, 
+            password: formData.password 
+          }
+        : { 
+            username: sanitizedData.username, 
+            email: sanitizedData.email, 
+            password: formData.password 
+          };
+      
+      const res = await axios.post(`https://server-dukungin-production.up.railway.app${endpoint}`, payload);
       
       if (isLogin) {
-        // Login success
+        // Login success - SIMPAN TOKEN DENGAN AMAN
         localStorage.setItem('token', res.data.token);
+        
+        // Simpan info user (tidak sensitive)
+        if (res.data.user) {
+          localStorage.setItem('user', JSON.stringify(safeText(JSON.stringify({
+            id: res.data.user.id,
+            username: res.data.user.username,
+            email: res.data.user.email // Email boleh disimpan
+          }))));
+        }
+        
         notify('Login Berhasil!', 'Selamat datang kembali di dashboard!', 'success');
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
         // Register → Verify PIN
-        setTempEmail(formData.email);
+        setTempEmail(sanitizedData.email);
         notify('Registrasi Berhasil', 'Selamat datang streamer', 'success');
         setTimeout(() => {
           closeNotif();
@@ -841,11 +1058,62 @@ const Auth = () => {
         }, 2500);
       }
     } catch (err) {
-      notify('Gagal', err.response?.data?.message || 'Koneksi terputus atau server error', 'error');
+      // ERROR HANDLING - Jangan expose detail error ke user
+      const errorMessage = err.response?.data?.message || 'Koneksi terputus atau server error';
+      
+      // Log error ke console untuk debugging (tidak perlu expose ke user)
+      console.error('[Auth Error]:', err.response?.status, errorMessage);
+      
+      notify('Gagal', errorMessage, 'error');
     } finally {
       setLoading(false);
     }
   };
+  
+  // Fungsi untuk validasi email di Forgot Password
+  // const handleForgotPassword = async (emailReset) => {
+  //   const sanitizedEmail = sanitizeInput(emailReset);
+    
+  //   if (!isValidEmail(sanitizedEmail)) {
+  //     return { success: false, message: 'Email tidak valid' };
+  //   }
+    
+  //   if (detectXSS(sanitizedEmail)) {
+  //     return { success: false, message: 'Email tidak valid' };
+  //   }
+    
+  //   try {
+  //     const res = await axios.post('https://server-dukungin-production.up.railway.app/api/auth/forgot-password', { 
+  //       email: sanitizedEmail 
+  //     });
+  //     return { success: true, message: res.data.message };
+  //   } catch (err) {
+  //     return { success: false, message: err.response?.data?.message || 'Email tidak terdaftar' };
+  //   }
+  // };
+  
+  // Fungsi untuk validasi password di Reset Password
+  // const handleResetPassword = async (email, token, newPassword) => {
+  //   const sanitizedEmail = sanitizeInput(email);
+  //   const sanitizedToken = sanitizeInput(token);
+    
+  //   // Validasi password
+  //   const pwdValidation = validatePassword(newPassword);
+  //   if (!pwdValidation.isValid) {
+  //     return { success: false, message: pwdValidation.message };
+  //   }
+    
+  //   try {
+  //     const res = await axios.post('https://server-dukungin-production.up.railway.app/api/auth/reset-password', {
+  //       email: sanitizedEmail,
+  //       token: sanitizedToken,
+  //       newPassword: newPassword // Password jangan disanitasi
+  //     });
+  //     return { success: true, message: res.data.message };
+  //   } catch (err) {
+  //     return { success: false, message: err.response?.data?.message || 'Token tidak valid atau kadaluarsa' };
+  //   }
+  // };
 
   const isTabActive = (i) => (isLogin && i === 0) || (!isLogin && i === 1);
 
