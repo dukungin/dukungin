@@ -17,18 +17,18 @@ const getTheme = (dark) => ({
   inputBorder:      dark ? 'rgba(255,255,255,0.12)'        : 'rgba(79,70,229,0.18)',
   inputBorderFocus: dark ? 'rgba(99,102,241,0.7)'          : 'rgba(79,70,229,0.8)',
   tabBg:            dark ? 'rgba(255,255,255,0.04)'        : 'rgba(79,70,229,0.06)',
-  tabBorder:        dark ? 'rgba(255,255,255,0.08)'        : 'rgba(79,70,229,0.14)',
+  tabBorder:        dark ? 'rgba(255,255,255,0.2)'        : 'rgba(79,70,229,0.14)',
   tabInactive:      dark ? '#475569'                       : '#94a3b8',
   divider:          dark ? 'rgba(255,255,255,0.2)'        : 'rgba(0,0,0,0.08)',
   dividerText:      dark ? '#ffffff'                       : '#94a3b8',
   toggleBg:         dark ? 'rgba(255,255,255,0.08)'        : 'rgba(79,70,229,0.08)',
   toggleColor:      dark ? '#a5b4fc'                       : '#4f46e5',
   heading:          dark ? '#ffffff'                       : '#1e1b4b',
-  subtext:          dark ? '#475569'                       : '#64748b',
+  subtext:          dark ? 'white'                       : '#64748b',
   label:            dark ? '#818cf8'                       : '#4f46e5',
   inputText:        dark ? '#1e1b4b'                       : '#1e1b4b',
   iconDefault:      dark ? '#94a3b8'                       : '#94a3b8',
-  switchText:       dark ? '#475569'                       : '#64748b',
+  switchText:       dark ? 'white'                       : '#64748b',
   switchLink:       dark ? '#818cf8'                       : '#4f46e5',
   backBtn:          dark ? '#94a3b8'                       : '#64748b',
   forgotColor:      dark ? '#818cf8'                       : '#4f46e5',
@@ -397,7 +397,7 @@ const MainAuthForm = ({
 
     <div style={{
           display: 'flex', border: `1px solid ${T.tabBorder}`,
-          borderRadius: 8, overflow: 'hidden', marginBottom: 28
+          borderRadius: 0, overflow: 'hidden', marginBottom: 28
         }}>
           {[
             { label: 'Masuk', icon: '→' },
@@ -444,6 +444,8 @@ const MainAuthForm = ({
                   T={T} 
                 />
               )}
+            </div>
+            <div className={`grid ${!isLogin ? 'md:grid-cols-2' : 'md:grid-cols-1' } grid-cols-1 gap-4`}>
               <AuthInput 
                 icon={Mail} 
                 type="email" 
@@ -452,20 +454,20 @@ const MainAuthForm = ({
                 onChange={v => setFormData(f => ({ ...f, email:v }))} 
                 T={T} 
                 />
+              {errors.username && (
+                <p style={{ color: '#ef4444', fontSize: 12, marginTop: -12, marginBottom: 12 }}>
+                  {errors.username}
+                </p>
+              )}
+              <AuthInput 
+                icon={Lock} 
+                type="password" 
+                placeholder="Password" 
+                value={formData.password} 
+                onChange={v => setFormData(f => ({ ...f, password:v }))} 
+                T={T} 
+              />
             </div>
-            {errors.username && (
-              <p style={{ color: '#ef4444', fontSize: 12, marginTop: -12, marginBottom: 12 }}>
-                {errors.username}
-              </p>
-            )}
-            <AuthInput 
-              icon={Lock} 
-              type="password" 
-              placeholder="Password" 
-              value={formData.password} 
-              onChange={v => setFormData(f => ({ ...f, password:v }))} 
-              T={T} 
-            />
           </div>
 
           {/* {isLogin && (
@@ -514,11 +516,11 @@ const MainAuthForm = ({
         </div> */}
 
         <p className='mt-6 uppercase' style={{ textAlign:'left', color: T.switchText, fontSize:14 }}>
-          {isLogin ? 'Belum punya akun?' : 'Sudah punya akun?'}{' '}
+          {isLogin ? 'Belum punya akun ?' : 'Sudah punya akun ?'}{' '}
           <button onClick={() => setIsLogin(!isLogin)}
             style={{ 
               background:'none', border:'none', cursor:'pointer', 
-              color: T.switchLink, fontWeight:800, fontSize:14 
+              color: T.switchLink, fontWeight:800, fontSize:14, marginLeft: 1 
             }}
             onMouseEnter={e => e.currentTarget.style.color='#7c3aed'}
             onMouseLeave={e => e.currentTarget.style.color=T.switchLink}
@@ -1017,11 +1019,21 @@ const Auth = () => {
     const sanitizedData = {
       username: sanitizeInput(formData.username),
       email: sanitizeInput(formData.email),
-      password: formData.password // Jangan sanitize password, tapi validasi
+      password: formData.password,
+      securityPin: formData.securityPin || ''
     };
+
+    // Validasi tambahan untuk Register
+    if (!isLogin) {
+      if (!sanitizedData.securityPin || sanitizedData.securityPin.length !== 4) {
+        notify('Validasi Gagal', 'PIN Keamanan harus 4 digit angka', 'error');
+        return;
+      }
+    }
     
-    const isFormValid = sanitizedData.email && formData.password && (isLogin || sanitizedData.username);
-    
+    const isFormValid = sanitizedData.email && formData.password && 
+                     (isLogin || (sanitizedData.username && sanitizedData.securityPin));
+
     if (!isFormValid) {
       notify('Validasi Gagal', 'Mohon lengkapi semua field', 'error');
       return;
@@ -1061,7 +1073,8 @@ const Auth = () => {
         : { 
             username: sanitizedData.username, 
             email: sanitizedData.email, 
-            password: formData.password 
+            password: formData.password,
+            securityPin: sanitizedData.securityPin  
           };
       
       const res = await axios.post(`https://server-dukungin-production.up.railway.app${endpoint}`, payload);
