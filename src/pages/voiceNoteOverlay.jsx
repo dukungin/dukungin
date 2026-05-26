@@ -223,7 +223,13 @@ const VoiceNoteOverlay = () => {
 
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
         const startTime = Date.now();
-        const duration = audioDurationMsRef.current; // ✅ dari ref
+
+        // ✅ Baca langsung dari audio element, bukan dari ref
+        const duration = isFinite(audio.duration) && audio.duration > 0
+          ? audio.duration * 1000
+          : audioDurationMsRef.current;
+
+        console.log('[onplay] duration used for progress:', duration);
 
         progressIntervalRef.current = setInterval(() => {
           const elapsed = Date.now() - startTime;
