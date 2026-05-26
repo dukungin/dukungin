@@ -28,9 +28,9 @@ const STATUS_CONFIG = {
   FAILED: { label: 'Ditolak', icon: <XCircle size={13} />, className: 'bg-red-50 text-red-500 border border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-800' },
 };
 
-const MIN_TARIK = 20000;
+const MIN_TARIK = 10000;
 const MAX_TARIK = 10000000;
-const MIN_SALDO = 20000;
+const MIN_SALDO = 10000;
 const FEE_PERCENT = 0.025;
 const ADMIN_FEE = 0; // 0 dulu karena gratis
 
@@ -87,6 +87,8 @@ export const WithdrawPage = () => {
   });
 
   const amt = parseFloat(formData.amount) || 0;
+  const WITHDRAW_FEE = 1500;
+  const netAmount = Math.max(0, amt - WITHDRAW_FEE);
 
   const handleSubmit = () => {
     if (!formData.amount || isNaN(amt) || amt <= 0) return alert('Masukkan nominal yang valid');
@@ -290,15 +292,15 @@ export const WithdrawPage = () => {
               <div className="bg-slate-50 dark:bg-slate-800/60 border ... p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-slate-500">Nominal penarikan</span>
-                  <span className="font-black">Rp {formatRupiah(amt)}</span>
+                  <span>Rp {formatRupiah(netAmount)}</span>
                 </div>
                 <div className="flex justify-between text-slate-400 text-xs">
-                  <span>2.5% sudah dipotong saat donasi masuk</span>
-                  <span>✓ Gratis</span>
+                  <span>Biaya admin</span>
+                  <span>Rp {formatRupiah(WITHDRAW_FEE)}</span>
                 </div>
                 <div className="border-t pt-2 flex justify-between text-emerald-600 font-bold">
                   <span>Yang kamu terima</span>
-                  <span>Rp {formatRupiah(amt)}</span>  {/* sama persis */}
+                  <span>Rp {formatRupiah(netAmount)}</span>
                 </div>
               </div>
             )}
@@ -417,8 +419,7 @@ export const WithdrawPage = () => {
                       <tr key={wd._id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all">
                         <td className="px-6 py-5">
                           <p className="flex items-center text-sm font-black text-slate-800 dark:text-green-400">
-                            {Number(wd.amount).toLocaleString('id-ID')} <ArrowRight size={14} className='mx-1' /> 
-                            {Number(wd.amount - (wd.amount * 0.025)).toLocaleString('id-ID')}
+                            {Number(wd.amount).toLocaleString('id-ID')}
                           </p>
                         </td>
                         <td className="px-6">
