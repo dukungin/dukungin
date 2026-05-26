@@ -781,6 +781,7 @@ const CombinedOverlay = () => {
     const joinRooms = () => {
       socket.emit('join-room', token);
       socket.emit('join-room', `${token}-mediashare`);
+      socket.emit('join-room', `${token}-voice`); 
       console.log(`[CombinedOverlay] ✅ Joined: ${token} & ${token}-mediashare`);
     };
 
@@ -1019,6 +1020,7 @@ const CombinedOverlay = () => {
       configRef.current = newConfig;
       if (newConfig.overlayEnabled === false) {
         setAlertData(null); clearMediaDisplay();
+        stopVoiceAudio();
         setAlertProgress(100); setMediaProgress(100);
         [alertIntervalRef, mediaIntervalRef].forEach(r => clearInterval(r.current));
         [alertTimerRef, mediaTimerRef].forEach(r => clearTimeout(r.current));
