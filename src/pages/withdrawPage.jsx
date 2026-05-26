@@ -200,7 +200,7 @@ export const WithdrawPage = () => {
           {[
             { label: 'Min. Tarik',  value: `Rp ${MIN_TARIK.toLocaleString('id-ID')}` },
             { label: 'Maks. Tarik', value: `Rp ${(MAX_TARIK / 1000000).toFixed(0)}jt` },
-            { label: 'Biaya Admin', value: '2.5%' },
+            { label: 'Biaya Admin', value: '1.500' },
           ].map(r => (
             <div key={r.label} className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-none p-3 text-center">
               <p className="font-black text-blue-600 dark:text-white text-sm">{r.value}</p>
@@ -292,13 +292,13 @@ export const WithdrawPage = () => {
               <div className="bg-slate-50 dark:bg-slate-800/60 border ... p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-slate-500">Nominal penarikan</span>
-                  <span>Rp {formatRupiah(netAmount)}</span>
+                  <span>Rp {formatRupiah(amt)}</span>
                 </div>
                 <div className="flex justify-between text-slate-400 text-xs">
                   <span>Biaya admin</span>
                   <span>Rp {formatRupiah(WITHDRAW_FEE)}</span>
                 </div>
-                <div className="border-t pt-2 flex justify-between text-emerald-600 font-bold">
+                <div className="border-t pt-2 flex justify-between text-emerald-400 font-bold">
                   <span>Yang kamu terima</span>
                   <span>Rp {formatRupiah(netAmount)}</span>
                 </div>
@@ -423,7 +423,7 @@ export const WithdrawPage = () => {
                           </p>
                         </td>
                         <td className="px-6">
-                          <p className="text-[14px] relative top-[-1.4px] text-slate-400 dark:text-red-300 font-medium">-2.5%</p>
+                          <p className="text-[14px] relative top-[-1.4px] text-slate-400 dark:text-red-300 font-medium">1.500</p>
                           {/* <p className="font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.accountName}</p> */}
                         </td>
                         <td className="px-6 py-5">
