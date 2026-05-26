@@ -1414,10 +1414,10 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   };
 
   const donors = [
-    { name: 'Budi Santoso', amount: 50000,  msg: 'Semangat terus ngodingnya bang!' },
-    { name: 'Reza Gunawan',  amount: 150000, msg: 'Mantap kontennya, keep it up!'   },
-    { name: 'Anonim',       amount: 10000,  msg: 'Good luck!'                       },
-    { name: 'RizkyDev',     amount: 200000, msg: 'Dukung terus creator lokal!'      },
+    { name: 'Budi Santoso', amount: 50000,  msg: 'Semangat terus ngodingnya yakk!' },
+    { name: 'Reza Gunawan',  amount: 150000, msg: 'Mantap konten-kontennya, gass!'   },
+    { name: 'Anonim',       amount: 10000,  msg: 'Seru banget streamingnya bang!'                       },
+    { name: 'RizkyDev',     amount: 200000, msg: 'Dukung terus creator Indonesia!'      },
   ];
 
   const triggerDemo = () => {
@@ -1488,7 +1488,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         fontFamily: 'monospace',
         letterSpacing: '0.05em',
       }}>
-        {`> `}{new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+        {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
       </div>
     )
     : <div />;
@@ -1523,7 +1523,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
         position: 'relative',
         zIndex: 2,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        {/* <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <FrogDeco size={12} />
           <span style={{
             fontFamily: 'monospace',
@@ -1533,7 +1533,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             letterSpacing: '0.18em',
             fontWeight: 700,
           }}>DUKUNGAN MASUK</span>
-        </div>
+        </div> */}
         <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
           {/* Pixel status dots */}
           {['#ff4444', '#ffaa00', hl].map((c, i) => (
@@ -1591,8 +1591,8 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
           color: hl,
           letterSpacing: '-1px',
           lineHeight: 1,
-          borderLeft: `3px solid ${hl}`,
-          paddingLeft: 8,
+          // borderLeft: `3px solid ${hl}`,
+          // paddingLeft: 8,
           marginBottom: 6,
           textShadow: `0 0 12px ${hl}60`,
         }}>
@@ -1612,7 +1612,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
             lineHeight: 1.4,
             marginBottom: 6,
           }}>
-            {'>> '}{currentDonor.msg}
+            {currentDonor.msg}
           </div>
         )}
 
@@ -1647,7 +1647,28 @@ const smoothInner = (
     gap: 10,
   }}>
     {/* Icon + Nama */}
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+      <div>
+        {/* <div style={{
+          fontSize: 11,
+          fontWeight: 500,
+          color: fg,
+          opacity: 0.5,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          marginBottom: 2,
+          }}>
+          Dukungan Masuk
+          </div> */}
+        <div style={{
+          fontSize: 24,
+          fontWeight: 700,
+          color: fg,
+          lineHeight: 1.2,
+        }}>
+          {currentDonor.name}
+        </div>
+      </div>
       <div style={{
         width: 44,
         height: 44,
@@ -1662,27 +1683,6 @@ const smoothInner = (
       }}>
         {renderIconPreview(settings.customIcon, 22)}
       </div>
-      <div>
-        {/* <div style={{
-          fontSize: 11,
-          fontWeight: 500,
-          color: fg,
-          opacity: 0.5,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          marginBottom: 2,
-        }}>
-          Dukungan Masuk
-        </div> */}
-        <div style={{
-          fontSize: 15,
-          fontWeight: 700,
-          color: fg,
-          lineHeight: 1.2,
-        }}>
-          {currentDonor.name}
-        </div>
-      </div>
     </div>
 
     {/* Divider tipis */}
@@ -1693,6 +1693,7 @@ const smoothInner = (
       fontSize: 26,
       fontWeight: 800,
       color: hl,
+      margin: "8px 0px",
       letterSpacing: '-0.5px',
       lineHeight: 1,
     }}>
@@ -1719,7 +1720,7 @@ const smoothInner = (
     {/* Timestamp */}
     {settings.showTimestamp !== false && (
       <div style={{
-        fontSize: 11,
+        fontSize: 24,
         color: fg,
         opacity: 0.35,
         fontWeight: 400,
@@ -1762,14 +1763,14 @@ const smoothInner = (
           }}>
             {renderIconPreview(settings.customIcon, 16)}
           </span>
-          <span style={{
+          {/* <span style={{
             fontFamily: 'monospace',
             fontSize: 10,
             fontWeight: 700,
             color: hl,
             textTransform: 'uppercase',
             letterSpacing: '0.15em',
-          }}>★ Dukungan Masuk! ★</span>
+          }}>★ Dukungan Masuk! ★</span> */}
         </div>
         <FrogDeco size={11} />
       </div>
@@ -1822,18 +1823,17 @@ const smoothInner = (
             color: fg,
             opacity: 0.8,
             lineHeight: 1.45,
-            borderLeft: `2px solid ${hl}`,
-            paddingLeft: 8,
+            // borderLeft: `2px solid ${hl}`,
+            // paddingLeft: 8,
             marginBottom: 6,
           }}>
             {currentDonor.msg}
-            <span style={{ animation: 'blink 1s step-end infinite', color: hl }}>▮</span>
           </div>
         )}
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {ts}
-          <div style={{
+          {/* <div style={{
             fontFamily: 'monospace',
             fontSize: 8,
             color: hl,
@@ -1841,7 +1841,7 @@ const smoothInner = (
             letterSpacing: '0.1em',
           }}>
             {`[ PRESS ▲ TO CONTINUE ]`}
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -1871,15 +1871,15 @@ const smoothInner = (
             alignItems: 'center',
             gap: 6,
           }}>
-            <FrogDeco size={11} />
-            <span style={{
+            <FrogDeco size={16} />
+            {/* <span style={{
               fontFamily: 'monospace',
               fontSize: 8,
               color: hl,
               opacity: 0.55,
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-            }}>DONASI</span>
+            }}>DONASI</span> */}
           </div>
           <span style={{
             fontFamily: 'monospace',
@@ -1896,21 +1896,21 @@ const smoothInner = (
         {/* Name */}
         <div style={{
           fontFamily: 'monospace',
-          fontSize: 15,
+          fontSize: 24,
           fontWeight: 900,
           color: fg,
           marginBottom: 3,
           borderBottom: `1px solid ${hl}20`,
           paddingBottom: 5,
         }}>
-          {'> '}{currentDonor.name}
+          {currentDonor.name}
         </div>
 
         {/* Message */}
         {currentDonor.msg && (
           <div style={{
             fontFamily: 'monospace',
-            fontSize: 10,
+            fontSize: 24,
             color: fg,
             opacity: 0.7,
             lineHeight: 1.4,
@@ -1923,16 +1923,6 @@ const smoothInner = (
         {/* Bottom */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {ts}
-          {/* Pixel dash divider */}
-          <div style={{
-            fontFamily: 'monospace',
-            fontSize: 8,
-            color: hl,
-            opacity: 0.35,
-            letterSpacing: '2px',
-          }}>
-            {'- - - - - - - -'}
-          </div>
         </div>
       </div>
     </div>

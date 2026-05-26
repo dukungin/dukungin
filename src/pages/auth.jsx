@@ -259,7 +259,7 @@ const LeftPanel = () => (
 // ─── THEME TOGGLE ─────────────────────────────────────────────────────────────
 const ThemeToggle = ({ isDark, onToggle, T }) => (
   <motion.button onClick={onToggle} whileTap={{ scale:0.90 }} style={{
-    position:'absolute', top:0, right:0, display:'flex', alignItems:'center', gap:7,
+    position:'absolute', top:30, right:35, display:'flex', alignItems:'center', gap:7,
     background: T.toggleBg, padding:'12px 18px', cursor:'pointer', zIndex:20,
     borderRadius:0, transition:'background 0.35s',
   }}>

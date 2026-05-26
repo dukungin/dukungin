@@ -494,8 +494,8 @@ const calculateMediaShareDuration = (config, amount) => {
               padding: '5px 10px', position: 'relative', zIndex: 2,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
-                <span style={{ fontFamily: monospace, fontSize:16, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>
+                {/* <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span> */}
+                <span style={{ fontFamily: monospace, fontSize:20, marginLeft: 2, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>
                   Media share
                 </span>
               </div>
@@ -507,41 +507,45 @@ const calculateMediaShareDuration = (config, amount) => {
             </div>
 
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
                 <div style={{
                   width: 40, height: 40, border: pixelBorder, flexShrink: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 23, background: hl + '12',
+                  fontSize: 24, background: hl + '12',
                 }}>
-                  {renderIcon(customIcon, 20)}
+                  {renderIcon(customIcon, 24)}
                 </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: monospace, fontSize: 10, color: fg, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div>
-                  <div style={{ fontFamily: monospace, fontSize: 17, fontWeight: 900, color: fg, lineHeight: 1.1 }}>{alert.donorName}</div>
+                <div style={{ flex: 1, minWidth: 0, marginLeft: 4 }}>
+                  {/* <div style={{ fontFamily: monospace, fontSize: 10, color: fg, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div> */}
+                  <div style={{ fontFamily: monospace, fontSize: 24, fontWeight: 900, color: fg, lineHeight: 1.1 }}>{alert.donorName}</div>
                 </div>
               </div>
 
               <div style={{
-                fontFamily: monospace, fontSize: 24, fontWeight: 900, color: hl,
-                letterSpacing: '-1px', lineHeight: 1, borderLeft: `3px solid ${hl}`,
-                paddingLeft: 8, marginBottom: 6, textShadow: `0 0 10px ${hl}55`,
+                fontFamily: monospace, fontSize: 24,
+                padding: "10px 0px",
+                fontWeight: 900, color: hl,
+                letterSpacing: '-1px', lineHeight: 1, 
+                // borderLeft: `3px solid ${hl}`,
+                // paddingLeft: 8, 
+                marginBottom: 6, textShadow: `0 0 10px ${hl}55`,
               }}>
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </div>
 
               {alert.message && (
                 <div style={{
-                  fontFamily: monospace, fontSize: 23, color: fg, fontWeight: 900,
+                  fontFamily: monospace, fontSize: 24, color: fg, fontWeight: 400,
                   background: 'rgba(255,255,255,0.04)', border: dimBorder,
-                  padding: '5px 8px', lineHeight: 1.4, marginBottom: 6,
+                  padding: '5px 10px', lineHeight: 1.4, marginBottom: 6,
                 }}>
-                  {'>> '}{alert.message}
+                  {alert.message}
                 </div>
               )}
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 }}>
                 {showTs && alert?.receivedAt
-                  ? <div style={{ fontFamily: monospace, fontSize:16, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                  ? <div style={{ fontFamily: monospace, fontSize:20, color: 'rgba(255,255,255,0.35)' }}>{formatTimestamp(alert.receivedAt)}</div>
                   : <div />
                 }
                 <div style={{ display: 'flex', gap: 2 }}>
@@ -564,21 +568,21 @@ const calculateMediaShareDuration = (config, amount) => {
 
             <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {/* Icon + Nama */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: 10,
-                  background: hl + '22', border: `1.5px solid ${hl}40`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0,
-                }}>
-                  {renderIcon(customIcon, 18)}
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
                 <div>
                   {/* <div style={{ fontSize: 26, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>
                     Media share
-                  </div> */}
+                    </div> */}
                   <div style={{ fontSize: 26, fontWeight: 700, color: fg }}>
                     {alert.donorName}
                   </div>
+                </div>
+                <div style={{
+                  width: 36, height: 36, borderRadius: 10,
+                  background: hl + '22', border: `1.5px solid ${hl}40`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0,
+                }}>
+                  {renderIcon(customIcon, 24)}
                 </div>
               </div>
 
@@ -593,7 +597,8 @@ const calculateMediaShareDuration = (config, amount) => {
               {/* Pesan */}
               {alert.message && (
                 <div style={{
-                  fontSize: 24, color: fg, fontWeight: 900,
+                  fontSize: 24, color: fg, fontWeight: 400,
+                  marginTop: 12,
                   background: hl + '10', borderRadius: 8, padding: '6px 10px',
                   lineHeight: 1.5, border: `1px solid ${hl}20`,
                 }}>
@@ -621,8 +626,8 @@ const calculateMediaShareDuration = (config, amount) => {
           <div style={{ position: 'relative', overflow: 'hidden' }}>
             <div style={scanlineStyle} />
             {mediaBlock}
-            <div style={{ height: 3, background: hl, position: 'relative', zIndex: 2 }} />
-            <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', position: 'relative', zIndex: 2 }} />
+            {/* <div style={{ height: 3, background: hl, position: 'relative', zIndex: 2 }} /> */}
+            {/* <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', position: 'relative', zIndex: 2 }} /> */}
 
             <div style={{
               background: hl + '15', borderBottom: `1px solid ${hl}40`,
@@ -630,37 +635,40 @@ const calculateMediaShareDuration = (config, amount) => {
               position: 'relative', zIndex: 2,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                <span style={{ fontSize: 16 }}>{renderIcon(customIcon, 16)}</span>
-                <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                <span style={{ fontSize: 24, position: 'relative', bottom: 3 }}>{renderIcon(customIcon, 16)}</span>
+                <span style={{ fontFamily: monospace, fontSize: 24, marginLeft: 6, position: 'relative', top: 2, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
                   Media share 
                 </span>
               </div>
-              <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+              {/* <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span> */}
             </div>
 
             <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>
-                <span style={{ fontFamily: monospace, fontSize:16, color: hl, letterSpacing: '0.12em' }}>NAME</span>
-                <span style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg }}>{alert.donorName}</span>
+                {/* <span style={{ fontFamily: monospace, fontSize:24, color: hl, letterSpacing: '0.12em' }}>NAME</span> */}
+                <span style={{ fontFamily: monospace, fontSize: 24, fontWeight: 900, color: fg }}>{alert.donorName}</span>
               </div>
 
-              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, letterSpacing: '-0.5px', marginBottom: 5, textShadow: `0 0 10px ${hl}50` }}>
+              <div style={{ fontFamily: monospace, fontSize: 24, fontWeight: 900, color: hl, letterSpacing: '-0.5px', marginBottom: 5, textShadow: `0 0 10px ${hl}50` }}>
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </div>
 
               {alert.message && (
-                <div style={{ fontFamily: monospace, fontSize: 23, color: fg, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
+                <div style={{ fontFamily: monospace, fontSize: 24, color: fg, lineHeight: 1.45, 
+                  // borderLeft: `2px solid ${hl}`, 
+                  // paddingLeft: 8, 
+                  marginBottom: 6 }}>
                   {alert.message}
-                  <span style={{ color: hl, animation: 'blink 1s step-end infinite' }}>▮</span>
+                  {/* <span style={{ color: hl, animation: 'blink 1s step-end infinite' }}>▮</span> */}
                 </div>
               )}
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
                 {showTs && alert?.receivedAt
-                  ? <div style={{ fontFamily: monospace, fontSize:16, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                  ? <div style={{ fontFamily: monospace, fontSize:20, color: 'rgba(255,255,255,0.35)' }}>
+                    {formatTimestamp(alert.receivedAt)}</div>
                   : <div />
                 }
-                <div style={{ fontFamily: monospace, fontSize: 8, color: hl, letterSpacing: '0.08em' }}>[ PRESS ▲ TO CONTINUE ]</div>
               </div>
 
               <div style={{ height: 2, background: 'rgba(255,255,255,0.08)', marginTop: 8 }}>
@@ -669,7 +677,7 @@ const calculateMediaShareDuration = (config, amount) => {
             </div>
 
             <div style={{ height: 1, background: 'rgba(255,255,255,0.08)' }} />
-            <div style={{ height: 3, background: hl }} />
+            {/* <div style={{ height: 3, background: hl }} /> */}
             <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
           </div>
         );
@@ -682,31 +690,27 @@ const calculateMediaShareDuration = (config, amount) => {
           {mediaBlock}
           <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontFamily: monospace, fontSize: 23, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
-                <span style={{ fontFamily: monospace, fontSize: 8, color: hl, letterSpacing: '0.18em', textTransform: 'uppercase' }}>MEDIA</span>
-              </div>
-              <span style={{ fontFamily: monospace, fontSize: 23, fontWeight: 900, color: hl, letterSpacing: '-1px', textShadow: `0 0 8px ${hl}50` }}>
+              <span style={{ fontFamily: monospace, fontSize: 24, marginTop: 4, fontWeight: 900, color: hl, letterSpacing: '-1px', textShadow: `0 0 8px ${hl}50` }}>
                 Rp {Number(alert.amount).toLocaleString('id-ID')}
               </span>
             </div>
 
-            <div style={{ fontFamily: monospace, fontSize: 15, fontWeight: 900, color: fg, marginBottom: 3, borderBottom: `1px solid ${hl}20`, paddingBottom: 5 }}>
-              {'> '}{alert.donorName}
+            <div style={{ fontFamily: monospace, fontSize: 24, fontWeight: 900, color: fg, marginBottom: 3, borderBottom: `1px solid ${hl}20`, paddingBottom: 5 }}>
+              {alert.donorName}
             </div>
 
             {alert.message && (
-              <div style={{ fontFamily: monospace, fontSize: 10, color: fg, lineHeight: 1.4, marginBottom: 4 }}>
+              <div style={{ fontFamily: monospace, fontSize: 24, color: fg, lineHeight: 1.4, marginBottom: 4 }}>
                 {alert.message}
               </div>
             )}
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {showTs && alert?.receivedAt
-                ? <div style={{ fontFamily: monospace, fontSize:16, color: 'rgba(255,255,255,0.35)' }}>{'> '}{formatTimestamp(alert.receivedAt)}</div>
+                ? <div style={{ fontFamily: monospace, fontSize:20, color: 'rgba(255,255,255,0.35)' }}>
+                  {formatTimestamp(alert.receivedAt)}</div>
                 : <div />
               }
-              <div style={{ fontFamily: monospace, fontSize: 8, color: hl, letterSpacing: '2px' }}>{'- - - - - - - -'}</div>
             </div>
 
             <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', marginTop: 6 }}>
