@@ -418,16 +418,16 @@ export const WithdrawPage = () => {
                     return (
                       <tr key={wd._id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all">
                         <td className="px-6 py-5">
-                          <p className="flex items-center text-sm font-black text-slate-800 dark:text-green-400">
-                            {Number(wd.amount).toLocaleString('id-ID')}
+                          <p className="flex items-center text-sm text-slate-800 dark:text-green-300">
+                            {Number(wd.amount-1500).toLocaleString('id-ID')}
                           </p>
                         </td>
                         <td className="px-6">
-                          <p className="text-[14px] relative top-[-1.4px] text-slate-400 dark:text-red-300 font-medium">1.500</p>
+                          <p className="text-sm relative top-[-1.4px] text-slate-400 dark:text-red-300 font-medium">1.500</p>
                           {/* <p className="font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.accountName}</p> */}
                         </td>
                         <td className="px-6 py-5">
-                          <p className="font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.paymentMethod || 'BANK'}</p>
+                          <p className="text-slate-600 dark:text-slate-300 text-sm">{wd.paymentMethod || 'BANK'}</p>
                           {/* <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">{wd.channelCode}</p> */}
                         </td>
                         <td className="px-6 py-5">
