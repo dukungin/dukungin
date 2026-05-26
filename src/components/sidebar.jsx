@@ -45,38 +45,51 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
     navigate('/login');
   };
 
-  const menuItems = [
-    { id: 'settings',    label: 'Editor Overlay',   icon: <Layout size={20} /> },
-    { id: 'alertSettings',  label: 'Alert OBS',      icon: <ZapIcon size={20} /> },
-    { id: 'mediaSettings',  label: 'Media Share',     icon: <Video size={20} /> },
-    { id: 'store',         label: 'Toko OBS',         icon: <ShoppingBag size={20} /> }, // ← BARU
-    { id: 'history',     label: 'Riwayat Donasi',   icon: <History size={20} /> },
-    // { id: 'myDonations', label: 'Berdonasi',        icon: <Heart size={20} /> },   
-    { id: 'wallet',      label: 'Penarikan Dana',   icon: <Wallet size={20} /> },
-    { id: 'poll',        label: 'Poll & Voting',    icon: <Vote size={20} /> },
-    { id: 'feeConfig',   label: 'Konfigurasi Fee',  icon: <ReceiptText size={20} /> }, // ← TAMBAHKAN INI
+  const superAdminOnly = ['whatsapp', 'suggestions', 'ghostAlert'];
 
-    // Tambahkan property 'mobileOnly' pada profile
-    // { id: 'profile',     label: 'Profile Saya',     icon: <User size={20} /> },
-    { id: 'subathon',    label: 'Subathon',         icon: <Timer size={20} /> },
-    { id: 'milestones',  label: 'Milestones',       icon: <TrendingUp size={20} /> },
-    { id: 'leaderboard', label: 'Leaderboard',      icon: <Trophy size={20} /> },
-    ...(isSuperAdmin ? [{
-      id: 'whatsapp', 
-      label: 'WhatsApp', 
-      icon: <MessageSquare size={20} />
-    }] : []),
-    ...(isSuperAdmin ? [{
-      id: 'suggestions',
-      icon: <MessageSquare size={20} />,
-      label: 'Masukan Streamer'
-    }] : []),
-    ...(isSuperAdmin ? [{
-      id: 'ghostAlert',
-      icon: <Zap size={20} />,
-      label: 'Admin Notif Hantu'
-    }] : [])
+  // menu yang justru HILANG kalau superAdmin
+  const hideForSuperAdmin = [
+    'settings',
+    'alertSettings',
+    'mediaSettings',
+    'store',
+    'history',
+    'wallet',
+    'poll',
+    'feeConfig',
+    'subathon',
+    'milestones',
+    'leaderboard'
   ];
+
+  const menuItems = [
+    { id: 'settings', label: 'Editor Overlay', icon: <Layout size={20} /> },
+    { id: 'alertSettings', label: 'Alert OBS', icon: <ZapIcon size={20} /> },
+    { id: 'mediaSettings', label: 'Media Share', icon: <Video size={20} /> },
+    { id: 'store', label: 'Toko OBS', icon: <ShoppingBag size={20} /> },
+    { id: 'history', label: 'Riwayat Donasi', icon: <History size={20} /> },
+    { id: 'wallet', label: 'Penarikan Dana', icon: <Wallet size={20} /> },
+    { id: 'poll', label: 'Poll & Voting', icon: <Vote size={20} /> },
+    { id: 'feeConfig', label: 'Konfigurasi Fee', icon: <ReceiptText size={20} /> },
+    { id: 'subathon', label: 'Subathon', icon: <Timer size={20} /> },
+    { id: 'milestones', label: 'Milestones', icon: <TrendingUp size={20} /> },
+    { id: 'leaderboard', label: 'Leaderboard', icon: <Trophy size={20} /> },
+
+    ...(isSuperAdmin ? [
+      { id: 'whatsapp', label: 'WhatsApp', icon: <MessageSquare size={20} /> },
+      { id: 'suggestions', label: 'Masukan Streamer', icon: <MessageSquare size={20} /> },
+      { id: 'ghostAlert', label: 'Admin Notif Hantu', icon: <Zap size={20} /> }
+    ] : [])
+  ];
+
+  const filteredMenuItems = menuItems.filter(item => {
+    // kalau superAdmin → hide beberapa menu user biasa
+    if (isSuperAdmin && hideForSuperAdmin.includes(item.id)) {
+      return false;
+    }
+
+    return true;
+  });
 
   return (
     <>
@@ -159,7 +172,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
         {/* Navigation */}
         <nav className="md:flex-1 space-y-3.5">
-          {menuItems.map((item) => (
+          {filteredMenuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => {
@@ -167,7 +180,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setIsSidebarOpen(false);
               }}
               className={`cursor-pointer active:scale-[0.99] w-full flex items-center gap-4 px-4 p-3 rounded-none font-black transition-all text-sm 
-                ${item.mobileOnly ? 'lg:hidden' : ''} // <--- Tambahkan Baris Ini
+                ${item.mobileOnly ? 'lg:hidden' : ''} 
                 ${
                 activeTab === item.id
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/30'
@@ -187,10 +200,10 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab('admin');
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer mb-2 w-full flex items-center gap-4 p-4 rounded-none font-black transition-all text-sm ${
+              className={`cursor-pointer mb-2 w-full flex items-center gap-4 px-4 py-3 rounded-none font-black transition-all text-sm ${
                 activeTab === 'admin'
                   ? 'bg-blue-600 text-white shadow-xl shadow-blue-100 dark:shadow-blue-900/30'
-                  : 'text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
+                  : 'text-slate-400 bg-white/20 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
               <ShieldAlert size={20} />
