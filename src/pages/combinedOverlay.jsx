@@ -523,6 +523,129 @@ const renderMediaInner = ({ alert, config, progress, videoRef, setMediaError }) 
   );
 };
 
+const renderVoiceInner = ({ alert, config, progress, audioProgress, isPlaying }) => {
+  const hl        = config.highlightColor || '#a5b4fc';
+  const fg        = config.textColor      || '#ffffff';
+  const theme     = config.theme          || 'modern';
+  const monospace = "'Courier New', 'Lucida Console', monospace";
+
+  const vbars = Array.from({ length: 16 });
+  const barStyle = (i) => ({
+    width: 4, display: 'inline-block',
+    background: isPlaying ? hl : hl + '30',
+    height: isPlaying ? `${30 + Math.abs(Math.sin(i * 0.7)) * 70}%` : '20%',
+    animation: isPlaying ? `vbar${i % 5} ${0.35 + (i % 4) * 0.07}s ease-in-out infinite alternate` : 'none',
+    transition: 'background 0.3s',
+  });
+
+  const vbarKeyframes = `
+    @keyframes vbar0 { from{height:20%} to{height:85%} }
+    @keyframes vbar1 { from{height:35%} to{height:70%} }
+    @keyframes vbar2 { from{height:50%} to{height:95%} }
+    @keyframes vbar3 { from{height:25%} to{height:75%} }
+    @keyframes vbar4 { from{height:40%} to{height:60%} }
+  `;
+
+  if (theme === 'smooth') {
+    return (
+      <div style={{ fontFamily: "'Poppins', sans-serif", padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 14, background: hl + '22', border: `1.5px solid ${hl}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
+            🎙️
+          </div>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 500, color: fg, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>Voice Donation</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: fg }}>{alert.donorName}</div>
+            <div style={{ fontSize: 18, fontWeight: 800, color: hl, letterSpacing: '-0.5px' }}>Rp {Number(alert.amount).toLocaleString('id-ID')}</div>
+          </div>
+        </div>
+        <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
+        {alert.message && (
+          <div style={{ fontSize: 13, color: fg, background: hl + '10', borderRadius: 10, padding: '8px 12px', lineHeight: 1.5, border: `1px solid ${hl}20` }}>
+            {alert.message}
+          </div>
+        )}
+        <div style={{ background: hl + '0d', borderRadius: 10, padding: '8px 12px', border: `1px solid ${hl}20`, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 24 }}>
+            {vbars.map((_, i) => <span key={i} style={{ ...barStyle(i), borderRadius: 2 }} />)}
+          </div>
+          <div style={{ height: 3, background: hl + '25', borderRadius: 99, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${audioProgress}%`, background: isPlaying ? '#22c55e' : hl, borderRadius: 99, transition: 'width 100ms linear' }} />
+          </div>
+        </div>
+        {alert.receivedAt && (
+          <div style={{ fontSize: 11, color: fg }}>
+            {new Date(alert.receivedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+          </div>
+        )}
+        <div style={{ height: 3, background: hl + '20', borderRadius: 99, overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${progress}%`, background: hl, borderRadius: 99, transition: 'width 50ms linear' }} />
+        </div>
+        <style>{vbarKeyframes}</style>
+      </div>
+    );
+  }
+
+  // modern / classic / minimal → pakai layout retro sama seperti VoiceNoteOverlay
+  return (
+    <div style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px)', pointerEvents: 'none', zIndex: 1 }} />
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: hl + '18', borderBottom: `2px solid ${hl}`, padding: '5px 10px', position: 'relative', zIndex: 2 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontFamily: monospace, fontSize: 11, color: hl, letterSpacing: '-1px' }}>(o_o)</span>
+          <span style={{ fontFamily: monospace, fontSize: 9, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>VOICE DONATION</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <span style={{ width: 7, height: 7, display: 'inline-block', background: isPlaying ? '#22c55e' : hl + '50', border: `1px solid ${isPlaying ? '#22c55e' : hl}`, transition: 'all 0.3s' }} />
+          <span style={{ fontFamily: monospace, fontSize: 8, color: isPlaying ? '#22c55e' : hl, opacity: isPlaying ? 1 : 0.5, letterSpacing: '0.1em', transition: 'all 0.3s' }}>
+            {isPlaying ? 'PLAYING' : 'READY'}
+          </span>
+        </div>
+      </div>
+      {/* Body */}
+      <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 8 }}>
+          <div style={{ width: 40, height: 40, border: `2px solid ${hl}`, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, background: hl + '12' }}>🎙️</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontFamily: monospace, fontSize: 10, color: fg, marginBottom: 2, letterSpacing: '0.1em' }}>{'> DONOR:'}</div>
+            <div style={{ fontFamily: monospace, fontSize: 15, fontWeight: 900, color: fg, lineHeight: 1.1 }}>{alert.donorName}</div>
+            <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: hl, letterSpacing: '-0.5px', marginTop: 2, textShadow: `0 0 8px ${hl}55` }}>
+              Rp {Number(alert.amount).toLocaleString('id-ID')}
+            </div>
+          </div>
+        </div>
+        {alert.message && (
+          <div style={{ fontFamily: monospace, fontSize: 10, color: fg, background: 'rgba(255,255,255,0.04)', border: `1px solid ${hl}35`, padding: '5px 8px', lineHeight: 1.4, marginBottom: 8 }}>
+            {'>> '}{alert.message}
+          </div>
+        )}
+        {/* Visualizer */}
+        <div style={{ border: `1px solid ${hl}35`, background: 'rgba(0,0,0,0.25)', padding: '7px 10px', marginBottom: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 24, marginBottom: 5 }}>
+            {vbars.map((_, i) => <span key={i} style={barStyle(i)} />)}
+          </div>
+          <div style={{ height: 2, background: 'rgba(255,255,255,0.08)' }}>
+            <div style={{ height: '100%', width: `${audioProgress}%`, background: isPlaying ? '#22c55e' : hl, transition: 'width 100ms linear, background 0.3s' }} />
+          </div>
+        </div>
+        {/* Footer */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ fontFamily: monospace, fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>
+            {'> VOICE · '}{alert.receivedAt ? new Date(alert.receivedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : ''}
+          </div>
+          <div style={{ display: 'flex', gap: 2 }}>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <span key={i} style={{ width: 6, height: 6, display: 'inline-block', background: i < Math.round(progress / 12.5) ? hl : hl + '22' }} />
+            ))}
+          </div>
+        </div>
+      </div>
+      <style>{vbarKeyframes}</style>
+    </div>
+  );
+};
+
 // ── CombinedOverlay — Main Component ─────────────────────────────────────────
 const CombinedOverlay = () => {
   const { token } = useParams();
@@ -536,6 +659,19 @@ const CombinedOverlay = () => {
   const [alertProgress, setAlertProgress] = useState(100);
   const [mediaProgress, setMediaProgress] = useState(100);
   const [mediaError,    setMediaError]    = useState(false);
+
+  // Voice note state
+  const [voiceData,       setVoiceData]       = useState(null);
+  const [voiceProgress,   setVoiceProgress]   = useState(100);
+  const [voiceAudioProg,  setVoiceAudioProg]  = useState(0);
+  const [voiceIsPlaying,  setVoiceIsPlaying]  = useState(false);
+
+  // Voice refs
+  const voiceAudioRef       = useRef(null);
+  const voiceIntervalRef    = useRef(null);
+  const voiceTimerRef       = useRef(null);
+  const voiceAudioProgRef   = useRef(null);
+  const voiceDurationMsRef  = useRef(0);
 
   const audioRef            = useRef(null);
   const configRef           = useRef(null);
@@ -583,6 +719,20 @@ const CombinedOverlay = () => {
 
     setMediaData(null);        // ← Penting!
     setMediaProgress(100);
+  }, []);
+
+  const stopVoiceAudio = useCallback(() => {
+    if (voiceAudioProgRef.current) clearInterval(voiceAudioProgRef.current);
+    if (voiceIntervalRef.current)  clearInterval(voiceIntervalRef.current);
+    if (voiceTimerRef.current)     clearTimeout(voiceTimerRef.current);
+    if (voiceAudioRef.current) {
+      voiceAudioRef.current.pause();
+      voiceAudioRef.current.src = '';
+    }
+    setVoiceData(null);
+    setVoiceProgress(100);
+    setVoiceAudioProg(0);
+    setVoiceIsPlaying(false);
   }, []);
 
   // TTS
@@ -721,6 +871,133 @@ const CombinedOverlay = () => {
         }, duration);
     });
 
+    socket.on('new-voice-donation', (data) => {
+      if (configRef.current?.overlayEnabled === false) return;
+
+      // Clear semua overlay lain
+      setAlertData(null);
+      setAlertProgress(100);
+      if (alertIntervalRef.current) clearInterval(alertIntervalRef.current);
+      if (alertTimerRef.current)    clearTimeout(alertTimerRef.current);
+      clearMediaDisplay();
+      if (mediaIntervalRef.current) clearInterval(mediaIntervalRef.current);
+      if (mediaTimerRef.current)    clearTimeout(mediaTimerRef.current);
+
+      // Stop voice sebelumnya kalau ada
+      stopVoiceAudio();
+
+      const absoluteVoiceUrl = data.voiceUrl?.startsWith('http')
+        ? data.voiceUrl
+        : data.voiceUrl ? `${API_URL}${data.voiceUrl}` : null;
+
+      const donation = {
+        ...data,
+        voiceUrl: absoluteVoiceUrl,
+        receivedAt: data.receivedAt || new Date().toISOString(),
+      };
+
+      setVoiceData(donation);
+      setVoiceProgress(100);
+      setVoiceAudioProg(0);
+      setVoiceIsPlaying(false);
+
+      const INTRO_DELAY     = 1000;
+      const FALLBACK_MS     = 10000;
+
+      const startDismissTimer = (audioDurationMs) => {
+        voiceDurationMsRef.current = audioDurationMs;
+        const TOTAL = INTRO_DELAY + audioDurationMs;
+        if (voiceTimerRef.current) clearTimeout(voiceTimerRef.current);
+        voiceTimerRef.current = setTimeout(() => {
+          stopVoiceAudio();
+        }, TOTAL);
+      };
+
+      if (!absoluteVoiceUrl || !voiceAudioRef.current) {
+        // Fallback tanpa audio
+        voiceDurationMsRef.current = FALLBACK_MS;
+        const startTime = Date.now();
+        voiceIntervalRef.current = setInterval(() => {
+          const remaining = Math.max(0, 100 - ((Date.now() - startTime) / FALLBACK_MS) * 100);
+          setVoiceProgress(remaining);
+          if (remaining <= 0) clearInterval(voiceIntervalRef.current);
+        }, 50);
+        voiceTimerRef.current = setTimeout(() => stopVoiceAudio(), FALLBACK_MS);
+        return;
+      }
+
+      const audio = voiceAudioRef.current;
+      audio.src = absoluteVoiceUrl;
+      audio.load();
+
+      let countdownStarted = false;
+
+      const metaTimeout = setTimeout(() => {
+        if (!countdownStarted) {
+          countdownStarted = true;
+          startDismissTimer(60 * 1000);
+        }
+      }, 2000);
+
+      audio.onloadedmetadata = () => {
+        clearTimeout(metaTimeout);
+        const raw = audio.duration;
+        const dur = isFinite(raw) && raw > 0 ? Math.min(raw, 60) : null;
+        if (dur && !countdownStarted) {
+          countdownStarted = true;
+          startDismissTimer(dur * 1000);
+        }
+      };
+
+      audio.onplay = () => {
+        setVoiceIsPlaying(true);
+
+        // Audio progress
+        if (voiceAudioProgRef.current) clearInterval(voiceAudioProgRef.current);
+        voiceAudioProgRef.current = setInterval(() => {
+          if (!voiceAudioRef.current) return;
+          const { currentTime, duration } = voiceAudioRef.current;
+          if (duration > 0) setVoiceAudioProg((currentTime / duration) * 100);
+        }, 100);
+
+        // Progress bar — pakai durasi dari audio element langsung
+        if (voiceIntervalRef.current) clearInterval(voiceIntervalRef.current);
+        const startTime = Date.now();
+        const dur = isFinite(audio.duration) && audio.duration > 0
+          ? audio.duration * 1000
+          : voiceDurationMsRef.current;
+
+        voiceIntervalRef.current = setInterval(() => {
+          const remaining = Math.max(0, 100 - ((Date.now() - startTime) / dur) * 100);
+          setVoiceProgress(remaining);
+          if (remaining <= 0) clearInterval(voiceIntervalRef.current);
+        }, 50);
+      };
+
+      audio.onended = () => {
+        if (voiceAudioProgRef.current) clearInterval(voiceAudioProgRef.current);
+        setVoiceAudioProg(0);
+        setVoiceIsPlaying(false);
+        if (!countdownStarted) {
+          countdownStarted = true;
+          startDismissTimer(0);
+        }
+      };
+
+      audio.onerror = () => {
+        clearTimeout(metaTimeout);
+        setVoiceIsPlaying(false);
+        if (!countdownStarted) {
+          countdownStarted = true;
+          startDismissTimer(FALLBACK_MS);
+        }
+      };
+
+      setTimeout(() => {
+        audio.play().catch(() => setVoiceIsPlaying(false));
+      }, INTRO_DELAY);
+    });
+
     // ── MediaShare control (skip/volume) ──────────────────────────────────────
     socket.on('mediashare-control', ({ action, volume }) => {
       if (action === 'skip') {
@@ -749,14 +1026,15 @@ const CombinedOverlay = () => {
     });
 
     return () => {
-      ['connect','reconnect','disconnect','connect_error','new-donation','new-media-donation','mediashare-control','settings-updated']
+      ['connect','reconnect','disconnect','connect_error','new-donation','new-media-donation', 'new-voice-donation', 'mediashare-control','settings-updated']
         .forEach(ev => socket.off(ev));
       socket.disconnect();
       [alertIntervalRef, mediaIntervalRef].forEach(r => clearInterval(r.current));
       [alertTimerRef, mediaTimerRef].forEach(r => clearTimeout(r.current));
       clearMediaDisplay();
+      stopVoiceAudio();
     };
-  }, [token, speakDonation]);
+  }, [token, speakDonation, clearMediaDisplay, stopVoiceAudio]);
 
   if (!config) return null;
   if (config.overlayEnabled === false) {
@@ -819,6 +1097,7 @@ const CombinedOverlay = () => {
       background: 'transparent', overflow: 'hidden',
     }}>
       <audio ref={audioRef} />
+      <audio ref={voiceAudioRef} />
 
       {/* MediaShare — tampil di atas */}
       <AnimatePresence>
@@ -831,6 +1110,27 @@ const CombinedOverlay = () => {
             style={wrapperStyle}
           >
             {renderMediaInner({ alert: mediaData, config, progress: mediaProgress, videoRef, setMediaError })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Voice Note */}
+      <AnimatePresence>
+        {voiceData && (
+          <motion.div
+            key={voiceData.receivedAt || 'voice'}
+            initial={anim.initial}
+            animate={anim.animate}
+            exit={anim.exit}
+            style={wrapperStyle}
+          >
+            {renderVoiceInner({
+              alert: voiceData,
+              config,
+              progress: voiceProgress,
+              audioProgress: voiceAudioProg,
+              isPlaying: voiceIsPlaying,
+            })}
           </motion.div>
         )}
       </AnimatePresence>
