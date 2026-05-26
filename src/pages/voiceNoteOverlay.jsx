@@ -129,7 +129,7 @@ const VoiceNoteOverlay = () => {
       socket.emit('join-room', `${token}-voice`);
     });
 
-    socket.on('new-voice-donation', (data) => {
+   socket.on('new-voice-donation', (data) => {
       if (configRef.current?.overlayEnabled === false) return;
 
       if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
@@ -151,11 +151,13 @@ const VoiceNoteOverlay = () => {
       setAudioProgress(0);
       setIsPlaying(false);
 
-      const INTRO_DELAY = 1000;  // delay sebelum play
-      const OUTRO_BUFFER = 3000; // buffer setelah audio selesai sebelum dismiss
+      const INTRO_DELAY  = 1000;
+      const OUTRO_BUFFER = 2000;
+      const FALLBACK_DURATION = 10000; // kalau gagal detect durasi
 
       const startCountdownAndDismiss = (audioDurationMs) => {
         const TOTAL_DURATION = INTRO_DELAY + audioDurationMs + OUTRO_BUFFER;
+        console.log(`[VoiceOverlay] Total duration: ${TOTAL_DURATION}ms (audio: ${audioDurationMs}ms)`);
 
         const startTime = Date.now();
         progressIntervalRef.current = setInterval(() => {
@@ -178,45 +180,76 @@ const VoiceNoteOverlay = () => {
         }, TOTAL_DURATION);
       };
 
-      setTimeout(() => {
-        if (absoluteVoiceUrl && audioRef.current) {
-          audioRef.current.src = absoluteVoiceUrl;
-          audioRef.current.load();
+      if (!absoluteVoiceUrl || !audioRef.current) {
+        // Tidak ada voice — fallback
+        startCountdownAndDismiss(FALLBACK_DURATION);
+        return;
+      }
 
-          audioRef.current.onloadedmetadata = () => {
-            // ✅ Pakai durasi asli audio, bukan hardcode
-            const realDuration = audioRef.current.duration;
-            const clampedDuration = Math.min(realDuration, 60); // max 60 detik
-            setAudioDuration(clampedDuration);
+      // ── Load audio dulu, baru set countdown ──────────────────────────────────
+      const audio = audioRef.current;
+      audio.src = absoluteVoiceUrl;
+      audio.load();
 
-            // ✅ Start countdown berdasarkan durasi asli
-            startCountdownAndDismiss(clampedDuration * 1000);
-          };
+      let countdownStarted = false;
 
-          audioRef.current.onplay = () => {
-            setIsPlaying(true);
-            startAudioProgress();
-          };
+      const onMeta = () => {
+        const rawDuration = audio.duration;
+        // WebM dari MediaRecorder kadang Infinity/NaN — fallback ke 60s
+        const knownDuration = isFinite(rawDuration) && rawDuration > 0
+          ? Math.min(rawDuration, 60)
+          : null;
 
-          audioRef.current.onended = () => {
-            stopAudioProgress();
-            setIsPlaying(false);
-            // ✅ Tidak perlu stop paksa — biarkan dismissTimer yang handle
-          };
-
-          audioRef.current.onerror = () => {
-            stopAudioProgress();
-            setIsPlaying(false);
-            // Fallback kalau audio gagal load: dismiss setelah 5 detik
-            startCountdownAndDismiss(5000);
-          };
-
-          audioRef.current.play().catch(() => setIsPlaying(false));
-
-        } else {
-          // Tidak ada voice URL — dismiss setelah 5 detik
-          startCountdownAndDismiss(5000);
+        if (knownDuration && !countdownStarted) {
+          countdownStarted = true;
+          setAudioDuration(knownDuration);
+          startCountdownAndDismiss(knownDuration * 1000);
         }
+      };
+
+      // Fallback: kalau metadata tidak fire dalam 2s, mulai play dan pakai ended
+      const metaTimeout = setTimeout(() => {
+        if (!countdownStarted) {
+          console.warn('[VoiceOverlay] onloadedmetadata timeout — pakai ended event');
+          countdownStarted = true;
+          // Mulai countdown dengan max 60s, biarkan onended yang akurat
+          startCountdownAndDismiss(60 * 1000);
+        }
+      }, 2000);
+
+      audio.onloadedmetadata = () => {
+        clearTimeout(metaTimeout);
+        onMeta();
+      };
+
+      audio.onplay = () => {
+        setIsPlaying(true);
+        startAudioProgress();
+      };
+
+      audio.onended = () => {
+        stopAudioProgress();
+        setIsPlaying(false);
+        // Kalau countdown belum dimulai (edge case), mulai sekarang dengan 0s audio
+        if (!countdownStarted) {
+          countdownStarted = true;
+          startCountdownAndDismiss(0);
+        }
+      };
+
+      audio.onerror = () => {
+        clearTimeout(metaTimeout);
+        stopAudioProgress();
+        setIsPlaying(false);
+        if (!countdownStarted) {
+          countdownStarted = true;
+          startCountdownAndDismiss(FALLBACK_DURATION);
+        }
+      };
+
+      // Play setelah intro delay
+      setTimeout(() => {
+        audio.play().catch(() => setIsPlaying(false));
       }, INTRO_DELAY);
     });
 
