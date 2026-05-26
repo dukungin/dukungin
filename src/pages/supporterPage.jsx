@@ -462,8 +462,185 @@ const SupporterNavbar = ({ onOpenAuth, authPayload, profile, onLogout, theme, to
 // ============================================================
 // MEDIA INPUT SECTION
 // ============================================================
+// const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStartTime }) => {
+//   const [inputMode, setInputMode] = useState('url'); // 'url' | 'upload'
+//   const [previewError, setPreviewError] = useState(false);
+//   const [uploading, setUploading] = useState(false);
+//   const [uploadedFile, setUploadedFile] = useState(null); // { name, previewUrl, serverUrl }
+//   const [uploadError, setUploadError] = useState('');
+//   const fileInputRef = useRef(null);
+//   const videoRef = useRef(null);
+//   const isYouTube = isYouTubeUrl(mediaUrl);
+
+//   useEffect(() => { setPreviewError(false); }, [mediaUrl]);
+
+//   const mediaType = getMediaType(mediaUrl);
+//   const hasPreview = mediaUrl && !previewError;
+//   const allowImage = trigger.mediaType === 'image' || trigger.mediaType === 'both';
+//   const allowVideo = trigger.mediaType === 'video' || trigger.mediaType === 'both';
+
+//   const placeholderText =
+//     allowImage && allowVideo
+//       ? 'https://youtu.be/xxxx atau https://i.imgur.com/xxxx.jpg'
+//       : allowVideo
+//         ? 'https://youtu.be/xxxx atau https://example.com/video.mp4'
+//         : 'https://i.imgur.com/contoh-gambar.jpg';
+
+//   const getYouTubeEmbedUrlWithTime = (url, startSeconds = 0) => {
+//     if (!url) return '';
+//     // Live — jangan append start
+//     if (/youtube\.com\/live\//i.test(url)) return getYouTubeEmbedUrl(url);
+//     let embedUrl = getYouTubeEmbedUrl(url);
+//     if (startSeconds > 0) {
+//       const separator = embedUrl.includes('?') ? '&' : '?';
+//       embedUrl += `${separator}start=${startSeconds}&autoplay=1&mute=1`;
+//     }
+//     return embedUrl;
+//   };
+
+//   const isYouTubeLive = isYouTubeUrl(mediaUrl) && /youtube\.com\/live\//i.test(mediaUrl);
+
+//   return (
+//     <div className="rounded-none border-2 border-blue-200 dark:border-blue-800 bg-blue-50/60 dark:bg-blue-900/30 p-5 space-y-4">
+//       {/* Header */}
+//       <div className="flex items-center justify-between">
+//         <div className="flex items-center gap-2.5">
+//           <div className="w-7 h-7 rounded-none bg-blue-600 flex items-center justify-center text-white flex-shrink-0">
+//             {allowVideo && allowImage
+//               ? <span className="flex items-center gap-0.5"><ImageIcon size={9} /><Video size={9} /></span>
+//               : allowVideo ? <Video size={13} /> : <ImageIcon size={13} />}
+//           </div>
+//           <div>
+//             <p className="text-xs font-black text-blue-700 dark:text-blue-400 leading-none">
+//               🎉 {trigger.label || 'Media Alert'} Unlocked!
+//             </p>
+//             <p className="text-[10px] text-blue-400 dark:text-blue-500 font-medium mt-0.5">
+//               Tersedia mulai Rp {Number(trigger.minAmount).toLocaleString('id-ID')}
+//             </p>
+//           </div>
+//         </div>
+//         {mediaUrl && (
+//           <button onClick={() => { setMediaUrl(''); setStartTime(0); }}
+//             className="w-6 h-6 rounded-none bg-blue-100 dark:bg-blue-900 hover:bg-red-100 dark:hover:bg-red-900 text-blue-400 flex items-center justify-center transition-all hover:text-red-500">
+//             <X size={12} />
+//           </button>
+//         )}
+//       </div>
+
+//       {/* Badge tipe media */}
+//       <div className="flex items-center gap-2">
+//         {allowImage && (
+//           <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-800 rounded-none text-[10px] font-bold text-blue-600 dark:text-blue-400">
+//             <ImageIcon size={10} /> Animasi GIF
+//           </span>
+//         )}
+//         {allowVideo && (
+//           <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-purple-800 rounded-none text-[10px] font-bold text-purple-600 dark:text-purple-400">
+//             <Video size={10} /> Video YouTube
+//           </span>
+//         )}
+//       </div>
+
+//       {/* Input URL */}
+//       <div className="space-y-1.5">
+//         <label className="block text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest ml-1">
+//           Link Media (YouTube)
+//         </label>
+//         <input
+//           type="url"
+//           value={mediaUrl}
+//           onChange={(e) => { setMediaUrl(e.target.value); setStartTime(0); }}
+//           className="w-full p-4 rounded-none bg-white dark:bg-slate-900 border-2 border-blue-100 dark:border-blue-800 focus:border-blue-400 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400"
+//           placeholder={placeholderText}
+//         />
+//         <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium ml-1">
+//           * Opsional — Gambar (jpg, gif, png), Video (.mp4), atau YouTube
+//         </p>
+//       </div>
+
+//       {/* YouTube time picker */}
+//       <AnimatePresence>
+//         {isYouTube && mediaUrl && !isYouTubeLive && (
+//           <YouTubeTimePicker startTime={startTime} onChange={setStartTime} />
+//         )}
+//       </AnimatePresence>
+
+//       <AnimatePresence>
+//         {isYouTubeLive && (
+//           <motion.div
+//             initial={{ opacity: 0, height: 0 }}
+//             animate={{ opacity: 1, height: 'auto' }}
+//             exit={{ opacity: 0, height: 0 }}
+//             className="mt-3 px-3 py-2.5 bg-amber-900/30 border-amber-200 dark:border-amber-800 border border-amber-200 dark:border-amber-800 rounded-none flex items-center gap-2"
+//           >
+//             <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
+//             <p className="text-[10px] font-black text-amber-600 dark:text-amber-400">
+//               YouTube Live — akan diputar dari waktu terkini
+//             </p>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+
+//       {/* Preview */}
+//       <AnimatePresence>
+//         {hasPreview && (
+//           <motion.div
+//             initial={{ opacity: 0, scale: 0.96 }}
+//             animate={{ opacity: 1, scale: 1 }}
+//             exit={{ opacity: 0, scale: 0.96 }}
+//             transition={{ duration: 0.25 }}
+//             className="rounded-none overflow-hidden border border-blue-100 dark:border-blue-800 bg-slate-900 relative"
+//             style={{ maxHeight: 200 }}
+//           >
+//             {mediaType === 'youtube' ? (
+//               <iframe
+//                 src={getYouTubeEmbedUrlWithTime(mediaUrl, startTime)}
+//                 className="w-full aspect-video"
+//                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+//                 allowFullScreen
+//                 onError={() => setPreviewError(true)}
+//               />
+//             ) : mediaType === 'video' ? (
+//               <video ref={videoRef} src={mediaUrl} autoPlay muted loop playsInline
+//                 className="w-full object-cover" style={{ maxHeight: 200 }}
+//                 onError={() => setPreviewError(true)} />
+//             ) : (
+//               <img src={mediaUrl} alt="Media preview" className="w-full object-cover"
+//                 style={{ maxHeight: 200 }} onError={() => setPreviewError(true)} />
+//             )}
+//             <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-black/60 backdrop-blur-sm">
+//               <p className="text-[10px] text-white/90 font-bold">
+//                 {mediaType === 'youtube' ? (
+//                   <>▶️ YouTube {startTime > 0 && (
+//                     <span className="ml-1 bg-yellow-500/30 px-1 py-0.5 text-[9px]">
+//                       {Math.floor(startTime / 60).toString().padStart(2, '0')}:{(startTime % 60).toString().padStart(2, '0')}
+//                     </span>
+//                   )}</>
+//                 ) : mediaType === 'video' ? '🎬 Direct Video' : '🖼️ Gambar'}
+//                 {' '}— Preview
+//               </p>
+//             </div>
+//           </motion.div>
+//         )}
+//         {previewError && mediaUrl && (
+//           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+//             className="rounded-none border border-red-100 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-xs text-red-500 font-bold flex items-center gap-2">
+//             <X size={14} /> URL tidak valid atau media tidak dapat dimuat.
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </div>
+//   );
+// };
+
+
 const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStartTime }) => {
+  const [inputMode, setInputMode] = useState('url'); // 'url' | 'upload'
   const [previewError, setPreviewError] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(null); // { name, previewUrl, serverUrl }
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef(null);
   const videoRef = useRef(null);
   const isYouTube = isYouTubeUrl(mediaUrl);
 
@@ -473,6 +650,7 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
   const hasPreview = mediaUrl && !previewError;
   const allowImage = trigger.mediaType === 'image' || trigger.mediaType === 'both';
   const allowVideo = trigger.mediaType === 'video' || trigger.mediaType === 'both';
+  const isYouTubeLive = isYouTubeUrl(mediaUrl) && /youtube\.com\/live\//i.test(mediaUrl);
 
   const placeholderText =
     allowImage && allowVideo
@@ -483,7 +661,6 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
 
   const getYouTubeEmbedUrlWithTime = (url, startSeconds = 0) => {
     if (!url) return '';
-    // Live — jangan append start
     if (/youtube\.com\/live\//i.test(url)) return getYouTubeEmbedUrl(url);
     let embedUrl = getYouTubeEmbedUrl(url);
     if (startSeconds > 0) {
@@ -493,11 +670,60 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
     return embedUrl;
   };
 
-  const isYouTubeLive = isYouTubeUrl(mediaUrl) && /youtube\.com\/live\//i.test(mediaUrl);
+  const clearUpload = () => {
+    if (uploadedFile?.previewUrl) URL.revokeObjectURL(uploadedFile.previewUrl);
+    setUploadedFile(null);
+    setMediaUrl('');
+    setUploadError('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleModeSwitch = (mode) => {
+    setInputMode(mode);
+    setMediaUrl('');
+    setStartTime(0);
+    setPreviewError(false);
+    clearUpload();
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError('Ukuran file maksimal 5MB');
+      return;
+    }
+
+    const localUrl = URL.createObjectURL(file);
+    setUploadedFile({ name: file.name, previewUrl: localUrl, serverUrl: null });
+    setUploadError('');
+    setUploading(true);
+    setMediaUrl('');
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const res = await axios.post(`${BASE_URL}/api/midtrans/temp-upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      setUploadedFile({ name: file.name, previewUrl: localUrl, serverUrl: res.data.url });
+      setMediaUrl(res.data.url);
+    } catch (err) {
+      setUploadError(err.response?.data?.message || 'Upload gagal, coba lagi');
+      setUploadedFile(null);
+      setMediaUrl('');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div className="rounded-none border-2 border-blue-200 dark:border-blue-800 bg-blue-50/60 dark:bg-blue-900/30 p-5 space-y-4">
-      {/* Header */}
+
+      {/* Header — sama persis aslinya */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-7 h-7 rounded-none bg-blue-600 flex items-center justify-center text-white flex-shrink-0">
@@ -514,15 +740,17 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
             </p>
           </div>
         </div>
-        {mediaUrl && (
-          <button onClick={() => { setMediaUrl(''); setStartTime(0); }}
-            className="w-6 h-6 rounded-none bg-blue-100 dark:bg-blue-900 hover:bg-red-100 dark:hover:bg-red-900 text-blue-400 flex items-center justify-center transition-all hover:text-red-500">
+        {(mediaUrl || uploadedFile) && (
+          <button
+            onClick={() => handleModeSwitch(inputMode)}
+            className="w-6 h-6 rounded-none bg-blue-100 dark:bg-blue-900 hover:bg-red-100 dark:hover:bg-red-900 text-blue-400 flex items-center justify-center transition-all hover:text-red-500"
+          >
             <X size={12} />
           </button>
         )}
       </div>
 
-      {/* Badge tipe media */}
+      {/* Badge tipe media — sama persis aslinya */}
       <div className="flex items-center gap-2">
         {allowImage && (
           <span className="flex items-center gap-1 px-2 py-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-800 rounded-none text-[10px] font-bold text-blue-600 dark:text-blue-400">
@@ -536,94 +764,231 @@ const MediaInputSection = ({ trigger, mediaUrl, setMediaUrl, startTime, setStart
         )}
       </div>
 
-      {/* Input URL */}
-      <div className="space-y-1.5">
-        <label className="block text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest ml-1">
-          Link Media (YouTube)
-        </label>
-        <input
-          type="url"
-          value={mediaUrl}
-          onChange={(e) => { setMediaUrl(e.target.value); setStartTime(0); }}
-          className="w-full p-4 rounded-none bg-white dark:bg-slate-900 border-2 border-blue-100 dark:border-blue-800 focus:border-blue-400 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400"
-          placeholder={placeholderText}
-        />
-        <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium ml-1">
-          * Opsional — Gambar (jpg, gif, png), Video (.mp4), atau YouTube
-        </p>
-      </div>
-
-      {/* YouTube time picker */}
-      <AnimatePresence>
-        {isYouTube && mediaUrl && !isYouTubeLive && (
-          <YouTubeTimePicker startTime={startTime} onChange={setStartTime} />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isYouTubeLive && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="mt-3 px-3 py-2.5 bg-amber-900/30 border-amber-200 dark:border-amber-800 border border-amber-200 dark:border-amber-800 rounded-none flex items-center gap-2"
+      {/* Toggle URL / Upload — hanya muncul kalau allowImage */}
+      {allowImage && (
+        <div className="grid grid-cols-2 border border-blue-200 dark:border-blue-700 overflow-hidden">
+          <button
+            onClick={() => handleModeSwitch('url')}
+            className={`flex items-center justify-center gap-1.5 py-2 text-[10px] font-black transition-all cursor-pointer ${
+              inputMode === 'url'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-slate-800'
+            }`}
           >
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
-            <p className="text-[10px] font-black text-amber-600 dark:text-amber-400">
-              YouTube Live — akan diputar dari waktu terkini
+            <Video size={10} /> Link URL
+          </button>
+          <button
+            onClick={() => handleModeSwitch('upload')}
+            className={`flex items-center justify-center gap-1.5 py-2 text-[10px] font-black transition-all cursor-pointer border-l border-blue-200 dark:border-blue-700 ${
+              inputMode === 'upload'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-slate-800'
+            }`}
+          >
+            <ImageIcon size={10} /> Upload Gambar
+          </button>
+        </div>
+      )}
+
+      {/* ── MODE: URL (default, sama persis aslinya) ── */}
+      {inputMode === 'url' && (
+        <>
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest ml-1">
+              Link Media (YouTube)
+            </label>
+            <input
+              type="url"
+              value={mediaUrl}
+              onChange={(e) => { setMediaUrl(e.target.value); setStartTime(0); }}
+              className="w-full p-4 rounded-none bg-white dark:bg-slate-900 border-2 border-blue-100 dark:border-blue-800 focus:border-blue-400 outline-none font-mono text-xs text-slate-700 dark:text-white font-bold transition-all placeholder:font-sans placeholder:text-slate-400"
+              placeholder={placeholderText}
+            />
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium ml-1">
+              * Opsional — Gambar (jpg, gif, png), Video (.mp4), atau YouTube
             </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
 
-      {/* Preview */}
-      <AnimatePresence>
-        {hasPreview && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.25 }}
-            className="rounded-none overflow-hidden border border-blue-100 dark:border-blue-800 bg-slate-900 relative"
-            style={{ maxHeight: 200 }}
-          >
-            {mediaType === 'youtube' ? (
-              <iframe
-                src={getYouTubeEmbedUrlWithTime(mediaUrl, startTime)}
-                className="w-full aspect-video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                onError={() => setPreviewError(true)}
-              />
-            ) : mediaType === 'video' ? (
-              <video ref={videoRef} src={mediaUrl} autoPlay muted loop playsInline
-                className="w-full object-cover" style={{ maxHeight: 200 }}
-                onError={() => setPreviewError(true)} />
-            ) : (
-              <img src={mediaUrl} alt="Media preview" className="w-full object-cover"
-                style={{ maxHeight: 200 }} onError={() => setPreviewError(true)} />
+          <AnimatePresence>
+            {isYouTube && mediaUrl && !isYouTubeLive && (
+              <YouTubeTimePicker startTime={startTime} onChange={setStartTime} />
             )}
-            <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-black/60 backdrop-blur-sm">
-              <p className="text-[10px] text-white/90 font-bold">
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isYouTubeLive && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-3 px-3 py-2.5 bg-amber-900/30 border border-amber-800 rounded-none flex items-center gap-2"
+              >
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
+                <p className="text-[10px] font-black text-amber-600 dark:text-amber-400">
+                  YouTube Live — akan diputar dari waktu terkini
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Preview URL — sama persis aslinya */}
+          <AnimatePresence>
+            {hasPreview && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.25 }}
+                className="rounded-none overflow-hidden border border-blue-100 dark:border-blue-800 bg-slate-900 relative"
+                style={{ maxHeight: 200 }}
+              >
                 {mediaType === 'youtube' ? (
-                  <>▶️ YouTube {startTime > 0 && (
-                    <span className="ml-1 bg-yellow-500/30 px-1 py-0.5 text-[9px]">
-                      {Math.floor(startTime / 60).toString().padStart(2, '0')}:{(startTime % 60).toString().padStart(2, '0')}
-                    </span>
-                  )}</>
-                ) : mediaType === 'video' ? '🎬 Direct Video' : '🖼️ Gambar'}
-                {' '}— Preview
-              </p>
-            </div>
-          </motion.div>
-        )}
-        {previewError && mediaUrl && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className="rounded-none border border-red-100 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-xs text-red-500 font-bold flex items-center gap-2">
-            <X size={14} /> URL tidak valid atau media tidak dapat dimuat.
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  <iframe
+                    src={getYouTubeEmbedUrlWithTime(mediaUrl, startTime)}
+                    className="w-full aspect-video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    onError={() => setPreviewError(true)}
+                  />
+                ) : mediaType === 'video' ? (
+                  <video ref={videoRef} src={mediaUrl} autoPlay muted loop playsInline
+                    className="w-full object-cover" style={{ maxHeight: 200 }}
+                    onError={() => setPreviewError(true)} />
+                ) : (
+                  <img src={mediaUrl} alt="Media preview" className="w-full object-cover"
+                    style={{ maxHeight: 200 }} onError={() => setPreviewError(true)} />
+                )}
+                <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-black/60 backdrop-blur-sm">
+                  <p className="text-[10px] text-white/90 font-bold">
+                    {mediaType === 'youtube' ? (
+                      <>▶️ YouTube {startTime > 0 && (
+                        <span className="ml-1 bg-yellow-500/30 px-1 py-0.5 text-[9px]">
+                          {Math.floor(startTime / 60).toString().padStart(2, '0')}:{(startTime % 60).toString().padStart(2, '0')}
+                        </span>
+                      )}</>
+                    ) : mediaType === 'video' ? '🎬 Direct Video' : '🖼️ Gambar'}
+                    {' '}— Preview
+                  </p>
+                </div>
+              </motion.div>
+            )}
+            {previewError && mediaUrl && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                className="rounded-none border border-red-100 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-xs text-red-500 font-bold flex items-center gap-2">
+                <X size={14} /> URL tidak valid atau media tidak dapat dimuat.
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
+      )}
+
+      {/* ── MODE: UPLOAD ── */}
+      {inputMode === 'upload' && (
+        <div className="space-y-3">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/gif,image/webp"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+
+          {!uploadedFile ? (
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="w-full border-2 border-dashed border-blue-300 dark:border-blue-700 rounded-none py-8 flex flex-col items-center gap-3 cursor-pointer hover:border-blue-500 hover:bg-blue-50/80 dark:hover:bg-blue-900/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {uploading ? (
+                <>
+                  <Loader2 size={24} className="animate-spin text-blue-500" />
+                  <span className="text-xs font-black text-blue-500">Mengupload...</span>
+                </>
+              ) : (
+                <>
+                  <ImageIcon size={24} className="text-blue-400" />
+                  <div className="text-center">
+                    <p className="text-xs font-black text-blue-600 dark:text-blue-400">Klik untuk pilih gambar</p>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-1">JPG, PNG, GIF, WebP — maks 5MB</p>
+                    <p className="text-[10px] text-amber-500 font-bold mt-1.5">⏱ Otomatis terhapus setelah 15 menit</p>
+                  </div>
+                </>
+              )}
+            </button>
+          ) : (
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="space-y-2"
+              >
+                {/* Preview gambar upload */}
+                <div
+                  className="relative rounded-none overflow-hidden border border-blue-200 dark:border-blue-700 bg-slate-900"
+                  style={{ maxHeight: 200 }}
+                >
+                  <img
+                    src={uploadedFile.previewUrl}
+                    alt="preview"
+                    className="w-full object-cover"
+                    style={{ maxHeight: 200 }}
+                  />
+                  <button
+                    onClick={clearUpload}
+                    className="absolute top-2 right-2 w-7 h-7 bg-black/60 hover:bg-red-600 text-white rounded-none flex items-center justify-center transition-all"
+                  >
+                    <X size={13} />
+                  </button>
+                  <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-black/60 backdrop-blur-sm flex items-center justify-between">
+                    <p className="text-[10px] text-white/90 font-bold truncate max-w-[70%]">
+                      🖼️ {uploadedFile.name}
+                    </p>
+                    {uploadedFile.serverUrl ? (
+                      <span className="text-[10px] text-green-400 font-black">✓ Terupload</span>
+                    ) : (
+                      <span className="text-[10px] text-yellow-400 font-black flex items-center gap-1">
+                        <Loader2 size={10} className="animate-spin" /> Uploading...
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Warning 15 menit */}
+                {uploadedFile.serverUrl && (
+                  <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-none">
+                    <span className="text-amber-500 flex-shrink-0">⏱</span>
+                    <p className="text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                      Gambar otomatis terhapus dari server dalam 15 menit
+                    </p>
+                  </div>
+                )}
+
+                {/* Ganti gambar */}
+                <button
+                  onClick={() => { clearUpload(); setTimeout(() => fileInputRef.current?.click(), 100); }}
+                  className="w-full py-2 text-[10px] font-black text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all cursor-pointer rounded-none"
+                >
+                  Ganti Gambar
+                </button>
+              </motion.div>
+            </AnimatePresence>
+          )}
+
+          {/* Error */}
+          <AnimatePresence>
+            {uploadError && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2 px-3 py-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-none text-[10px] font-bold text-red-500"
+              >
+                <X size={12} /> {uploadError}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 };
