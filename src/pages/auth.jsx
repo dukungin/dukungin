@@ -470,9 +470,9 @@ const MainAuthForm = ({
             </div>
           </div>
 
-          {/* {isLogin && (
-            <div style={{ textAlign:'right', marginBottom:24 }}>
-              <button type="button" onClick={() => setCurrentPage('forgot-password')}
+          {isLogin && (
+            <div className='uppercase' style={{ textAlign:'left', marginBottom:24 }}>
+              <button className='uppercase' type="button" onClick={() => setCurrentPage('forgot-password')}
                 style={{ 
                   background:'none', border:'none', cursor:'pointer', 
                   color: T.forgotColor, fontSize:13, fontWeight:700, 
@@ -484,7 +484,7 @@ const MainAuthForm = ({
                 Lupa Password?
               </button>
             </div>
-          )} */}
+          )}
 
           <button type="submit" disabled={!isFormValid || loading} className="submit-btn"
             style={{ 
@@ -534,67 +534,77 @@ const MainAuthForm = ({
 };
 
 // ─── FORGOT PASSWORD PAGE ────────────────────────────────────────────────────
-const ForgotPasswordPage = ({ T, setCurrentPage, emailReset, setEmailReset, setTempEmail, setTempToken }) => {
-  const [step, setStep] = useState(1); // 1 = email, 2 = pin
+// ─── FORGOT PASSWORD PAGE (VERSI BARU - Pakai Security PIN) ───────────────────
+const ForgotPasswordPage = ({ 
+  T, 
+  setCurrentPage, 
+  emailReset, 
+  setEmailReset, 
+  setTempEmail, 
+  setTempToken,
+  notify 
+}) => {
+  
+  const [step, setStep] = useState(1); // 1 = Masukkan Email, 2 = Masukkan PIN
   const [pin, setPin] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');   // ← WAJIB DITAMBAHKAN
 
-  const handleVerifyPin = async () => {
-    if (pin.length !== 4) return;
+  // Step 1: Cek Email
+  const handleCheckEmail = async () => {
+    setError('');
     
+    if (!emailReset) {
+      setError('Email wajib diisi');
+      return;
+    }
+    if (!isValidEmail(emailReset)) {
+      setError('Format email tidak valid');
+      return;
+    }
+    if (detectXSS(emailReset)) {
+      setError('Email tidak valid');
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await axios.post('https://server.../api/auth/verify-security-pin', {
-        email: emailReset,
-        securityPin: pin
+      const res = await axios.post('https://server-dukungin-production.up.railway.app/api/auth/forgot-password', {
+        email: sanitizeInput(emailReset)
       });
       
-      setTempEmail(emailReset);
-      setTempToken(res.data.tempToken);
-      setCurrentPage('reset-password');
+      notify('Email Ditemukan', 'Masukkan PIN Keamanan 4 digit Anda', 'success');
+      setStep(2);
     } catch (err) {
-      notify('Gagal', err.response?.data?.message || 'PIN salah', 'error');
-      setPin('');
+      notify('Gagal', err.response?.data?.message || 'Email tidak terdaftar', 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleForgotPassword = async () => {
+  // Step 2: Verifikasi Security PIN
+  const handleVerifyPin = async () => {
+    if (pin.length !== 4) {
+      setError('PIN harus 4 digit');
+      return;
+    }
+
+    setLoading(true);
     setError('');
     
-    // Validasi email
-    if (!emailReset) {
-      setError('Email wajib diisi');
-      return;
-    }
-    
-    if (!isValidEmail(emailReset)) {
-      setError('Format email tidak valid');
-      return;
-    }
-    
-    // Cek XSS
-    if (detectXSS(emailReset)) {
-      setError('Email tidak valid');
-      return;
-    }
-    
-    // Sanitasi sebelum发送
-    const sanitizedEmail = sanitizeInput(emailReset);
-    
-    setLoading(true);
     try {
-      const res = await axios.post('https://server-dukungin-production.up.railway.app/api/auth/forgot-password', { 
-        email: sanitizedEmail 
+      const res = await axios.post('https://server-dukungin-production.up.railway.app/api/auth/verify-security-pin', {
+        email: sanitizeInput(emailReset),
+        securityPin: pin
       });
-      notify('Link Reset Dikirim!', res.data.message, 'success');
-      setTimeout(() => {
-        closeNotif();
-        setCurrentPage('main');
-      }, 3000);
+
+      setTempEmail(emailReset);
+      setTempToken(res.data.tempToken);
+      setCurrentPage('reset-password');
+      
     } catch (err) {
-      notify('Gagal', err.response?.data?.message || 'Email tidak terdaftar', 'error');
+      setError(err.response?.data?.message || 'PIN salah');
+      setPin('');
     } finally {
       setLoading(false);
     }
@@ -607,34 +617,33 @@ const ForgotPasswordPage = ({ T, setCurrentPage, emailReset, setEmailReset, setT
       animate={{ opacity:1, y:0 }} 
       exit={{ opacity:0, y:-20 }}
     >
-      <button onClick={() => setCurrentPage('main')}
+      <button 
+        onClick={() => setCurrentPage('main')}
         style={{ 
-          position: 'absolute',
-          top: 40,
-          marginLeft: -3,
-          background:'none', border:'none', cursor:'pointer', color: T.backBtn, 
-          fontSize:14, fontWeight:700, display:'flex', alignItems:'center', gap:6, 
-          marginBottom:32, transition:'color 0.2s' 
+          position: 'absolute', top: 40, marginLeft: -3,
+          background:'none', border:'none', cursor:'pointer', 
+          color: T.backBtn, fontSize:14, fontWeight:700, 
+          display:'flex', alignItems:'center', gap:6 
         }}
-        onMouseEnter={e => e.currentTarget.style.color='#4f46e5'}
-        onMouseLeave={e => e.currentTarget.style.color=T.backBtn}
       >
-        <ArrowLeft size={18} />
-        Kembali
+        <ArrowLeft size={18} /> Kembali
       </button>
 
       <div style={{ textAlign: 'center', marginBottom: 32 }}>
         <div style={{ 
-          width: 72, height: 72, margin: '0 auto 20px', background: '#fef3c7', 
-          borderRadius: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' 
+          width: 72, height: 72, margin: '0 auto 20px', 
+          background: '#fef3c7', borderRadius: 20, 
+          display: 'flex', alignItems: 'center', justifyContent: 'center' 
         }}>
           <Mail size={32} style={{ color: '#d97706' }} />
         </div>
         <h2 style={{ fontSize: 28, fontWeight: 900, color: T.heading, marginBottom: 8 }}>
-          Lupa Password?
+          {step === 1 ? 'Lupa Password?' : 'Masukkan PIN Keamanan'}
         </h2>
         <p style={{ color: T.subtext, fontSize:14, lineHeight:1.6 }}>
-          Masukkan email kamu dan kami akan kirim link reset password.
+          {step === 1 
+            ? 'Masukkan email yang terdaftar' 
+            : `Masukkan PIN 4 digit untuk akun\n${emailReset}`}
         </p>
       </div>
 
@@ -649,27 +658,57 @@ const ForgotPasswordPage = ({ T, setCurrentPage, emailReset, setEmailReset, setT
       )}
 
       <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
-        <AuthInput 
-          icon={Mail} 
-          placeholder="Email kamu" 
-          value={emailReset} 
-          onChange={setEmailReset} 
-          T={T} 
-        />
-        <button 
-          onClick={handleForgotPassword} 
-          disabled={loading || !emailReset}
-          className="submit-btn"
-          style={{ 
-            width:'100%', padding:'16px 0', borderRadius:0, fontWeight:900, fontSize:14, 
-            border:'none', cursor:'pointer', 
-            background: emailReset ? 'linear-gradient(135deg, #4f46e5, #7c3aed)' : '#e2e8f0', 
-            color: emailReset ? 'white' : '#64748b', opacity: loading ? 0.6 : 1, 
-            display:'flex', alignItems:'center', justifyContent:'center', gap:8 
-          }}
-        >
-          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Kirim Link Reset →'}
-        </button>
+        {step === 1 ? (
+          <>
+            <AuthInput 
+              icon={Mail} 
+              placeholder="Email kamu" 
+              value={emailReset} 
+              onChange={setEmailReset} 
+              T={T} 
+            />
+            <button 
+              onClick={handleCheckEmail} 
+              disabled={loading || !emailReset}
+              className='text-center flex justify-center items-center active:scale-[0.99]'
+              style={{ 
+                width:'100%', padding:'16px 0', borderRadius:0, fontWeight:900, fontSize:14, 
+                border:'none', cursor:'pointer', 
+                background: emailReset ? 'linear-gradient(135deg, #4f46e5, #7c3aed)' : '#e2e8f0', 
+                color: emailReset ? 'white' : '#64748b', 
+                opacity: loading ? 0.6 : 1 
+              }}
+            >
+              {loading ? <Loader2 className="w-5 h-5 mx-auto animate-spin" /> : 'Lanjutkan →'}
+            </button>
+          </>
+        ) : (
+          <>
+            <AuthInput 
+              icon={ShieldCheck} 
+              type="text" 
+              maxLength={4}
+              placeholder="PIN Keamanan 4 Digit" 
+              value={pin} 
+              onChange={(v) => setPin(v.replace(/\D/g, '').slice(0,4))} 
+              T={T} 
+            />
+            <button 
+              onClick={handleVerifyPin} 
+              disabled={loading || pin.length !== 4}
+              className='flex justify-center items-center active:scale-[0.99] text-center'
+              style={{ 
+                width:'100%', padding:'16px 0', borderRadius:0, fontWeight:900, fontSize:14, 
+                border:'none', cursor:'pointer', 
+                background: pin.length === 4 ? 'linear-gradient(135deg, #10b981, #059669)' : '#e2e8f0', 
+                color: pin.length === 4 ? 'white' : '#64748b', 
+                opacity: loading ? 0.6 : 1 
+              }}
+            >
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Verifikasi PIN'}
+            </button>
+          </>
+        )}
       </div>
     </motion.div>
   );
@@ -974,7 +1013,8 @@ const Auth = () => {
   const T = getTheme(isDark);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
+  const [tempToken, setTempToken] = useState('');
+  
   // Page state
   const [currentPage, setCurrentPage] = useState('main');
   const [tempEmail, setTempEmail] = useState('');
@@ -1176,10 +1216,13 @@ const Auth = () => {
       case 'forgot-password':
         return (
           <ForgotPasswordPage 
-            T={T} setCurrentPage={setCurrentPage} 
-            emailReset={emailReset} setEmailReset={setEmailReset}
-            loading={loading} setLoading={setLoading}
-            notify={notify} closeNotif={closeNotif}
+            T={T} 
+            setCurrentPage={setCurrentPage} 
+            emailReset={emailReset} 
+            setEmailReset={setEmailReset}
+            setTempEmail={setTempEmail}
+            setTempToken={setTempToken}     // ← Tambahkan ini
+            notify={notify}
           />
         );
       
