@@ -433,6 +433,17 @@ const MainAuthForm = ({
                     />
                   </motion.div>
               )}
+              {!isLogin && (
+                <AuthInput 
+                  icon={ShieldCheck} 
+                  type="text" 
+                  maxLength={4}
+                  placeholder="PIN Keamanan (4 digit)" 
+                  value={formData.securityPin || ''} 
+                  onChange={v => setFormData(f => ({ ...f, securityPin: v.replace(/\D/g,'').slice(0,4) }))} 
+                  T={T} 
+                />
+              )}
               <AuthInput 
                 icon={Mail} 
                 type="email" 
@@ -521,9 +532,32 @@ const MainAuthForm = ({
 };
 
 // ─── FORGOT PASSWORD PAGE ────────────────────────────────────────────────────
-const ForgotPasswordPage = ({ T, setCurrentPage, emailReset, setEmailReset, loading, setLoading, notify, closeNotif }) => {
-  const [error, setError] = useState('');
-  
+const ForgotPasswordPage = ({ T, setCurrentPage, emailReset, setEmailReset, setTempEmail, setTempToken }) => {
+  const [step, setStep] = useState(1); // 1 = email, 2 = pin
+  const [pin, setPin] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleVerifyPin = async () => {
+    if (pin.length !== 4) return;
+    
+    setLoading(true);
+    try {
+      const res = await axios.post('https://server.../api/auth/verify-security-pin', {
+        email: emailReset,
+        securityPin: pin
+      });
+      
+      setTempEmail(emailReset);
+      setTempToken(res.data.tempToken);
+      setCurrentPage('reset-password');
+    } catch (err) {
+      notify('Gagal', err.response?.data?.message || 'PIN salah', 'error');
+      setPin('');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleForgotPassword = async () => {
     setError('');
     
@@ -946,7 +980,7 @@ const Auth = () => {
   // Form state
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ username:'', email:'', password:'' });
+  const [formData, setFormData] = useState({ username:'', email:'', password:'', securityPin: '' });
   const [emailReset, setEmailReset] = useState('');
   // const [validationErrors, setValidationErrors] = useState({});
 
