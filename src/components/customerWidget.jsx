@@ -616,8 +616,8 @@ const replyFromCS = (question) => {
 
             style={{
                 position: 'fixed',
-                bottom: 24,
-                right: 24,
+                bottom: 16,
+                right: 27.9,
                 zIndex: 9999,
                 width: 56,
                 height: 56,

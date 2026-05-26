@@ -141,7 +141,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               <div className="w-10 h-10 bg-red-200 rounded-none flex items-center justify-center text-white font-black text-xl italic shadow-lg">
                 <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
               </div>
-              <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">TapTipTup</h1>
+              <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">TAPTIPTUP</h1>
             </div>
           </a>
           <button
