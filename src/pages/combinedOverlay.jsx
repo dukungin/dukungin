@@ -952,32 +952,39 @@ const CombinedOverlay = () => {
 
       audio.onplay = () => {
         setVoiceIsPlaying(true);
+        console.log('[onplay] audio.duration:', audio.duration);
+        console.log('[onplay] voiceDurationMsRef:', voiceDurationMsRef.current);
 
-        // Audio progress
+        // Audio progress tracker
         if (voiceAudioProgRef.current) clearInterval(voiceAudioProgRef.current);
         voiceAudioProgRef.current = setInterval(() => {
           if (!voiceAudioRef.current) return;
           const { currentTime, duration } = voiceAudioRef.current;
-          if (duration > 0) setVoiceAudioProg((currentTime / duration) * 100);
+          if (duration > 0) {
+            const pct = (currentTime / duration) * 100;
+            setVoiceAudioProg(pct);
+            setVoiceProgress(100 - pct); // ← sync langsung, tidak hitung terpisah
+          }
         }, 100);
 
-        // Progress bar — pakai durasi dari audio element langsung
-        if (voiceIntervalRef.current) clearInterval(voiceIntervalRef.current);
-        const startTime = Date.now();
-        const dur = isFinite(audio.duration) && audio.duration > 0
-          ? audio.duration * 1000
-          : voiceDurationMsRef.current;
+        // // Progress bar — pakai durasi dari audio element langsung
+        // if (voiceIntervalRef.current) clearInterval(voiceIntervalRef.current);
+        // const startTime = Date.now();
+        // const dur = isFinite(audio.duration) && audio.duration > 0
+        //   ? audio.duration * 1000
+        //   : voiceDurationMsRef.current;
 
-        voiceIntervalRef.current = setInterval(() => {
-          const remaining = Math.max(0, 100 - ((Date.now() - startTime) / dur) * 100);
-          setVoiceProgress(remaining);
-          if (remaining <= 0) clearInterval(voiceIntervalRef.current);
-        }, 50);
+        // voiceIntervalRef.current = setInterval(() => {
+        //   const remaining = Math.max(0, 100 - ((Date.now() - startTime) / dur) * 100);
+        //   setVoiceProgress(remaining);
+        //   if (remaining <= 0) clearInterval(voiceIntervalRef.current);
+        // }, 50);
       };
 
       audio.onended = () => {
         if (voiceAudioProgRef.current) clearInterval(voiceAudioProgRef.current);
-        setVoiceAudioProg(0);
+        setVoiceAudioProg(100);  // ← pastikan keduanya full saat selesai
+        setVoiceProgress(0);
         setVoiceIsPlaying(false);
         if (!countdownStarted) {
           countdownStarted = true;
