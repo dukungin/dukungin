@@ -55,6 +55,7 @@ const VoiceNoteOverlay = () => {
   const [audioDuration, setAudioDuration] = useState(0);
   const [audioProgress, setAudioProgress] = useState(0);
 
+  const audioDurationMsRef = useRef(0);
   const audioRef = useRef(null);
 
   // ✅ LETAKKAN DI SINI — sebelum conditional return apapun
@@ -156,17 +157,11 @@ const VoiceNoteOverlay = () => {
       const FALLBACK_DURATION = 10000; // kalau gagal detect durasi
 
       const startCountdownAndDismiss = (audioDurationMs) => {
+        audioDurationMsRef.current = audioDurationMs;
         const TOTAL_DURATION = INTRO_DELAY + audioDurationMs;
         console.log(`[VoiceOverlay] Total duration: ${TOTAL_DURATION}ms (audio: ${audioDurationMs}ms)`);
 
-        const startTime = Date.now();
-        progressIntervalRef.current = setInterval(() => {
-          const elapsed = Date.now() - startTime;
-          const remaining = Math.max(0, 100 - (elapsed / TOTAL_DURATION) * 100);
-          setProgress(remaining);
-          if (remaining <= 0) clearInterval(progressIntervalRef.current);
-        }, 50);
-
+        // ✅ Hanya dismiss timer — TIDAK ada progressInterval di sini
         dismissTimerRef.current = setTimeout(() => {
           setAlert(null);
           setProgress(100);
@@ -225,13 +220,14 @@ const VoiceNoteOverlay = () => {
       audio.onplay = () => {
         setIsPlaying(true);
         startAudioProgress();
-        
-        // Reset & mulai countdown dari sini, bukan dari startCountdownAndDismiss
-        const startTime = Date.now();
+
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+        const startTime = Date.now();
+        const duration = audioDurationMsRef.current; // ✅ dari ref
+
         progressIntervalRef.current = setInterval(() => {
           const elapsed = Date.now() - startTime;
-          const remaining = Math.max(0, 100 - (elapsed / audioDurationMs) * 100);
+          const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
           setProgress(remaining);
           if (remaining <= 0) clearInterval(progressIntervalRef.current);
         }, 50);
