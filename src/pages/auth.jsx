@@ -12,10 +12,10 @@ import { sanitizeInput, isValidEmail, isValidUsername, validatePassword, detectX
 const getTheme = (dark) => ({
   pageBg:           dark ? '#0f0c29'                       : '#f5f4ff',
   rightBg:          dark ? '#13111f'                       : '#ffffff',
-  inputBg:          dark ? 'rgba(255,255,255,1)'        : 'rgba(79,70,229,0.04)',
-  inputBgFocus:     dark ? 'rgba(255,255,255,1)'        : 'rgba(79,70,229,0.07)',
-  inputBorder:      dark ? 'rgba(255,255,255,0.12)'        : 'rgba(79,70,229,0.18)',
-  inputBorderFocus: dark ? 'rgba(99,102,241,0.7)'          : 'rgba(79,70,229,0.8)',
+  inputBg: dark ? 'rgba(255,255,255,0.04)' : 'rgba(79,70,229,0.04)',
+  inputBgFocus: dark ? 'rgba(255,255,255,0.08)' : 'rgba(79,70,229,0.07)',
+  inputBorder: dark ? 'rgba(255,255,255,0.10)' : 'rgba(79,70,229,0.18)',
+  inputBorderFocus: dark ? 'rgba(99,102,241,0.6)' : 'rgba(79,70,229,0.8)',
   tabBg:            dark ? 'rgba(255,255,255,0.04)'        : 'rgba(79,70,229,0.06)',
   tabBorder:        dark ? 'rgba(255,255,255,0.2)'        : 'rgba(79,70,229,0.14)',
   tabInactive:      dark ? '#475569'                       : '#94a3b8',
@@ -167,74 +167,6 @@ const AuthInput = ({ icon: Icon, type='text', value, onChange, placeholder, T, c
     </div>
   );
 };
-
-// ─── Left Panel Components ────────────────────────────────────────────────────
-// const BrandLogo = () => (
-//   <div className='md:mb-[48px] mb-0 inline-flex' style={{ 
-//     alignItems:'center', gap:10, background:'rgba(255,255,255,0.12)', 
-//     border:'1px solid rgba(255,255,255,0.2)', borderRadius:0, padding:'8px 16px' 
-//   }}>
-//     <div style={{ width:26, height:26, background:'white', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center' }}>
-//       <span className='flex justify-center items-center' style={{ color:'#4f46e5', fontWeight:900, fontSize:13, fontStyle:'italic' }}>
-//         <img src="/jellyfish.png" alt="icon" className='w-[70%] h-[70%]' />
-//       </span>
-//     </div>
-//     <span style={{ color:'white', fontWeight:800, fontSize:13, letterSpacing:'-0.01em' }}>
-//       TAPTIPTUP From Indonesia 🚀
-//     </span>
-//   </div>
-// );
-
-// const HeroJellyfish = () => (
-//   <div style={{ position:'relative' }} className='md:mb-[32px] mt-0 md:mt-[-10px] mb-[16px]'>
-//     <motion.img className='md:block hidden' src="/jellyfish.png" alt=""
-//       animate={{ y:[0,-10,0] }} transition={{ duration:4, repeat:Infinity, ease:'easeInOut' }}
-//       style={{ width:'18%', userSelect:'none', pointerEvents:'none' }} />
-//     {/* <motion.img className='md:block md:opacity-[0.45] opacity-[0.20]' src="/jellyfish.png" alt=""
-//       animate={{ y:[0,8,0], rotate:[-45,-38,-45] }} 
-//       transition={{ duration:5.5, repeat:Infinity, ease:'easeInOut', delay:0.8 }}
-//       style={{ position:'absolute', top:-60, right:-30, width:'44%', transform:'rotate(-45deg)', userSelect:'none', pointerEvents:'none' }} /> */}
-//   </div>
-// );
-
-// const HeroContent = () => (
-//   <>
-//     <h1 style={{ 
-//       fontSize:'clamp(28px,3.2vw,40px)', fontWeight:900, color:'white', 
-//       lineHeight:1.20, letterSpacing:'-0.02em', marginBottom:14 
-//     }}>
-//       Mulai Terima<br />
-//       <span style={{ color:'#a5b4fc' }}>Dukungan</span> Real-time.
-//     </h1>
-//     <p style={{ color:'rgba(199,210,254,0.8)', lineHeight:1.65 }} 
-//        className='md:text-[15px] text-[13px] md:w-[90%] w-[98%]'>
-//       Platform donasi real-time untuk streamer Indonesia dengan overlay OBS custom, 
-//       pembayaran lokal, dan pencairan cepat.
-//     </p>
-//   </>
-// );
-
-// const StatBadge = ({ value, label }) => (
-//   <div style={{ 
-//     background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', 
-//     padding:'14px 20px', textAlign:'center' 
-//   }}>
-//     <div style={{ fontSize:22, fontWeight:900, color:'white', lineHeight:1 }}>{value}</div>
-//     <div style={{ fontSize:11, color:'rgba(255,255,255,0.5)', marginTop:4, fontWeight:600 }}>
-//       {label}
-//     </div>
-//   </div>
-// );
-
-// const StatsGrid = () => (
-//   <div className='md:inline hidden' style={{ position:'relative', zIndex:10 }}>
-//     <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:28 }}>
-//       <StatBadge value="2.5%" label="Potongan" />
-//       <StatBadge value="99.9%" label="Uptime" />
-//       <StatBadge value="<2det" label="Notif Alert" />
-//     </div>
-//   </div>
-// );
 
 // ─── LEFT PANEL ───────────────────────────────────────────────────────────────
 const LeftPanel = () => (
