@@ -303,7 +303,7 @@ export const AdminAnnouncementsPage = () => {
   return (
     <div className="space-y-0 pb-8">
       {/* Header */}
-      <div className="bg-gradient-to-br from-blue-700 to-indigo-800 rounded-none p-5 md:p-7 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-blue-700 to-indigo-800 rounded-none p-5 md:p-6 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)', backgroundSize: '20px 20px' }} />
         <div className="relative flex items-start justify-between gap-4">
           <div>
@@ -311,7 +311,7 @@ export const AdminAnnouncementsPage = () => {
               <Megaphone size={14} className="text-blue-300" />
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-300">Super Admin</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight">Manajemen Pengumuman</h1>
+            <h1 className="text-md md:text-lg font-black tracking-tight">Manajemen Pengumuman</h1>
             <p className="text-blue-200 text-sm font-medium mt-1">Kirim info, update, & promo ke semua streamer</p>
           </div>
           <button
@@ -321,7 +321,7 @@ export const AdminAnnouncementsPage = () => {
             <Plus size={16} /> Buat Pengumuman
           </button>
         </div>
-        <div className="relative mt-4 flex gap-3 flex-wrap text-xs font-black">
+        {/* <div className="relative mt-4 flex gap-3 flex-wrap text-xs font-black">
           <span className="px-3 py-1.5 bg-white/15 rounded-none border border-white/20">
             {pagination.total || 0} total
           </span>
@@ -331,7 +331,7 @@ export const AdminAnnouncementsPage = () => {
           <button onClick={() => refetch()} disabled={isFetching} className="cursor-pointer px-3 py-1.5 bg-white/15 hover:bg-white/25 rounded-none border border-white/20 flex items-center gap-1.5 transition-all disabled:opacity-50">
             <RefreshCw size={11} className={isFetching ? 'animate-spin' : ''} /> Refresh
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Form Modal */}
@@ -388,7 +388,7 @@ export const AdminAnnouncementsPage = () => {
       </AnimatePresence>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2 my-3">
+      <div className="flex flex-wrap gap-2 px-5 my-5">
         {/* Type filter */}
         <div className="flex gap-1.5">
           <button onClick={() => setTypeFilter('')}
@@ -402,7 +402,6 @@ export const AdminAnnouncementsPage = () => {
             </button>
           ))}
         </div>
-        <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 self-center" />
         {/* Active filter */}
         {[{ v: '', l: 'Semua Status' }, { v: 'true', l: '✅ Aktif' }, { v: 'false', l: '○ Non-aktif' }].map(f => (
           <button key={f.v} onClick={() => setActiveFilter(f.v)}
@@ -413,7 +412,7 @@ export const AdminAnnouncementsPage = () => {
       </div>
 
       {/* List */}
-      <div className="space-y-3 grid grid-cols-2 gap-3">
+      <div className="relative space-y-0 md:space-y-3 grid grid-cols-1 md:grid-cols-2 gap-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-20 text-slate-400 gap-3 font-bold">
             <Loader2 size={20} className="animate-spin" /> Memuat pengumuman...
@@ -435,7 +434,7 @@ export const AdminAnnouncementsPage = () => {
                 key={ann._id}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0, transition: { delay: i * 0.04 } }}
-                className={`bg-white h-[200px] dark:bg-slate-900 border rounded-none overflow-hidden shadow-sm transition-all ${
+                className={`relative bg-white h-[200px] dark:bg-slate-900 border rounded-none overflow-hidden shadow-sm transition-all ${
                   !ann.isActive || expired
                     ? 'border-slate-200 dark:border-slate-800 opacity-60'
                     : 'border-slate-200 dark:border-slate-800 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700'
@@ -454,7 +453,7 @@ export const AdminAnnouncementsPage = () => {
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap mb-1">
-                            <h3 className="font-black text-slate-800 dark:text-slate-100 truncate">{ann.title}</h3>
+                            <h3 className="font-black truncate max-w-[96%] overflow-hidden text-slate-800 dark:text-slate-100 truncate">{ann.title}</h3>
                             <span className={`px-2 py-0.5 rounded-none text-[9px] font-black uppercase tracking-wider border ${cfg.badge}`}>
                               {cfg.label}
                             </span>
@@ -482,16 +481,6 @@ export const AdminAnnouncementsPage = () => {
                         </div>
 
                         {/* Actions */}
-                        <div className="flex items-center gap-1.5 flex-shrink-0">
-                          <button onClick={() => openEdit(ann)}
-                            className="cursor-pointer p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-none transition-all">
-                            <PenLine size={16} />
-                          </button>
-                          <button onClick={() => setDeleteId(ann._id)}
-                            className="cursor-pointer p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-none transition-all">
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
                       </div>
 
                       {/* Preview image */}
@@ -522,6 +511,16 @@ export const AdminAnnouncementsPage = () => {
                       </div>
                     </div>
                   </div>
+                    <div className="absolute bottom-4 right-4 flex items-center gap-2 mt-6 flex-shrink-0">
+                        <button onClick={() => openEdit(ann)}
+                        className="border border-white/20 active:scale-[0.98] cursor-pointer p-2 text-white hover:text-white/80 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-none transition-all">
+                        <PenLine size={16} />
+                        </button>
+                        <button onClick={() => setDeleteId(ann._id)}
+                        className="cursor-pointer p-2 border border-white/20 active:scale-[0.98]  text-white hover:text-white/80 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-none transition-all">
+                        <Trash2 size={16} />
+                        </button>
+                    </div>
                 </div>
               </motion.div>
             );

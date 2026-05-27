@@ -45,7 +45,7 @@ const StatCard = ({ label, value, sub, icon: Icon, accent, index }) => (
         <Icon size={16} style={{ color: accent }} />
       </div>
     </div>
-    <p className="text-2xl font-black text-white leading-none tracking-tight">{value}</p>
+    <p className="text-md font-black text-white leading-none tracking-tight">{value}</p>
     {sub && <p className="text-[11px] text-slate-500 font-medium">{sub}</p>}
   </motion.div>
 );
@@ -136,7 +136,7 @@ export const DashboardSuperPage = () => {
             <Shield size={14} className="text-indigo-400" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400">Super Admin</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight">
+          <h1 className="text-lg md:text-xl font-black tracking-tight">
             Pusat <span className="text-indigo-400">Statistik</span>
           </h1>
           <p className="text-slate-500 text-sm font-medium mt-1">Platform overview — semua data real-time</p>
@@ -184,7 +184,7 @@ export const DashboardSuperPage = () => {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Platform-wide</p>
-              <p className="font-black text-white">Top 3 Donatur</p>
+              <p className="font-black text-sm text-white">Top 3 Donatur</p>
             </div>
           </div>
           <div className="space-y-3">
@@ -218,7 +218,10 @@ export const DashboardSuperPage = () => {
             </div>
             <div>
               {/* <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Perlu Tindakan</p> */}
-              <p className="font-black text-white">Pending Withdraw</p>
+              <p className="font-black text-sm text-white">Pending Withdraw</p>
+            </div>
+            <div className="w-8 h-8 bg-red-500/10 border border-red-500/20 rounded-none flex items-center justify-center">
+              <AlertTriangle size={14} className="text-red-400" />
             </div>
           </div>
 
@@ -268,7 +271,7 @@ export const DashboardSuperPage = () => {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Real-time</p>
-              <p className="font-black text-white">Donasi Terbaru</p>
+              <p className="font-black text-sm text-white">Donasi Terbaru</p>
             </div>
           </div>
           <div className="space-y-2">

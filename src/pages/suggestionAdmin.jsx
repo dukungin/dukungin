@@ -122,7 +122,7 @@ export const SuggestionsAdmin = () => {
   };
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-5 pb-6">
       {/* Toast */}
       <AnimatePresence>
         {showToast && (
@@ -141,7 +141,7 @@ export const SuggestionsAdmin = () => {
       </AnimatePresence>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-none p-6 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-none p-5 text-white relative overflow-hidden">
         <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/5 rounded-none" />
         <div className="absolute -bottom-8 -left-8 w-20 h-20 bg-white/5 rounded-none" />
         <div className="relative z-10 flex items-center justify-between">
@@ -150,7 +150,7 @@ export const SuggestionsAdmin = () => {
               <MessageCircle size={20} />
               <span className="text-slate-400 text-xs font-black uppercase tracking-widest">Super Admin</span>
             </div>
-            <h2 className="text-2xl font-black tracking-tight">Kelola Masukan Streamer</h2>
+            <h2 className="text-md md:text-lg font-black tracking-tight">Kelola Masukan Streamer</h2>
             <p className="text-slate-400 text-sm font-medium mt-1">{pagination.total || 0} total saran masuk</p>
           </div>
           <div className="flex items-center gap-2">
@@ -164,7 +164,7 @@ export const SuggestionsAdmin = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-2 flex-wrap px-6 md:px-0">
+      <div className="flex gap-2 flex-wrap px-5 md:px-0">
         <button
           onClick={() => setStatusFilter('')}
           className={`cursor-pointer px-4 py-2 rounded-none font-black text-xs transition-all ${

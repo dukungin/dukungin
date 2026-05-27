@@ -165,7 +165,7 @@ export const InboxBell = ({ setActiveTab }) => {
               </div>
 
               {/* List */}
-              <div className="max-h-96 overflow-y-auto">
+              <div className="max-h-[68vh] overflow-y-auto">
                 {isLoading ? (
                   <div className="flex items-center justify-center py-10 text-slate-400 gap-2">
                     <Loader2 size={16} className="animate-spin" />
@@ -305,7 +305,7 @@ export const InboxPage = () => {
   return (
     <div className="space-y-5 pb-8">
       {/* Header */}
-      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-none p-5 md:p-7 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-none p-5 md:p-5 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), radial-gradient(circle at 80% 20%, #6366f1 0%, transparent 50%)' }} />
         <div className="relative flex items-start justify-between gap-4">
           <div>
@@ -313,7 +313,7 @@ export const InboxPage = () => {
               <Bell size={14} className="text-slate-400" />
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Notifikasi</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight">Inbox</h1>
+            <h1 className="text-lg md:text-lg font-black tracking-tight">Inbox</h1>
             <p className="text-slate-400 text-sm font-medium mt-1">
               Pengumuman & informasi terbaru dari tim TAPTIPTUP
             </p>
@@ -330,7 +330,7 @@ export const InboxPage = () => {
           )}
         </div>
         <div className="relative mt-5 flex gap-3 text-sm flex-wrap">
-          <div className="px-3 py-1.5 bg-white/10 rounded-none border border-white/20 font-black">
+          <div className="px-3 py-1.5 bg-white/10 rounded-none border border-white/20 text-md">
             {announcements.length} pengumuman
           </div>
           {unreadCount > 0 && (
@@ -342,7 +342,7 @@ export const InboxPage = () => {
       </div>
 
       {/* Type filters */}
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap px-5">
         <button onClick={() => setTypeFilter('')}
           className={`px-3 py-2 rounded-none text-[11px] font-black border transition-all cursor-pointer active:scale-[0.97] ${!typeFilter ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-transparent' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-300'}`}>
           Semua
@@ -403,7 +403,7 @@ export const InboxPage = () => {
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap mb-1">
-                            <h3 className={`font-black text-base ${ann.isRead ? 'text-slate-700 dark:text-slate-300' : 'text-slate-900 dark:text-slate-100'}`}>
+                            <h3 className={`font-medium text-md ${ann.isRead ? 'text-slate-700 dark:text-slate-300' : 'text-slate-900 dark:text-slate-100'}`}>
                               {ann.title}
                             </h3>
                             {!ann.isRead && (

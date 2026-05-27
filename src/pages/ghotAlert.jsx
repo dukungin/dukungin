@@ -906,7 +906,7 @@ const GhostAlertPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-none border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-7 space-y-6"
+          className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-none border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-4.5 space-y-6"
         >
           {/* Streamer Target */}
           <div>
