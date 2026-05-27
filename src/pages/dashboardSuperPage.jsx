@@ -136,7 +136,7 @@ export const DashboardSuperPage = () => {
             <Shield size={14} className="text-indigo-400" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400">Super Admin</span>
           </div>
-          <h1 className="text-lg md:text-xl font-black tracking-tight">
+          <h1 className="text-[18px] md:text-[20px] font-black tracking-tight">
             Pusat <span className="text-indigo-400">Statistik</span>
           </h1>
           <p className="text-slate-500 text-sm font-medium mt-1">Platform overview — semua data real-time</p>
