@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, ChevronRight, Expand, Eye, EyeOff, HeadphonesIcon, LogOut, Moon, PanelLeftClose, PanelLeftOpen, Sun, Users, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import InboxBell from "./inboxBell";
 
 const TAB_LABELS = {
   settings:      'Editor Overlay',
@@ -15,6 +16,7 @@ const TAB_LABELS = {
   subathon:      'Subathon',
   milestones:    'Milestones',
   leaderboard:   'Leaderboard',
+  inbox: 'Inbox',
   community:     'Komunitas',
   contact:       'Bantuan & Kontak',
   ghostAlert:    'Notif Hantu',
@@ -220,8 +222,6 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
 
           {/* Theme toggle */}
           <ThemeToggle theme={theme} onToggle={toggle} />
-
-          {/* Bantuan */}
           <button
             onClick={() => setActiveTab('contact')}
             className={`cursor-pointer h-[40px] active:scale-[0.99] flex items-center gap-2 px-3.5 rounded-none border font-bold text-md transition-all ${
@@ -232,6 +232,10 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
             <HeadphonesIcon size={14} />
             <span className="hidden md:inline">Bantuan</span>
           </button>
+
+          <InboxBell setActiveTab={setActiveTab} />
+
+          {/* Bantuan */}
 
           {/* Komunitas */}
           <button

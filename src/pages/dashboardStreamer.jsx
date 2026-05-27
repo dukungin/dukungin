@@ -61,6 +61,9 @@ import { WhatsAppPage } from './whatsappPage';
 import { SuggestionsAdmin } from './suggestionAdmin';
 import { ALERT_PRESETS } from '../constants/alertPresets';
 import CustomerServiceWidget from '../components/customerWidget';
+import DashboardSuperPage from './dashboardSuperPage';
+import { InboxPage } from '../components/inboxBell';
+import AdminAnnouncementsPage from './adminannouncements';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -2897,6 +2900,8 @@ export const DashboardStreamer = () => {
     mediaSettings: 'Media share',
     store: 'Toko OBS',
     history:       'Riwayat',
+    inbox: 'Inbox',
+    announcements: 'Pengumuman',
     feeConfig:     'Konfigurasi Fee',
     wallet:        'Wallet',
     community:     'Community',
@@ -3088,8 +3093,26 @@ export const DashboardStreamer = () => {
               </motion.div>
             )}
 
+            {activeTab === 'settings' && isSuperAdmin && (
+              <motion.div key="superDashboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <DashboardSuperPage />
+              </motion.div>
+            )}
+
+            {activeTab === 'inbox' && (
+              <motion.div key="inbox" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <InboxPage />
+              </motion.div>
+            )}
+            
+            {activeTab === 'announcements' && isSuperAdmin && (
+              <motion.div key="announcements" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <AdminAnnouncementsPage />
+              </motion.div>
+            )}
+
             {/* ══════════════════════ SETTINGS (Editor Overlay) ══════════════════════ */}
-            {activeTab === 'settings' && (
+            {activeTab === 'settings' && !isSuperAdmin && (
               <motion.div key="settings" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="grid grid-cols-1 xl:grid-cols-12 gap-5">
                 <section className="xl:col-span-7 space-y-6">
 

@@ -890,7 +890,7 @@ const GhostAlertPage = () => {
 
   // ── Main UI ───────────────────────────────────────────────────────────────
   return (
-    <div className="max-w-7xl mx-auto px-0 md:px-0 py-0 space-y-6">
+    <div className="max-w-8xl mx-auto px-0 md:px-0 py-0 space-y-6">
 
       {/* Toast */}
       <div className="fixed bottom-6 right-6 z-[9999] pointer-events-none">
@@ -1100,25 +1100,6 @@ const GhostAlertPage = () => {
                 maxSeconds={60}
                 disabled={sending}
               />
-              
-              {/* Fallback: manual URL input (opsional) */}
-              {/* {form.voiceUrl && (
-                <div className="flex items-center gap-2">
-                  <audio 
-                    controls 
-                    src={form.voiceUrl} 
-                    className="w-full h-8" 
-                    style={{ borderRadius: 0 }} 
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setForm({ ...form, voiceUrl: '' })}
-                    className="p-2 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 text-red-500 rounded-none transition-all"
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-              )} */}
             </div>
           </div>
 

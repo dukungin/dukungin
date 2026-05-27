@@ -16,6 +16,8 @@
     "clsx": "^2.1.1",
     "edge-tts-node": "^1.5.7",
     "framer-motion": "^12.38.0",
+    "highcharts": "^12.6.0",
+    "highcharts-react-official": "^3.2.3",
     "lucide-react": "^1.7.0",
     "midtrans-client": "^1.4.3",
     "qrcode": "^1.5.4",
@@ -23,6 +25,7 @@
     "react-dom": "^19.2.4",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.13.2",
+    "recharts": "^2.12.7",
     "socket.io-client": "^4.8.3",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2"
