@@ -2952,7 +2952,7 @@ export const DashboardStreamer = () => {
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
 
       {/* <video src="/glass.mp4" className='absolute z-[1]' autoplay={true}></video> */}
-      <img src="/glass.jpg" className='opacity-[20%] fixed top-0 left-0 w-screen h-screen z-[1]' autoplay={true}></img>
+      <img src="/glass.jpg" className='opacity-[10%] fixed top-0 left-0 w-screen h-screen z-[1]' autoplay={true}></img>
       {/* ── Modal Copy URL ── */}
       <AnimatePresence>
         {showCopyModal && (
@@ -3055,7 +3055,7 @@ export const DashboardStreamer = () => {
           activeTab={activeTab} setActiveTab={setActiveTab}
         />
 
-        <div className="relative md:mt-[-14px] px-0 md:px-7 lg:py-11 w-full">
+        <div className="relative md:mt-[-14px] px-0 md:px-5 lg:py-11 w-full">
           <AnimatePresence mode="wait">
 
             {/* ══════════════════════ COMMUNITY ══════════════════════ */}
