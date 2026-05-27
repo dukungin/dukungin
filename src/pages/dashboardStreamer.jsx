@@ -2634,11 +2634,19 @@ export const DashboardStreamer = () => {
   const [followAction, setFollowAction]   = useState({ type: '', username: '' });
   const [navbar, setNavbar]               = useState(false);
   const [showBalance, setShowBalance]     = useState(false);
+  const [iconMode, setIconMode] = useState('emoji');
+
   const { theme, toggle } = useTheme();
 
   const { data: profileData, isLoading: profileLoading } = useQuery({
     queryKey: ['profile'], queryFn: fetchProfile, refetchInterval: 30000,
   });
+
+  useEffect(() => {
+    if (localSettings?.customIcon?.startsWith('http')) {
+      setIconMode('gif');
+    }
+  }, [localSettings?.customIcon]);
 
   useEffect(() => {
     if (profileData && !localSettings) {
@@ -3011,7 +3019,7 @@ export const DashboardStreamer = () => {
                         </div>
                       </div>
 
-                      <div className="space-y-3">
+                      {/* <div className="space-y-3">
                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">Icon Alert</label>
                         <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
                           {ICON_PRESETS.map(({ emoji, label }) => (
@@ -3022,7 +3030,83 @@ export const DashboardStreamer = () => {
                             </button>
                           ))}
                         </div>
-                      </div>
+                      </div> */}
+
+                      {/* Icon Alert */}
+                        <div className="space-y-3">
+                          <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">Icon Alert</label>
+                          
+                          {/* Mode selector */}
+                          <div className="flex gap-2">
+                            {[{ id: 'emoji', label: '😊 Emoji' }, { id: 'gif', label: '🎬 GIF / URL' }].map(m => (
+                              <button key={m.id}
+                                onClick={() => {
+                                  if (m.id === 'emoji') upd('customIcon', '');
+                                  setIconMode(m.id);
+                                }}
+                                className={`cursor-pointer active:scale-[0.97] px-4 py-2 rounded-none font-black text-xs transition-all ${
+                                  iconMode === m.id
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                                }`}>
+                                {m.label}
+                              </button>
+                            ))}
+                          </div>
+
+                          {iconMode === 'emoji' ? (
+                            <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+                              {ICON_PRESETS.map(({ emoji, label }) => (
+                                <button key={emoji} onClick={() => upd('customIcon', emoji === '💜' ? '' : emoji)} title={label}
+                                  className={`flex flex-col items-center gap-1 p-3 rounded-none border-2 text-lg transition-all cursor-pointer active:scale-[0.95] ${
+                                    (settings.customIcon || '💜') === emoji || (!settings.customIcon && emoji === '💜')
+                                      ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40'
+                                      : 'border-slate-100 dark:border-slate-700 hover:border-slate-300 bg-slate-50 dark:bg-slate-800'
+                                  }`}>
+                                  <span>{emoji}</span>
+                                  <span className="text-[8px] font-black text-slate-400 leading-none">{label}</span>
+                                </button>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="space-y-3">
+                              <div className="flex gap-2 items-center">
+                                <input
+                                  type="url"
+                                  value={settings.customIcon?.startsWith('http') ? settings.customIcon : ''}
+                                  onChange={e => upd('customIcon', e.target.value)}
+                                  placeholder="https://media.giphy.com/media/xxxx/giphy.gif"
+                                  className="flex-1 p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-mono text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400 transition-all"
+                                />
+                                {settings.customIcon?.startsWith('http') && (
+                                  <div className="w-12 h-12 flex-shrink-0 border-2 border-slate-200 dark:border-slate-700 rounded-none overflow-hidden bg-slate-900 flex items-center justify-center">
+                                    <img src={settings.customIcon} alt="preview" className="w-full h-full object-contain" />
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Giphy reference */}
+                              <div className="flex items-center gap-3 p-3 bg-pink-50 dark:bg-pink-950/20 border border-pink-200 dark:border-pink-900 rounded-none">
+                                <span className="text-lg flex-shrink-0">🎬</span>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[10px] font-black text-pink-700 dark:text-pink-400 uppercase tracking-wider mb-0.5">Cari GIF di Giphy</p>
+                                  <p className="text-[10px] text-pink-500 dark:text-pink-500 font-medium">
+                                    Buka Giphy → klik GIF → Share → Copy GIF Link → paste di atas
+                                  </p>
+                                </div>
+                                <a href="https://giphy.com/search/terima-kasih" target="_blank" rel="noopener noreferrer"
+                                  className="flex-shrink-0 px-3 py-1.5 bg-pink-500 hover:bg-pink-600 text-white rounded-none text-[10px] font-black transition-all active:scale-[0.97]">
+                                  Buka Giphy →
+                                </a>
+                              </div>
+
+                              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-medium space-y-1">
+                                <p>• <span className="font-black">Giphy:</span> klik GIF → Share → Copy GIF Link → ambil URL yang berakhiran <code className="bg-slate-100 dark:bg-slate-800 px-1">/giphy.gif</code></p>
+                                <p>• Format yang didukung: <code className="bg-slate-100 dark:bg-slate-800 px-1">.gif</code> <code className="bg-slate-100 dark:bg-slate-800 px-1">.png</code> <code className="bg-slate-100 dark:bg-slate-800 px-1">.jpg</code> <code className="bg-slate-100 dark:bg-slate-800 px-1">.webp</code></p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
