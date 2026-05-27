@@ -262,7 +262,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
   const [isSending, setIsSending] = useState(false);
   const [lastSent, setLastSent] = useState(null);
   const [customAmount, setCustomAmount] = useState(50000);
-  const [customName, setCustomName] = useState('TestDonor');
+  const [customName, setCustomName] = useState('Mas Dev');
   const [customMsg, setCustomMsg] = useState('Ini test donasi dari dashboard! 🎉');
   const [customVoiceUrl, setCustomVoiceUrl] = useState('');
 
@@ -303,7 +303,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
           <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nama Donor</label>
           <input value={customName} onChange={e => setCustomName(e.target.value)}
             className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
-            placeholder="TestDonor" />
+            placeholder="Mas Dev" />
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nominal (Rp)</label>
@@ -371,7 +371,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
   const [isSending, setIsSending] = useState(false);
   const [lastSent, setLastSent] = useState(null);
   const [formData, setFormData] = useState({
-    donorName: 'TestDonor',
+    donorName: 'Mas Dev',
     amount: 25000,
     message: 'Terima kasih atas dukungannya! 🔥',
     mediaUrl: 'https://picsum.photos/400/300',
@@ -423,7 +423,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
           <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nama Donor</label>
           <input value={formData.donorName} onChange={e => updateForm('donorName', e.target.value)}
             className="p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm focus:border-purple-400 focus:outline-none transition-all"
-            placeholder="@TestDonor" />
+            placeholder="@Mas Dev" />
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nominal</label>

@@ -665,13 +665,13 @@
               animate={anim.animate}
               exit={anim.exit}
               style={{
-                backgroundColor: bg,
+                backgroundColor: theme === 'gifCard' ? 'transparent' : bg,
                 color: fg,
                 width: `${maxW}px`,
-                borderRadius: theme === 'smooth' ? 20 : 0,                           // ← no radius di wrapper
-                border: `1px solid ${borderColor}`,
-                boxShadow: '0 16px 40px rgba(0,0,0,0.55)',
-                overflow: 'hidden',
+                borderRadius: theme === 'smooth' ? 20 : 0,
+                border: theme === 'gifCard' ? 'none' : `1px solid ${borderColor}`,
+                boxShadow: theme === 'gifCard' ? 'none' : '0 16px 40px rgba(0,0,0,0.55)',
+                overflow: theme === 'gifCard' ? 'visible' : 'hidden',
                 fontFamily: "'Inter', -apple-system, 'Segoe UI', sans-serif",
               }}
             >
