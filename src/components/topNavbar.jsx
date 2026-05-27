@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, ChevronRight, Expand, Eye, EyeOff, HeadphonesIcon, LogOut, Moon, PanelLeftClose, PanelLeftOpen, Sun, Users, Wallet } from "lucide-react";
+import { AlertCircle, ChevronRight, Expand, Eye, EyeOff, HeadphonesIcon, LogOut, Moon, PanelLeftClose, PanelLeftOpen, SendHorizonal, Sun, Users, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InboxBell from "./inboxBell";
+import { TransferModal } from "./TransferModal";
 
 const TAB_LABELS = {
   settings:      'Editor Overlay',
@@ -16,7 +17,7 @@ const TAB_LABELS = {
   subathon:      'Subathon',
   milestones:    'Milestones',
   leaderboard:   'Leaderboard',
-  inbox: 'Inbox',
+  inbox:         'Inbox',
   community:     'Komunitas',
   contact:       'Bantuan & Kontak',
   ghostAlert:    'Notif Hantu',
@@ -125,14 +126,21 @@ const ThemeToggle = ({ theme, onToggle }) => {
 // ─── TopNavbar ─────────────────────────────────────────────────────────────────
 
 export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, navbar, isCollapsed, setIsCollapsed }) => {
-  const [showLogout, setShowLogout] = useState(false);
+  const [showLogout, setShowLogout]           = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [showTransfer, setShowTransfer]       = useState(false); // ← BARU
+  const [currentBalance, setCurrentBalance]   = useState(user?.balance ?? 0); // ← BARU
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const [showBalance, setShowBalance] = useState(() => {
     const saved = localStorage.getItem('showBalance');
-    return saved === 'true'; 
+    return saved === 'true';
   });
+
+  // Sinkronkan balance dari props user ketika user berubah
+  useEffect(() => {
+    setCurrentBalance(user?.balance ?? 0);
+  }, [user?.balance]);
 
   useEffect(() => {
     if (!showLogout) return;
@@ -162,14 +170,21 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
     window.dispatchEvent(new Event('storage'));
   };
 
+  // ── Callback setelah transfer sukses — update balance lokal ─────────────────
+  const handleTransferSuccess = (newBalance) => {
+    if (newBalance !== undefined) {
+      setCurrentBalance(newBalance);
+    }
+    // Opsional: trigger storage event agar komponen lain juga tahu
+    window.dispatchEvent(new Event('storage'));
+  };
+
   return (
     <>
       <div className={`hidden md:flex sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-4 py-4 flex items-center justify-between gap-4`}>
 
-        {/* Kiri: Tombol collapse + Breadcrumb */}
+        {/* Kiri: Breadcrumb */}
         <div className="flex items-center gap-3 min-w-0">
-
-          {/* Breadcrumb */}
           <div className="flex ml-[2.9px] items-center gap-1.5 min-w-0">
             <span className="text-md font-bold text-slate-400 dark:text-slate-500 whitespace-nowrap">Dashboard</span>
             <ChevronRight size={16} className="text-slate-400 dark:text-slate-600 flex-shrink-0" />
@@ -188,40 +203,55 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           >
             <AnimatePresence mode="wait">
               {isCollapsed ? (
-                <motion.span
-                  className="flex items-center justify-center gap-2 w-max"
-                  key="open"
-                >
+                <motion.span className="flex items-center justify-center gap-2 w-max" key="open">
                   <Expand size={17} />
                   <p className="text-md">Expanded</p>
                 </motion.span>
               ) : (
-                <motion.span
-                  className="flex items-center justify-center gap-2 w-max"
-                  key="close"
-                >
+                <motion.span className="flex items-center justify-center gap-2 w-max" key="close">
                   <PanelLeftClose size={17} />
                   <p className="text-md">Condense</p>
                 </motion.span>
               )}
             </AnimatePresence>
           </button>
-          {/* Saldo */}
-          <div className="hidden sm:flex items-center h-[40px] gap-2 rounded-none px-3.5 py-2 border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60">
-            <Wallet size={18} className="text-blue-400" />
-            <span className="font-bold text-blue-600 dark:text-blue-400 text-md tracking-wide">
-              {showBalance 
-                ? `Rp ${parseFloat(user.balance).toLocaleString('id-ID')}` 
-                : "Rp *********"
-              }
-            </span>
-            <button onClick={() => handleShowBalance()} className="cursor-pointer p-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-blue-600 transition-all hover:bg-blue-50 dark:hover:bg-blue-950/40">
-              {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
+
+          {/* ── Saldo + Tombol Kirim ─────────────────────────────────────── */}
+          <div className="hidden sm:flex items-center h-[40px] gap-0 rounded-none border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60 overflow-hidden">
+            {/* Info saldo */}
+            <div className="flex items-center gap-2 px-3.5 py-2 border-r border-slate-200/80 dark:border-slate-700">
+              <Wallet size={18} className="text-blue-400" />
+              <span className="font-bold text-blue-600 dark:text-blue-400 text-md tracking-wide">
+                {showBalance
+                  ? `Rp ${parseFloat(currentBalance).toLocaleString('id-ID')}`
+                  : "Rp *********"
+                }
+              </span>
+              <button
+                onClick={handleShowBalance}
+                className="cursor-pointer p-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-blue-600 transition-all hover:bg-blue-50 dark:hover:bg-blue-950/40"
+              >
+                {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+
+            {/* Tombol Kirim Saldo */}
+            <button
+              onClick={() => setShowTransfer(true)}
+              title="Kirim saldo ke streamer lain"
+              className="cursor-pointer h-full px-3.5 flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 dark:hover:text-blue-400 transition-all active:scale-[0.97] group"
+            >
+              <SendHorizonal
+                size={16.5}
+                className="group-hover:translate-x-0.5 transition-transform"
+              />
+              <span className="text-md font-bold hidden lg:inline">Kirim</span>
             </button>
           </div>
 
           {/* Theme toggle */}
           <ThemeToggle theme={theme} onToggle={toggle} />
+
           <button
             onClick={() => setActiveTab('contact')}
             className={`cursor-pointer h-[40px] active:scale-[0.99] flex items-center gap-2 px-3.5 rounded-none border font-bold text-md transition-all ${
@@ -234,8 +264,6 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           </button>
 
           <InboxBell setActiveTab={setActiveTab} />
-
-          {/* Bantuan */}
 
           {/* Komunitas */}
           <button
@@ -267,8 +295,8 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
             >
               <div className="w-8 h-8 rounded-none bg-blue-600 flex items-center justify-center text-white font-bold text-md flex-shrink-0">
                 {user?.profilePicture ? (
-                  <img 
-                    src={user.profilePicture} 
+                  <img
+                    src={user.profilePicture}
                     alt={user.username}
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -300,11 +328,21 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                     className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-900 rounded-none shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden z-20"
                   >
                     {/* Saldo mobile */}
-                    <div className="sm:hidden px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center gap-2">
-                      <Wallet size={13} className="text-blue-400" />
-                      <span className="font-bold text-blue-600 dark:text-blue-400 text-sm">
-                        Rp {parseFloat(user.balance).toLocaleString('id-ID')}
-                      </span>
+                    <div className="sm:hidden px-4 py-3 border-b border-slate-50 dark:border-slate-800">
+                      <div className="flex items-center gap-2">
+                        <Wallet size={13} className="text-blue-400" />
+                        <span className="font-bold text-blue-600 dark:text-blue-400 text-sm">
+                          Rp {parseFloat(currentBalance).toLocaleString('id-ID')}
+                        </span>
+                      </div>
+                      {/* Kirim saldo di mobile (dropdown) */}
+                      <button
+                        onClick={() => { setShowLogout(false); setShowTransfer(true); }}
+                        className="cursor-pointer mt-2 w-full flex items-center gap-2 py-2 px-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-xs font-bold hover:bg-blue-100 dark:hover:bg-blue-950/60 transition-all"
+                      >
+                        <SendHorizonal size={13} />
+                        Kirim Saldo ke Streamer
+                      </button>
                     </div>
 
                     {/* Theme toggle */}
@@ -342,7 +380,18 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
         </div>
       </div>
 
-      {/* Modal Konfirmasi Logout */}
+      {/* ── Modal Transfer ──────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {showTransfer && (
+          <TransferModal
+            user={{ ...user, balance: currentBalance }}
+            onClose={() => setShowTransfer(false)}
+            onSuccess={handleTransferSuccess}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Modal Konfirmasi Logout ─────────────────────────────────────────── */}
       <AnimatePresence>
         {showLogoutConfirm && (
           <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-6">
