@@ -506,7 +506,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
                       value={digit}
                       onChange={(e) => handlePinInput(i, e.target.value)}
                       onKeyDown={(e) => handlePinKeyDown(i, e)}
-                      className={`w-12 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
+                      className={`w-14 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
                         ${digit
                           ? "border-blue-500 dark:border-blue-400 text-slate-800 dark:text-slate-100"
                           : "border-slate-200 dark:border-slate-700 text-slate-300"
