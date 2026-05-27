@@ -62,7 +62,7 @@ import { SuggestionsAdmin } from './suggestionAdmin';
 import { ALERT_PRESETS } from '../constants/alertPresets';
 import CustomerServiceWidget from '../components/customerWidget';
 import DashboardSuperPage from './dashboardSuperPage';
-import { InboxPage } from '../components/inboxBell';
+import InboxBell, { InboxPage } from '../components/inboxBell';
 import AdminAnnouncementsPage from './adminannouncements';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
@@ -3028,10 +3028,10 @@ export const DashboardStreamer = () => {
       </div>
 
       {/* ── Mobile Navbar ── */}
-      <div className="lg:hidden fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 z-50 px-3 py-4 flex justify-between items-center">
+      <div className="lg:hidden fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 z-50 px-4 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 p-2 bg-red-200 rounded-none flex items-center justify-center"><img src="/jellyfish.png" alt="icon" /></div>
-          <span className="font-black text-lg tracking-tight text-slate-800 dark:text-slate-100">TTT</span>
+          <div className="w-11.5 md:w-10 h-11.5 md:h-10 p-2 bg-red-200 rounded-none flex items-center justify-center"><img src="/jellyfish.png" alt="icon" /></div>
+          {/* <span className="font-black text-lg tracking-tight text-slate-800 dark:text-slate-100">TTT</span> */}
         </div>
         <div className="flex items-center gap-2">
           <button onClick={toggle} className="h-[40px] cursor-pointer active:scale-[0.97] flex items-center gap-2 px-3 rounded-none border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700">
@@ -3043,6 +3043,7 @@ export const DashboardStreamer = () => {
           <button onClick={() => setActiveTab('community')} className="h-[40px] cursor-pointer hover:brightness-90 active:scale-[0.97] relative flex items-center gap-2 px-3 py-3 rounded-none font-medium text-md overflow-hidden" style={{ background: 'linear-gradient(90deg, #0f0c29, #302b63, #24243e, #0f0c29)', backgroundSize: '300% 100%', animation: 'rainbowSlide 3s ease-in-out infinite' }}>
             <Users size={16} className="relative z-10 text-white" />
           </button>
+          <InboxBell setActiveTab={setActiveTab} />
           <button onClick={() => setIsSidebarOpen(true)} className="h-[40px] cursor-pointer active:scale-[0.97] p-2 bg-white dark:bg-slate-800 rounded-none text-slate-600 dark:text-slate-400">
             <Menu size={24} />
           </button>
@@ -3136,10 +3137,10 @@ export const DashboardStreamer = () => {
                         </div>
                       ))}
 
-                      <div className="bg-slate-100 dark:bg-slate-800 p-5 rounded-none border border-slate-100/10 mb-2">
-                        <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2 rounded">DONATE URL</label>
+                      <div className="bg-slate-100 dark:bg-slate-800 p-5 pb-4.5 rounded-none border border-slate-100/10 mb-2">
+                        <label className="block text-[10px] font-black bg-emerald-300 w-max text-slate-700 mb-2 uppercase tracking-widest px-2">DONATE URL</label>
                         <div className="flex gap-3">
-                          <input readOnly value={`https://taptiptup.vercel.app/donate/${user.username}`} className="flex-1 bg-transparent font-mono text-sm text-blue-600 dark:text-blue-400 font-bold outline-none overflow-hidden text-ellipsis" />
+                          <input readOnly value={`https://taptiptup.vercel.app/donate/${user.username}`} className="flex-1 bg-transparent font-mono text-sm text-white font-bold outline-none overflow-hidden text-ellipsis" />
                           <button onClick={() => copyToClipboard(`https://taptiptup.vercel.app/donate/${user.username}`)} className="text-slate-400 hover:text-blue-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
                         </div>
                       </div>

@@ -135,7 +135,7 @@ export const InboxBell = ({ setActiveTab }) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute right-0 top-full mt-2 w-[90vw] md:w-120 bg-white dark:bg-slate-900 rounded-none shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden z-[9999]"
+              className="absolute right-[-127%] top-full mt-2 w-[88vw] md:w-120 bg-white dark:bg-slate-900 rounded-none shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden z-[9999]"
             >
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
@@ -227,7 +227,7 @@ export const InboxBell = ({ setActiveTab }) => {
                               exit={{ height: 0, opacity: 0 }}
                               className="overflow-hidden"
                             >
-                              <div className="px-4 pb-4 space-y-3">
+                              <div className="px-4 pb-4 pt-3 space-y-3">
                                 {ann.imageUrl && (
                                   <img src={ann.imageUrl} alt={ann.title}
                                     className="w-full max-h-40 object-cover rounded-none border border-slate-200 dark:border-slate-700" />
