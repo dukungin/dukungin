@@ -3225,11 +3225,6 @@ export const DashboardStreamer = () => {
                                   Buka Giphy →
                                 </a>
                               </div>
-
-                              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-medium space-y-1">
-                                <p>• <span className="font-black">Giphy:</span> klik GIF → Share → Copy GIF Link → ambil URL yang berakhiran <code className="bg-slate-100 dark:bg-slate-800 px-1">/giphy.gif</code></p>
-                                <p>• Format yang didukung: <code className="bg-slate-100 dark:bg-slate-800 px-1">.gif</code> <code className="bg-slate-100 dark:bg-slate-800 px-1">.png</code> <code className="bg-slate-100 dark:bg-slate-800 px-1">.jpg</code> <code className="bg-slate-100 dark:bg-slate-800 px-1">.webp</code></p>
-                              </div>
                             </div>
                           )}
                         </div>

@@ -104,11 +104,16 @@ export const showSessionExpiredModal = () => {
   const label = modal.querySelector('#sei-label');
 
   const tick = setInterval(() => {
+    if (remaining <= 1) {
+        redirect();
+        return;
+    }
+
     remaining--;
-    const filled   = (remaining / TOTAL) * circumference;
+    
+    const filled = (remaining / TOTAL) * circumference;
     ring.setAttribute('stroke-dashoffset', String(circumference - filled));
     count.textContent = String(remaining);
-    label.textContent = String(remaining);
-    if (remaining <= 0) redirect();
+
   }, 1000);
 };
