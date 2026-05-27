@@ -2713,11 +2713,11 @@ const TTSSection = ({ settings, upd, saveSettingsMutation, api }) => {
 
 
 const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
-  <div className="space-y-2">
-    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+  <div className="space-y-2 mt-2">
+    <p className="text-[10px] mb-2.5 font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
       {label}
-    </label>
-    <div className="flex gap-3">
+    </p>
+    <div className="w-full flex gap-5">
       {pinForm[groupKey].map((digit, i) => (
         <input
           key={i}
@@ -2728,7 +2728,7 @@ const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
           value={digit}
           onChange={e => handlePinInputChange(groupKey, i, e.target.value, refs, setPinForm)}
           onKeyDown={e => handlePinKeyDown(groupKey, i, e, refs, setPinForm)}
-          className={`w-12 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
+          className={`w-14 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
             ${digit
               ? 'border-blue-500 dark:border-blue-400 text-slate-800 dark:text-slate-100'
               : 'border-slate-200 dark:border-slate-700 text-slate-300'
@@ -3678,7 +3678,7 @@ export const DashboardStreamer = () => {
                           <p className="text-sm text-slate-400 font-medium">Gunakan PIN baru untuk konfirmasi transfer berikutnya.</p>
                         </motion.div>
                       ) : (
-                        <motion.div key="pin-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+                        <motion.div key="pin-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full grid grid-cols-1 gap-4 md:gap-14 items-center justify-center md:grid-cols-4 space-y-0">
                           <PinRow
                             label="PIN Saat Ini"
                             groupKey="currentPin"
@@ -3723,13 +3723,13 @@ export const DashboardStreamer = () => {
                               pinForm.newPin.join('').length < 4 ||
                               pinForm.confirmPin.join('').length < 4
                             }
-                            className="cursor-pointer w-full py-4 bg-amber-500 hover:bg-amber-600 text-white font-black text-sm transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                            className="cursor-pointer md:mt-0 mt-2 ml-auto w-full md:w-max px-4 relative md:top-[7px] h-[52px] py-4 bg-blue-500 hover:bg-amber-600 text-white font-black text-sm transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
                             style={{ borderRadius: 0 }}
                           >
                             {pinLoading ? (
                               <><Loader2 size={16} className="animate-spin" /> Memproses...</>
                             ) : (
-                              <><ShieldCheck size={16} /> Simpan PIN Baru</>
+                              <><Save />Simpan PIN terbaru</>
                             )}
                           </button>
                         </motion.div>
