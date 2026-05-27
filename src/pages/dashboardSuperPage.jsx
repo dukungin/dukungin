@@ -7,14 +7,6 @@ import {
     RefreshCw, Server, Shield, TrendingUp,
     Trophy, Users, Wallet
 } from 'lucide-react';
-import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis, YAxis
-} from 'recharts';
 import api from '../lib/axiosInstance';
 
 // ─── Fetch ────────────────────────────────────────────────────────────────────
