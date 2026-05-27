@@ -1636,6 +1636,40 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
     </div>
   );
 
+  const gifCardInner = (
+    <div style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={{
+        width: '100%', height: 120,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(0,0,0,0.4)', overflow: 'hidden',
+        borderBottom: `2px solid ${hl}40`,
+      }}>
+        {settings.customIcon?.startsWith('http') || settings.customIcon?.startsWith('/') ? (
+          <img src={settings.customIcon} alt="icon"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <span style={{ fontSize: 60, lineHeight: 1 }}>{settings.customIcon || '💜'}</span>
+        )}
+      </div>
+      <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: 16, fontWeight: 900, color: fg,
+          borderBottom: `1px solid ${hl}25`, paddingBottom: 6 }}>
+          {currentDonor.name}
+        </div>
+        <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: 20, fontWeight: 900, color: hl,
+          textShadow: `0 0 10px ${hl}55` }}>
+          Rp {currentDonor.amount.toLocaleString('id-ID')}
+        </div>
+        {currentDonor.msg && (
+          <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: 13, color: fg,
+            background: hl + '12', border: `1px solid ${hl}25`, padding: '5px 8px', lineHeight: 1.5 }}>
+            {currentDonor.msg}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   // ══════════════════════════════════════════
 // SMOOTH — Soft rounded card with Poppins
 // ══════════════════════════════════════════
@@ -1929,7 +1963,7 @@ const smoothInner = (
     </div>
   );
 
-  const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner, smooth: smoothInner };
+  const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner, smooth: smoothInner, gifCard: gifCardInner };
 
   return (
     <>
@@ -3115,9 +3149,15 @@ export const DashboardStreamer = () => {
                       <div className="md:col-span-2">
                         <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-4 uppercase tracking-widest">Tema Visual</label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {['modern', 'classic', 'minimal', 'smooth'].map(t => (
+                          {['modern', 'classic', 'minimal', 'smooth', 'gifCard'].map(t => (
                             <button key={t} onClick={() => upd('theme', t)}
-                              className={`cursor-pointer active:scale-[0.97] py-4 rounded-none border-2 transition-all font-black text-sm capitalize ${settings.theme === t ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 shadow-md' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'}`}>{t}</button>
+                              className={`cursor-pointer active:scale-[0.97] py-4 rounded-none border-2 transition-all font-black text-sm capitalize ${
+                                settings.theme === t
+                                  ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 shadow-md'
+                                  : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'
+                              }`}>
+                              {t === 'gifCard' ? '🎬 GIF Card' : t}
+                            </button>
                           ))}
                         </div>
                       </div>
