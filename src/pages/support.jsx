@@ -105,7 +105,7 @@ export const ContactPage = () => {
           <img src="/jellyfish.png" alt="icon" className="md:flex hidden w-[16%] opacity-90 z-[1] absolute top-[10%] right-[-60px] -rotate-40" />
         </div>
 
-        <div className="relative z-10 hidden md:grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">
+        <div className="relative z-2 hidden md:grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">
           {[
             { val: '1x24 Jam', label: 'Avg. Response'     },
             { val: '98%',      label: 'Resolved Tickets'  },
