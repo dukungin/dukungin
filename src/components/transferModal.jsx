@@ -7,6 +7,7 @@ import {
   Loader2,
   Search,
   SendHorizonal,
+  ShieldCheck,
   Users,
   X,
 } from "lucide-react";
@@ -28,6 +29,8 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
   const [error, setError]         = useState("");
   const [submitting, setSubmitting] = useState(false);
   const amountRef = useRef(null);
+  const [pin, setPin] = useState(["", "", "", ""]);
+  const pinRefs = [useRef(), useRef(), useRef(), useRef()];
 
   // ── Fetch mutual follows ──────────────────────────────────────────────────
   useEffect(() => {
@@ -53,6 +56,30 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
     u.username.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handlePinInput = (index, value) => {
+    if (!/^\d?$/.test(value)) return;
+    const newPin = [...pin];
+    newPin[index] = value;
+    setPin(newPin);
+    setError("");
+    if (value && index < 3) pinRefs[index + 1].current?.focus();
+  };
+
+  const handlePinKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !pin[index] && index > 0) {
+      pinRefs[index - 1].current?.focus();
+    }
+  };
+
+  const handlePinSubmit = () => {
+    const fullPin = pin.join("");
+    if (fullPin.length < 4) {
+      setError("Masukkan 4 digit PIN keamanan");
+      return;
+    }
+    handleSubmit(fullPin);
+  };
+
   const numAmount = Number(amount.replace(/\D/g, "")) || 0;
   const amountValid = numAmount >= 1_000 && numAmount <= 1_000_000;
 
@@ -73,7 +100,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
       setError("Jumlah harus antara Rp 1.000 – Rp 1.000.000");
       return;
     }
-    setStep("confirm");
+    setStep("pin"); 
   };
 
   const handleSubmit = async () => {
@@ -91,6 +118,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
           recipientId: selected._id,
           amount: numAmount,
           note,
+          securityPin
         }),
       });
       const data = await res.json();
@@ -142,6 +170,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
                 {step === "list" && "Pilih penerima"}
                 {step === "form" && `Ke @${selected?.username}`}
                 {step === "confirm" && "Konfirmasi transfer"}
+                {step === "pin" && "Verifikasi PIN"}
                 {step === "done" && "Transfer berhasil"}
               </p>
             </div>
@@ -436,6 +465,89 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
               </div>
             </motion.div>
           )}
+
+           {step === "pin" && (
+              <motion.div
+                key="pin"
+                initial={{ opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -16 }}
+                transition={{ duration: 0.18 }}
+                className="px-6 py-8 text-center space-y-6"
+              >
+                <div>
+                  <div className="w-12 h-12 mx-auto bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center mb-4">
+                    <ShieldCheck size={22} className="text-amber-500" />
+                  </div>
+                  <p className="font-bold text-slate-800 dark:text-slate-100 text-base">
+                    Masukkan PIN Keamanan
+                  </p>
+                  <p className="text-xs text-slate-400 font-medium mt-1">
+                    Konfirmasi transfer{" "}
+                    <span className="font-bold text-slate-600 dark:text-slate-300">
+                      {formatRp(numAmount)}
+                    </span>{" "}
+                    ke{" "}
+                    <span className="font-bold text-slate-600 dark:text-slate-300">
+                      @{selected?.username}
+                    </span>
+                  </p>
+                </div>
+
+                {/* 4 PIN inputs */}
+                <div className="flex items-center justify-center gap-3">
+                  {pin.map((digit, i) => (
+                    <input
+                      key={i}
+                      ref={pinRefs[i]}
+                      type="password"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handlePinInput(i, e.target.value)}
+                      onKeyDown={(e) => handlePinKeyDown(i, e)}
+                      className={`w-12 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
+                        ${digit
+                          ? "border-blue-500 dark:border-blue-400 text-slate-800 dark:text-slate-100"
+                          : "border-slate-200 dark:border-slate-700 text-slate-300"
+                        }
+                        focus:border-blue-500 dark:focus:border-blue-400`}
+                      style={{ borderRadius: 0 }}
+                    />
+                  ))}
+                </div>
+
+                {error && (
+                  <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+                    <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
+                    <p className="text-xs font-bold text-red-600 dark:text-red-400">{error}</p>
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => { setStep("confirm"); setPin(["", "", "", ""]); setError(""); }}
+                    disabled={submitting}
+                    className="cursor-pointer flex-1 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-sm hover:bg-slate-200 transition-all active:scale-[0.99] disabled:opacity-40"
+                    style={{ borderRadius: 0 }}
+                  >
+                    Kembali
+                  </button>
+                  <button
+                    onClick={handlePinSubmit}
+                    disabled={submitting || pin.join("").length < 4}
+                    className="cursor-pointer flex-[2] py-3.5 bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={{ borderRadius: 0 }}
+                  >
+                    {submitting ? (
+                      <><Loader2 size={15} className="animate-spin" /> Memproses...</>
+                    ) : (
+                      <><ShieldCheck size={15} /> Konfirmasi PIN</>
+                    )}
+                  </button>
+                </div>
+              </motion.div>
+            )}
 
           {/* ── STEP: DONE ─────────────────────────────────────────────────── */}
           {step === "done" && (
