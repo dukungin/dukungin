@@ -381,17 +381,16 @@
 
       if (theme === 'gifCard') {
         return (
-          <div style={{ position: 'relative', overflow: 'hidden' }}>
-            {/* GIF / Icon besar di atas */}
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%', marginLeft: '40px' }}>
+            {/* GIF area — full width, transparent bg */}
             <div style={{
               width: '100%',
-              height: 160,
+              height: 120,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(0,0,0,0.4)',
+              marginBottom: 16,
               overflow: 'hidden',
-              borderBottom: `2px solid ${hl}40`,
             }}>
               {customIcon?.startsWith('http') || customIcon?.startsWith('/') ? (
                 <img
@@ -400,88 +399,69 @@
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover',
+                    objectFit: 'contain',
+                    display: 'block',
+                    marginLeft: -6,
                   }}
                 />
               ) : (
-                <span style={{ fontSize: 80, lineHeight: 1 }}>
-                  {customIcon || '💜'}
-                </span>
+                <span style={{ fontSize: 72, lineHeight: 1 }}>{customIcon || '💜'}</span>
               )}
             </div>
 
-            {/* Info donasi di bawah */}
-            <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {/* Nama donor */}
-              <div style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 22,
-                fontWeight: 900,
-                color: fg,
-                lineHeight: 1.2,
-                borderBottom: `1px solid ${hl}25`,
-                paddingBottom: 8,
-              }}>
-                {alert.donorName}
-              </div>
-
-              {/* Nominal */}
-              <div style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 26,
-                fontWeight: 900,
-                color: hl,
-                letterSpacing: '-0.5px',
-                lineHeight: 1,
-                textShadow: `0 0 12px ${hl}55`,
-              }}>
-                Rp {Number(alert.amount).toLocaleString('id-ID')}
-              </div>
-
-              {/* Pesan */}
-              {alert.message && (
+            {/* Info area */}
+            <div style={{
+              padding: '10px 12px',
+              display: 'flex',
+              textAlign: 'center',
+              flexDirection: 'column',
+              gap: 7,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: 18,
+                  fontWeight: 500,
+                  color: fg,
+                  borderBottom: `1px solid ${highlight}25`,
+                }}>
+                  {alert.donorName} mengirim
+                </div>
+                <div style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: 18,
+                  marginLeft: 5,
+                  fontWeight: 500,
+                  color: highlight,
+                  letterSpacing: '-0.5px',
+                  lineHeight: 1,
+                  textShadow: `0 0 10px ${highlight}55`,
+                }}>
+                  Rp {Number(alert.amount).toLocaleString('id-ID')}
+                </div>
+              </div>
+
+              {alert.message && (
+                <div style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: 16,
                   color: fg,
                   fontWeight: 400,
-                  background: hl + '12',
-                  border: `1px solid ${hl}25`,
-                  padding: '6px 10px',
+                  background: highlight + '12',
+                  border: `1px solid ${highlight}25`,
+                  padding: '5px 8px',
                   lineHeight: 1.5,
                 }}>
                   {alert.message}
                 </div>
               )}
 
-              {/* Timestamp + progress dots */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 2 }}>
-                {showTs && alert?.receivedAt ? (
-                  <div style={{
-                    fontFamily: 'monospace',
-                    fontSize: 16,
-                    color: 'rgba(255,255,255,0.35)',
-                    letterSpacing: '0.04em',
-                  }}>
-                    {formatTimestamp(alert.receivedAt)}
-                  </div>
-                ) : <div />}
-                <div style={{ display: 'flex', gap: 2 }}>
-                  {Array.from({ length: 8 }).map((_, i) => (
-                    <span key={i} style={{
-                      width: 5, height: 5, display: 'inline-block',
-                      background: i < Math.round(progress / 12.5) ? hl : hl + '22',
-                    }} />
-                  ))}
-                </div>
-              </div>
-
               {/* Progress bar */}
-              <div style={{ height: 3, background: hl + '20', overflow: 'hidden' }}>
+              <div style={{ height: 3, background: highlight + '20', overflow: 'hidden' }}>
                 <div style={{
                   height: '100%',
                   width: `${progress}%`,
-                  background: hl,
+                  background: highlight,
                   transition: 'width 50ms linear',
                 }} />
               </div>

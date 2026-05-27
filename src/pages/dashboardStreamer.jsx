@@ -1637,35 +1637,78 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
   );
 
   const gifCardInner = (
-    <div style={{ position: 'relative', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', marginLeft: '40px' }}>
+      {/* GIF area — lebar sama dengan card, transparan */}
       <div style={{
-        width: '100%', height: 120,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'rgba(0,0,0,0.4)', overflow: 'hidden',
-        borderBottom: `2px solid ${hl}40`,
+        width: '100%',
+        height: 120,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        // background: 'red',
+        marginBottom: 16,
+        overflow: 'hidden',
       }}>
         {settings.customIcon?.startsWith('http') || settings.customIcon?.startsWith('/') ? (
-          <img src={settings.customIcon} alt="icon"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img
+            src={settings.customIcon}
+            alt="icon"
+            style={{
+              width: '100%',      // ← full lebar container
+              height: '100%',
+              objectFit: 'contain',
+              display: 'block',
+              marginLeft: -6
+            }}
+          />
         ) : (
-          <span style={{ fontSize: 60, lineHeight: 1 }}>{settings.customIcon || '💜'}</span>
+          <span style={{ fontSize: 72, lineHeight: 1 }}>{settings.customIcon || '💜'}</span>
         )}
       </div>
-      <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: 16, fontWeight: 900, color: fg,
-          borderBottom: `1px solid ${hl}25`, paddingBottom: 6 }}>
-          {currentDonor.name}
-        </div>
-        <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: 20, fontWeight: 900, color: hl,
-          textShadow: `0 0 10px ${hl}55` }}>
-          Rp {currentDonor.amount.toLocaleString('id-ID')}
+
+      {/* Info area */}
+      <div style={{
+        // backgroundColor: bg,
+        // border: `1px solid ${settings.borderColor || hl + '40'}`,
+        padding: '10px 12px',
+        display: 'flex',
+        textAlign: 'center',
+        flexDirection: 'column',
+        gap: 7,
+      }}>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <div style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: 18, fontWeight: 500, color: fg,
+            borderBottom: `1px solid ${hl}25`, 
+            // paddingBottom: 7,
+          }}>
+            {currentDonor.name} mengirim
+          </div>
+          <div style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: 18,
+            marginLeft: 5,
+            fontWeight: 500, color: hl,
+            letterSpacing: '-0.5px', lineHeight: 1,
+            textShadow: `0 0 10px ${hl}55`,
+          }}>
+            Rp {currentDonor.amount.toLocaleString('id-ID')}
+          </div>
         </div>
         {currentDonor.msg && (
-          <div style={{ fontFamily: "'Poppins', sans-serif", fontSize: 13, color: fg,
-            background: hl + '12', border: `1px solid ${hl}25`, padding: '5px 8px', lineHeight: 1.5 }}>
+          <div style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: 16, color: fg, fontWeight: 400,
+            background: hl + '12', border: `1px solid ${hl}25`,
+            padding: '5px 8px', lineHeight: 1.5,
+          }}>
             {currentDonor.msg}
           </div>
         )}
+        <div style={{ height: 3, background: hl + '20', overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: '60%', background: hl, transition: 'width 50ms linear' }} />
+        </div>
       </div>
     </div>
   );
@@ -1965,26 +2008,44 @@ const smoothInner = (
 
   const innerMap = { modern: modernInner, classic: classicInner, minimal: minimalInner, smooth: smoothInner, gifCard: gifCardInner };
 
-  return (
-    <>
-      {/* CSS untuk blink cursor di classic */}
-      <style>{`
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-      `}</style>
-      <div style={{
-        backgroundColor: bg,
-        color: fg,
-        borderRadius: settings.theme === 'smooth' ? 20 : 0,
-        maxWidth: `${settings.maxWidth || 280}px`,
-        width: '100%',
-        overflow: 'hidden',
-        boxShadow: `0 0 0 2px ${hl}30, 0 8px 32px rgba(0,0,0,0.6)`,
-        border: `2px solid ${settings.borderColor || hl + '40'}`,
-        imageRendering: 'pixelated',
-      }}>
-        {innerMap[settings.theme] ?? modernInner}
-      </div>
-    </>
+  // return (
+    // <>
+    //   {/* CSS untuk blink cursor di classic */}
+    //   <style>{`
+    //     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    //   `}</style>
+    //   <div style={{
+    //     backgroundColor: bg,
+    //     color: fg,
+    //     borderRadius: settings.theme === 'smooth' ? 20 : 0,
+    //     maxWidth: `${settings.maxWidth || 280}px`,
+    //     width: '100%',
+    //     overflow: 'hidden',
+    //     boxShadow: `0 0 0 2px ${hl}30, 0 8px 32px rgba(0,0,0,0.6)`,
+    //     border: `2px solid ${settings.borderColor || hl + '40'}`,
+    //     imageRendering: 'pixelated',
+    //   }}>
+    //     {innerMap[settings.theme] ?? modernInner}
+    //   </div>
+    // </>
+
+    return (
+      <>
+        <style>{`@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }`}</style>
+        <div style={{
+          backgroundColor: settings.theme === 'gifCard' ? 'transparent' : bg,
+          color: fg,
+          borderRadius: settings.theme === 'smooth' ? 20 : 0,
+          maxWidth: `${settings.maxWidth || 280}px`,
+          width: '100%',
+          // overflow: 'hidden',
+          boxShadow: settings.theme === 'gifCard' ? 'none' : `0 0 0 2px ${hl}30, 0 8px 32px rgba(0,0,0,0.6)`,
+          border: settings.theme === 'gifCard' ? 'none' : `2px solid ${settings.borderColor || hl + '40'}`,
+          imageRendering: 'pixelated',
+        }}>
+          {innerMap[settings.theme] ?? modernInner}
+        </div>
+      </>
   );
 };
 
