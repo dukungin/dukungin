@@ -1,19 +1,26 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, ChevronRight, Eye, EyeOff, HeadphonesIcon, LogOut, Moon, Sun, Users, Wallet } from "lucide-react";
+import { AlertCircle, ChevronRight, Expand, Eye, EyeOff, HeadphonesIcon, LogOut, Moon, PanelLeftClose, PanelLeftOpen, Sun, Users, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const TAB_LABELS = {
-  settings:    'Editor Overlay',
-  history:     'Riwayat Donasi',
-  wallet:      'Penarikan Dana',
-  poll:        'Poll & Voting',
-  subathon:    'Subathon',
-  leaderboard: 'Leaderboard',
-  milestones:  'Milestones',
-  community:   'Komunitas',
-  contact:     'Bantuan & Kontak',
-  admin:       'Permintaan Penarikan',
+  settings:      'Editor Overlay',
+  alertSettings: 'Alert OBS',
+  mediaSettings: 'Media Share',
+  store:         'Toko OBS',
+  history:       'Riwayat Donasi',
+  wallet:        'Penarikan Dana',
+  poll:          'Poll & Voting',
+  feeConfig:     'Konfigurasi Fee',
+  subathon:      'Subathon',
+  milestones:    'Milestones',
+  leaderboard:   'Leaderboard',
+  community:     'Komunitas',
+  contact:       'Bantuan & Kontak',
+  ghostAlert:    'Notif Hantu',
+  whatsapp:      'WhatsApp',
+  suggestions:   'Masukan Streamer',
+  admin:         'Permintaan Penarikan',
 };
 
 // ─── Theme hook ───────────────────────────────────────────────────────────────
@@ -49,7 +56,6 @@ const ThemeToggle = ({ theme, onToggle }) => {
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       className="cursor-pointer relative h-[38px] w-[70px] rounded-none border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center px-1 transition-all active:scale-[0.99] hover:brightness-95 overflow-hidden"
     >
-      {/* Track */}
       <motion.div
         className="absolute inset-0 rounded-none"
         style={{
@@ -61,7 +67,6 @@ const ThemeToggle = ({ theme, onToggle }) => {
         transition={{ duration: 0.3 }}
       />
 
-      {/* Stars (dark mode) */}
       {isDark && (
         <>
           <span className="absolute top-1.5 right-3 w-0.5 h-0.5 bg-white rounded-none opacity-80" />
@@ -70,7 +75,6 @@ const ThemeToggle = ({ theme, onToggle }) => {
         </>
       )}
 
-      {/* Sun rays (light mode) */}
       {!isDark && (
         <span className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30">
           <svg viewBox="0 0 16 16" fill="#f59e0b">
@@ -79,7 +83,6 @@ const ThemeToggle = ({ theme, onToggle }) => {
         </span>
       )}
 
-      {/* Thumb */}
       <motion.div
         className="relative z-10 w-7 h-7 rounded-none shadow-sm flex items-center justify-center"
         animate={{ x: isDark ? 30 : 0 }}
@@ -119,26 +122,22 @@ const ThemeToggle = ({ theme, onToggle }) => {
 
 // ─── TopNavbar ─────────────────────────────────────────────────────────────────
 
-export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, navbar }) => {
+export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, navbar, isCollapsed, setIsCollapsed }) => {
   const [showLogout, setShowLogout] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const [showBalance, setShowBalance] = useState(() => {
     const saved = localStorage.getItem('showBalance');
-    // LocalStorage menyimpan string, jadi kita bandingkan dengan 'true'
     return saved === 'true'; 
   });
 
   useEffect(() => {
     if (!showLogout) return;
-
     const handleClickOutside = () => setShowLogout(false);
-    
     const timer = setTimeout(() => {
       document.addEventListener('click', handleClickOutside);
     }, 0);
-
     return () => {
       clearTimeout(timer);
       document.removeEventListener('click', handleClickOutside);
@@ -150,7 +149,6 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
     navigate('/login');
   };
 
-  // 2. Gunakan useEffect untuk mensinkronisasi state ke localStorage jika diperlukan
   useEffect(() => {
     localStorage.setItem('showBalance', showBalance);
   }, [showBalance]);
@@ -159,27 +157,53 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
     const next = !showBalance;
     setShowBalance(next);
     localStorage.setItem('showBalance', String(next));
-
-    // 🔥 Ini yang penting
     window.dispatchEvent(new Event('storage'));
   };
 
   return (
     <>
-      <div className={`hidden md:flex sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between gap-4`}>
+      <div className={`hidden md:flex sticky top-0 ${navbar ? 'z-[1]' : 'z-[3]'} w-full bg-white dark:bg-transparent backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-4 py-4 flex items-center justify-between gap-4`}>
 
-        {/* Kiri: Breadcrumb */}
-        <div className="flex items-center gap-1.5 min-w-0">
-          <span className="text-md font-bold text-slate-400 dark:text-slate-500 whitespace-nowrap">Dashboard</span>
-          <ChevronRight size={16} className="text-slate-400 dark:text-slate-600 flex-shrink-0" />
-          <span className="text-md font-bold text-slate-700 dark:text-slate-200 truncate">
-            {TAB_LABELS[activeTab] || activeTab}
-          </span>
+        {/* Kiri: Tombol collapse + Breadcrumb */}
+        <div className="flex items-center gap-3 min-w-0">
+
+          {/* Breadcrumb */}
+          <div className="flex ml-[2.9px] items-center gap-1.5 min-w-0">
+            <span className="text-md font-bold text-slate-400 dark:text-slate-500 whitespace-nowrap">Dashboard</span>
+            <ChevronRight size={16} className="text-slate-400 dark:text-slate-600 flex-shrink-0" />
+            <span className="text-md font-bold text-slate-700 dark:text-slate-200 truncate">
+              {TAB_LABELS[activeTab] || activeTab}
+            </span>
+          </div>
         </div>
 
         {/* Kanan */}
         <div className="flex items-center gap-2.5 flex-shrink-0">
-
+          <button
+            onClick={() => setIsCollapsed(v => !v)}
+            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            className="cursor-pointer flex-shrink-0 h-[40px] border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60 w-max px-2 mx-[1px] flex items-center justify-center gap-1 text-slate-500 dark:text-slate-400 hover:brightness-110 transition-all"
+          >
+            <AnimatePresence mode="wait">
+              {isCollapsed ? (
+                <motion.span
+                  className="flex items-center justify-center gap-2 w-max"
+                  key="open"
+                >
+                  <Expand size={17} />
+                  <p className="text-md">Expanded</p>
+                </motion.span>
+              ) : (
+                <motion.span
+                  className="flex items-center justify-center gap-2 w-max"
+                  key="close"
+                >
+                  <PanelLeftClose size={17} />
+                  <p className="text-md">Condense</p>
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
           {/* Saldo */}
           <div className="hidden sm:flex items-center h-[40px] gap-2 rounded-none px-3.5 py-2 border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60">
             <Wallet size={18} className="text-blue-400" />
@@ -189,7 +213,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                 : "Rp *********"
               }
             </span>
-             <button onClick={() => handleShowBalance()} className="cursor-pointer p-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-blue-600 transition-all hover:bg-blue-50 dark:hover:bg-blue-950/40">
+            <button onClick={() => handleShowBalance()} className="cursor-pointer p-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-blue-600 transition-all hover:bg-blue-50 dark:hover:bg-blue-950/40">
               {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
@@ -239,22 +263,21 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
             >
               <div className="w-8 h-8 rounded-none bg-blue-600 flex items-center justify-center text-white font-bold text-md flex-shrink-0">
                 {user?.profilePicture ? (
-                <img 
-                  src={user.profilePicture} 
-                  alt={user.username}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = user.username?.charAt(0).toUpperCase() || '?';
-                  }}
-                />
-              ) : (
-                user.username?.charAt(0).toUpperCase() || '?'
-              )}
+                  <img 
+                    src={user.profilePicture} 
+                    alt={user.username}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.parentElement.innerHTML = user.username?.charAt(0).toUpperCase() || '?';
+                    }}
+                  />
+                ) : (
+                  user.username?.charAt(0).toUpperCase() || '?'
+                )}
               </div>
               <div className="text-left hidden sm:block">
                 <p className="font-bold text-slate-800 dark:text-slate-200 text-md leading-tight">@{user.username}</p>
-                {/* <p className="text-[11px] text-slate-400 font-bold truncate max-w-[120px]">{user.email}</p> */}
               </div>
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400 ml-0.5">
                 <path d="M6 9l6 6 6-6" />
@@ -280,7 +303,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                       </span>
                     </div>
 
-                    {/* Theme toggle in dropdown (mobile-friendly label) */}
+                    {/* Theme toggle */}
                     <div className="px-4 py-3 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
                       <span className="text-sm text-slate-500 dark:text-slate-400 font-bold">
                         {theme === 'dark' ? 'Mode Gelap' : 'Mode Terang'}

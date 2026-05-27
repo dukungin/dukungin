@@ -6,13 +6,14 @@ import {
   Layout,
   LogOut,
   MessageSquare,
+  PanelLeftClose,
+  PanelLeftOpen,
   ReceiptText,
   ShieldAlert,
   ShoppingBag,
   Timer,
   TrendingUp,
   Trophy,
-  User,
   Video,
   Vote,
   Wallet,
@@ -33,7 +34,7 @@ const getTokenPayload = () => {
   }
 };
 
-const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) => {
+const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isCollapsed, setIsCollapsed }) => {
   const navigate = useNavigate();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
@@ -47,7 +48,6 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
 
   const superAdminOnly = ['whatsapp', 'suggestions', 'ghostAlert'];
 
-  // menu yang justru HILANG kalau superAdmin
   const hideForSuperAdmin = [
     'settings',
     'alertSettings',
@@ -63,31 +63,70 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
   ];
 
   const menuItems = [
-    { id: 'settings', label: 'Editor Overlay', icon: <Layout size={20} /> },
-    { id: 'alertSettings', label: 'Alert OBS', icon: <ZapIcon size={20} /> },
-    { id: 'mediaSettings', label: 'Media Share', icon: <Video size={20} /> },
-    { id: 'store', label: 'Toko OBS', icon: <ShoppingBag size={20} /> },
-    { id: 'history', label: 'Riwayat Donasi', icon: <History size={20} /> },
-    { id: 'wallet', label: 'Penarikan Dana', icon: <Wallet size={20} /> },
-    { id: 'poll', label: 'Poll & Voting', icon: <Vote size={20} /> },
-    { id: 'feeConfig', label: 'Konfigurasi Fee', icon: <ReceiptText size={20} /> },
-    { id: 'subathon', label: 'Subathon', icon: <Timer size={20} /> },
-    { id: 'milestones', label: 'Milestones', icon: <TrendingUp size={20} /> },
-    { id: 'leaderboard', label: 'Leaderboard', icon: <Trophy size={20} /> },
+    { id: 'settings',      label: 'Editor Overlay',   icon: <Layout size={20} /> },
+    { id: 'alertSettings', label: 'Alert OBS',         icon: <ZapIcon size={20} /> },
+    { id: 'mediaSettings', label: 'Media Share',       icon: <Video size={20} /> },
+    { id: 'store',         label: 'Toko OBS',          icon: <ShoppingBag size={20} /> },
+    { id: 'history',       label: 'Riwayat Donasi',    icon: <History size={20} /> },
+    { id: 'wallet',        label: 'Penarikan Dana',    icon: <Wallet size={20} /> },
+    { id: 'poll',          label: 'Poll & Voting',     icon: <Vote size={20} /> },
+    { id: 'feeConfig',     label: 'Konfigurasi Fee',   icon: <ReceiptText size={20} /> },
+    { id: 'subathon',      label: 'Subathon',          icon: <Timer size={20} /> },
+    { id: 'milestones',    label: 'Milestones',        icon: <TrendingUp size={20} /> },
+    { id: 'leaderboard',   label: 'Leaderboard',       icon: <Trophy size={20} /> },
 
     ...(isSuperAdmin ? [
-      { id: 'whatsapp', label: 'WhatsApp', icon: <MessageSquare size={20} /> },
-      { id: 'suggestions', label: 'Masukan Streamer', icon: <MessageSquare size={20} /> },
-      { id: 'ghostAlert', label: 'Admin Notif Hantu', icon: <Zap size={20} /> }
+      { id: 'whatsapp',    label: 'WhatsApp',          icon: <MessageSquare size={20} /> },
+      { id: 'suggestions', label: 'Masukan Streamer',  icon: <MessageSquare size={20} /> },
+      { id: 'ghostAlert',  label: 'Admin Notif Hantu', icon: <Zap size={20} /> }
     ] : [])
   ];
 
-  const filteredMenuItems = menuItems.filter(item => {
-    // kalau superAdmin → hide beberapa menu user biasa
-    if (isSuperAdmin && hideForSuperAdmin.includes(item.id)) {
-      return false;
-    }
+  const menuGroups = [
+    {
+      groupLabel: 'OBS & Overlay',
+      items: [
+        { id: 'settings',      label: 'Editor Overlay', icon: <Layout size={20} /> },
+        { id: 'alertSettings', label: 'Alert OBS',      icon: <ZapIcon size={20} /> },
+        { id: 'mediaSettings', label: 'Media Share',    icon: <Video size={20} /> },
+        { id: 'store',         label: 'Toko OBS',       icon: <ShoppingBag size={20} /> },
+      ]
+    },
+    {
+      groupLabel: 'Keuangan',
+      items: [
+        { id: 'history', label: 'Riwayat Donasi', icon: <History size={20} /> },
+        { id: 'wallet',  label: 'Penarikan Dana', icon: <Wallet size={20} /> },
+      ]
+    },
+    {
+      groupLabel: 'Interaksi',
+      items: [
+        { id: 'poll',        label: 'Poll & Voting', icon: <Vote size={20} /> },
+        { id: 'subathon',    label: 'Subathon',      icon: <Timer size={20} /> },
+        { id: 'milestones',  label: 'Milestones',    icon: <TrendingUp size={20} /> },
+        { id: 'leaderboard', label: 'Leaderboard',   icon: <Trophy size={20} /> },
+      ]
+    },
+    {
+      groupLabel: 'Konfigurasi',
+      items: [
+        { id: 'feeConfig', label: 'Konfigurasi Fee', icon: <ReceiptText size={20} /> },
+      ]
+    },
 
+    ...(isSuperAdmin ? [{
+      groupLabel: 'Admin',
+      items: [
+        { id: 'whatsapp',    label: 'WhatsApp',          icon: <MessageSquare size={20} /> },
+        { id: 'suggestions', label: 'Masukan Streamer',  icon: <MessageSquare size={20} /> },
+        { id: 'ghostAlert',  label: 'Notif Hantu',       icon: <Zap size={20} /> },
+      ]
+    }] : [])
+  ];
+
+  const filteredMenuItems = menuItems.filter(item => {
+    if (isSuperAdmin && hideForSuperAdmin.includes(item.id)) return false;
     return true;
   });
 
@@ -120,13 +159,13 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleLogout}
-                  className="cursor-pointer active:scale-[0.99] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-none font-black text-md md:text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700 transition-all"
+                  className="cursor-pointer active:scale-[0.99] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-none font-black text-md md:text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700"
                 >
                   Ya, Keluar
                 </button>
                 <button
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="cursor-pointer active:scale-[0.99] hover:brightness-90 w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-black text-md md:text-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                  className="cursor-pointer active:scale-[0.99] hover:brightness-90 w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-black text-md md:text-lg hover:bg-slate-200 dark:hover:bg-slate-700"
                 >
                   Batal
                 </button>
@@ -137,70 +176,127 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
       </AnimatePresence>
 
       {/* ── SIDEBAR ── */}
-      <aside className={`
-        fixed lg:sticky top-0 left-0 h-screen overflow-y-auto
-        w-full lg:w-[20.5vw]
-        bg-white/5 dark:bg-slate-900/5
-        backdrop-blur-sm
-        border-r border-slate-100 dark:border-slate-800
-        py-4 px-4 md:px-6 z-[99999] lg:z-[1] flex flex-col
-        transition-transform duration-300
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-
+      <aside
+        className={`
+          fixed lg:sticky top-0 left-0 h-screen overflow-y-auto overflow-x-hidden
+          bg-white/5 dark:bg-slate-900/5
+          backdrop-blur-sm
+          border-r border-slate-100 dark:border-slate-800
+          py-4 z-[99999] lg:z-[1] flex flex-col
+          transition-all duration-300 ease-in-out
+          w-full lg:w-auto
+          px-2
+          ${isCollapsed ? 'lg:max-w-[120px] lg:min-w-[120px]' : 'lg:max-w-[19vw] lg:min-w-[20vw]'}
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}
+      >
         {/* Logo */}
-        <div className="flex items-center justify-between mb-8 md:mb-11">
-          <a href='/'>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-red-200 rounded-none flex items-center justify-center text-white font-black text-xl italic shadow-lg">
-                <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
+        <div className={`flex items-center mb-8 md:mb-11 ${isCollapsed ? 'justify-center px-2' : 'px-4 justify-between md:px-[8.5px] relative top-[1px]'}`}>
+          {!isCollapsed && (
+            <a href='/'>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-red-200 rounded-none flex items-center justify-center text-white font-black text-xl italic shadow-lg">
+                  <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
+                </div>
+                <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">TAPTIPTUP</h1>
               </div>
-              <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100">TAPTIPTUP</h1>
-            </div>
-          </a>
-          <button
-            onClick={() => setIsSidebarOpen(false)}
-            className="relative left-3.5 w-max cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500"
-          >
-            <X size={30} />
-          </button>
+            </a>
+          )}
+          {isCollapsed && (
+            <a href='/'>
+              <div className="w-full h-12 bg-red-200 rounded-none flex items-center justify-center shadow-lg">
+                <img src="/jellyfish.png" alt="icon" className={`${isCollapsed ? 'w-[30%]' : 'w-[60%]'}`} />
+              </div>
+            </a>
+          )}
+
+          {/* Close button (mobile only) */}
+          {!isCollapsed && (
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="relative left-3.5 w-max cursor-pointer active:scale-[0.95] hover:text-red-600 lg:hidden p-2 text-red-500"
+            >
+              <X size={30} />
+            </button>
+          )}
         </div>
 
-        <div className="md:flex hidden pt-0 pb-2 px-1 mb-4">
-          <p className="text-[10px] font-black text-slate-400 dark:text-slate-100 uppercase tracking-widest">Menu Utama</p>
-        </div>
+        {/* Section label */}
+        {!isCollapsed && (
+          <div className="md:flex hidden pt-2 pb-2 px-5 mb-4">
+            <p className="text-[10px] font-black text-slate-400 dark:text-slate-100 uppercase tracking-widest">Menu Utama</p>
+          </div>
+        )}
 
         {/* Navigation */}
-        <nav className="md:flex-1 space-y-3.5">
-          {filteredMenuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => {
-                setActiveTab(item.id);
-                setIsSidebarOpen(false);
-              }}
-              className={`cursor-pointer active:scale-[0.99] w-full flex items-center gap-4 px-4 p-3 rounded-none font-black transition-all text-sm 
-                ${item.mobileOnly ? 'lg:hidden' : ''} 
-                ${
-                activeTab === item.id
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/30'
-                  : 'text-slate-900 dark:text-white bg-slate-100 dark:bg-white/20 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
-              }`}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </button>
-          ))}
-          {/* Logout button (mobile only) */}
-          <button
-            onClick={() => setShowLogoutConfirm(true)}
-            className="md:hidden w-full flex items-center gap-4 p-4 bg-red-100 dark:bg-red-900 text-white hover:bg-red-50 dark:hover:bg-red-950 rounded-none cursor-pointer active:scale-[0.98] font-black transition-all"
-          >
-            <LogOut size={18} />
-            <span className="text-sm ml-[3px]">Keluar</span>
-          </button>
+        <nav className={`${isCollapsed ? 'mt-[-4px]' : 'mt-0'} md:flex-1 space-y-4 px-2`}>
+          {menuGroups.map((group) => {
+            const visibleItems = group.items.filter(item => {
+              if (isSuperAdmin && hideForSuperAdmin.includes(item.id)) return false;
+              return true;
+            });
+            if (visibleItems.length === 0) return null;
 
-          <div className="w-full h-[1px] my-5 bg-slate-200 dark:bg-slate-800" />
+            return (
+              <div key={group.groupLabel}>
+                {/* Group Label */}
+                {!isCollapsed && (
+                  <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">
+                    {group.groupLabel}
+                  </p>
+                )}
+                {isCollapsed && (
+                  <div className="w-6 h-[1px] mx-auto bg-slate-300 dark:bg-slate-700 mb-1" />
+                )}
+
+                {/* Items */}
+                <div className="space-y-1">
+                  {visibleItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        setIsSidebarOpen(false);
+                      }}
+                      title={isCollapsed ? item.label : undefined}
+                      className={`cursor-pointer mb-2 active:scale-[0.99] w-full flex items-center gap-4 rounded-none font-black text-sm 
+                        ${isCollapsed ? 'justify-center px-0 py-3' : 'px-4 py-3'}
+                        ${
+                          activeTab === item.id
+                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/30'
+                            : 'text-slate-900 dark:text-white bg-slate-100 dark:bg-white/20 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
+                        }`}
+                    >
+                      <span className="flex-shrink-0">{item.icon}</span>
+                      {!isCollapsed && (
+                        <motion.span
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.15 }}
+                          className="whitespace-nowrap overflow-hidden"
+                        >
+                          {item.label}
+                        </motion.span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+
+          {!isCollapsed && (
+            <button
+              onClick={() => setShowLogoutConfirm(true)}
+              className="md:hidden w-full flex items-center gap-4 p-4 bg-red-100 dark:bg-red-900 text-white hover:bg-red-50 dark:hover:bg-red-950 rounded-none cursor-pointer active:scale-[0.98] font-black"
+            >
+              <LogOut size={18} />
+              <span className="text-sm ml-[3px]">Keluar</span>
+            </button>
+          )}
+
+          <div className="w-full h-[1px] my-3 bg-slate-200 dark:bg-slate-800" />
 
           {isSuperAdmin && (
             <button
@@ -208,18 +304,20 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) =
                 setActiveTab('admin');
                 setIsSidebarOpen(false);
               }}
-              className={`cursor-pointer mb-2 w-full flex items-center gap-4 px-4 py-3 rounded-none font-black transition-all text-sm ${
-                activeTab === 'admin'
-                  ? 'bg-blue-600 text-white shadow-xl shadow-blue-100 dark:shadow-blue-900/30'
-                  : 'text-slate-400 bg-white/20 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
-              }`}
+              title={isCollapsed ? 'Permintaan Penarikan' : undefined}
+              className={`cursor-pointer mb-2 w-full flex items-center rounded-none font-black text-sm
+                ${isCollapsed ? 'justify-center px-0 py-3' : 'gap-4 px-4 py-3'}
+                ${
+                  activeTab === 'admin'
+                    ? 'bg-blue-600 text-white shadow-xl shadow-blue-100 dark:shadow-blue-900/30'
+                    : 'text-slate-400 bg-white/20 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
+                }`}
             >
               <ShieldAlert size={20} />
-              <span>Permintaan Penarikan</span>
+              {!isCollapsed && <span className="whitespace-nowrap">Permintaan Penarikan</span>}
             </button>
           )}
         </nav>
-
       </aside>
     </>
   );

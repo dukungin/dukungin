@@ -2730,6 +2730,7 @@ export const DashboardStreamer = () => {
   const [navbar, setNavbar]               = useState(false);
   const [showBalance, setShowBalance]     = useState(false);
   const [iconMode, setIconMode] = useState('emoji');
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const { theme, toggle } = useTheme();
 
@@ -3043,10 +3044,16 @@ export const DashboardStreamer = () => {
         </div>
       </div>
 
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      <Sidebar 
+        isCollapsed={isCollapsed}         // ← tambah ini
+        setIsCollapsed={setIsCollapsed}
+        activeTab={activeTab} setActiveTab={setActiveTab} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
       <main className="flex-1 mt-22 md:mt-0 md:w-8xl z-[2] mx-auto w-full relative">
-        <TopNavbar user={user} navbar={navbar}
+        <TopNavbar 
+          isCollapsed={isCollapsed}         // ← tambah ini
+          setIsCollapsed={setIsCollapsed} 
+          user={user} navbar={navbar}
           showBalance={showBalance}
           onToggleBalance={() => setShowBalance(v => !v)}
           displayBalance={displayBalance}
@@ -3217,7 +3224,7 @@ export const DashboardStreamer = () => {
                                   ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 shadow-md'
                                   : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'
                               }`}>
-                              {t === 'gifCard' ? '🎬 GIF Card' : t}
+                              {t === 'gifCard' ? 'GIF card' : t}
                             </button>
                           ))}
                         </div>
