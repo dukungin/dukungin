@@ -3,7 +3,7 @@ import { AlertCircle, ChevronRight, Expand, Eye, EyeOff, HeadphonesIcon, LogOut,
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InboxBell from "./inboxBell";
-import { TransferModal } from "./TransferModal";
+import { TransferModal } from "./transferModal";
 
 const TAB_LABELS = {
   settings:      'Editor Overlay',
