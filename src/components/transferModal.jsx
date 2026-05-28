@@ -4,6 +4,8 @@ import {
   AlertCircle,
   ArrowRight,
   CheckCircle2,
+  Eye,
+  EyeOff,
   Loader2,
   Search,
   SendHorizonal,
@@ -26,6 +28,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
   const [selected, setSelected]   = useState(null);
   const [amount, setAmount]       = useState("");
   const [note, setNote]           = useState("");
+  const [showPin, setShowPin] = useState(false);
   const [error, setError]         = useState("");
   const [submitting, setSubmitting] = useState(false);
   const amountRef = useRef(null);
@@ -59,7 +62,8 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
   const handlePinInput = (index, value) => {
     if (!/^\d?$/.test(value)) return;
     const newPin = [...pin];
-    newPin[index] = value;
+    // ← ambil digit terakhir saja, bukan value penuh (handle paste/replace)
+    newPin[index] = value.slice(-1);
     setPin(newPin);
     setError("");
     if (value && index < 3) pinRefs[index + 1].current?.focus();
@@ -103,7 +107,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
     setStep("pin"); 
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (securityPin) => {  // ← tambah parameter
     setSubmitting(true);
     setError("");
     try {
@@ -118,7 +122,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
           recipientId: selected._id,
           amount: numAmount,
           note,
-          securityPin
+          securityPin,  // ← sekarang terisi dari parameter
         }),
       });
       const data = await res.json();
@@ -127,7 +131,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
       onSuccess?.(data.newBalance);
     } catch (err) {
       setError(err.message);
-      setStep("form");
+      setStep("pin");  // ← kembali ke pin bukan form supaya user bisa coba lagi
     } finally {
       setSubmitting(false);
     }
@@ -445,7 +449,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
                   Ubah
                 </button>
                 <button
-                  onClick={handleSubmit}
+                  onClick={() => setStep("pin")}  
                   disabled={submitting}
                   className="cursor-pointer flex-[2] py-3.5 bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-70"
                   style={{ borderRadius: 0 }}
@@ -495,17 +499,31 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
                 </div>
 
                 {/* 4 PIN inputs */}
+                {/* Toggle show/hide */}
+                <div className="flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowPin(v => !v)}
+                    className="cursor-pointer flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-blue-500 transition-colors"
+                  >
+                    {showPin ? <EyeOff size={13} /> : <Eye size={13} />}
+                    {showPin ? 'Sembunyikan PIN' : 'Tampilkan PIN'}
+                  </button>
+                </div>
+
+                {/* 4 PIN inputs */}
                 <div className="flex items-center justify-center gap-3">
                   {pin.map((digit, i) => (
                     <input
                       key={i}
                       ref={pinRefs[i]}
-                      type="password"
+                      type={showPin ? 'text' : 'password'}
                       inputMode="numeric"
                       maxLength={1}
                       value={digit}
                       onChange={(e) => handlePinInput(i, e.target.value)}
                       onKeyDown={(e) => handlePinKeyDown(i, e)}
+                      onFocus={(e) => e.target.select()}  // ← select saat focus agar langsung replace
                       className={`w-14 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
                         ${digit
                           ? "border-blue-500 dark:border-blue-400 text-slate-800 dark:text-slate-100"
@@ -518,7 +536,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
                 </div>
 
                 {error && (
-                  <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+                  <div className="flex items-center gap-2 p-3 justify-center bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
                     <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
                     <p className="text-xs font-bold text-red-600 dark:text-red-400">{error}</p>
                   </div>

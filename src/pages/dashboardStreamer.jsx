@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import StoreManager from './storeManager';           // buat file baru
 import StoreWidget from '../components/storeWidget'; // widget OBS
 import {
+  AlertCircle,
   Calendar,
   Check,
   CheckCircle2,
@@ -2711,36 +2712,6 @@ const TTSSection = ({ settings, upd, saveSettingsMutation, api }) => {
   );
 };
 
-
-const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
-  <div className="space-y-2 mt-2">
-    <p className="text-[10px] mb-2.5 font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-      {label}
-    </p>
-    <div className="w-full flex gap-5">
-      {pinForm[groupKey].map((digit, i) => (
-        <input
-          key={i}
-          ref={refs[i]}
-          type="password"
-          inputMode="numeric"
-          maxLength={1}
-          value={digit}
-          onChange={e => handlePinInputChange(groupKey, i, e.target.value, refs, setPinForm)}
-          onKeyDown={e => handlePinKeyDown(groupKey, i, e, refs, setPinForm)}
-          className={`w-14 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
-            ${digit
-              ? 'border-blue-500 dark:border-blue-400 text-slate-800 dark:text-slate-100'
-              : 'border-slate-200 dark:border-slate-700 text-slate-300'
-            }
-            focus:border-blue-500 dark:focus:border-blue-400`}
-          style={{ borderRadius: 0 }}
-        />
-      ))}
-    </div>
-  </div>
-);
-
 // ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
 
 export const DashboardStreamer = () => {
@@ -2763,13 +2734,122 @@ export const DashboardStreamer = () => {
   const [showBalance, setShowBalance]     = useState(false);
   const [iconMode, setIconMode] = useState('emoji');
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [pinForm, setPinForm] = useState({ currentPin: ['','','',''], newPin: ['','','',''], confirmPin: ['','','',''] });
   const [pinStep, setPinStep] = useState('idle'); // idle | success | error
   const [pinError, setPinError] = useState('');
   const [pinLoading, setPinLoading] = useState(false);
   const currentPinRefs = [useRef(), useRef(), useRef(), useRef()];
   const newPinRefs     = [useRef(), useRef(), useRef(), useRef()];
   const confirmPinRefs = [useRef(), useRef(), useRef(), useRef()];
+  const [pinForm, setPinForm] = useState({ 
+    currentPin: ['','','',''], 
+    newPin: ['','','',''], 
+    confirmPin: ['','','',''] 
+  });
+
+  // ─── PIN HANDLERS (dipindah ke dalam komponen) ─────────────────────────────────
+
+const handlePinInputChange = useCallback((group, index, value, refs, setter) => {
+  const sanitized = value.replace(/[^0-9]/g, '').slice(0, 1);
+  
+  setter(prev => {
+    const updated = { ...prev };
+    updated[group] = [...prev[group]];
+    updated[group][index] = sanitized;
+    return updated;
+  });
+
+  if (sanitized && index < 3) {
+    setTimeout(() => refs[index + 1].current?.focus(), 10);
+  }
+}, []);
+
+const handlePinKeyDown = useCallback((group, index, e, refs) => {
+  if (e.key === 'Backspace' && !pinForm[group][index] && index > 0) {
+    refs[index - 1].current?.focus();
+  }
+}, [pinForm]);
+
+const handleChangePin = async () => {
+  const current = pinForm.currentPin.join('');
+  const newP    = pinForm.newPin.join('');
+  const confirm = pinForm.confirmPin.join('');
+
+  if (current.length < 4 || newP.length < 4 || confirm.length < 4) {
+    setPinError('Semua PIN harus 4 digit');
+    return;
+  }
+  if (newP !== confirm) {
+    setPinError('PIN baru dan konfirmasi tidak cocok');
+    return;
+  }
+  if (current === newP) {
+    setPinError('PIN baru tidak boleh sama dengan PIN lama');
+    return;
+  }
+
+  setPinLoading(true);
+  setPinError('');
+
+  try {
+    const response = await api.put('/api/auth/change-pin', { 
+      currentPin: current, 
+      newPin: newP 
+    });
+
+    // Success
+    setPinStep('success');
+    setPinForm({ 
+      currentPin: ['','','',''], 
+      newPin: ['','','',''], 
+      confirmPin: ['','','',''] 
+    });
+    
+    setTimeout(() => setPinStep('idle'), 2500);
+    toast.success('✅ PIN berhasil diubah!');
+
+  } catch (err) {
+    console.error(err);
+    const message = err.response?.data?.message || err.message || 'Gagal mengubah PIN';
+    setPinError(message);
+    setPinStep('error');
+
+    // JANGAN logout otomatis jika hanya error PIN
+    if (message.includes('token') || message.includes('unauthorized')) {
+      toast.error('Sesi error. Silakan login ulang.');
+    }
+  } finally {
+    setPinLoading(false);
+  }
+};
+
+const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
+  <div className="space-y-2 mt-2">
+    <p className="text-[10px] mb-2.5 font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+      {label}
+    </p>
+    <div className="w-full flex gap-5">
+      {pinForm[groupKey].map((digit, i) => (
+        <input
+          key={i}
+          ref={refs[i]}
+          type="text"
+          inputMode="numeric"
+          maxLength={1}
+          value={digit}
+          onChange={e => handlePinInputChange(groupKey, i, e.target.value, refs, setPinForm)}
+          onKeyDown={e => handlePinKeyDown(groupKey, i, e, refs)}
+          className={`w-14 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
+            ${digit
+              ? 'border-blue-500 dark:border-blue-400 text-slate-800 dark:text-slate-100'
+              : 'border-slate-200 dark:border-slate-700 text-slate-300'
+            }
+            focus:border-blue-500 dark:focus:border-blue-400`}
+          style={{ borderRadius: 0 }}
+        />
+      ))}
+    </div>
+  </div>
+);
 
   const { theme, toggle } = useTheme();
 
@@ -2830,53 +2910,6 @@ export const DashboardStreamer = () => {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['profile'] }); setShowToast(true); setTimeout(() => setShowToast(false), 3000); },
     onError: (err) => alert(err.response?.data?.message || 'Gagal update profil'),
   });
-
-  const handlePinInputChange = (group, index, value, refs, setter) => {
-    if (!/^\d?$/.test(value)) return;
-    setter(prev => {
-      const updated = { ...prev };
-      updated[group] = [...prev[group]];
-      updated[group][index] = value;
-      return updated;
-    });
-    if (value && index < 3) refs[index + 1].current?.focus();
-  };
-
-  const handlePinKeyDown = (group, index, e, refs, setter) => {
-    if (e.key === 'Backspace' && !pinForm[group][index] && index > 0) {
-      refs[index - 1].current?.focus();
-    }
-  };
-
-  const handleChangePin = async () => {
-    const current = pinForm.currentPin.join('');
-    const newP    = pinForm.newPin.join('');
-    const confirm = pinForm.confirmPin.join('');
-
-    if (current.length < 4 || newP.length < 4 || confirm.length < 4) {
-      setPinError('Semua PIN harus 4 digit'); return;
-    }
-    if (newP !== confirm) {
-      setPinError('PIN baru dan konfirmasi tidak cocok'); return;
-    }
-    if (current === newP) {
-      setPinError('PIN baru tidak boleh sama dengan PIN lama'); return;
-    }
-
-    setPinLoading(true);
-    setPinError('');
-    try {
-      await api.put('/api/auth/change-pin', { currentPin: current, newPin: newP });
-      setPinStep('success');
-      setPinForm({ currentPin: ['','','',''], newPin: ['','','',''], confirmPin: ['','','',''] });
-      setTimeout(() => setPinStep('idle'), 3000);
-    } catch (err) {
-      setPinError(err.response?.data?.message || 'Gagal mengubah PIN');
-      setPinStep('error');
-    } finally {
-      setPinLoading(false);
-    }
-  };
 
   const handleFollowAction = (username, actionType) => {
     setFollowAction({ type: actionType, username });
@@ -3648,7 +3681,7 @@ export const DashboardStreamer = () => {
 
                     <div className="md:col-span-2">
                       <button onClick={() => updateProfileMutation.mutate(profileForm)} disabled={updateProfileMutation.isPending}
-                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black text-md transition-all flex items-center justify-center gap-2 disabled:opacity-70">
                         <Save size={20} />
                         {updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                       </button>
@@ -3678,7 +3711,7 @@ export const DashboardStreamer = () => {
                           <p className="text-sm text-slate-400 font-medium">Gunakan PIN baru untuk konfirmasi transfer berikutnya.</p>
                         </motion.div>
                       ) : (
-                        <motion.div key="pin-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full grid grid-cols-1 gap-4 md:gap-14 items-center justify-center md:grid-cols-4 space-y-0">
+                        <motion.div key="pin-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full grid grid-cols-1 gap-4 md:gap-14 items-center justify-center md:grid-cols-3 space-y-0">
                           <PinRow
                             label="PIN Saat Ini"
                             groupKey="currentPin"
@@ -3701,40 +3734,40 @@ export const DashboardStreamer = () => {
                             setPinForm={setPinForm}
                           />
 
-                          <AnimatePresence>
-                            {pinError && (
-                              <motion.div
-                                initial={{ opacity: 0, y: -4 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0 }}
-                                className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800"
-                              >
-                                <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
-                                <p className="text-xs font-bold text-red-600 dark:text-red-400">{pinError}</p>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-
-                          <button
-                            onClick={handleChangePin}
-                            disabled={
-                              pinLoading ||
-                              pinForm.currentPin.join('').length < 4 ||
-                              pinForm.newPin.join('').length < 4 ||
-                              pinForm.confirmPin.join('').length < 4
-                            }
-                            className="cursor-pointer md:mt-0 mt-2 ml-auto w-full md:w-max px-4 relative md:top-[7px] h-[52px] py-4 bg-blue-500 hover:bg-amber-600 text-white font-black text-sm transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
-                            style={{ borderRadius: 0 }}
-                          >
-                            {pinLoading ? (
-                              <><Loader2 size={16} className="animate-spin" /> Memproses...</>
-                            ) : (
-                              <><Save />Simpan PIN terbaru</>
-                            )}
-                          </button>
                         </motion.div>
-                      )}
+                    )}
                     </AnimatePresence>
+                      <AnimatePresence>
+                        {pinError && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            className="w-max flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800"
+                          >
+                            <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
+                            <p className="text-xs font-bold text-red-600 dark:text-red-400">{pinError}</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      <button
+                        onClick={handleChangePin}
+                        disabled={
+                          pinLoading ||
+                          pinForm.currentPin.join('').length < 4 ||
+                          pinForm.newPin.join('').length < 4 ||
+                          pinForm.confirmPin.join('').length < 4
+                        }
+                        className="cursor-pointer md:mt-0 mt-2 w-full px-4 relative md:top-[7px] py-3 bg-blue-500 hover:bg-amber-600 text-white font-black text-sm transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                        style={{ borderRadius: 0 }}
+                      >
+                        {pinLoading ? (
+                          <><Loader2 size={16} className="animate-spin" /> Memproses...</>
+                        ) : (
+                          <><Save />Simpan PIN terbaru</>
+                        )}
+                      </button>
                   </div>
               </motion.div>
             )}
