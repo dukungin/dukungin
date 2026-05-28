@@ -3641,7 +3641,7 @@ const handleChangePin = async () => {
                   <SectionHeader icon={<User size={18} />} title="Profil Publik" color="bg-blue-500" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
                     <div className="md:col-span-2">
-                      <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest ml-1">Foto Profil</label>
+                      <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">Foto Profil</label>
                       <div className="flex flex-col sm:flex-row items-start gap-4">
                         <div className="w-20 h-20 rounded-none border-2 border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-5xl font-black flex-shrink-0">
                           {profileForm.profilePicture ? (
@@ -3680,14 +3680,14 @@ const handleChangePin = async () => {
                     <div className="md:col-span-2">
                       <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1 mb-2 block">Bio Singkat</label>
                       <textarea value={profileForm.bio} onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))}
-                        className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-none font-bold outline-none focus:border-blue-500 h-32 transition-all"
+                        className="w-full p-3 text-sm bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-none font-bold outline-none focus:border-blue-500 h-32 transition-all"
                         placeholder="Ceritakan tentang kontenmu..." />
                     </div>
 
                     <div className="md:col-span-2 mb-1">
                       <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest ml-1">Intro Halaman Donate</label>
                       <input type="text" value={profileForm.donateIntro || ''} onChange={e => setProfileForm(f => ({ ...f, donateIntro: e.target.value }))}
-                        className="w-full p-5 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-none font-bold outline-none focus:border-blue-500 transition-all"
+                        className="w-full p-3 text-sm bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-none font-bold outline-none focus:border-blue-500 transition-all"
                         placeholder="Support aku biar makin semangat 🚀" maxLength={120} />
                     </div>
 

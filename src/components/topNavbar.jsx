@@ -195,7 +195,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
         </div>
 
         {/* Kanan */}
-        <div className="flex items-center gap-2.5 flex-shrink-0">
+        <div className="flex items-center gap-2.5 pr-[7px] flex-shrink-0">
           <button
             onClick={() => setIsCollapsed(v => !v)}
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -245,7 +245,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                 size={16.5}
                 className="group-hover:translate-x-0.5 transition-transform"
               />
-              <span className="text-md font-bold hidden lg:inline">Kirim</span>
+              <span className="text-md font-bold md:hidden 2xl:flex">Kirim</span>
             </button>
           </div>
 
@@ -260,7 +260,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}>
             <HeadphonesIcon size={14} />
-            <span className="hidden md:inline">Bantuan</span>
+            <span className="text-md font-bold md:hidden 2xl:flex">Bantuan</span>
           </button>
 
           <InboxBell setActiveTab={setActiveTab} />
