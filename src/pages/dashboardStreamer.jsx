@@ -3625,7 +3625,7 @@ const handleChangePin = async () => {
                           <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2> <Verified className='relative top-[3.9px] text-blue-400' />
                         </div>
                       </div>
-                      <div className="w-max px-4 py-1.5 relative bg-green-100 relative top-1 text-green-600 rounded-none text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</div>
+                      <div className="w-max px-4 md:flex hidden py-1.5 relative bg-green-100 relative top-1 text-green-600 rounded-none text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</div>
                       <p className="text-slate-200 font-medium text-sm">{user.email}</p>
                     </div>
                   </div>
