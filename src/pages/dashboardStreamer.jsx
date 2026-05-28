@@ -35,6 +35,7 @@ import {
   Trophy,
   User,
   Users,
+  Verified,
   Video,
   Vote,
   X,
@@ -2712,6 +2713,48 @@ const TTSSection = ({ settings, upd, saveSettingsMutation, api }) => {
   );
 };
 
+const PinRow = ({ label, groupKey, refs, pinForm, setPinForm, showPins, setShowPins, handlePinInputChange, handlePinKeyDown }) => (
+  <div className="space-y-2 mt-2">
+    <div className="flex items-center justify-start gap-2 mb-2.5">
+      <p className="text-[10px] font-black text-slate-400 dark:text-slate-400 uppercase tracking-widest">
+        {label}
+      </p>
+      <p className='relative text-slate-400 top-[-1.2px]'>-</p>
+      <button
+        type="button"
+        onClick={() => setShowPins(prev => ({ ...prev, [groupKey]: !prev[groupKey] }))}
+        className="uppercase cursor-pointer flex items-center gap-1 text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors"
+      >
+        {showPins[groupKey]
+          ? <><EyeOff size={11} /> Sembunyikan</>
+          : <><Eye size={11} /> Tampilkan</>}
+      </button>
+    </div>
+    <div className="w-full flex gap-5">
+      {pinForm[groupKey].map((digit, i) => (
+        <input
+          key={i}
+          ref={refs[i]}
+          type={showPins[groupKey] ? 'text' : 'password'}
+          inputMode="numeric"
+          maxLength={1}
+          value={digit}
+          onChange={e => handlePinInputChange(groupKey, i, e.target.value, refs, setPinForm)}
+          onKeyDown={e => handlePinKeyDown(groupKey, i, e, refs)}
+          onFocus={e => e.target.select()}
+          className={`w-14 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
+            ${digit
+              ? 'border-blue-500 dark:border-blue-400 text-slate-800 dark:text-slate-100'
+              : 'border-slate-200 dark:border-slate-700 text-slate-300'
+            }
+            focus:border-blue-500 dark:focus:border-blue-400`}
+          style={{ borderRadius: 0 }}
+        />
+      ))}
+    </div>
+  </div>
+);
+
 // ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
 
 export const DashboardStreamer = () => {
@@ -2735,6 +2778,11 @@ export const DashboardStreamer = () => {
   const [iconMode, setIconMode] = useState('emoji');
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [pinStep, setPinStep] = useState('idle'); // idle | success | error
+  const [showPins, setShowPins] = useState({
+    currentPin: false,
+    newPin: false,
+    confirmPin: false,
+  });
   const [pinError, setPinError] = useState('');
   const [pinLoading, setPinLoading] = useState(false);
   const currentPinRefs = [useRef(), useRef(), useRef(), useRef()];
@@ -2798,6 +2846,7 @@ const handleChangePin = async () => {
 
     // Success
     setPinStep('success');
+    setShowPins({ currentPin: false, newPin: false, confirmPin: false });
     setPinForm({ 
       currentPin: ['','','',''], 
       newPin: ['','','',''], 
@@ -2821,35 +2870,6 @@ const handleChangePin = async () => {
     setPinLoading(false);
   }
 };
-
-const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
-  <div className="space-y-2 mt-2">
-    <p className="text-[10px] mb-2.5 font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-      {label}
-    </p>
-    <div className="w-full flex gap-5">
-      {pinForm[groupKey].map((digit, i) => (
-        <input
-          key={i}
-          ref={refs[i]}
-          type="text"
-          inputMode="numeric"
-          maxLength={1}
-          value={digit}
-          onChange={e => handlePinInputChange(groupKey, i, e.target.value, refs, setPinForm)}
-          onKeyDown={e => handlePinKeyDown(groupKey, i, e, refs)}
-          className={`w-14 h-14 text-center text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 outline-none transition-all
-            ${digit
-              ? 'border-blue-500 dark:border-blue-400 text-slate-800 dark:text-slate-100'
-              : 'border-slate-200 dark:border-slate-700 text-slate-300'
-            }
-            focus:border-blue-500 dark:focus:border-blue-400`}
-          style={{ borderRadius: 0 }}
-        />
-      ))}
-    </div>
-  </div>
-);
 
   const { theme, toggle } = useTheme();
 
@@ -3591,19 +3611,21 @@ const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
             {/* ══════════════════════ PROFILE ══════════════════════ */}
             {activeTab === 'profile' && (
               <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-3 pb-6">
-                <div className="bg-slate-900/70 rounded-none px-6 py-6 text-white relative overflow-hidden">
+                <div className="relative bg-slate-900/70 backdrop-blur-sm rounded-none py-8 md:pl-7 pr-8 shadow-sm border border-slate-100 dark:border-slate-800 px-8 py-0 text-white relative overflow-hidden">
                   <div className="relative z-2 flex flex-col md:flex-row items-center gap-6">
-                    <div className="w-26 h-26 mt-2 mx-auto rounded-none overflow-hidden bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-white dark:border-slate-900">
+                    <div className="w-26 h-26 mt-[-1.6px] mx-auto rounded-none overflow-hidden bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-white dark:border-slate-900">
                       {profileForm.profilePicture || user?.profilePicture ? (
                         <img src={profileForm.profilePicture || user?.profilePicture} alt={user.username} className="w-full h-full object-cover"
                           onError={(e) => { e.target.style.display = 'none'; const parent = e.target.parentElement; if (parent) parent.innerHTML = (user.username?.charAt(0) || '?').toUpperCase(); }} />
                       ) : (user.username?.charAt(0) || '?').toUpperCase()}
                     </div>
-                    <div className="flex-1 text-center md:text-left space-y-2">
-                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                        <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2>
-                        <span className="px-4 py-1.5 bg-green-100 relative top-1 text-green-600 rounded-none text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</span>
+                    <div className="flex-1 text-center md:text-left md:block flex flex-col jsutify-center items-center space-y-2">
+                      <div className="flex flex-wrap items-center justify-center md:justify-between gap-3">
+                        <div className='flex items-center gap-2'>
+                          <h2 className="text-3xl font-black text-white tracking-tighter">@{user.username}</h2> <Verified className='relative top-[3.9px] text-blue-400' />
+                        </div>
                       </div>
+                      <div className="w-max px-4 py-1.5 relative bg-green-100 relative top-1 text-green-600 rounded-none text-[10px] font-black uppercase tracking-widest border border-green-200">Verified Creator</div>
                       <p className="text-slate-200 font-medium text-sm">{user.email}</p>
                     </div>
                   </div>
@@ -3718,6 +3740,10 @@ const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
                             refs={currentPinRefs}
                             pinForm={pinForm}
                             setPinForm={setPinForm}
+                            showPins={showPins}
+                            setShowPins={setShowPins}
+                            handlePinInputChange={handlePinInputChange}
+                            handlePinKeyDown={handlePinKeyDown}
                           />
                           <PinRow
                             label="PIN Baru"
@@ -3725,6 +3751,10 @@ const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
                             refs={newPinRefs}
                             pinForm={pinForm}
                             setPinForm={setPinForm}
+                            showPins={showPins}
+                            setShowPins={setShowPins}
+                            handlePinInputChange={handlePinInputChange}
+                            handlePinKeyDown={handlePinKeyDown}
                           />
                           <PinRow
                             label="Konfirmasi PIN Baru"
@@ -3732,6 +3762,10 @@ const PinRow = ({ label, groupKey, refs, pinForm, setPinForm }) => (
                             refs={confirmPinRefs}
                             pinForm={pinForm}
                             setPinForm={setPinForm}
+                            showPins={showPins}
+                            setShowPins={setShowPins}
+                            handlePinInputChange={handlePinInputChange}
+                            handlePinKeyDown={handlePinKeyDown}
                           />
 
                         </motion.div>
