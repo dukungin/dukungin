@@ -3037,6 +3037,7 @@ const handleChangePin = async () => {
   const TAB_TITLE = {
     settings:      'Dashboard',
     alertSettings: 'Alert OBS',
+    voiceSettings: 'Voice Note',
     mediaSettings: 'Media share',
     store: 'Toko OBS',
     history:       'Riwayat',
@@ -3219,6 +3220,24 @@ const handleChangePin = async () => {
             {activeTab === 'maintenance' && (
               <motion.div key="maintenance" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <MaintenancePage />
+              </motion.div>
+            )}
+
+            {activeTab === 'voiceSettings' && (
+              <motion.div
+                key="voiceSettings"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-6 pb-6 w-full"
+              >
+                <VoiceSettingsPage
+                  user={user}
+                  onCopyUrl={(url, label) => {
+                    setCopiedUrl(url);
+                    setCopiedLabel(label);
+                    setShowCopyModal(true);
+                  }}
+                />
               </motion.div>
             )}
 

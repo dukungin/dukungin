@@ -154,7 +154,16 @@ const VoiceNoteOverlay = () => {
 
       const INTRO_DELAY  = 1000;
       // const OUTRO_BUFFER = 2000;
-      const FALLBACK_DURATION = 10000; // kalau gagal detect durasi
+      // const FALLBACK_DURATION = 10000; // kalau gagal detect durasi
+      const FALLBACK_DURATION = (() => {
+        const cfg = configRef.current;
+        if (!cfg) return 10000;
+        const base   = Number(cfg.voiceBaseDuration)     || 10;
+        const perAmt = Number(cfg.voiceExtraPerAmount)   || 10000;
+        const extra  = Number(cfg.voiceExtraDuration)    || 5;
+        const extras = perAmt > 0 ? Math.floor((data.amount || 0) / perAmt) : 0;
+        return (base + extras * extra) * 1000;
+      })();
 
       const startCountdownAndDismiss = (audioDurationMs) => {
         audioDurationMsRef.current = audioDurationMs;
