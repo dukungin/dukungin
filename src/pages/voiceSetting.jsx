@@ -149,161 +149,161 @@
     // ─── InstantTestVoice ─────────────────────────────────────────────────────────
 
     const InstantTestVoice = ({ user, localSettings }) => {
-    const [isSending, setIsSending]         = useState(false);
-    const [lastSent, setLastSent]           = useState(null);
-    const [voiceUrl, setVoiceUrl]           = useState('');
-    const [customName, setCustomName]       = useState('Mas Dev');
-    const [customAmount, setCustomAmount]   = useState(50000);
-    const [customMsg, setCustomMsg]         = useState('');
+        const [isSending, setIsSending]         = useState(false);
+        const [lastSent, setLastSent]           = useState(null);
+        const [voiceUrl, setVoiceUrl]           = useState('');
+        const [customName, setCustomName]       = useState('Mas Dev');
+        const [customAmount, setCustomAmount]   = useState(50000);
+        const [customMsg, setCustomMsg]         = useState('');
 
-    // Hitung maksimal durasi rekaman berdasarkan pengaturan + nominal
-    const calculateMaxRecordSeconds = useCallback(() => {
+        // Perhitungan Durasi
         const base   = Number(localSettings?.voiceBaseDuration)     || 10;
         const perAmt = Number(localSettings?.voiceExtraPerAmount)   || 10000;
         const extra  = Number(localSettings?.voiceExtraDuration)    || 5;
 
         const extraSeconds = perAmt > 0 
-        ? Math.floor(customAmount / perAmt) * extra 
-        : 0;
+            ? Math.floor(customAmount / perAmt) * extra 
+            : 0;
 
-        // Durasi total + buffer 30 detik untuk rekaman
-        return Math.min(300, base + extraSeconds + 30); // maksimal 5 menit
-    }, [localSettings, customAmount]);
+        const actualDuration = base + extraSeconds;
+        const maxRecordSeconds = actualDuration;   // ← Diubah jadi sama persis
 
-    const maxRecordSeconds = calculateMaxRecordSeconds();
+        const sendTest = async () => {
+            if (!user?.overlayToken || !voiceUrl) return;
+            setIsSending(true);
+            try {
+                await api.post('/api/test-alert/send', {
+                    targetUsername: user.username,
+                    donorName:      customName,
+                    amount:         Number(customAmount),
+                    message:        customMsg || null,
+                    mediaUrl:       null,
+                    mediaType:      null,
+                    voiceUrl:       voiceUrl,
+                });
+                setLastSent(new Date());
+                toast.success('✅ Voice test terkirim ke OBS!');
+            } catch (err) {
+                toast.error(err.response?.data?.message || 'Gagal mengirim test');
+            } finally {
+                setIsSending(false);
+            }
+        };
 
-    const sendTest = async () => {
-        if (!user?.overlayToken || !voiceUrl) return;
-        setIsSending(true);
-        try {
-        await api.post('/api/test-alert/send', {
-            targetUsername: user.username,
-            donorName:      customName,
-            amount:         Number(customAmount),
-            message:        customMsg || null,
-            mediaUrl:       null,
-            mediaType:      null,
-            voiceUrl:       voiceUrl,
-        });
-        setLastSent(new Date());
-        toast.success('✅ Voice test terkirim ke OBS!');
-        } catch (err) {
-        toast.error(err.response?.data?.message || 'Gagal mengirim test');
-        } finally {
-        setIsSending(false);
-        }
-    };
+        return (
+            <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-6">
+                <div className="flex items-center gap-4">
+                    <div className="bg-rose-500 p-3 rounded-none text-white shadow-lg">
+                        <Zap size={20} />
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+                            Instant Test Voice Note
+                        </h3>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
+                            Rekam suara → kirim langsung ke OBS overlay
+                        </p>
+                    </div>
+                </div>
 
-    return (
-        <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-6">
-        <div className="flex items-center gap-4">
-            <div className="bg-rose-500 p-3 rounded-none text-white shadow-lg">
-            <Zap size={20} />
+                {/* Form data donasi */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* ... input nama, nominal, pesan tetap sama ... */}
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                            Nama Donor
+                        </label>
+                        <input
+                            value={customName}
+                            onChange={e => setCustomName(e.target.value)}
+                            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+                            placeholder="Mas Dev"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                            Nominal (Rp)
+                        </label>
+                        <input
+                            type="number"
+                            value={customAmount}
+                            onChange={e => setCustomAmount(e.target.value)}
+                            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1.5 md:col-span-2">
+                        <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                            Pesan Teks <span className="normal-case font-medium text-slate-300 dark:text-slate-600">(opsional)</span>
+                        </label>
+                        <input
+                            value={customMsg}
+                            onChange={e => setCustomMsg(e.target.value)}
+                            className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
+                            placeholder="Semangat terus bang! (opsional)"
+                        />
+                    </div>
+                </div>
+
+                {/* Quick amount */}
+                <div className="flex flex-wrap gap-2">
+                    {[1000, 5000, 10000, 50000, 100000, 500000].map(v => (
+                        <button
+                            key={v}
+                            onClick={() => setCustomAmount(v)}
+                            className={`cursor-pointer active:scale-[0.97] px-3 py-1.5 rounded-none text-xs font-black transition-all border-2 ${
+                                Number(customAmount) === v
+                                    ? 'bg-rose-500 border-rose-500 text-white'
+                                    : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-rose-300'
+                            }`}
+                        >
+                            {v >= 1000000 ? `${v / 1000000}jt` : `${v / 1000}K`}
+                        </button>
+                    ))}
+                </div>
+
+                {/* VoiceRecorder */}
+                <div className="space-y-2">
+                    <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
+                        <span className="text-white font-medium">
+                            Maksimal {maxRecordSeconds} detik
+                        </span>
+                    </label>
+
+                    <VoiceRecorder
+                        onVoiceReady={(url) => setVoiceUrl(url || '')}
+                        maxSeconds={maxRecordSeconds}
+                        disabled={false}
+                    />
+                </div>
+
+                {/* Tombol kirim */}
+                <button
+                    onClick={sendTest}
+                    disabled={isSending || !voiceUrl || !user?.overlayToken}
+                    className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-rose-200 dark:shadow-rose-900/30"
+                >
+                    {isSending ? (
+                        <><RefreshCw size={18} className="animate-spin" /> Mengirim...</>
+                    ) : (
+                        <><Zap size={18} /> Kirim Voice Test ke OBS</>
+                    )}
+                </button>
+
+                {/* Last sent notification */}
+                <AnimatePresence>
+                    {lastSent && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900"
+                        >
+                            <CheckCircle2 size={14} />
+                            Voice test terakhir dikirim: {lastSent.toLocaleTimeString('id-ID')}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
-            <div>
-            <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Instant Test Voice Note
-            </h3>
-            <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
-                Rekam suara → kirim langsung ke OBS overlay
-            </p>
-            </div>
-        </div>
-
-        {/* Form data donasi */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                Nama Donor
-            </label>
-            <input
-                value={customName}
-                onChange={e => setCustomName(e.target.value)}
-                className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
-                placeholder="Mas Dev"
-            />
-            </div>
-            <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                Nominal (Rp)
-            </label>
-            <input
-                type="number"
-                value={customAmount}
-                onChange={e => setCustomAmount(e.target.value)}
-                className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
-            />
-            </div>
-            <div className="flex flex-col gap-1.5 md:col-span-2">
-            <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                Pesan Teks <span className="normal-case font-medium text-slate-300 dark:text-slate-600">(opsional)</span>
-            </label>
-            <input
-                value={customMsg}
-                onChange={e => setCustomMsg(e.target.value)}
-                className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-rose-400 transition-all"
-                placeholder="Semangat terus bang! (opsional)"
-            />
-            </div>
-        </div>
-
-        {/* Quick amount */}
-        <div className="flex flex-wrap gap-2">
-            {[10000, 50000, 100000, 500000].map(v => (
-            <button
-                key={v}
-                onClick={() => setCustomAmount(v)}
-                className={`cursor-pointer active:scale-[0.97] px-3 py-1.5 rounded-none text-xs font-black transition-all border-2 ${
-                Number(customAmount) === v
-                    ? 'bg-rose-500 border-rose-500 text-white'
-                    : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 hover:border-rose-300'
-                }`}
-            >
-                {v >= 1000000 ? `${v / 1000000}jt` : `${v / 1000}K`}
-            </button>
-            ))}
-        </div>
-
-        {/* VoiceRecorder */}
-        <div className="space-y-2">
-            <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
-            Rekam Voice Message 
-            <span className="ml-2 text-rose-500 font-medium"> (Maks: {maxRecordSeconds} detik)</span>
-            </label>
-            <VoiceRecorder
-                onVoiceReady={(url) => setVoiceUrl(url || '')}
-                maxSeconds={maxRecordSeconds}
-                disabled={false}
-            />
-        </div>
-
-        {/* Tombol kirim */}
-        <button
-            onClick={sendTest}
-            disabled={isSending || !voiceUrl || !user?.overlayToken}
-            className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-rose-200 dark:shadow-rose-900/30"
-        >
-            {isSending ? (
-            <><RefreshCw size={18} className="animate-spin" /> Mengirim...</>
-            ) : (
-            <><Zap size={18} /> Kirim Voice Test ke OBS</>
-            )}
-        </button>
-
-        <AnimatePresence>
-            {lastSent && (
-            <motion.div
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900"
-            >
-                <CheckCircle2 size={14} />
-                Voice test terakhir dikirim: {lastSent.toLocaleTimeString('id-ID')}
-            </motion.div>
-            )}
-        </AnimatePresence>
-        </div>
-    );
+        );
     };
 
     // ─── VoiceOverlayUrls ─────────────────────────────────────────────────────────
@@ -356,8 +356,8 @@
 
     const VoiceSettingsInfo = () => (
     <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
-        <SectionHeader icon={<span className="text-xl">🎙️</span>} title="Tentang Voice Note Donation" color="bg-indigo-500" />
-        <div className="gap-4 grid grid-cols-2">
+        <SectionHeader icon={<span className="text-xl">🎙️</span>} title="Tentang Voice Note" color="bg-indigo-500" />
+        <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
         {[
             {
             icon: '🎤',
@@ -415,16 +415,16 @@
     });
 
     useEffect(() => {
-        if (profileData && !localSettings) {
-        const s = profileData.settings || profileData.overlaySetting || {};
-        setLocalSettings({
-            voiceBaseDuration:   s.voiceBaseDuration   ?? 10,
-            voiceExtraPerAmount: s.voiceExtraPerAmount  ?? 10000,
-            voiceExtraDuration:  s.voiceExtraDuration   ?? 5,
-            ...s,
-        });
+        if (profileData) {
+            const s = profileData.settings || profileData.overlaySetting || {};
+            setLocalSettings({
+                voiceBaseDuration:   s.voiceBaseDuration   ?? 10,
+                voiceExtraPerAmount: s.voiceExtraPerAmount ?? 10000,
+                voiceExtraDuration:  s.voiceExtraDuration  ?? 5,
+                ...s,                    // ini tetap dipertahankan
+            });
         }
-    }, [profileData]);
+    }, [profileData]); // hapus kondisi !localSettings
 
     const saveSettingsMutation = useMutation({
         mutationFn: saveSettings,
