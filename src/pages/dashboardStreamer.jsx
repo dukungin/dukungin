@@ -969,9 +969,9 @@ const AdminWithdrawalPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Super Admin</p>
-            <h2 className="text-2xl font-black">Manajemen Penarikan Dana</h2>
+            <h2 className="text-2xl font-black">Penarikan Dana</h2>
           </div>
-          <div className="flex items-center gap-2 text-slate-400 text-xs font-bold">
+          <div className="hidden md:flex items-center gap-2 text-slate-400 text-xs font-bold">
             <span className="w-2 h-2 bg-green-400 rounded-none animate-pulse" /> Auto 30s
             <button onClick={() => refetch()} disabled={isFetching} className="ml-1 hover:text-white transition-colors disabled:opacity-50">
               <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />

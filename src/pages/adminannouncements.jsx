@@ -388,27 +388,29 @@ export const AdminAnnouncementsPage = () => {
       </AnimatePresence>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2 px-5 my-5">
+      <div className="gap-2 px-5 md:px-0 my-5">
         {/* Type filter */}
-        <div className="flex gap-1.5">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-2">
           <button onClick={() => setTypeFilter('')}
             className={`px-3 py-2 rounded-none text-[11px] font-black border transition-all cursor-pointer ${!typeFilter ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-transparent' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'}`}>
             Semua Jenis
           </button>
           {Object.entries(TYPE_CONFIG).map(([key, cfg]) => (
             <button key={key} onClick={() => setTypeFilter(k => k === key ? '' : key)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-none text-[11px] font-black border transition-all cursor-pointer ${typeFilter === key ? cfg.badge + ' border-current' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'}`}>
+              className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-none text-[11px] font-black border transition-all cursor-pointer ${typeFilter === key ? cfg.badge + ' border-current' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'}`}>
               {cfg.icon} {cfg.label}
             </button>
           ))}
         </div>
         {/* Active filter */}
-        {[{ v: '', l: 'Semua Status' }, { v: 'true', l: '✅ Aktif' }, { v: 'false', l: '○ Non-aktif' }].map(f => (
-          <button key={f.v} onClick={() => setActiveFilter(f.v)}
+        <div className='w-full grid gap-2 border-t border-slate-200/20 pt-2 md:border-t-none grid-cols-3'>
+          {[{ v: '', l: 'Semua Status' }, { v: 'true', l: '✅ Aktif' }, { v: 'false', l: '○ Non-aktif' }].map(f => (
+            <button key={f.v} onClick={() => setActiveFilter(f.v)}
             className={`px-3 py-2 rounded-none text-[11px] font-black border transition-all cursor-pointer ${activeFilter === f.v ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-transparent' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'}`}>
-            {f.l}
-          </button>
-        ))}
+              {f.l}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* List */}
@@ -453,20 +455,7 @@ export const AdminAnnouncementsPage = () => {
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap mb-1">
-                            <h3 className="font-black truncate max-w-[96%] overflow-hidden text-slate-800 dark:text-slate-100 truncate">{ann.title}</h3>
-                            <span className={`px-2 py-0.5 rounded-none text-[9px] font-black uppercase tracking-wider border ${cfg.badge}`}>
-                              {cfg.label}
-                            </span>
-                            {!ann.isActive && (
-                              <span className="px-2 py-0.5 rounded-none text-[9px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
-                                Non-aktif
-                              </span>
-                            )}
-                            {expired && (
-                              <span className="px-2 py-0.5 rounded-none text-[9px] font-black bg-red-100 dark:bg-red-950/40 text-red-500 border border-red-200 dark:border-red-900">
-                                Kedaluwarsa
-                              </span>
-                            )}
+                            <h3 className="font-black truncate max-w-[780%] overflow-hidden text-slate-800 dark:text-slate-100 truncate">{ann.title}</h3>
                           </div>
                           <p className={`text-sm text-slate-500 dark:text-slate-400 font-medium ${isExpanded ? '' : 'line-clamp-2'}`}>
                             {ann.description}
@@ -512,6 +501,19 @@ export const AdminAnnouncementsPage = () => {
                     </div>
                   </div>
                     <div className="absolute bottom-4 right-4 flex items-center gap-2 mt-6 flex-shrink-0">
+                        <span className={`px-2 py-2.5 rounded-none text-[9px] font-black uppercase tracking-wider border ${cfg.badge}`}>
+                          {cfg.label}
+                        </span>
+                        {!ann.isActive && (
+                          <span className="px-2 py-2.5 rounded-none text-[9px] font-black bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
+                            Non-aktif
+                          </span>
+                        )}
+                        {expired && (
+                          <span className="px-2 py-2.5 rounded-none text-[9px] font-black bg-red-100 dark:bg-red-950/40 text-red-500 border border-red-200 dark:border-red-900">
+                            Kedaluwarsa
+                          </span>
+                        )}
                         <button onClick={() => openEdit(ann)}
                         className="border border-white/20 active:scale-[0.98] cursor-pointer p-2 text-white hover:text-white/80 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-none transition-all">
                         <PenLine size={16} />

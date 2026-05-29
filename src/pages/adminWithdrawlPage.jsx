@@ -59,17 +59,17 @@ export const AdminWithdrawalPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Super Admin</p>
-            <h2 className="text-2xl font-black">Manajemen Penarikan Dana</h2>
+            <h2 className="text-2xl font-black">Penarikan Dana</h2>
             <p className="text-slate-400 text-sm font-medium mt-1">
               Approve = kamu sudah transfer manual. Reject = saldo dikembalikan ke streamer.
             </p>
           </div>
-          <div className="flex items-center gap-2 text-slate-400 text-xs font-bold">
+          {/* <div className="flex items-center gap-2 text-slate-400 text-xs font-bold">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" /> Auto 30s
             <button onClick={() => refetch()} disabled={isFetching} className="ml-1 hover:text-white transition-colors disabled:opacity-50">
               <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -77,7 +77,7 @@ export const AdminWithdrawalPage = () => {
       <div className="flex gap-2 flex-wrap">
         {STATUS_FILTERS.map(f => (
           <button key={f.val} onClick={() => setStatusFilter(f.val)}
-            className={`px-4 py-2 rounded-xl font-black text-sm transition-all ${
+            className={`px-3 py-2 rounded-xl font-black text-sm transition-all ${
               statusFilter === f.val
                 ? 'bg-blue-600 text-white shadow-none'
                 : 'bg-white text-slate-400 border border-slate-100 hover:border-blue-200 hover:text-blue-600'

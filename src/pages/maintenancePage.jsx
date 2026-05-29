@@ -89,17 +89,16 @@ const MaintenancePage = () => {
 
       <CustomToast toastState={toastState} />
 
-      <div className="flex items-center gap-4">
+      <div className="hidden md:flex flex-col items-center gap-4 px-6 md:px-0">
         <div className="bg-amber-500 p-3 rounded-none text-white">
           <ShieldAlert size={24} />
         </div>
         <div>
           <h2 className="text-lg font-black">Maintenance Mode</h2>
-          <p className="text-slate-500">Nonaktifkan akses ke halaman tertentu</p>
         </div>
       </div>
 
-      <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 p-6 rounded-none">
+      <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 p-5 rounded-none">
         <div className="grid gap-4">
           {pages.map(({ key, label, desc }) => (
             <div key={key} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">

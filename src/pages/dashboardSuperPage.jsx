@@ -127,15 +127,11 @@ export const DashboardSuperPage = () => {
   }
 
   return (
-    <div className="h-max text-white pb-0 px-4 md:px-0 pt-0 space-y-8 font-sans">
+    <div className="h-max text-white pb-0 px-4 md:px-0 pt-2 md:pt-0 space-y-8 font-sans">
 
       {/* ── Header ── */}
       <motion.div {...staggerChild(0)} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Shield size={14} className="text-indigo-400" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400">Super Admin</span>
-          </div>
           <h1 className="text-[18px] md:text-[20px] font-black tracking-tight">
             Pusat <span className="text-indigo-400">Statistik</span>
           </h1>
