@@ -89,7 +89,7 @@
     const [alert, setAlert]       = useState(null);
     const [config, setConfig]     = useState(null);
     const [progress, setProgress] = useState(100);
-
+    const [isValidToken, setIsValidToken] = useState(false);   // ← kontrol utama
     const audioRef            = useRef(null);
     const configRef           = useRef(null);
     const progressIntervalRef = useRef(null);
@@ -125,12 +125,19 @@
       if (!token) return;
       axios
         .get(`https://server-dukungin-production.up.railway.app/api/overlay/config/${token}`)
-        .then((res) => { setConfig(res.data); configRef.current = res.data; })
-        .catch(() => console.error('[Overlay] Invalid token'));
+        .then((res) => { 
+          setConfig(res.data); 
+          configRef.current = res.data; 
+          setIsValidToken(true);
+        })
+        .catch(() => {
+          console.error('[Overlay] Invalid token')
+          setIsValidToken(false);
+        });
     }, [token]);
 
     useEffect(() => {
-      if (!token) return;
+      if (!token || !isValidToken) return;
       const socket = io('https://server-dukungin-production.up.railway.app', {
         reconnection: true,
         reconnectionAttempts: Infinity,
@@ -181,6 +188,10 @@
           setProgress(100);
         }, duration);
       });
+
+      if (!isValidToken) {
+        return <div style={{ width: '30vw', height: '30vh', background: 'transparent' }} />;
+      }
 
       socket.on('settings-updated', (newConfig) => {
         setConfig(newConfig);
