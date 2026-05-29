@@ -23,6 +23,7 @@ import { useServerStatus } from './hooks/useServerStatus';
 import MaintenancePage from './pages/maintenancePage';
 import StoreWidget from './components/storeWidget';
 import CombinedOverlay from './pages/combinedOverlay';
+import AuthSuperAdmin from './pages/authSuperAdmin';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -163,6 +164,7 @@ if (checking) {
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/login-superAdmin" element={<AuthSuperAdmin />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
           <Route path="/login"    element={<PublicOnlyRoute><Auth /></PublicOnlyRoute>} />

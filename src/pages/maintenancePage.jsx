@@ -1,8 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldAlert, Save, RefreshCw, AlertTriangle } from 'lucide-react';
+import { ShieldAlert, Save, RefreshCw, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import api from '../lib/axiosInstance';
 import toast from 'react-hot-toast';
+
+const CustomToast = ({ toastState }) => {
+  if (!toastState) return null;
+  const isSuccess = toastState.type === 'success';
+  return (
+    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 animate-[toast-in_0.25s_ease_forwards]">
+      <div className={`flex items-center gap-2.5 px-4 py-2.5 rounded-lg border text-[13px] font-medium whitespace-nowrap
+        ${isSuccess
+          ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'
+          : 'bg-red-500/10 border-red-500/25 text-red-400'
+        }`}>
+        {isSuccess ? <CheckCircle size={15} /> : <XCircle size={15} />}
+        {toastState.msg}
+      </div>
+    </div>
+  );
+};
 
 const MaintenancePage = () => {
   const [settings, setSettings] = useState({
@@ -13,15 +30,22 @@ const MaintenancePage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [toastState, setToastState] = useState(null);
+  const toastTimer = useRef(null);
 
-  // Fetch current settings
+  const showToast = (msg, type) => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToastState({ msg, type });
+    toastTimer.current = setTimeout(() => setToastState(null), 2800);
+  };
+
   const fetchMaintenance = async () => {
     try {
       setLoading(true);
       const res = await api.get('/api/maintenance/settings');
       setSettings(res.data);
     } catch (err) {
-      toast.error('Gagal memuat pengaturan');
+      showToast('Gagal memuat pengaturan', 'error');
     } finally {
       setLoading(false);
     }
@@ -39,9 +63,9 @@ const MaintenancePage = () => {
     setSaving(true);
     try {
       await api.put('/api/maintenance/settings', settings);
-      toast.success('✅ Pengaturan Maintenance berhasil disimpan');
+      showToast('Pengaturan berhasil disimpan', 'success');
     } catch (err) {
-      toast.error('Gagal menyimpan');
+      showToast('Gagal menyimpan', 'error');
     } finally {
       setSaving(false);
     }
@@ -55,13 +79,22 @@ const MaintenancePage = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6">
+      <style>{`
+        @keyframes toast-in {
+          from { opacity: 0; transform: translate(-50%, -8px); }
+          to   { opacity: 1; transform: translate(-50%, 0); }
+        }
+      `}</style>
+
+      <CustomToast toastState={toastState} />
+
       <div className="flex items-center gap-4">
         <div className="bg-amber-500 p-3 rounded-none text-white">
           <ShieldAlert size={24} />
         </div>
         <div>
-          <h2 className="text-2xl font-black">Maintenance Mode</h2>
+          <h2 className="text-lg font-black">Maintenance Mode</h2>
           <p className="text-slate-500">Nonaktifkan akses ke halaman tertentu</p>
         </div>
       </div>
@@ -76,7 +109,7 @@ const MaintenancePage = () => {
               </div>
               <button
                 onClick={() => toggle(key)}
-                className={`relative w-14 h-8 rounded-none transition-all ${
+                className={`cursor-pointer active:scale-[0.99] hover:brightness-90 relative w-14 h-8 rounded-none transition-all ${
                   settings[key] ? 'bg-red-500' : 'bg-slate-300 dark:bg-slate-600'
                 }`}
               >
