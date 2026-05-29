@@ -294,7 +294,7 @@ const InstantTestVoice = ({ user }) => {
 const VoiceOverlayUrls = ({ overlayToken, onCopy }) => {
   const urls = [
     {
-      label: 'URL VOICE NOTE — OBS',
+      label: 'VOICE NOTE',
       url: `${APP_URL}/overlay/${overlayToken}/voice`,
       desc: 'Pasang di OBS sebagai Browser Source, ukuran 400×160px',
     },
