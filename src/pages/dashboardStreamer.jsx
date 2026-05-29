@@ -66,6 +66,9 @@ import CustomerServiceWidget from '../components/customerWidget';
 import DashboardSuperPage from './dashboardSuperPage';
 import InboxBell, { InboxPage } from '../components/inboxBell';
 import AdminAnnouncementsPage from './adminannouncements';
+import MaintenancePage from './maintenancePage';
+import { useMaintenance } from '../hooks/useMaintenance';
+import MaintenanceScreen from '../components/MaintenanceScreen';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -2793,6 +2796,7 @@ export const DashboardStreamer = () => {
     newPin: ['','','',''], 
     confirmPin: ['','','',''] 
   });
+  const { maintenance } = useMaintenance(); // ← tambah ini
 
   // ─── PIN HANDLERS (dipindah ke dalam komponen) ─────────────────────────────────
 
@@ -3090,6 +3094,11 @@ const handleChangePin = async () => {
     </div>
   );
 
+  // Ganti blok if (maintenance?.dashboard) yang lama dengan:
+  if (maintenance?.dashboard) return (
+    <MaintenanceScreen title="Dashboard - maintenance" subtitle="Kami sedang melakukan pembaruan. Semua data kamu aman dan akan kembali seperti semula." />
+  );
+
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
 
@@ -3206,6 +3215,12 @@ const handleChangePin = async () => {
 
         <div className="relative md:mt-[-14px] px-0 md:px-5 lg:py-11 w-full">
           <AnimatePresence mode="wait">
+
+            {activeTab === 'maintenance' && (
+              <motion.div key="maintenance" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <MaintenancePage />
+              </motion.div>
+            )}
 
             {/* ══════════════════════ COMMUNITY ══════════════════════ */}
             {activeTab === 'community' && (
@@ -3807,7 +3822,11 @@ const handleChangePin = async () => {
             )}
 
             {/* ══════════════════════ WALLET ══════════════════════ */}
-            {activeTab === 'wallet' && <WithdrawPage />}
+            {activeTab === 'wallet' && (
+              maintenance?.withdrawal
+                ? <MaintenanceScreen title="Sitem WD - maintenance" subtitle="Fitur penarikan sementara tidak tersedia. Saldo kamu aman dan tidak terpengaruh." />
+                : <WithdrawPage />
+            )}
 
             {/* ══════════════════════ FEE CONFIG ══════════════════════ */}
             {activeTab === 'feeConfig' && (

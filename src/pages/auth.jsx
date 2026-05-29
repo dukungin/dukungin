@@ -7,6 +7,8 @@ import {
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { sanitizeInput, isValidEmail, isValidUsername, validatePassword, detectXSS, safeText } from '../utils/xssProtection';
+import { useMaintenance } from '../hooks/useMaintenance';
+import MaintenanceScreen from '../components/MaintenanceScreen';
 
 // ─── Theme tokens ──────────────────────────────────────────────────────────────
 const getTheme = (dark) => ({
@@ -967,7 +969,8 @@ const Auth = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [tempToken, setTempToken] = useState('');
-  
+  const { maintenance, loading: maintenanceLoading } = useMaintenance();
+
   // Page state
   const [currentPage, setCurrentPage] = useState('main');
   const [tempEmail, setTempEmail] = useState('');
@@ -1003,6 +1006,10 @@ const Auth = () => {
       setFormData({ username: '', email: '', password: '' });
     }
   }, [isLogin]);
+
+  if (maintenance?.auth) return (
+    <MaintenanceScreen title="Halaman login - maintenance" />
+  );
 
   // Main form submit handler dengan XSS protection
   const handleSubmit = async (e) => {

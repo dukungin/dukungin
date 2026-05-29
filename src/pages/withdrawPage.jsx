@@ -43,6 +43,14 @@ export const WithdrawPage = () => {
   const [historyPage, setHistoryPage] = useState(1);
   const [showBalance, setShowBalance] = useState(() => localStorage.getItem('showBalance') === 'true');
 
+  // === PIN States ===
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [pin, setPin] = useState(["", "", "", ""]);
+  const [showPin, setShowPin] = useState(false);
+  const [pinError, setPinError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const pinRefs = [useRef(), useRef(), useRef(), useRef()];
+
   useEffect(() => {
     const handleStorageChange = () => setShowBalance(localStorage.getItem('showBalance') === 'true');
     window.addEventListener('storage', handleStorageChange);
@@ -90,6 +98,49 @@ export const WithdrawPage = () => {
   const WITHDRAW_FEE = 1500;
   const netAmount = Math.max(0, amt - WITHDRAW_FEE);
 
+  // Handle PIN Input
+  const handlePinInput = (index, value) => {
+    if (!/^\d?$/.test(value)) return;
+    const newPin = [...pin];
+    newPin[index] = value.slice(-1);
+    setPin(newPin);
+    setPinError("");
+
+    if (value && index < 3) {
+      pinRefs[index + 1].current?.focus();
+    }
+  };
+
+  const handlePinKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !pin[index] && index > 0) {
+      pinRefs[index - 1].current?.focus();
+    }
+  };
+
+  const handlePinSubmit = async () => {
+    const fullPin = pin.join("");
+    if (fullPin.length < 4) {
+      setPinError("Masukkan 4 digit PIN keamanan");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setPinError("");
+
+    try {
+      // Kirim withdraw dengan PIN
+      await withdrawMutation.mutateAsync({
+        ...formData,
+        paymentMethod: method,
+        securityPin: fullPin,   // ← Kirim ke backend
+      });
+    } catch (err) {
+      setPinError(err.response?.data?.message || "PIN salah atau terjadi kesalahan");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleSubmit = () => {
     if (!formData.amount || isNaN(amt) || amt <= 0) return alert('Masukkan nominal yang valid');
     if (availableBalance < MIN_SALDO) return alert(`Saldo tersedia minimum Rp ${formatRupiah(MIN_SALDO)}`);
@@ -97,7 +148,9 @@ export const WithdrawPage = () => {
     if (amt > MAX_TARIK) return alert(`Maksimal penarikan Rp ${formatRupiah(MAX_TARIK)}`);
     if (amt > availableBalance) return alert(`Saldo tersedia tidak mencukupi. Saldo tersedia: Rp ${formatRupiah(availableBalance)}`);
     if (!formData.accountNumber || !formData.accountName) return alert('Lengkapi data rekening / e-wallet');
-    withdrawMutation.mutate({ ...formData, paymentMethod: method });
+
+    setShowPinModal(true);
+    // withdrawMutation.mutate({ ...formData, paymentMethod: method });
   };
 
   const canSubmit = availableBalance >= MIN_SALDO && amt >= MIN_TARIK;
@@ -330,6 +383,85 @@ export const WithdrawPage = () => {
           )}
         </div>
       </div>
+
+      <AnimatePresence>
+        {showPinModal && (
+          <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-white dark:bg-slate-900 w-full max-w-md rounded-none shadow-2xl overflow-hidden"
+            >
+              <div className="p-8 text-center space-y-6">
+                <div className="w-16 h-16 mx-auto bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center">
+                  <ShieldCheck size={32} className="text-amber-500" />
+                </div>
+
+                <div>
+                  <p className="font-bold text-xl">Konfirmasi PIN Keamanan</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    Penarikan <span className="font-bold text-emerald-500">Rp {formatRupiah(netAmount)}</span><br />
+                    ke {formData.channelCode} • {formData.accountNumber}
+                  </p>
+                </div>
+
+                {/* PIN Input */}
+                <div className="flex justify-center gap-4">
+                  {pin.map((digit, i) => (
+                    <input
+                      key={i}
+                      ref={pinRefs[i]}
+                      type={showPin ? "text" : "password"}
+                      maxLength={1}
+                      inputMode="numeric"
+                      value={digit}
+                      onChange={(e) => handlePinInput(i, e.target.value)}
+                      onKeyDown={(e) => handlePinKeyDown(i, e)}
+                      className="w-14 h-14 text-center text-3xl font-black border-2 bg-slate-50 dark:bg-slate-800 border-slate-300 dark:border-slate-700 focus:border-blue-500 rounded-none outline-none"
+                    />
+                  ))}
+                </div>
+
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowPin(!showPin)}
+                    className="text-xs flex items-center gap-1 text-slate-400 hover:text-blue-600"
+                  >
+                    {showPin ? <EyeOff size={14} /> : <Eye size={14} />}
+                    {showPin ? 'Sembunyikan' : 'Tampilkan'} PIN
+                  </button>
+                </div>
+
+                {pinError && (
+                  <div className="flex items-center gap-2 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 p-3 rounded-none">
+                    <AlertCircle size={16} className="text-red-500" />
+                    <p className="text-sm font-medium text-red-600 dark:text-red-400">{pinError}</p>
+                  </div>
+                )}
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => { setShowPinModal(false); setPin(["", "", "", ""]); setPinError(""); }}
+                    className="flex-1 py-3.5 border border-slate-300 dark:border-slate-700 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    onClick={handlePinSubmit}
+                    disabled={isSubmitting || pin.join("").length < 4}
+                    className="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold disabled:opacity-60 transition-all flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? <Loader2 className="animate-spin" size={18} /> : <ShieldCheck size={18} />}
+                    {isSubmitting ? "Memverifikasi..." : "Konfirmasi Penarikan"}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* ── Riwayat Withdrawal ── */}
       <div className="bg-white dark:bg-slate-900 rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">

@@ -1110,7 +1110,7 @@ const GhostAlertPage = () => {
             type="button"
             onClick={handleSend}
             disabled={sending || !form.targetUserId || !form.amount}
-            className="active:scale-[0.99] cursor-pointer w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-base shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 transition-all"
+            className="active:scale-[0.99] cursor-pointer w-full py-3 text-sm bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-none font-black text-base shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 transition-all"
           >
             {sending ? (
               <><Loader2 size={18} className="animate-spin" /> Mengirim Alert...</>

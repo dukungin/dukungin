@@ -22,6 +22,8 @@ import { Link, useParams } from 'react-router-dom';
 import Badge from '../components/badge';
 import { VoiceRecorder } from '../components/voiceOver';
 import { useTheme } from '../hooks/useTheme';
+import { useMaintenance } from '../hooks/useMaintenance';
+import MaintenanceScreen from '../components/MaintenanceScreen';
 
 // ============================================================
 // DETEKSI ENVIRONMENT
@@ -1191,6 +1193,7 @@ const SupporterPage = () => {
   const [feeBearer, setFeeBearer] = useState('streamer');
   const [ytChecking, setYtChecking] = useState(false);
   const [ytBlockedReason, setYtBlockedReason] = useState(null);
+  const { maintenance } = useMaintenance();
 
   // ── Tab state ──────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState('alert'); // 'alert' | 'mediashare' | 'voice'
@@ -1244,6 +1247,10 @@ const SupporterPage = () => {
 
     return () => clearTimeout(timeout);
   }, [mediaUrl]);
+
+  if (maintenance?.supporter) return (
+    <MaintenanceScreen title="Halaman donasi - maintenance" subtitle="Sementara kamu tidak bisa mengirim donasi. Coba lagi beberapa saat lagi." />
+  );
 
   const handleAuthSuccess = async (data) => {
     const newPayload = getPayload();

@@ -195,7 +195,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
         </div>
 
         {/* Kanan */}
-        <div className="flex items-center gap-2.5 pr-[7px] flex-shrink-0">
+        <div className="flex items-center gap-2.5 md:pr-[7px] flex-shrink-0">
           <button
             onClick={() => setIsCollapsed(v => !v)}
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
