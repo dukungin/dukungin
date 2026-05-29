@@ -55,16 +55,16 @@ export const AdminWithdrawalPage = () => {
     <div className="w-full mx-auto space-y-5 pb-6">
 
       {/* Header */}
-      <div className="w-full mx-auto space-y-5 pb-6 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
+      <div className="w-full mx-auto space-y-5 pb-6 bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 from-blue-700 to-indigo-800  rounded-xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Super Admin</p>
+            <p className="text-blue-200 dark:text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Super Admin</p>
             <h2 className="text-2xl font-black">Penarikan Dana</h2>
-            <p className="text-slate-400 text-sm font-medium mt-1">
+            <p className="text-blue-300 dark:text-slate-400 text-sm font-medium mt-1">
               Approve = kamu sudah transfer manual. Reject = saldo dikembalikan ke streamer.
             </p>
           </div>
-          {/* <div className="flex items-center gap-2 text-slate-400 text-xs font-bold">
+          {/* <div className="flex items-center gap-2 text-blue-200 dark:text-slate-400 text-xs font-bold">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" /> Auto 30s
             <button onClick={() => refetch()} disabled={isFetching} className="ml-1 hover:text-white transition-colors disabled:opacity-50">
               <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />

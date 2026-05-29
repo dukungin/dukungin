@@ -305,16 +305,16 @@ export const InboxPage = () => {
   return (
     <div className="space-y-5 pb-8">
       {/* Header */}
-      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-none p-5 md:p-5 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 from-blue-700 to-indigo-800 rounded-none p-5 md:p-5 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), radial-gradient(circle at 80% 20%, #6366f1 0%, transparent 50%)' }} />
         <div className="relative flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <Bell size={14} className="text-slate-400" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Notifikasi</span>
+              <Bell size={14} className="text-blue-200 dark:text-slate-400" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-300 dark:text-slate-400">Notifikasi</span>
             </div>
             <h1 className="text-lg md:text-lg font-black tracking-tight">Inbox</h1>
-            <p className="text-slate-400 text-sm font-medium mt-1">
+            <p className="text-blue-200 dark:text-slate-400 text-sm font-medium mt-1">
               Pengumuman & informasi terbaru dari tim TAPTIPTUP
             </p>
           </div>

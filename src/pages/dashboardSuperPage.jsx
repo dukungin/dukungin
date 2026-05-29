@@ -35,7 +35,7 @@ const staggerChild = (i) => ({
 const StatCard = ({ label, value, sub, icon: Icon, accent, index }) => (
   <motion.div
     {...staggerChild(index)}
-    className="relative overflow-hidden rounded-none border border-slate-800 bg-slate-900 p-6 flex flex-col gap-3"
+    className="relative overflow-hidden rounded-none border dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col gap-3"
   >
     {/* accent line */}
     <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accent }} />
@@ -45,7 +45,7 @@ const StatCard = ({ label, value, sub, icon: Icon, accent, index }) => (
         <Icon size={16} style={{ color: accent }} />
       </div>
     </div>
-    <p className="text-md font-black text-white leading-none tracking-tight">{value}</p>
+    <p className="text-md font-black text-slate-900 dark:text-white leading-none tracking-tight">{value}</p>
     {sub && <p className="text-[11px] text-slate-500 font-medium">{sub}</p>}
   </motion.div>
 );
@@ -132,7 +132,7 @@ export const DashboardSuperPage = () => {
       {/* ── Header ── */}
       <motion.div {...staggerChild(0)} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-[18px] md:text-[20px] font-black tracking-tight">
+          <h1 className="text-[18px] text-slate-900  dark:text-white md:text-[20px] font-black tracking-tight">
             Pusat <span className="text-indigo-400">Statistik</span>
           </h1>
           <p className="text-slate-500 text-sm font-medium mt-1">Platform overview — semua data real-time</p>
@@ -173,14 +173,13 @@ export const DashboardSuperPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
         {/* Top Donatur */}
-        <motion.div {...staggerChild(10)} className="bg-slate-900 border border-slate-800 rounded-none p-5 md:p-6">
+        <motion.div {...staggerChild(10)} className="bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-8 h-8 bg-amber-500/10 border border-amber-500/20 rounded-none flex items-center justify-center">
               <Trophy size={14} className="text-amber-400" />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Platform-wide</p>
-              <p className="font-black text-sm text-white">Top 3 Donatur</p>
+              <p className="font-black text-sm text-slate-900 dark:text-white">Top 3 Donatur</p>
             </div>
           </div>
           <div className="space-y-3">
@@ -191,11 +190,11 @@ export const DashboardSuperPage = () => {
               const medals = ['🥇', '🥈', '🥉'];
               const accents = ['#f59e0b', '#94a3b8', '#b45309'];
               return (
-                <div key={i} className="flex items-center gap-3 p-3 bg-slate-800/50 border border-slate-700/50 rounded-none">
+                <div key={i} className="flex items-center gap-3 p-3 bg-white dark:bg-slate-800/50 border border-slate-700/50 rounded-none">
                   <span className="text-xl flex-shrink-0">{medals[i]}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-black text-sm text-white truncate">{d.name}</p>
-                    <p className="text-[10px] text-slate-500 font-medium">{d.count}x donasi</p>
+                    <p className="font-black text-sm text-slate-900 dark:text-white truncate">{d.name}</p>
+                    <p className="text-[10px] text-slate-900 dark:text-slate-500 font-medium">{d.count}x donasi</p>
                   </div>
                   <p className="font-black text-sm flex-shrink-0" style={{ color: accents[i] }}>
                     {fmtRp(d.totalAmount)}
@@ -207,14 +206,14 @@ export const DashboardSuperPage = () => {
         </motion.div>
 
         {/* Pending Withdrawals Alert */}
-        <motion.div {...staggerChild(11)} className="bg-slate-900 border border-slate-800 rounded-none p-5 md:p-6 flex justify-center items-center text-center flex-col">
+        <motion.div {...staggerChild(11)} className="bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6 flex justify-center items-center text-center flex-col">
           <div className="flex items-center gap-2 pt-0 mb-5">
             <div className="w-8 h-8 bg-red-500/10 border border-red-500/20 rounded-none flex items-center justify-center">
               <AlertTriangle size={14} className="text-red-400" />
             </div>
             <div>
               {/* <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Perlu Tindakan</p> */}
-              <p className="font-black text-sm text-white">Pending Withdraw</p>
+              <p className="font-black text-sm text-slate-900 dark:text-white">Pending Withdraw</p>
             </div>
             <div className="w-8 h-8 bg-red-500/10 border border-red-500/20 rounded-none flex items-center justify-center">
               <AlertTriangle size={14} className="text-red-400" />
@@ -240,9 +239,6 @@ export const DashboardSuperPage = () => {
                   <p className="text-[10px] text-slate-500 font-black uppercase tracking-wider mt-1">request</p>
                 </div>
               </div>
-              {stats?.pendingWithdrawals > 0 && (
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-none animate-ping" />
-              )}
             </div>
             <p className="text-xs text-slate-500 font-medium text-center">
               {stats?.pendingWithdrawals > 0
@@ -260,14 +256,13 @@ export const DashboardSuperPage = () => {
         </motion.div>
 
         {/* Donasi Terbaru */}
-        <motion.div {...staggerChild(12)} className="bg-slate-900 border border-slate-800 rounded-none p-5 md:p-6">
+        <motion.div {...staggerChild(12)} className="bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-8 h-8 bg-indigo-500/10 border border-indigo-500/20 rounded-none flex items-center justify-center">
               <ArrowUpRight size={14} className="text-indigo-400" />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Real-time</p>
-              <p className="font-black text-sm text-white">Donasi Terbaru</p>
+              <p className="font-black text-sm text-slate-900 dark:text-white">Donasi Terbaru</p>
             </div>
           </div>
           <div className="space-y-2">
@@ -280,7 +275,7 @@ export const DashboardSuperPage = () => {
                   {d.donorName?.charAt(0)?.toUpperCase() || '?'}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-black text-white truncate">{d.donorName || 'Anonim'}</p>
+                  <p className="text-xs font-black text-slate-900 dark:text-white truncate">{d.donorName || 'Anonim'}</p>
                   <p className="text-[10px] text-slate-500 font-medium truncate">→ @{d.userId?.username || '?'}</p>
                 </div>
                 <p className="text-xs font-black text-emerald-400 flex-shrink-0">{fmtRp(d.amount)}</p>
