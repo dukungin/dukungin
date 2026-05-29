@@ -44,6 +44,7 @@ const VoiceDurationSettings = ({ settings, onChange, saveSettingsMutation }) => 
     { label: 'Rp 50.000', amount: 50000 },
     { label: 'Rp 100.000', amount: 100000 },
     { label: 'Rp 500.000', amount: 500000 },
+    { label: 'Rp 1.000.000', amount: 1000000 },
   ].map(({ label, amount }) => ({
     label,
     seconds: base + Math.floor(amount / (perAmt || 1)) * extraDur,
@@ -110,19 +111,26 @@ const VoiceDurationSettings = ({ settings, onChange, saveSettingsMutation }) => 
       </div>
 
       {/* Preview kalkulasi */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-none border border-dashed border-slate-200 dark:border-slate-700">
+      <div className="md:bg-slate-50 md:dark:bg-slate-800/70 md:p-5 md:rounded-none md:border border-dashed border-slate-200 dark:border-slate-700">
         <p className="font-black text-xs text-slate-400 dark:text-slate-500 mb-4 uppercase tracking-widest">
           Simulasi Durasi
         </p>
-        <div className="space-y-2.5">
-          {previewDurations.map(({ label, seconds }) => (
-            <div key={label} className="flex justify-between items-center">
-              <span className="text-sm text-slate-600 dark:text-slate-300">{label}</span>
-              <span className="font-black text-slate-900 dark:text-white text-sm">
-                {seconds} detik
-              </span>
+        <div className="flex flex-wrap md:gap-0 gap-x-2 md:justify-between">
+          {previewDurations.map(({ label, seconds }, index) => (
+            <div className='md:flex mb-2 md:mb-0 items-center gap-4'>
+                <div 
+                    key={label} 
+                    className={`w-max border border-slate-100/20 py-1 px-3 flex justify-between gap-4 items-center`}
+                >
+                    <span className="text-sm text-slate-600 dark:text-slate-300">{label}</span>
+                    <span className="font-black text-slate-900 dark:text-white text-sm">
+                    {seconds} detik
+                    </span>
+                </div>
+                {/* <div className={`h-4 w-[1px] bg-white ${index === 4 ? 'hidden' : 'flex'}`}>
+                </div> */}
             </div>
-          ))}
+            ))}
         </div>
       </div>
 
@@ -265,12 +273,6 @@ const InstantTestVoice = ({ user }) => {
         )}
       </button>
 
-      {!voiceUrl && (
-        <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center">
-          Rekam suara dulu sebelum mengirim test
-        </p>
-      )}
-
       <AnimatePresence>
         {lastSent && (
           <motion.div
@@ -283,10 +285,6 @@ const InstantTestVoice = ({ user }) => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium text-center">
-        ⚠️ Pastikan OBS Voice overlay sudah dibuka di browser source sebelum test
-      </p>
     </div>
   );
 };
@@ -333,28 +331,6 @@ const VoiceOverlayUrls = ({ overlayToken, onCopy }) => {
           </div>
         </div>
       ))}
-
-      {/* Panduan singkat */}
-      <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-none border border-slate-200 dark:border-slate-700 space-y-2">
-        <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">
-          Cara Pasang di OBS
-        </p>
-        {[
-          'Buka OBS → klik tombol + di Sources',
-          'Pilih "Browser Source"',
-          'Paste URL di atas ke kolom URL',
-          'Set ukuran: 400 × 160 px (rekomendasi)',
-          'Centang "Shutdown source when not visible" agar tidak conflict',
-          'Klik OK — selesai!',
-        ].map((step, i) => (
-          <div key={i} className="flex items-start gap-3">
-            <span className="w-5 h-5 bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 rounded-none text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">
-              {i + 1}
-            </span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">{step}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
@@ -364,27 +340,27 @@ const VoiceOverlayUrls = ({ overlayToken, onCopy }) => {
 const VoiceSettingsInfo = () => (
   <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
     <SectionHeader icon={<span className="text-xl">🎙️</span>} title="Tentang Voice Note Donation" color="bg-indigo-500" />
-    <div className="space-y-3">
+    <div className="gap-4 grid grid-cols-2">
       {[
         {
           icon: '🎤',
           title: 'Donatur Rekam Langsung',
-          desc: 'Donatur bisa rekam pesan suara langsung dari halaman donasi, tanpa perlu app tambahan.',
+          desc: 'Donatur bisa rekam pesan suara langsung dari halaman donasi, tanpa perlu app tambahan',
         },
         {
           icon: '📡',
           title: 'Stream ke OBS Real-time',
-          desc: 'Suara diputar otomatis di overlay OBS kamu segera setelah donasi dikonfirmasi.',
+          desc: 'Suara diputar otomatis di overlay OBS kamu segera setelah donasi dikonfirmasi',
         },
         {
           icon: '⏱️',
           title: 'Durasi Otomatis',
-          desc: 'Overlay tetap tampil selama audio diputar + buffer kecil, sesuai durasi rekaman donatur.',
+          desc: 'Overlay tetap tampil selama audio diputar + buffer kecil, sesuai durasi rekaman donatur',
         },
         {
           icon: '🗑️',
           title: 'File Temporer 30 Menit',
-          desc: 'File audio disimpan di memory server, otomatis terhapus setelah 30 menit. Tidak ada penyimpanan permanen.',
+          desc: 'File audio disimpan di memory server, otomatis terhapus setelah 30 menit',
         },
       ].map(({ icon, title, desc }) => (
         <div key={title} className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-100 dark:border-slate-700">
