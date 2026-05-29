@@ -276,7 +276,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
                         ${isCollapsed ? 'justify-center px-0 py-3' : 'px-4 py-3'}
                         ${
                           activeTab === item.id
-                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 dark:shadow-blue-900/30'
+                            ? 'bg-blue-600 text-white'
                             : 'text-slate-900 dark:text-white bg-slate-100 dark:bg-white/20 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-600 dark:hover:text-slate-300'
                         }`}
                     >
