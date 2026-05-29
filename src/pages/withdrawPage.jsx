@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, Clock, CreditCard, Eye, EyeOff, RefreshCw, Smartphone, Wallet, XCircle } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { AlertCircle, ArrowRight, CheckCircle2, Clock, CreditCard, Eye, EyeOff, Loader2, RefreshCw, ShieldCheck, Smartphone, Wallet, XCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
@@ -249,7 +249,7 @@ export const WithdrawPage = () => {
         </h2>
 
         {/* Aturan singkat - HAPUS ADMIN FEE 5rb */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
+        <div className="grid grid-cols-3 gap-2 mb-6">
           {[
             { label: 'Min. Tarik',  value: `Rp ${MIN_TARIK.toLocaleString('id-ID')}` },
             { label: 'Maks. Tarik', value: `Rp ${(MAX_TARIK / 1000000).toFixed(0)}jt` },
@@ -391,7 +391,7 @@ export const WithdrawPage = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-white dark:bg-slate-900 w-full max-w-md rounded-none shadow-2xl overflow-hidden"
+              className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-none shadow-2xl overflow-hidden"
             >
               <div className="p-8 text-center space-y-6">
                 <div className="w-16 h-16 mx-auto bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center">
@@ -401,8 +401,8 @@ export const WithdrawPage = () => {
                 <div>
                   <p className="font-bold text-xl">Konfirmasi PIN Keamanan</p>
                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Penarikan <span className="font-bold text-emerald-500">Rp {formatRupiah(netAmount)}</span><br />
-                    ke {formData.channelCode} • {formData.accountNumber}
+                    Penarikan <span className="mr-1 font-bold text-emerald-500">Rp {formatRupiah(netAmount)}</span>
+                    ke {formData.channelCode} {formData.accountNumber}
                   </p>
                 </div>
 
@@ -427,7 +427,7 @@ export const WithdrawPage = () => {
                   <button
                     type="button"
                     onClick={() => setShowPin(!showPin)}
-                    className="text-xs flex items-center gap-1 text-slate-400 hover:text-blue-600"
+                    className="text-xs cursor-pointer active:scale-[0.99] flex items-center gap-1 text-slate-400 hover:text-blue-600"
                   >
                     {showPin ? <EyeOff size={14} /> : <Eye size={14} />}
                     {showPin ? 'Sembunyikan' : 'Tampilkan'} PIN
@@ -451,10 +451,10 @@ export const WithdrawPage = () => {
                   <button
                     onClick={handlePinSubmit}
                     disabled={isSubmitting || pin.join("").length < 4}
-                    className="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold disabled:opacity-60 transition-all flex items-center justify-center gap-2"
+                    className="cursor-pointer active:scale-[0.98] flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold disabled:opacity-60 transition-all flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? <Loader2 className="animate-spin" size={18} /> : <ShieldCheck size={18} />}
-                    {isSubmitting ? "Memverifikasi..." : "Konfirmasi Penarikan"}
+                    {isSubmitting ? "Memverifikasi..." : "Konfirmasi"}
                   </button>
                 </div>
               </div>
@@ -465,7 +465,7 @@ export const WithdrawPage = () => {
 
       {/* ── Riwayat Withdrawal ── */}
       <div className="bg-white dark:bg-slate-900 rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between px-5 md:px-8 py-5 border-b border-slate-100 dark:border-slate-800">
           <div>
             <p className="font-black text-slate-800 dark:text-slate-100">Riwayat Penarikan</p>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">{pagination.total || 0} total request</p>
@@ -536,12 +536,12 @@ export const WithdrawPage = () => {
               <table className="w-full text-left min-w-[700px]">
                 <thead>
                   <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                    <th className="px-6 py-4">Nominal</th>
-                    <th className="px-6 py-4">Fee</th>
-                    <th className="px-6 py-4">Metode</th>
-                    <th className="px-6 py-4">No. Rekening</th>
-                    <th className="px-6 py-4 text-center">Status</th>
-                    <th className="px-6 py-4">Waktu Pengajuan</th>
+                    <th className="px-6 md:px-8 py-4">Nominal</th>
+                    <th className="px-6 md:px-8 py-4">Fee</th>
+                    <th className="px-6 md:px-8 py-4">Metode</th>
+                    <th className="px-6 md:px-8 py-4">No. Rekening</th>
+                    <th className="px-6 md:px-8 py-4 text-center">Status</th>
+                    <th className="px-6 md:px-8 py-4">Waktu Pengajuan</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -549,7 +549,7 @@ export const WithdrawPage = () => {
                     const cfg = STATUS_CONFIG[wd.status] || STATUS_CONFIG.PENDING;
                     return (
                       <tr key={wd._id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all">
-                        <td className="px-6 py-5">
+                        <td className="px-5 md:px-8 py-5">
                           <p className="flex items-center text-sm text-slate-800 dark:text-green-300">
                             {Number(wd.amount-1500).toLocaleString('id-ID')}
                           </p>
@@ -558,14 +558,14 @@ export const WithdrawPage = () => {
                           <p className="text-sm relative top-[-1.4px] text-slate-400 dark:text-red-300 font-medium">1.500</p>
                           {/* <p className="font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.accountName}</p> */}
                         </td>
-                        <td className="px-6 py-5">
+                        <td className="px-5 md:px-8 py-5">
                           <p className="text-slate-600 dark:text-slate-300 text-sm">{wd.paymentMethod || 'BANK'}</p>
                           {/* <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">{wd.channelCode}</p> */}
                         </td>
-                        <td className="px-6 py-5">
+                        <td className="px-5 md:px-8 py-5">
                           <p className="font-mono font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.accountNumber}</p>
                         </td>
-                        <td className="px-6 py-5">
+                        <td className="px-5 md:px-8 py-5">
                           <div className="flex flex-col items-center gap-1.5">
                             <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${cfg.className}`}>
                               {cfg.icon} {cfg.label}
@@ -578,7 +578,7 @@ export const WithdrawPage = () => {
                             )} */}
                           </div>
                         </td>
-                        <td className="px-6 py-5">
+                        <td className="px-5 md:px-8 py-5">
                           <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{formatDate(wd.createdAt)}</p>
                         </td>
                       </tr>
