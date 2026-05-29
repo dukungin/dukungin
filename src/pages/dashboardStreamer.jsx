@@ -69,6 +69,7 @@ import AdminAnnouncementsPage from './adminannouncements';
 import MaintenancePage from './maintenancePage';
 import { useMaintenance } from '../hooks/useMaintenance';
 import MaintenanceScreen from '../components/MaintenanceScreen';
+import VoiceSettingsPage from './voiceSetting';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
