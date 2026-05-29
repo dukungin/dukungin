@@ -125,9 +125,9 @@ function ThemeToggle({ isDark, onToggle, C }) {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       style={{
         position: "relative",
-        width: 52,
-        height: 28,
-        borderRadius: 14,
+        width: 74,
+        height: 38,
+        borderRadius: 0,
         border: `1px solid ${hov ? C.lime : C.line2}`,
         background: isDark ? C.bg3 : C.lime,
         cursor: "pointer",
@@ -161,11 +161,11 @@ function ThemeToggle({ isDark, onToggle, C }) {
       {/* Thumb */}
       <span style={{
         position: "absolute",
-        top: 3,
-        left: isDark ? 3 : 25,
-        width: 20,
-        height: 20,
-        borderRadius: "50%",
+        top: 3.5,
+        left: isDark ? 3 : 35,
+        width: 32,
+        height: 28,
+        borderRadius: "0%",
         background: isDark ? C.lime : C.bg,
         transition: "left 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s",
         display: "block",
@@ -278,33 +278,32 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
       display: "flex", alignItems: "center", justifyContent: "space-between",
       padding: "18px clamp(27px, 5vw, 40px)",
       background: C.navBg,
+      gap: 30,
       backdropFilter: "blur(12px)",
       // borderBottom: `1px solid ${C.line}`,
       transition: "background 0.4s, border-color 0.4s",
     }}>
-      <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 16, textDecoration: "none", color: C.text, transition: "color 0.4s" }}>
-        <div style={{ width: 36, height: 36, background: C.lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 900, color: C.bg, transition: "background 0.4s" }}>
-          <img src="/jellyfish.png" alt="icon" className="w-5" />
+      <Link to="/" className="w-[33%]" style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 16, textDecoration: "none", color: C.text, transition: "color 0.4s" }}>
+        <div style={{ width: 38, height: 38, background: C.lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 900, color: C.bg, transition: "background 0.4s" }}>
+          <img src="/jellyfish.png" alt="icon" className="w-6" />
         </div>
-        TAP-TIP-TUP
+        TAP-TIP-TUP FOR STREAMER
       </Link>
 
-      <div className="flex w-max items-center gap-3">
-        <div style={{ display: "flex" }} className="hide-mobile">
-          <h2 style={{ color: C.muted, fontSize: 13, transition: "color 0.4s" }}>MADE WITH ❤️ FROM INDONESIA</h2>
-        </div>
+      <p className="italic">
+       PLATFORM DONATE MADE WITH FROM INDONESIA
+      </p>
 
-        <span className="md:flex hidden mx-[1px]" style={{ color: C.line2 }}>|</span>
+      <div className="flex w-[33%] justify-end items-center gap-9">
+
+        <div className="md:flex hidden mx-[5x]" style={{ color: C.line2 }}>|</div>
 
         <div className="flex items-center gap-5 md:gap-4">
-          {/* Theme Toggle */}
-          <ThemeToggle isDark={isDark} onToggle={onToggleTheme} C={C} />
-
           <div style={{ display: "flex", gap: 14 }} className="hide-mobile">
             <Link to="/login" style={{
-              fontFamily: "'Space Grotesk',sans-serif", fontSize: 12, fontWeight: 600,
+              fontFamily: "'Space Grotesk',sans-serif", fontSize: 14, fontWeight: 600,
               letterSpacing: "0.05em", textTransform: "uppercase",
-              padding: "8px 16px", background: C.lime, color: isDark ? 'black' : C.bg,
+              padding: "6px 16px", background: C.lime, color: isDark ? 'black' : C.bg,
               border: `1px solid ${C.lime}`, textDecoration: "none", transition: "opacity 0.15s, background 0.4s",
             }}
               onMouseOver={e => e.currentTarget.style.opacity = "0.85"}
@@ -313,6 +312,12 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
               Mulai Sekarang
             </Link>
           </div>
+          {/* Theme Toggle */}
+          <ThemeToggle isDark={isDark} onToggle={onToggleTheme} C={C} />
+
+          {/* <div style={{ display: "flex" }} className="hide-mobile">
+            <h2 style={{ color: C.muted, fontSize: 13, transition: "color 0.4s" }}>MADE WITH ❤️ FROM INDONESIA</h2>
+          </div> */}
         </div>
       </div>
 
@@ -405,11 +410,6 @@ function Hero({ C, isDark }) {
             letterSpacing: "0.1em", textTransform: "uppercase", 
             color: C.muted, marginBottom: 30, transition: "color 0.4s" 
           }}>
-            <span style={{ 
-              width: 6, height: 6, borderRadius: "50%", 
-              background: C.lime, animation: "blink 2s infinite", 
-              display: "inline-block" 
-            }} />
             Platform Donasi Streamer Dari Indonesia
           </div>
 
@@ -1070,7 +1070,7 @@ export default function TapTipTup() {
       <HowItWorks C={C} />
       <Testimonials C={C} />
       <SharePromo C={C} />   {/* ← tambah di sini */}
-      <CTA C={C} isDark={isDark} />
+      {/* <CTA C={C} isDark={isDark} /> */}
       <Footer C={C} />
     </div>
   );
