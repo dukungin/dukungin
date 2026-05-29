@@ -652,8 +652,12 @@ const FEE_PERCENT = 0.025;
 const ADMIN_FEE = 0;
 
 // ── Alert Modal ──
+// ── Alert Modal (Support Success & Error) ──
 const AlertModal = ({ modal, onClose }) => {
   if (!modal) return null;
+
+  const isSuccess = modal.type === 'success';
+
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -665,15 +669,26 @@ const AlertModal = ({ modal, onClose }) => {
           className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-none shadow-2xl overflow-hidden"
         >
           <div className="p-7 flex flex-col items-center text-center gap-4">
-            <div className="w-14 h-14 flex items-center justify-center bg-red-50 dark:bg-red-950/40">
-              <AlertTriangle size={28} className="text-red-500" />
-            </div>
-            <div>
-              <p className="font-black text-slate-800 dark:text-slate-100 text-base">{modal.title}</p>
-              {modal.message && (
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">{modal.message}</p>
+            <div className={`w-14 h-14 flex items-center justify-center rounded-full
+              ${isSuccess ? 'bg-green-50 dark:bg-green-950/40' : 'bg-red-50 dark:bg-red-950/40'}`}>
+              {isSuccess ? (
+                <CheckCircle2 size={28} className="text-green-500" />
+              ) : (
+                <AlertTriangle size={28} className="text-red-500" />
               )}
             </div>
+            
+            <div>
+              <p className="font-black text-slate-800 dark:text-slate-100 text-base">
+                {modal.title}
+              </p>
+              {modal.message && (
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+                  {modal.message}
+                </p>
+              )}
+            </div>
+
             <button
               onClick={onClose}
               className="cursor-pointer w-full py-3 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white font-black text-sm transition-all active:scale-[0.98]"
@@ -698,7 +713,9 @@ export const WithdrawPage = () => {
 
   // === Alert Modal State ===
   const [alertModal, setAlertModal] = useState(null);
-  const showAlert = (title, message = '') => setAlertModal({ title, message });
+  const showAlert = (title, message = '', type = 'error') => {
+    setAlertModal({ title, message, type });
+  };
   const closeAlert = () => setAlertModal(null);
 
   // === PIN States ===
@@ -745,6 +762,19 @@ export const WithdrawPage = () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
       queryClient.invalidateQueries({ queryKey: ['withdrawHistory'] });
       setFormData({ amount: '', formattedAmount: '', channelCode: method === 'BANK' ? 'BCA' : method, accountNumber: '', accountName: '' });
+
+      // Tutup modal PIN & reset PIN state
+      setShowPinModal(false);
+      setPin(["", "", "", ""]);
+      setPinError("");
+      setIsSubmitting(false);
+
+      // Optional: Tampilkan alert sukses
+      showAlert(
+        'Penarikan Berhasil Diajukan!',
+        'Admin akan memproses dalam 2×24 jam hari kerja',
+        'success'
+      );
     },
     onError: (err) => showAlert('Terjadi Kesalahan', err.response?.data?.message || 'Silakan coba lagi.'),
   });
@@ -957,12 +987,12 @@ export const WithdrawPage = () => {
           <div className="w-full flex flex-col gap-2">
             <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nominal Penarikan (Rp)</label>
             <div className="relative w-[99.8%] mx-auto">
-              <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black text-slate-400 dark:text-slate-500">Rp</span>
+              <span className="absolute left-5 top-[47%] -translate-y-1/2 font-black text-xl text-slate-400 dark:text-slate-500">Rp</span>
               <input
                 type="text"
                 value={formData.formattedAmount || ''}
                 placeholder="0"
-                className="w-full px-5 md:px-8 py-4 pl-14 bg-slate-900 dark:bg-slate-950 text-white ring-1 dark:ring-white/10 rounded-none font-bold text-xl outline-none focus:ring-1 dark:focus:ring-blue-900 transition-all placeholder:text-slate-600"
+                className="w-full py-4 pl-14 bg-slate-900 dark:bg-slate-950 text-white ring-1 dark:ring-white/10 rounded-none font-bold text-xl outline-none focus:ring-1 dark:focus:ring-blue-900 transition-all placeholder:text-slate-600"
                 onChange={(e) => {
                   let value = e.target.value.replace(/[^0-9]/g, '');
                   if (value === '') { setFormData(prev => ({ ...prev, amount: '', formattedAmount: '' })); return; }
