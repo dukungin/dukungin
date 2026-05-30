@@ -70,6 +70,7 @@ import MaintenancePage from './maintenancePage';
 import { useMaintenance } from '../hooks/useMaintenance';
 import MaintenanceScreen from '../components/MaintenanceScreen';
 import VoiceSettingsPage from './voiceSetting';
+import DonationTerminal from './DonationTerminal';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -3045,6 +3046,7 @@ const handleChangePin = async () => {
     store: 'Toko OBS',
     history:       'Riwayat',
     inbox: 'Inbox',
+    terminal: 'Log Donasi',
     announcements: 'Pengumuman',
     feeConfig:     'Konfigurasi Fee',
     wallet:        'Wallet',
@@ -3223,6 +3225,12 @@ const handleChangePin = async () => {
             {activeTab === 'maintenance' && (
               <motion.div key="maintenance" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <MaintenancePage />
+              </motion.div>
+            )}
+
+            {activeTab === 'terminal' && isSuperAdmin && (
+              <motion.div key="terminal" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <DonationTerminal />
               </motion.div>
             )}
 
