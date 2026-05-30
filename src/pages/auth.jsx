@@ -192,11 +192,11 @@ const LeftPanel = () => (
 
 // ─── THEME TOGGLE ─────────────────────────────────────────────────────────────
 const ThemeToggle = ({ isDark, onToggle, T }) => (
-  <motion.button onClick={onToggle} whileTap={{ scale:0.90 }} style={{
-    position:'absolute', top:30, right:35, display:'flex', alignItems:'center', gap:7,
-    background: T.toggleBg, padding:'12px 18px', cursor:'pointer', zIndex:20,
-    borderRadius:0, transition:'background 0.35s',
-  }}>
+  <motion.button
+    onClick={onToggle}
+    whileTap={{ scale: 0.90 }}
+    className="absolute top-0 md:top-[30px] right-0 md:right-[35px] flex items-center gap-[7px] dark:bg-[rgba(255,255,255,0.08)] bg-[rgba(79,70,229,0.08)] px-[18px] py-[12px] cursor-pointer z-20 rounded-none transition-colors duration-[350ms]"
+  >
     <AnimatePresence mode="wait">
       <motion.div key={isDark ? 'moon' : 'sun'}
         initial={{ opacity:0, rotate:-30, scale:0.7 }}

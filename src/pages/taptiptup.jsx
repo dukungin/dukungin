@@ -289,10 +289,10 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
         </div>
         TAP-TIP-TUP FOR STREAMER
       </Link>
-
+{/* 
       <p className="italic">
        PLATFORM DONATE MADE WITH FROM INDONESIA
-      </p>
+      </p> */}
 
       <div className="flex w-[33%] justify-end items-center gap-9">
 

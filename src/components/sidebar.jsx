@@ -57,6 +57,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
     // 'inbox',
     'alertSettings',
     'mediaSettings',
+    'voiceSettings',
     'store',
     'history',
     'wallet',
@@ -161,25 +162,25 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full md:max-w-md bg-white dark:bg-slate-900 rounded-none p-10 z-[9999] shadow-2xl text-center overflow-hidden border border-slate-100 dark:border-slate-800"
+              className="relative w-full md:max-w-md bg-white dark:bg-slate-900 rounded-none p-5 md:p-10 z-[9999] shadow-2xl text-center overflow-hidden border border-slate-100 dark:border-slate-800"
             >
               <div className="w-20 h-20 mx-auto mb-6 bg-red-100 dark:bg-red-950/40 text-red-600 rounded-none flex items-center justify-center">
                 <AlertCircle size={40} />
               </div>
               <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Keluar</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm md:text-md font-medium mb-8">
-                Apakah kamu yakin ingin mengakhiri sesi ini?
+                Apakah kamu yakin ingin ahirir sesi ini?
               </p>
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleLogout}
-                  className="cursor-pointer active:scale-[0.99] hover:brightness-90 w-full py-4 bg-red-600 text-white rounded-none font-black text-md md:text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700"
+                  className="cursor-pointer active:scale-[0.99] hover:brightness-90 w-full py-3 md:py-4 bg-red-600 text-white rounded-none font-black text-md md:text-lg shadow-xl shadow-red-200 dark:shadow-red-900/20 hover:bg-red-700"
                 >
                   Ya, Keluar
                 </button>
                 <button
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="cursor-pointer active:scale-[0.99] hover:brightness-90 w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-black text-md md:text-lg hover:bg-slate-200 dark:hover:bg-slate-700"
+                  className="cursor-pointer active:scale-[0.99] hover:brightness-90 w-full py-3 md:py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-none font-black text-md md:text-lg hover:bg-slate-200 dark:hover:bg-slate-700"
                 >
                   Batal
                 </button>

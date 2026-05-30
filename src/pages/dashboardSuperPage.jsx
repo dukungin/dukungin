@@ -130,7 +130,7 @@ export const DashboardSuperPage = () => {
     <div className="h-max text-white pb-0 px-4 md:px-0 pt-2 md:pt-0 space-y-8 font-sans">
 
       {/* ── Header ── */}
-      <motion.div {...staggerChild(0)} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <motion.div {...staggerChild(0)} className="hidden md:flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-[18px] text-slate-900  dark:text-white md:text-[20px] font-black tracking-tight">
             Pusat <span className="text-indigo-400">Statistik</span>
@@ -206,24 +206,17 @@ export const DashboardSuperPage = () => {
         </motion.div>
 
         {/* Pending Withdrawals Alert */}
-        <motion.div {...staggerChild(11)} className="bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6 flex justify-center items-center text-center flex-col">
-          <div className="flex items-center gap-2 pt-0 mb-5">
-            <div className="w-8 h-8 bg-red-500/10 border border-red-500/20 rounded-none flex items-center justify-center">
-              <AlertTriangle size={14} className="text-red-400" />
-            </div>
+        <motion.div {...staggerChild(11)} className="w-full bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6 flex justify-center md:items-center text-center flex-col">
+          <div className="flex justify-center items-center gap-2 pt-0 mb-5">
             <div>
-              {/* <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Perlu Tindakan</p> */}
               <p className="font-black text-sm text-slate-900 dark:text-white">Pending Withdraw</p>
-            </div>
-            <div className="w-8 h-8 bg-red-500/10 border border-red-500/20 rounded-none flex items-center justify-center">
-              <AlertTriangle size={14} className="text-red-400" />
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col items-center justify-center gap-4">
-            <div className="relative">
+          <div className="w-full flex-1 flex flex-col items-center justify-center gap-4">
+            <div className="w-full relative">
               <div
-                className="w-28 h-28 rounded-none border-4 flex items-center justify-center"
+                className="w-full md:w-28 h-28 rounded-none border-4 flex items-center justify-center"
                 style={{
                   borderColor: stats?.pendingWithdrawals > 0 ? '#ef4444' : '#22c55e',
                   background: stats?.pendingWithdrawals > 0 ? '#ef444410' : '#22c55e10',
@@ -248,7 +241,7 @@ export const DashboardSuperPage = () => {
           </div>
 
           {stats?.pendingWithdrawals > 0 && (
-            <div className="mt-4 flex items-center gap-2 px-4 py-2.5 bg-red-500/10 border border-red-500/20 rounded-none">
+            <div className="mt-4 hidden md:flex items-center gap-2 px-4 py-2.5 bg-red-500/10 border border-red-500/20 rounded-none">
               <Clock size={12} className="text-red-400 flex-shrink-0" />
               <p className="text-[11px] text-red-400 font-bold">Buka tab "Admin" untuk memproses</p>
             </div>

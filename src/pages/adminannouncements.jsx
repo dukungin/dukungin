@@ -305,7 +305,7 @@ export const AdminAnnouncementsPage = () => {
       {/* Header */}
       <div className="bg-gradient-to-br from-blue-700 to-indigo-800 rounded-none p-5 md:p-6 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)', backgroundSize: '20px 20px' }} />
-        <div className="relative flex items-start justify-between gap-4">
+        <div className="relative md:flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
               <Megaphone size={14} className="text-blue-300" />
@@ -316,7 +316,7 @@ export const AdminAnnouncementsPage = () => {
           </div>
           <button
             onClick={() => { setEditItem(null); setShowForm(true); }}
-            className="cursor-pointer flex-shrink-0 flex items-center gap-2 px-4 py-3 bg-white/20 hover:bg-white/30 text-white rounded-none font-black text-sm border border-white/30 backdrop-blur-sm transition-all active:scale-[0.97]"
+            className="cursor-pointer flex-shrink-0 mt-3 flex items-center gap-2 px-2 md:px-4 py-2 md:py-3 bg-white/20 hover:bg-white/30 text-white rounded-none font-black text-sm border border-white/30 backdrop-blur-sm transition-all active:scale-[0.97]"
           >
             <Plus size={16} /> Buat Pengumuman
           </button>

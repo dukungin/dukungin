@@ -592,7 +592,7 @@ export const SubathonManager = ({ overlayToken }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-black text-slate-700 dark:text-slate-200 text-sm">Auto Tambah Waktu dari Donasi</p>
-              <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">Waktu otomatis bertambah saat ada donasi masuk</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">Waktu otomatis bertambah saat ada donasi</p>
             </div>
             <button
               onClick={() => upd('autoAddEnabled', !localTimer.autoAddEnabled)}
@@ -614,7 +614,7 @@ export const SubathonManager = ({ overlayToken }) => {
                 <button
                   onClick={() => setShowTiersTable(!showTiersTable)}
                   className="cursor-pointer active:scale-[0.97] px-3 py-1.5 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-none text-xs font-black hover:bg-blue-200 dark:hover:bg-blue-800 transition-all">
-                  {showTiersTable ? 'Tutup' : 'Edit'} Tabel
+                  {showTiersTable ? 'Tutup' : 'Edit'}
                 </button>
               </div>
 

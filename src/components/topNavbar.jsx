@@ -412,7 +412,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                 <AlertCircle size={40} />
               </div>
               <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Keluar</h3>
-              <p className="text-slate-500 dark:text-slate-400 font-bold mb-8">Apakah kamu yakin ingin mengakhiri sesi ini?</p>
+              <p className="text-slate-500 dark:text-slate-400 font-bold mb-8">Apakah kamu yakin ingin akhiri sesi ini?</p>
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleLogout}
