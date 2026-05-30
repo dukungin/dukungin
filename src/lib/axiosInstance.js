@@ -6,16 +6,11 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const path = window.location.pathname;
-  const isOverlayPage = path.startsWith('/overlay') || path.startsWith('/widget');
-
   const token = localStorage.getItem('token');
-
-  if (!token && !isOverlayPage) {
+  if (!token) {
     showSessionExpiredModal();
     return Promise.reject(new Error('No token'));
   }
-
   config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
