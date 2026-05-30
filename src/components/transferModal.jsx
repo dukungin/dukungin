@@ -300,9 +300,6 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
                   <p className="font-bold text-slate-800 dark:text-slate-100 text-sm">
                     @{selected?.username}
                   </p>
-                  <p className="text-xs text-green-600 dark:text-green-400 font-medium">
-                    ✓ Saling follow
-                  </p>
                 </div>
                 <button
                   onClick={() => { setStep("list"); setSelected(null); setAmount(""); }}
