@@ -99,7 +99,7 @@
     const speakDonation = useCallback(async (donation) => {
       if (!configRef.current?.ttsEnabled) return;
 
-      const text = `${donation.donorName || 'Seseorang'} memberikan donasi Rp ${Number(donation.amount).toLocaleString('id-ID')}. ${donation.message || ''}`;
+      const text = `${donation.donorName || 'Seseorang'} mengirimkan Rp ${Number(donation.amount).toLocaleString('id-ID')}. ${donation.message || ''}`;
 
       try {
         const res = await fetch('https://server-dukungin-production.up.railway.app/api/overlay/tts/speak', {
