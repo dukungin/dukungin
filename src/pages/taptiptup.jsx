@@ -284,7 +284,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
     }}>
       <Link 
         to="/" 
-        className="w-[33%] flex items-center gap-[10px] font-bold text-[12px] md:text-[16px] no-underline transition-colors duration-[400ms]"
+        className="md:w-[33%] flex items-center gap-[10px] font-bold text-[16px] no-underline transition-colors duration-[400ms]"
         style={{ color: C.text }}
       >
         <div 
@@ -293,7 +293,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
         >
           <img src="/jellyfish.png" alt="icon" className="w-6" />
         </div>
-        TAP-TIP-TUP
+        TAP-TIP-TUP <span className="md:flex hidden">FOR STREAMER</span>
       </Link>
 
       <div className="flex w-[33%] justify-end items-center gap-9">
