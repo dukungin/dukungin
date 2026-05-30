@@ -287,7 +287,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
         <div style={{ width: 38, height: 38, background: C.lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 900, color: C.bg, transition: "background 0.4s" }}>
           <img src="/jellyfish.png" alt="icon" className="w-6" />
         </div>
-        TAP-TIP-TUP FOR STREAMER
+        TAP-TIP-TUP
       </Link>
 {/* 
       <p className="italic">
