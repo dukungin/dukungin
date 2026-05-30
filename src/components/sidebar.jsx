@@ -131,7 +131,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
         // { id: 'whatsapp',    label: 'WhatsApp',          icon: <MessageSquare size={20} /> },
         { id: 'suggestions', label: 'Masukan Streamer',  icon: <MessageSquare size={20} /> },
         { id: 'ghostAlert',  label: 'Notif Hantu',       icon: <Zap size={20} /> },
-        { id: 'terminal', label: 'Log Donasi', icon: <Terminal size={20} /> }
+        { id: 'terminal', label: 'Log Donasi', icon: <Terminal size={20} /> },
         { 
           id: 'maintenance', 
           label: 'Maintenance Mode', 
