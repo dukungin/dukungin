@@ -70,7 +70,7 @@ function App() {
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono&family=Space+Grotesk:wght@400;600&display=swap');
           @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
-          @keyframes flicker { 0%{opacity:1}10%{opacity:0.3}20%{opacity:1}50%{opacity:0.8}70%{opacity:0.2}100%{opacity:1} }
+          @keyframes flicker { 0%{opacity:1}10%{opaciwithty:0.3}20%{opacity:1}50%{opacity:0.8}70%{opacity:0.2}100%{opacity:1} }
           @keyframes glitch1 {
             0%,100%{clip-path:inset(0 0 90% 0);transform:translateX(0)}
             25%{clip-path:inset(20% 0 60% 0);transform:translateX(-4px)}

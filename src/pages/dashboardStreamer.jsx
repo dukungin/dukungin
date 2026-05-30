@@ -1005,7 +1005,7 @@ const AdminWithdrawalPage = () => {
                 <table className="w-full text-left min-w-[900px]">
                   <thead>
                     <tr className="bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                      {['Streamer', 'Jumlah', 'Metode / Bank', 'No. Rekening', 'Status', 'Waktu', 'Aksi'].map(h => <th key={h} className="px-6 py-5">{h}</th>)}
+                      {['Streamer', 'Jumlah', 'Metode / Bank', 'No. Rekening', 'Status', 'Waktu', ...(statusFilter === 'PENDING' ? ['Aksi'] : [])].map(h => <th key={h} className="px-6 py-5">{h}</th>)}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -1019,14 +1019,16 @@ const AdminWithdrawalPage = () => {
                           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${wd.status === 'COMPLETED' ? 'bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400' : wd.status === 'FAILED' ? 'bg-red-100 dark:bg-red-950/40 text-red-500 dark:text-red-400' : 'bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400'}`}>{wd.status}</span>
                         </td>
                         <td className="px-6 py-5"><p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{formatDate(wd.createdAt)}</p></td>
-                        <td className="px-6 py-5">
-                          {wd.status === 'PENDING' && (
+                          {statusFilter === 'PENDING' && (
+                          <td className="px-6 py-5">
+                            {wd.status === 'PENDING' && (
                             <div className="flex gap-2">
                               <button onClick={() => { setSelectedId(wd._id); setShowApproveModal(true); }} className="cursor-pointer px-2.5 py-2 bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-none text-sm font-black hover:bg-green-200 transition-all flex items-center"><Check size={18} /></button>
                               <button onClick={() => { setSelectedId(wd._id); setRejectNote(''); setShowRejectModal(true); }} className="cursor-pointer px-2.5 py-2 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 rounded-none text-sm font-black hover:bg-red-100 transition-all"><X size={18} /></button>
                             </div>
                           )}
                         </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>

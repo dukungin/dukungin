@@ -118,7 +118,7 @@ export const AdminWithdrawalPage = () => {
                 <table className="w-full text-left min-w-[900px]">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest">
-                      {['Streamer', 'Jumlah', 'Metode / Bank', 'No. Rekening', 'Nama', 'Status', 'Waktu', 'Aksi'].map(h => (
+                      {['Streamer', 'Jumlah', 'Metode / Bank', 'No. Rekening', 'Nama', 'Status', 'Waktu', ...(statusFilter === 'PENDING' ? ['Aksi'] : [])].map(h => (
                         <th key={h} className="px-6 py-5">{h}</th>
                       ))}
                     </tr>
@@ -159,8 +159,9 @@ export const AdminWithdrawalPage = () => {
                         <td className="px-6 py-5">
                           <p className="text-[11px] text-slate-400 font-medium whitespace-nowrap">{formatDate(wd.createdAt)}</p>
                         </td>
-                        <td className="px-6 py-5">
-                          {wd.status === 'PENDING' && (
+                        {statusFilter === 'PENDING' && (
+                          <td className="px-6 py-5">
+                            {wd.status === 'PENDING' && (
                             <div className="flex flex-col gap-2 min-w-[160px]">
                               {/* Tombol Approve */}
                               <button
@@ -206,7 +207,8 @@ export const AdminWithdrawalPage = () => {
                               }
                             </div>
                           )}
-                        </td>
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
