@@ -142,9 +142,9 @@ if (checking) {
   );
 }
 
-  if (!isOnline) {
-    return <MaintenancePage onRetry={retry} />;
-  }
+  // if (!isOnline) {
+  //   return <MaintenancePage onRetry={retry} />;
+  // }
 
   return (
     <QueryClientProvider client={queryClient}>
