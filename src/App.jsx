@@ -57,15 +57,8 @@ function App() {
   if (checking) {
     return isOverlay ? (
       <div style={{
-        width: '100vw', height: '100vh',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        background: 'transparent', gap: 12,
-        color: 'rgba(255,255,255,0.5)',
-        fontFamily: 'monospace',
+        background: 'transparent'
       }}>
-        <span style={{ fontSize: 32 }}>📶</span>
-        <span style={{ fontSize: 13 }}>Menghubungkan...</span>
       </div>
     ) : (
       <div style={{
