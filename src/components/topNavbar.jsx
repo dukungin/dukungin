@@ -205,12 +205,12 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
               {isCollapsed ? (
                 <motion.span className="flex items-center justify-center gap-2 w-max" key="open">
                   <Expand size={17} />
-                  <p className="text-md">Expanded</p>
+                  <p className="text-md font-bold">Expanded</p>
                 </motion.span>
               ) : (
                 <motion.span className="flex items-center justify-center gap-2 w-max" key="close">
                   <PanelLeftClose size={17} />
-                  <p className="text-md">Condense</p>
+                  <p className="text-md font-bold">Condense</p>
                 </motion.span>
               )}
             </AnimatePresence>
