@@ -280,19 +280,21 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
       background: C.navBg,
       gap: 30,
       backdropFilter: "blur(12px)",
-      // borderBottom: `1px solid ${C.line}`,
       transition: "background 0.4s, border-color 0.4s",
     }}>
-      <Link to="/" className="w-[33%]" style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 16, textDecoration: "none", color: C.text, transition: "color 0.4s" }}>
-        <div style={{ width: 38, height: 38, background: C.lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 900, color: C.bg, transition: "background 0.4s" }}>
+      <Link 
+        to="/" 
+        className="w-[33%] flex items-center gap-[10px] font-bold text-[12px] md:text-[16px] no-underline transition-colors duration-[400ms]"
+        style={{ color: C.text }}
+      >
+        <div 
+          className="w-[38px] h-[38px] flex items-center justify-center text-[16px] font-black transition-colors duration-[400ms]"
+          style={{ background: C.lime, color: C.bg }}
+        >
           <img src="/jellyfish.png" alt="icon" className="w-6" />
         </div>
         TAP-TIP-TUP
       </Link>
-{/* 
-      <p className="italic">
-       PLATFORM DONATE MADE WITH FROM INDONESIA
-      </p> */}
 
       <div className="flex w-[33%] justify-end items-center gap-9">
 
