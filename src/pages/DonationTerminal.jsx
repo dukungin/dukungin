@@ -6,8 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../lib/axiosInstance';
 
-const fetchLogs = async ({ streamer = 'all', limit = 200, status = '' }) => {
-  const params = new URLSearchParams({ streamer, limit, status });
+const fetchLogs = async ({ streamer = 'all', limit = 200, status = '', startDate = '', endDate = '' }) => {
+  const params = new URLSearchParams({ 
+    streamer, 
+    limit, 
+    status,
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate })
+  });
   return (await api.get(`/api/midtrans/admin/donation-logs?${params}`)).data;
 };
 
@@ -132,6 +138,8 @@ const DonationTerminal = () => {
   const prevIdsRef = useRef(new Set());
   const bottomRef = useRef(null);
   const [autoScroll, setAutoScroll] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const { data: streamersData } = useQuery({
     queryKey: ['adminStreamersList'],
@@ -140,11 +148,17 @@ const DonationTerminal = () => {
   });
 
   const { data, isLoading, dataUpdatedAt, refetch, isFetching } = useQuery({
-    queryKey: ['adminDonationLogs', selectedStreamer, limit, statusFilter],
-    queryFn: () => fetchLogs({ streamer: selectedStreamer, limit, status: statusFilter }),
+    queryKey: ['adminDonationLogs', selectedStreamer, limit, statusFilter, startDate, endDate],
+    queryFn: () => fetchLogs({ 
+        streamer: selectedStreamer, 
+        limit, 
+        status: statusFilter,
+        startDate,
+        endDate
+    }),
     refetchInterval: autoRefresh ? 8000 : false,
     staleTime: 4000,
-  });
+    });
 
   const donations = (data?.donations || []).filter(d =>
     !searchDonor || d.donorName?.toLowerCase().includes(searchDonor.toLowerCase())
@@ -290,6 +304,45 @@ const DonationTerminal = () => {
               padding: '5px 10px', outline: 'none', width: 160,
             }}
           />
+        </div>
+
+        {/* Date Range Filter */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontSize: 10, color: '#4b5563', letterSpacing: '0.1em' }}>FROM:</span>
+        <input
+            type="date"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+            style={{
+            background: '#111827', border: '1px solid #374151',
+            color: '#e2e8f0', fontFamily: mono, fontSize: 12,
+            padding: '5px 8px', outline: 'none'
+            }}
+        />
+        
+        <span style={{ fontSize: 10, color: '#4b5563', letterSpacing: '0.1em' }}>TO:</span>
+        <input
+            type="date"
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+            style={{
+            background: '#111827', border: '1px solid #374151',
+            color: '#e2e8f0', fontFamily: mono, fontSize: 12,
+            padding: '5px 8px', outline: 'none'
+            }}
+        />
+
+        {(startDate || endDate) && (
+            <button 
+            onClick={() => { setStartDate(''); setEndDate(''); }}
+            style={{
+                padding: '5px 10px', fontSize: 10, fontWeight: 700,
+                background: '#991b1b', color: '#fda4af', border: 'none', cursor: 'pointer'
+            }}
+            >
+            CLEAR
+            </button>
+        )}
         </div>
 
         {/* Limit */}
