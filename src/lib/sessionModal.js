@@ -1,6 +1,11 @@
 let isShowing = false;
 
 export const showSessionExpiredModal = () => {
+  const path = window.location.pathname;
+
+  const isOverlayPage = path.startsWith('/overlay') || path.startsWith('/widget');
+  if (isOverlayPage) return; // ← tambah ini
+
   if (isShowing) return;
   isShowing = true;
 

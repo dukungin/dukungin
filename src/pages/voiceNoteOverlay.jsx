@@ -329,6 +329,20 @@ const VoiceNoteOverlay = () => {
 
   const anim = animVariants[animation] || animVariants.bounce;
 
+  if (!config) return (
+    <div style={{
+      width: '100vw', height: '100vh',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      background: 'transparent', gap: 12,
+      color: 'rgba(255,255,255,0.5)',
+      fontFamily: 'monospace',
+    }}>
+      <span style={{ fontSize: 32 }}>📶</span>
+      <span style={{ fontSize: 13 }}>Menghubungkan...</span>
+    </div>
+  );
+
   return (
     <div style={{
       width: '100vw', height: '100vh',
