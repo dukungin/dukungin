@@ -28,7 +28,7 @@ const getTheme = (dark) => ({
   heading:          dark ? '#ffffff'                       : '#1e1b4b',
   subtext:          dark ? 'white'                       : '#64748b',
   label:            dark ? '#818cf8'                       : '#4f46e5',
-  inputText:        dark ? '#1e1b4b'                       : '#1e1b4b',
+  inputText:        dark ? 'white'                       : '#1e1b4b',
   iconDefault:      dark ? '#94a3b8'                       : '#94a3b8',
   switchText:       dark ? 'white'                       : '#64748b',
   switchLink:       dark ? '#818cf8'                       : '#4f46e5',

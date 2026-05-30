@@ -123,7 +123,7 @@ export const PollManager = ({ overlayToken, username }) => {
         <div className="bg-white dark:bg-slate-900 rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-green-50 dark:bg-green-950/30">
             <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 bg-green-500 rounded-none animate-pulse" />
+              <span className="w-2.5 h-2.5 bg-green-500 rounded-none" />
               <span className="font-black text-green-700 dark:text-green-400 text-sm uppercase tracking-widest">Poll Aktif</span>
             </div>
             <div className="flex gap-2">

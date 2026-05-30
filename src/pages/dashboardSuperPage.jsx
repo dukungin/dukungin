@@ -207,16 +207,16 @@ export const DashboardSuperPage = () => {
 
         {/* Pending Withdrawals Alert */}
         <motion.div {...staggerChild(11)} className="w-full bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6 flex justify-center md:items-center text-center flex-col">
-          <div className="flex justify-center items-center gap-2 pt-0 mb-5">
+          {/* <div className="flex justify-center items-center gap-2 pt-0 mb-5">
             <div>
               <p className="font-black text-sm text-slate-900 dark:text-white">Pending Withdraw</p>
             </div>
-          </div>
+          </div> */}
 
           <div className="w-full flex-1 flex flex-col items-center justify-center gap-4">
-            <div className="w-full relative">
+            <div className="w-full h-full flex justify-center items-center relative">
               <div
-                className="w-full md:w-28 h-28 rounded-none border-4 flex items-center justify-center"
+                className="w-full h-full md:py-4 py-6 rounded-none border-[3.5px] flex items-center justify-center"
                 style={{
                   borderColor: stats?.pendingWithdrawals > 0 ? '#ef4444' : '#22c55e',
                   background: stats?.pendingWithdrawals > 0 ? '#ef444410' : '#22c55e10',
@@ -229,23 +229,23 @@ export const DashboardSuperPage = () => {
                   >
                     {fmt(stats?.pendingWithdrawals)}
                   </p>
-                  <p className="text-[10px] text-slate-500 font-black uppercase tracking-wider mt-1">request</p>
+                  <p className="mt-4 text-[10px] text-slate-500 w-max font-black uppercase tracking-wider mt-1">request penarikan</p>
                 </div>
               </div>
             </div>
-            <p className="text-xs text-slate-500 font-medium text-center">
+            {/* <p className="text-xs text-slate-500 font-medium text-center">
               {stats?.pendingWithdrawals > 0
                 ? 'Segera proses permintaan penarikan'
                 : 'Semua penarikan sudah diproses'}
-            </p>
+            </p> */}
           </div>
-
+{/* 
           {stats?.pendingWithdrawals > 0 && (
             <div className="mt-4 hidden md:flex items-center gap-2 px-4 py-2.5 bg-red-500/10 border border-red-500/20 rounded-none">
               <Clock size={12} className="text-red-400 flex-shrink-0" />
               <p className="text-[11px] text-red-400 font-bold">Buka tab "Admin" untuk memproses</p>
             </div>
-          )}
+          )} */}
         </motion.div>
 
         {/* Donasi Terbaru */}

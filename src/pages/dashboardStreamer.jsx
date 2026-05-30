@@ -3499,7 +3499,7 @@ const handleChangePin = async () => {
                         <div className="block text-[10px] font-black bg-transparent w-max text-white mb-2 uppercase tracking-widest px-0">{label}</div>
                         <div className="flex gap-3">
                           <input readOnly value={url} className="flex-1 bg-transparent font-mono text-sm text-blue-600 dark:text-blue-400 font-bold outline-none overflow-hidden text-ellipsis" />
-                          <button onClick={() => copyToClipboard(url)} className="text-slate-400 hover:text-blue-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
+                          <button onClick={() => copyToClipboard(url)} className="text-white hover:text-blue-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
                         </div>
                       </div>
                     ))}
@@ -3538,8 +3538,8 @@ const handleChangePin = async () => {
                               <span className="font-black text-slate-700 dark:text-slate-200 text-sm">{label}</span>
                               <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold">{size}</span>
                             </div>
-                            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{desc}</p>
-                            <p className="text-[10px] font-mono text-blue-500 dark:text-blue-400 truncate mt-0.5">{widgetUrl}</p>
+                            <p className="text-sm text-slate-400 dark:text-slate-500 font-medium truncate">{desc}</p>
+                            <p className="text-sm truncate max-w-[90%] font-mono text-blue-500 dark:text-blue-400 truncate mt-0.5">{widgetUrl}</p>
                           </div>
                           <button onClick={() => copyToClipboard(widgetUrl, label)} className="cursor-pointer active:scale-[0.97] p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-blue-800 hover:text-blue-300 text-slate-300 rounded-none transition-all flex-shrink-0">
                             <Copy size={15} />
