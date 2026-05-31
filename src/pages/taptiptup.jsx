@@ -1010,6 +1010,7 @@ function SharePromo({ C }) {
 ───────────────────────────────────────── */
 export default function TapTipTup() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // Inisialisasi dari localStorage atau preferensi sistem
   const [isDark, setIsDark] = useState(() => {
@@ -1021,6 +1022,19 @@ export default function TapTipTup() {
   });
 
   const C = isDark ? THEMES.dark : THEMES.light;
+
+  // Modal Intro Logic
+  useEffect(() => {
+    const hasSeenIntro = localStorage.getItem("hasSeenIntro");
+    if (!hasSeenIntro) {
+      setShowModal(true);
+    }
+  }, []);
+
+  const closeModal = () => {
+    setShowModal(false);
+    localStorage.setItem("hasSeenIntro", "true");
+  };
 
   function handleToggleTheme() {
     setIsDark(prev => {
@@ -1052,6 +1066,124 @@ export default function TapTipTup() {
       <SharePromo C={C} />   {/* ← tambah di sini */}
       {/* <CTA C={C} isDark={isDark} /> */}
       <Footer C={C} />
+
+      {/* ==================== INTRO MODAL ==================== */}
+      {showModal && (
+        <div style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0,0,0,0.85)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 9999,
+          padding: "20px",
+        }}>
+          <div style={{
+            background: C.bg2,
+            border: `1px solid ${C.line}`,
+            borderRadius: "16px",
+            maxWidth: "860px",
+            width: "100%",
+            overflow: "hidden",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+          }}>
+            {/* Header Modal */}
+            <div style={{
+              padding: "20px 24px",
+              borderBottom: `1px solid ${C.line}`,
+              display: "flex",
+              justifyContent: "space-center",
+              alignItems: "center",
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: "18px", width: '100%', fontWeight: 700, color: C.text, textAlign: 'center' }}>
+                Selamat Datang di TapTipTup
+              </div>
+              {/* <button
+                onClick={closeModal}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: "28px",
+                  color: C.muted,
+                  cursor: "pointer",
+                  lineHeight: 1,
+                }}
+              >
+                ×
+              </button> */}
+            </div>
+
+            {/* Video */}
+            <div style={{ padding: "20px 20px 0" }}>
+              <video
+                src="./ttt.mp4"
+                controls
+                autoPlay
+                muted
+                loop
+                style={{
+                  width: "100%",
+                  borderRadius: "12px",
+                  background: "#000",
+                  height: '40vh'
+                }}
+              />
+            </div>
+
+            {/* Content */}
+            <div style={{
+              textAlign: "center",
+              padding: "32px 40px 40px",
+            }}>
+              <h2 style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "clamp(24px, 5vw, 48px)",
+                lineHeight: 1.1,
+                marginBottom: "16px",
+                color: C.text,
+              }}>
+                Ubah Streaming Kamu
+                Menjadi <span style={{ color: C.lime }}>Cuan</span>
+              </h2>
+
+              <p style={{
+                fontSize: "15.5px",
+                lineHeight: 1.7,
+                color: C.muted,
+                maxWidth: "580px",
+                margin: "0 auto",
+              }}>
+                Platform donasi lokal terbaik untuk streamer Indonesia. 
+                Potongan hanya 2.5%
+              </p>
+
+              <button
+                onClick={closeModal}
+                style={{
+                  marginTop: "32px",
+                  padding: "14px 42px",
+                  background: C.lime,
+                  color: C.bg,
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+                onMouseOver={(e) => e.currentTarget.style.opacity = "0.9"}
+                onMouseOut={(e) => e.currentTarget.style.opacity = "1"}
+              >
+                Mulai Sekarang
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
