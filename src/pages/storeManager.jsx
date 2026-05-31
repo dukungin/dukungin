@@ -73,7 +73,7 @@ const StoreManager = ({ overlayToken }) => {
 
   return (
     <div className="space-y-6 pb-10">
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-none border border-slate-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-none border border-slate-200 dark:border-slate-700">
         <div className="flex items-center gap-4">
             <div className="bg-rose-500 p-3 rounded-none text-white shadow-lg"><StoreIcon size={20} /></div>
             <div>
@@ -92,7 +92,7 @@ const StoreManager = ({ overlayToken }) => {
 
         <div className="mt-8">
           {products.map((p, i) => (
-            <div key={i} className="border-2 border-slate-200 dark:border-slate-700 p-6 py-4.5 bg-slate-50 dark:bg-slate-800 rounded-none">
+            <div key={i} className="md:border-2 border-slate-200 md:dark:border-slate-700 p-0 md:p-6 md:py-4.5 md:bg-slate-50 md:dark:bg-slate-800 rounded-none">
               {/* <div className="flex justify-between mb-4">
                 <button onClick={() => removeProduct(i)} className="text-red-500 hover:text-red-700">
                   <Trash2 size={20} />

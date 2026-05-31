@@ -804,7 +804,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
         ))}
       </div>
       {mode === 'preset' && (
-        <div className="grid grid-cols-3 uppercase md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 uppercase md:grid-cols-4 gap-2">
           <button onClick={() => onChange('')}
             className={`cursor-pointer active:scale-[0.97] flex items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${!value ? 'border-slate-600 bg-slate-800 text-white shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
             <span className="text-lg">🔇</span><span className='text-xs md:text-sm uppercase'>Tanpa Suara</span>
@@ -917,11 +917,11 @@ const LeaderboardCard = ({ stats }) => {
   const medals = ['🥇', '🥈', '🥉'];
   return (
     <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none pb-1.5 shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
-      <div className="px-6 py-5 dark:border-slate-800 flex items-center gap-3">
+      <div className="px-4 md:px-6 py-5 dark:border-slate-800 flex items-center gap-3">
         <div className="w-9 h-9 bg-amber-500 rounded-none flex items-center justify-center text-lg">🏆</div>
         <div><p className="font-black text-slate-800 dark:text-slate-100">Leaderboard Donor</p><p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Semua waktu</p></div>
       </div>
-      <div className="py-0 px-4 space-y-3">
+      <div className="py-0 md:px-2 space-y-3">
         {topDonors.slice(0, 3).map((donor, i) => (
           <motion.div key={donor.name} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}
             className={`flex items-center gap-4 p-4 dark:border-slate-100/10 border-t border-slate-200 dark:text-white text-black`}>
@@ -981,7 +981,7 @@ const AdminWithdrawalPage = () => {
           </div>
         </div>
       </div>
-      <div className="flex px-6 md:px-0 gap-2 flex-wrap">
+      <div className="flex px-5 md:px-0 gap-2 flex-wrap">
         {[{ val: 'PENDING', label: '⏳ Pending' }, { val: 'COMPLETED', label: '✅ Selesai' }, { val: 'FAILED', label: '❌ Ditolak' }, { val: '', label: '📋 Semua' }].map(f => (
           <button key={f.val} onClick={() => setStatusFilter(f.val)}
             className={`cursor-pointer active:scale-[0.98] px-4 py-2 rounded-none font-black text-sm transition-all ${statusFilter === f.val ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700'}`}>
@@ -1080,13 +1080,13 @@ const AdminWithdrawalPage = () => {
 
 const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly = false, mediaOnly = false }) => {
   return (
-    <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-5 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-8">
+    <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-3 md:space-y-8">
       <SectionHeader
         icon={<Timer size={22} />}
         title={mediaOnly ? 'Durasi Media share' : alertOnly ? 'Durasi Alert' : 'Pengaturan Durasi'}
         color="bg-amber-500"
       />
-      <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+      <p className="md:flex hidden text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
         Atur berapa lama {mediaOnly ? 'media share' : alertOnly ? 'alert' : 'alert'} muncul berdasarkan nominal donasi.
       </p>
 
@@ -2106,7 +2106,7 @@ const smoothInner = (
     })();
 
     return (
-    <div className="sticky top-26 space-y-3">
+    <div className="sticky md:p-0 p-4 md:bg-transparent bg-white/30 dark:bg-slate-900/60 md:backdrop-blur-sm rounded-none shadow-sm md:border-none border border-slate-100 dark:border-slate-800 top-26 space-y-3">
       <FullscreenPreview />
 
       {/* Tab switcher */}
@@ -2267,7 +2267,7 @@ const HistoryPage = () => {
           { label: 'Hari Ini', value: statsLoading ? '...' : maskAmount(stats?.today?.total || 0), sub: `${stats?.today?.count || 0} donasi`, color: 'bg-purple-500', icon: '⚡' },
           { label: 'Top Donatur', value: statsLoading ? '...' : (stats?.topDonors?.[0]?.name || '-'), sub: stats?.topDonors?.[0] ? maskAmount(stats.topDonors[0].totalAmount) : 'Belum ada', color: 'bg-amber-500', icon: '🏆' },
         ].map((card) => (
-          <div key={card.label} className={`${card.color} rounded-none p-6 text-white relative overflow-hidden`}>
+          <div key={card.label} className={`${card.color} rounded-none p-4 md:p-6 text-white relative overflow-hidden`}>
             <div className="absolute top-3 right-4 text-2xl opacity-20">{card.icon}</div>
             <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">{card.label}</p>
             <p className="text-xl font-black leading-tight">{card.value}</p>
@@ -2279,7 +2279,7 @@ const HistoryPage = () => {
       {stats && <LeaderboardCard stats={stats} />}
 
       <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 md:px-10 py-5 border-b border-slate-100 dark:border-slate-800 gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 md:px-6 py-5 border-b border-slate-100 dark:border-slate-800 gap-4">
           <div>
             <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Riwayat Donasi</p>
           </div>
@@ -2294,7 +2294,7 @@ const HistoryPage = () => {
         </div>
 
         {historyTab === 'received' && (
-          <div className="px-6 md:px-10 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-3">
+          <div className="px-4 md:px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-3">
             <div className="flex gap-1.5">
               <button onClick={() => {
                 const next = !showAmounts;
@@ -2317,12 +2317,12 @@ const HistoryPage = () => {
                 </button>
               ))}
             </div>
-            <div className="ml-auto flex items-center gap-2 text-xs text-green-500 font-bold">
+            {/* <div className="ml-auto flex items-center gap-2 text-xs text-green-500 font-bold">
               <span className="w-2 h-2 bg-green-400 rounded-none animate-pulse" /> Auto 15s
               <button onClick={() => refetch()} disabled={isFetching} className="ml-1 text-slate-400 hover:text-blue-600">
                 <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
               </button>
-            </div>
+            </div> */}
           </div>
         )}
 
@@ -2337,13 +2337,13 @@ const HistoryPage = () => {
                 <table className="w-full text-left min-w-[700px]">
                   <thead>
                     <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                      <th className="px-6 md:px-8 py-6">Donatur</th>
-                      <th className="px-6 md:px-8 py-6">Nominal</th>
-                      <th className="px-6 md:px-8 py-6">Pesan</th>
-                      <th className="px-6 md:px-8 py-6 text-center">Replay</th>
-                      <th className="px-6 md:px-8 py-6">Media</th>
-                      <th className="px-6 md:px-8 py-6">Status</th>
-                      <th className="px-6 md:px-8 py-6">Waktu</th>
+                      <th className="px-4 md:px-8 py-6">Donatur</th>
+                      <th className="px-4 md:px-8 py-6">Nominal</th>
+                      <th className="px-4 md:px-8 py-6">Pesan</th>
+                      <th className="px-4 md:px-8 py-6 text-center">Replay</th>
+                      <th className="px-4 md:px-8 py-6">Media</th>
+                      <th className="px-4 md:px-8 py-6">Status</th>
+                      <th className="px-4 md:px-8 py-6">Waktu</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -2354,24 +2354,24 @@ const HistoryPage = () => {
                         const isReplaying = replayLoading.has(item._id);
                         return (
                           <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
-                            <td className="px-6 md:px-8 py-5"><p className="font-black text-slate-700 dark:text-slate-200 text-sm">{item.donorName || 'Anonim'}</p></td>
-                            <td className="px-6 md:px-8 py-5"><p className={`font-black ${showAmounts ? 'text-emerald-400' : 'text-slate-300'}`}>{maskAmount(item.amount)}</p></td>
-                            <td className="px-6 md:px-8 py-5 max-w-[220px]"><p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic line-clamp-2">{item.message || '-'}</p></td>
-                            <td className="px-6 md:px-8 py-5 text-center">
+                            <td className="px-5 md:px-8 py-5"><p className="font-black text-slate-700 dark:text-slate-200 text-sm">{item.donorName || 'Anonim'}</p></td>
+                            <td className="px-5 md:px-8 py-5"><p className={`font-black ${showAmounts ? 'text-emerald-400' : 'text-slate-300'}`}>{maskAmount(item.amount)}</p></td>
+                            <td className="px-5 md:px-8 py-5 max-w-[220px]"><p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic line-clamp-2">{item.message || '-'}</p></td>
+                            <td className="px-5 md:px-8 py-5 text-center">
                               <button onClick={() => replayDonation(item._id)} disabled={isReplaying}
                                 className={`cursor-pointer active:scale-[0.99] inline-flex items-center gap-1.5 px-4 py-2 rounded-none text-xs font-black transition-all ${isReplaying ? 'text-slate-400 cursor-not-allowed' : 'text-blue-500 hover:text-blue-300'}`}>
                                 {isReplaying ? <><Loader2 size={14} className="animate-spin" />Replay...</> : <><Video size={15} />Replay</>}
                               </button>
                             </td>
-                            <td className="px-6 md:px-8 py-5">
+                            <td className="px-5 md:px-8 py-5">
                               {item.mediaUrl ? (
                                 <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline flex items-center gap-1 text-sm"><ImageIcon size={14} /> Lihat</a>
                               ) : <span className="text-slate-300 text-xs">-</span>}
                             </td>
-                            <td className="px-6 md:px-8 py-5">
+                            <td className="px-5 md:px-8 py-5">
                               <span className={`px-3 py-1 rounded-none text-[10px] font-black ${item.status === 'PAID' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>{item.status}</span>
                             </td>
-                            <td className="px-6 md:px-8 py-5 text-[10px] text-slate-400 whitespace-nowrap">{formatDate(item.createdAt)}</td>
+                            <td className="px-5 md:px-8 py-5 text-[10px] text-slate-400 whitespace-nowrap">{formatDate(item.createdAt)}</td>
                           </tr>
                         );
                       })
@@ -2384,7 +2384,7 @@ const HistoryPage = () => {
             <table className="w-full text-left min-w-[600px]">
               <thead>
                 <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                  {['Kepada', 'Jumlah', 'Pesan', 'Status', 'Waktu'].map(h => <th key={h} className="px-6 md:px-8 py-6">{h}</th>)}
+                  {['Kepada', 'Jumlah', 'Pesan', 'Status', 'Waktu'].map(h => <th key={h} className="px-5 md:px-8 py-6">{h}</th>)}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -2395,13 +2395,13 @@ const HistoryPage = () => {
                 ) : (
                   (sentData?.donations || []).map((item) => (
                     <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
-                      <td className="px-6 md:px-8 py-5"><p className="font-black text-slate-700 dark:text-slate-200">@{item.userId?.username || item.username || '-'}</p></td>
-                      <td className="px-6 md:px-8 py-5 font-black text-blue-600">Rp {Number(item.amount).toLocaleString('id-ID')}</td>
-                      <td className="px-6 md:px-8 py-5 max-w-[250px]"><p className="text-slate-500 dark:text-slate-400 text-sm italic truncate">{item.message || '-'}</p></td>
-                      <td className="px-6 md:px-8 py-5">
+                      <td className="px-5 md:px-8 py-5"><p className="font-black text-slate-700 dark:text-slate-200">@{item.userId?.username || item.username || '-'}</p></td>
+                      <td className="px-5 md:px-8 py-5 font-black text-blue-600">Rp {Number(item.amount).toLocaleString('id-ID')}</td>
+                      <td className="px-5 md:px-8 py-5 max-w-[250px]"><p className="text-slate-500 dark:text-slate-400 text-sm italic truncate">{item.message || '-'}</p></td>
+                      <td className="px-5 md:px-8 py-5">
                         <span className={`px-3 py-1.5 rounded-none text-[10px] font-black ${item.status === 'PAID' ? 'bg-green-100 text-green-600 dark:bg-green-950/40 dark:text-green-400' : 'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400'}`}>{item.status}</span>
                       </td>
-                      <td className="px-6 md:px-8 py-5 text-[10px] text-slate-400 dark:text-slate-500">{formatDate(item.createdAt)}</td>
+                      <td className="px-5 md:px-8 py-5 text-[10px] text-slate-400 dark:text-slate-500">{formatDate(item.createdAt)}</td>
                     </tr>
                   ))
                 )}
@@ -2415,8 +2415,8 @@ const HistoryPage = () => {
                 ← Sebelumnya
               </button>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-400 dark:text-slate-500">Halaman <span className="text-blue-600 dark:text-blue-400 font-black">{page}</span> dari {pagination.totalPages}</span>
-                <span className="text-xs text-slate-300 dark:text-slate-600">({pagination.total} total donasi)</span>
+                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1"><span className='md:flex hidden'>Halaman</span> <span className="text-blue-600 dark:text-blue-400 font-black">{page}</span> dari {pagination.totalPages}</span>
+                <span className="md:flex hidden text-xs text-slate-300 dark:text-slate-600">({pagination.total} total donasi)</span>
               </div>
               <button onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))} disabled={page === pagination.totalPages}
                 className="px-4 py-2 rounded-none bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-100 dark:hover:bg-slate-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
@@ -3070,17 +3070,17 @@ const handleChangePin = async () => {
   const SoundSection = () => (
     <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
       <SectionHeader icon={<Music size={20} />} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-blue-500" />
-      <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-none border border-slate-200 dark:border-slate-700">
+      <div className="md:p-5 md:bg-slate-50 md:dark:bg-slate-800/50 rounded-none md:border border-slate-200 dark:border-slate-700">
         <h4 className="font-black text-sm text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">📢 Suara Default (Semua Donasi)</h4>
         <SoundPicker label="Pilih suara default" value={settings.soundUrl || ''} onChange={v => upd('soundUrl', v)} />
       </div>
       <SoundTiersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
-      <div className="pt-8 border-t border-slate-200 dark:border-slate-700">
+      <div className="pt-2 md:pt-8 md:border-t border-slate-200 dark:border-slate-700">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 w-11 h-11 bg-emerald-500 rounded-none flex items-center justify-center text-white shadow-lg"><Music size={20} /></div>
           <div>
             <h4 className="text-xl font-black text-slate-800 dark:text-white">Quick Soundboard</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ke streamer</p>
+            <p className="md:flex hidden text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ke streamer</p>
           </div>
         </div>
         <AudioManager
@@ -3463,7 +3463,7 @@ const handleChangePin = async () => {
                   </div>
 
                   {/* Preset Warna Siap Pakai */}
-                  <div className="md:col-span-2">
+                  <div className="md:col-span-2 px-4 md:bg-white/30 md:dark:bg-slate-900/60 backdrop-blur-sm border border-slate-100 dark:border-slate-800 md:py-6 py-4 md:px-6">
                     <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
                       Preset Warna Siap Pakai
                     </label>

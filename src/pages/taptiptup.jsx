@@ -123,54 +123,26 @@ function ThemeToggle({ isDark, onToggle, C }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      style={{
-        position: "relative",
-        width: 74,
-        height: 38,
-        borderRadius: 0,
-        border: `1px solid ${hov ? C.lime : C.line2}`,
-        background: isDark ? C.bg3 : C.lime,
-        cursor: "pointer",
-        transition: "all 0.3s cubic-bezier(0.34,1.56,0.64,1)",
-        flexShrink: 0,
-        padding: 0,
-      }}
+      className={`relative w-[60px] md:w-[74px] h-[32px] md:h-[38px] rounded-none border cursor-pointer transition-all duration-300 flex-shrink-0 p-0
+        ${isDark
+          ? 'bg-slate-800 border-slate-700 hover:border-[#fda4af]'
+          : 'bg-white border-[#fda4af] hover:border-[#fda4af]'
+        }`}
     >
-      {/* Track icons */}
-      <span style={{
-        position: "absolute",
-        left: 7,
-        top: "50%",
-        transform: "translateY(-50%)",
-        fontSize: 11,
-        opacity: isDark ? 0.5 : 0,
-        transition: "opacity 0.2s",
-        pointerEvents: "none",
-      }}>🌙</span>
-      <span style={{
-        position: "absolute",
-        right: 7,
-        top: "50%",
-        transform: "translateY(-50%)",
-        fontSize: 11,
-        opacity: isDark ? 0 : 0.8,
-        transition: "opacity 0.2s",
-        pointerEvents: "none",
-      }}>☀️</span>
+    {/* Moon icon */}
+    <span className={`absolute left-[7px] top-1/2 -translate-y-1/2 text-[11px] pointer-events-none transition-opacity duration-200 ${isDark ? 'opacity-50' : 'opacity-0'}`}>
+      🌙
+    </span>
 
-      {/* Thumb */}
-      <span style={{
-        position: "absolute",
-        top: 3.5,
-        left: isDark ? 3 : 35,
-        width: 32,
-        height: 28,
-        borderRadius: "0%",
-        background: isDark ? C.lime : C.bg,
-        transition: "left 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s",
-        display: "block",
-        boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
-      }} />
+    {/* Sun icon */}
+    <span className={`absolute right-[7px] top-1/2 -translate-y-1/2 text-[11px] pointer-events-none transition-opacity duration-200 ${isDark ? 'opacity-0' : 'opacity-80'}`}>
+      ☀️
+    </span>
+
+    {/* Thumb */}
+    <span className={`absolute top-[3.5px] w-[26px] md:w-[32px] h-[22px] md:h-[28px] rounded-none block shadow-[0_1px_4px_rgba(0,0,0,0.3)] transition-all duration-300
+      ${isDark ? 'left-[3px] bg-[#fda4af]' : 'left-[30px] bg-[#fda4af]'}`}
+    />
     </button>
   );
 }
@@ -208,7 +180,7 @@ function BtnMain({ children, href, style, C }) {
   return (
     <Link 
       to={href || "/"} 
-      className="w-[86vw] sm:w-auto text-center" // Tambahkan class ini
+      className="w-[92vw] md:w-auto text-center" // Tambahkan class ini
       style={{
         fontFamily: "'Space Grotesk', sans-serif",
         fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
@@ -276,7 +248,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 99,
       display: "flex", alignItems: "center", justifyContent: "space-between",
-      padding: "18px clamp(27px, 5vw, 40px)",
+      padding: "18px clamp(24px, 5vw, 0px)",
       background: C.navBg,
       gap: 30,
       backdropFilter: "blur(12px)",
@@ -288,12 +260,14 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
         style={{ color: C.text }}
       >
         <div 
-          className="w-[38px] h-[38px] flex items-center justify-center text-[16px] font-black transition-colors duration-[400ms]"
+          className="w-[32px] md:w-[38px] h-[32px] md:h-[38px] flex items-center justify-center text-[13px] md:text-[16px] font-black transition-colors duration-[400ms]"
           style={{ background: C.lime, color: C.bg }}
         >
-          <img src="/jellyfish.png" alt="icon" className="w-6" />
+          <img src="/jellyfish.png" alt="icon" className="w-5 md:w-6" />
         </div>
-        TAP-TIP-TUP <span className="md:flex hidden">FOR STREAMER</span>
+        <p className="relative flex item-center gap-1 md:top-0 top-[1.2px]">
+          TAP-TIP-TUP <span className="md:flex hidden">FOR STREAMER</span>
+        </p>
       </Link>
 
       <div className="flex w-[33%] justify-end items-center gap-9">
@@ -301,9 +275,9 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
         <div className="md:flex hidden mx-[5x]" style={{ color: C.line2 }}>|</div>
 
         <div className="flex items-center gap-5 md:gap-4">
-          <div style={{ display: "flex", gap: 14 }} className="hide-mobile">
+          <div style={{ display: "flex", gap: 14 }} className="hide-mobile h-[32px] md:h-[38px]">
             <Link to="/login" style={{
-              fontFamily: "'Space Grotesk',sans-serif", fontSize: 14, fontWeight: 600,
+              fontFamily: "'Space Grotesk',sans-serif", fontSize: 13, fontWeight: 600,
               letterSpacing: "0.05em", textTransform: "uppercase",
               padding: "6px 16px", background: C.lime, color: isDark ? 'black' : C.bg,
               border: `1px solid ${C.lime}`, textDecoration: "none", transition: "opacity 0.15s, background 0.4s",
@@ -364,7 +338,7 @@ function Hero({ C, isDark }) {
 
   return (
     <section 
-      className="hero-wrapper md:py-0 h-[62vh] md:h-[93vh] overflow-hidden relative" 
+      className="hero-wrapper md:py-0 min-h-[62vh] md:h-[93vh] overflow-hidden relative" 
       style={{ 
         display: "grid", 
         gridTemplateRows: "1fr auto", 
@@ -627,8 +601,12 @@ function Testimonials({ C }) {
   return (
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
       <div className="text-center justify-center items-center flex flex-col" style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
-        <Kicker C={C}>Kata Mereka</Kicker>
-        <BigTitle C={C}>SUDAH TERUJI OLEH STREAMER</BigTitle>
+         <div>
+          <BigTitle C={C}>SUDAH TERUJI OLEH STREAMER</BigTitle>
+        </div>
+        <p style={{ fontSize: 14, lineHeight: 1.75, color: C.muted, fontWeight: 400, maxWidth: '80%', transition: "color 0.4s" }}>
+          Proses setup yang dirancang seminimal mungkin
+        </p>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)" }}
         className="testimonials-grid">
@@ -915,7 +893,7 @@ function SharePromo({ C }) {
   }
 
   return (
-    <section style={{ borderBottom: `1px solid ${C.line}` }}>
+    <section className="md:block hidden" style={{ borderBottom: `1px solid ${C.line}` }}>
       {/* Header */}
       <div className="text-center flex flex-col justify-center items-center"
         style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}` }}>

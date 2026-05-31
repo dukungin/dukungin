@@ -121,7 +121,7 @@ export const PollManager = ({ overlayToken, username }) => {
       {/* Active Poll */}
       {activePoll ? (
         <div className="bg-white dark:bg-slate-900 rounded-none shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-green-50 dark:bg-green-950/30">
+          <div className="flex items-center justify-between px-6 py-3 md:py-4 border-b border-slate-100 dark:border-slate-800 bg-green-50 dark:bg-green-950/30">
             <div className="flex items-center gap-3">
               <span className="w-2.5 h-2.5 bg-green-500 rounded-none" />
               <span className="font-black text-green-700 dark:text-green-400 text-sm uppercase tracking-widest">Poll Aktif</span>
@@ -246,7 +246,7 @@ export const PollManager = ({ overlayToken, username }) => {
             <button
               onClick={handleCreate}
               disabled={createMutation.isPending}
-              className="cursor-pointer active:scale-[0.97] w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+              className="cursor-pointer active:scale-[0.97] w-full py-3 md:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
               <Vote size={16} /> {createMutation.isPending ? 'Membuat...' : 'Mulai Poll Sekarang'}
             </button>
           </motion.div>
@@ -458,7 +458,7 @@ export const SubathonManager = ({ overlayToken }) => {
   };
 
   if (isLoading || !localTimer) {
-    return <div className="text-slate-400 dark:text-slate-500 text-sm font-bold animate-pulse py-4">Memuat timer...</div>;
+    return <div className="text-slate-400 dark:text-slate-500 text-sm font-bold animate-pulse py-3 md:py-4">Memuat timer...</div>;
   }
 
   const isRunning = localTimer.isRunning;
@@ -502,7 +502,7 @@ export const SubathonManager = ({ overlayToken }) => {
             : startMutation.mutate()
           }
           disabled={startMutation.isPending || pauseMutation.isPending}
-          className={`cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-4 rounded-none font-black text-sm transition-all disabled:opacity-60 ${
+          className={`cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-3 md:py-4 rounded-none font-black text-sm transition-all disabled:opacity-60 ${
             isRunning ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'
           }`}>
           {isRunning ? <Pause size={20} /> : <Play size={20} />}
@@ -511,14 +511,14 @@ export const SubathonManager = ({ overlayToken }) => {
         <button
           onClick={() => { if (window.confirm('Reset timer ke waktu awal?')) resetMutation.mutate(); }}
           disabled={resetMutation.isPending}
-          className="cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-4 rounded-none font-black text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all disabled:opacity-60">
+          className="cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-3 md:py-4 rounded-none font-black text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all disabled:opacity-60">
           <RotateCcw size={20} />
           Reset
         </button>
         <button
           onClick={() => addTimeMutation.mutate(manualAdd)}
           disabled={addTimeMutation.isPending}
-          className="cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-4 rounded-none font-black text-sm bg-blue-600 hover:bg-blue-700 text-white transition-all disabled:opacity-60">
+          className="cursor-pointer active:scale-[0.97] flex justify-center md:flex-col items-center gap-2 py-3 md:py-4 rounded-none font-black text-sm bg-blue-600 hover:bg-blue-700 text-white transition-all disabled:opacity-60">
           <Plus size={20} />
           +{formatSeconds(manualAdd)}
         </button>
@@ -541,7 +541,7 @@ export const SubathonManager = ({ overlayToken }) => {
       </div>
 
       {/* Konfigurasi */}
-      <div className="bg-white dark:bg-slate-900 rounded-none p-6 border border-slate-100 dark:border-slate-800 space-y-5">
+      <div className="md:bg-white md:dark:bg-slate-900 rounded-none md:p-6 md:border border-slate-100 dark:border-slate-800 space-y-5">
         <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Konfigurasi Timer</p>
 
         <div className="space-y-1.5">
@@ -699,8 +699,8 @@ export const SubathonManager = ({ overlayToken }) => {
         </div>
 
         {overlayToken && (
-          <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700">
-            <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Widget URL untuk OBS (360×200px)</p>
+          <div className="md:mt-0 mt-8 md:bg-slate-100 md:dark:bg-slate-800 md:p-4 rounded-none md:border border-slate-200 dark:border-slate-700">
+            <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest md:mb-2">Widget URL untuk OBS (360×200px)</p>
             <div className="flex gap-2">
               <input readOnly value={`${window.location.origin}/widget/${overlayToken}/subathon`}
                 className="flex-1 bg-transparent font-mono text:xs text-blue-600 dark:text-blue-400 font-bold outline-none truncate" />
@@ -717,7 +717,7 @@ export const SubathonManager = ({ overlayToken }) => {
         )}
 
         <button onClick={save} disabled={configMutation.isPending}
-          className={`cursor-pointer active:scale-[0.97] w-full py-3.5 rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 ${
+          className={`cursor-pointer active:scale-[0.97] w-full py-3 md:py-3.5 rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 ${
             saved ? 'bg-green-500 text-white' : 'bg-slate-900 dark:bg-slate-100 hover:bg-blue-600 dark:hover:bg-blue-500 text-white dark:text-slate-900 dark:hover:text-white'
           } disabled:opacity-70`}>
           {saved ? <><CheckCircle2 size={16} /> Tersimpan!</> : configMutation.isPending ? 'Menyimpan...' : <><Save size={16} /> Simpan Konfigurasi</>}
@@ -760,12 +760,12 @@ export const LeaderboardSettings = ({ overlayToken }) => {
 
   const upd = (k, v) => setLocal(s => ({ ...s, [k]: v }));
 
-  if (isLoading || !local) return <div className="text-slate-400 dark:text-slate-500 text-sm animate-pulse py-4">Memuat...</div>;
+  if (isLoading || !local) return <div className="text-slate-400 dark:text-slate-500 text-sm animate-pulse py-3 md:py-4">Memuat...</div>;
 
   return (
     <div className="space-y-5">
       {/* Preview */}
-      <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-none p-6">
+      <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-none p-4 md:p-6">
         <div className="flex items-center gap-3 mb-5">
           <Trophy size={20} className="text-amber-400" />
           <span className="font-black text-slate-900 dark:text-slate-100 text-sm">Preview Leaderboard</span>
@@ -792,11 +792,11 @@ export const LeaderboardSettings = ({ overlayToken }) => {
       </div>
 
       {/* Pengaturan */}
-      <div className="bg-white dark:bg-slate-900 rounded-none p-6 border border-slate-100 dark:border-slate-800 space-y-5">
+      <div className="bg-white dark:bg-slate-900 rounded-none p-4 md:p-6 border border-slate-100 dark:border-slate-800 space-y-5">
 
         <div className="space-y-2">
           <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Periode Leaderboard</label>
-          <div className="grid md:grid-cols-2 gap-3">
+          <div className="grid md:grid-cols-2 gap-3 pt-1">
             {[
               { id: 'alltime', label: '⏳ Semua Waktu', desc: 'Total donasi sejak awal' },
               { id: 'today',   label: '📅 Hari Ini',    desc: 'Donasi hari ini saja' },
@@ -872,7 +872,7 @@ export const LeaderboardSettings = ({ overlayToken }) => {
         <button
           onClick={() => saveMutation.mutate(local)}
           disabled={saveMutation.isPending}
-          className={`cursor-pointer active:scale-[0.97] w-full py-4 rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 ${
+          className={`cursor-pointer active:scale-[0.97] w-full py-3 md:py-4 rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 ${
             saved ? 'bg-green-500 text-white' : 'bg-slate-900 dark:bg-slate-100 hover:bg-blue-600 dark:hover:bg-blue-500 text-white dark:text-slate-900 dark:hover:text-white'
           } disabled:opacity-70`}>
           {saved ? <><CheckCircle2 size={16} /> Tersimpan!</> : saveMutation.isPending ? 'Menyimpan...' : <><Save size={16} /> Simpan Pengaturan Leaderboard</>}
@@ -1035,7 +1035,7 @@ export const MilestonesManager = ({ overlayToken }) => {
   const remove = (i) => setLocal(list.filter((_, idx) => idx !== i));
   const upd    = (i, key, val) => setLocal(list.map((m, idx) => idx === i ? { ...m, [key]: val } : m));
 
-  if (isLoading) return <div className="text-slate-400 dark:text-slate-500 text-sm font-bold animate-pulse py-4">Memuat...</div>;
+  if (isLoading) return <div className="text-slate-400 dark:text-slate-500 text-sm font-bold animate-pulse py-3 md:py-4">Memuat...</div>;
 
   return (
     <div className="space-y-5">
@@ -1094,45 +1094,47 @@ export const MilestonesManager = ({ overlayToken }) => {
           </div>
         ))}
       </div>
-
-      <button
-        onClick={add}
-        className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 rounded-none font-black text-sm hover:border-green-400 dark:hover:border-green-600 hover:bg-green-50 dark:hover:bg-green-950/30 transition-all flex items-center justify-center gap-2">
-        <Plus size={16} /> Tambah Milestone
-      </button>
-
-      {list.length > 0 && (
+      
+      <div className='md:w-full w-[100vw] p-5 mx-auto space-y-3 bg-white dark:bg-slate-900 rounded-none shadow-sm border border-slate-100 dark:border-slate-800'>
         <button
-          onClick={() => mutation.mutate(list)}
-          disabled={mutation.isPending}
-          className="cursor-pointer active:scale-[0.97] w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
-          <Save size={16} /> {mutation.isPending ? 'Menyimpan...' : 'Simpan Milestone'}
+          onClick={add}
+          className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 rounded-none font-black text-sm hover:border-green-400 dark:hover:border-green-600 hover:bg-green-50 dark:hover:bg-green-950/30 transition-all flex items-center justify-center gap-2">
+          <Plus size={16} /> Tambah Milestone
         </button>
-      )}
 
-      {overlayToken && (
-        <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700">
-          <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Widget URL untuk OBS (420×200px)</p>
-          <div className="flex gap-2">
-            <input
-              readOnly
-              value={`${window.location.origin}/widget/${overlayToken}/milestones`}
-              className="flex-1 bg-transparent font-mono text-xs text-blue-600 dark:text-blue-400 font-bold outline-none truncate"
-            />
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(`${window.location.origin}/widget/${overlayToken}/milestones`);
-                setMlCopied(true);
-                setTimeout(() => setMlCopied(false), 2000);
-              }}
-              className={`cursor-pointer active:scale-[0.97] px-3 py-2 rounded-none text-xs font-black transition-all flex items-center gap-1.5 ${
-                mlCopied ? 'bg-green-500 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'
-              }`}>
-              {mlCopied ? <><CheckCircle2 size={12} /> Tersalin!</> : 'Salin'}
-            </button>
+        {list.length > 0 && (
+          <button
+            onClick={() => mutation.mutate(list)}
+            disabled={mutation.isPending}
+            className="cursor-pointer active:scale-[0.97] w-full py-3 md:py-4 bg-green-600 hover:bg-green-700 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+            <Save size={16} /> {mutation.isPending ? 'Menyimpan...' : 'Simpan Milestone'}
+          </button>
+        )}
+
+        {overlayToken && (
+          <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700">
+            <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Widget URL untuk OBS (420×200px)</p>
+            <div className="flex gap-2">
+              <input
+                readOnly
+                value={`${window.location.origin}/widget/${overlayToken}/milestones`}
+                className="flex-1 bg-transparent font-mono text-xs text-blue-600 dark:text-blue-400 font-bold outline-none truncate"
+              />
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/widget/${overlayToken}/milestones`);
+                  setMlCopied(true);
+                  setTimeout(() => setMlCopied(false), 2000);
+                }}
+                className={`cursor-pointer active:scale-[0.97] px-3 py-2 rounded-none text-xs font-black transition-all flex items-center gap-1.5 ${
+                  mlCopied ? 'bg-green-500 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }`}>
+                {mlCopied ? <><CheckCircle2 size={12} /> Tersalin!</> : 'Salin'}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
