@@ -142,8 +142,6 @@ export const SuggestionsAdmin = () => {
 
       {/* Header */}
       <div className="bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 from-blue-700 to-indigo-800  rounded-none p-5 text-white relative overflow-hidden">
-        <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/5 rounded-none" />
-        <div className="absolute -bottom-8 -left-8 w-20 h-20 bg-white/5 rounded-none" />
         <div className="relative z-10 flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
