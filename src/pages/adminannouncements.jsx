@@ -303,7 +303,7 @@ export const AdminAnnouncementsPage = () => {
   return (
     <div className="space-y-0 pb-8">
       {/* Header */}
-      <div className="bg-gradient-to-br from-blue-700 to-indigo-800 rounded-none p-5 md:p-6 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-blue-700 to-indigo-800 rounded-none p-4 md:p-5 md:p-6 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)', backgroundSize: '20px 20px' }} />
         <div className="relative md:flex items-start justify-between gap-4">
           <div>
@@ -345,13 +345,13 @@ export const AdminAnnouncementsPage = () => {
               className="relative w-full max-w-2xl min-h-screen bg-white dark:bg-slate-900 rounded-none shadow-2xl border border-slate-100 dark:border-slate-800 z-10"
               onClick={e => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center justify-between p-4 md:p-5 border-b border-slate-100 dark:border-slate-800">
                 <h3 className="font-black text-lg text-slate-800 dark:text-slate-100">
                   {editItem ? 'Edit Pengumuman' : 'Buat Pengumuman Baru'}
                 </h3>
                 <button onClick={closeForm} className="cursor-pointer text-slate-400 hover:text-slate-600 p-1"><X size={20} /></button>
               </div>
-              <div className="p-5">
+              <div className="p-4 md:p-5">
                 <AnnouncementForm initial={editItem} onClose={closeForm} onSuccess={handleSuccess} />
               </div>
             </motion.div>
@@ -388,7 +388,7 @@ export const AdminAnnouncementsPage = () => {
       </AnimatePresence>
 
       {/* Filters */}
-      <div className="gap-2 px-5 md:px-0 my-5">
+      <div className="gap-2 px-4 md:px-0 my-5">
         {/* Type filter */}
         <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-2">
           <button onClick={() => setTypeFilter('')}
@@ -443,7 +443,7 @@ export const AdminAnnouncementsPage = () => {
                 }`}
               >
                 <div className={`h-[3px] ${cfg.color}`} />
-                <div className="p-5">
+                <div className="p-4 md:p-5">
                   <div className="flex items-center gap-4">
                     {/* Icon */}
                     <div className={`w-9 h-9 rounded-none flex items-center justify-center flex-shrink-0 ${cfg.color} text-white`}>

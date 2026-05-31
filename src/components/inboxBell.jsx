@@ -305,7 +305,7 @@ export const InboxPage = () => {
   return (
     <div className="space-y-5 pb-8">
       {/* Header */}
-      <div className="bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 from-blue-700 to-indigo-800 rounded-none p-5 md:p-5 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 from-blue-700 to-indigo-800 rounded-none p-4 md:p-5 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 20% 80%, #3b82f6 0%, transparent 50%), radial-gradient(circle at 80% 20%, #6366f1 0%, transparent 50%)' }} />
         <div className="relative flex items-start justify-between gap-4">
           <div>
@@ -342,7 +342,7 @@ export const InboxPage = () => {
       </div>
 
       {/* Type filters */}
-      <div className="flex gap-2 flex-wrap px-5">
+      <div className="flex gap-2 flex-wrap px-4 md:px-5">
         <button onClick={() => setTypeFilter('')}
           className={`px-3 py-2 rounded-none text-[11px] font-black border transition-all cursor-pointer active:scale-[0.97] ${!typeFilter ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-transparent' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-300'}`}>
           Semua
@@ -389,7 +389,7 @@ export const InboxPage = () => {
 
                 <button
                   onClick={() => handleExpand(ann)}
-                  className="w-full text-left p-5 cursor-pointer hover:bg-white/40 dark:hover:bg-slate-800/40 transition-all"
+                  className="w-full text-left p-4 md:p-5 cursor-pointer hover:bg-white/40 dark:hover:bg-slate-800/40 transition-all"
                 >
                   <div className="flex items-start gap-4">
                     {/* Icon */}
@@ -403,14 +403,14 @@ export const InboxPage = () => {
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap mb-1">
-                            <h3 className={`font-medium text-md ${ann.isRead ? 'text-slate-700 dark:text-slate-300' : 'text-slate-900 dark:text-slate-100'}`}>
+                            <h3 className={`font-medium text-sm md:text-md ${ann.isRead ? 'text-slate-700 dark:text-slate-300' : 'text-slate-900 dark:text-slate-100'}`}>
                               {ann.title}
                             </h3>
                             {!ann.isRead && (
                               <span className="w-2 h-2 bg-blue-500 rounded-none flex-shrink-0" />
                             )}
                           </div>
-                          <p className={`text-sm font-medium ${isExpanded ? '' : 'line-clamp-2'} ${ann.isRead ? 'text-slate-400 dark:text-slate-500' : 'text-slate-600 dark:text-slate-400'}`}>
+                          <p className={`text-xs md:text-sm font-medium ${isExpanded ? '' : 'line-clamp-2'} ${ann.isRead ? 'text-slate-400 dark:text-slate-500' : 'text-slate-600 dark:text-slate-400'}`}>
                             {ann.description}
                           </p>
                         </div>

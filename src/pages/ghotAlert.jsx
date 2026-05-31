@@ -906,7 +906,7 @@ const GhostAlertPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-none border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-4.5 space-y-6"
+          className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-none border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-4 md:p-4.5 space-y-6"
         >
           {/* Streamer Target */}
           <div>
@@ -1128,7 +1128,7 @@ const GhostAlertPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="md:flex flex-col hidden bg-gradient-to-br from-indigo-600 to-violet-700 rounded-none p-6 text-white shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30"
+            className="md:flex flex-col hidden bg-gradient-to-br from-indigo-600 to-violet-700 rounded-none p-4 md:p-6 text-white shadow-xl shadow-indigo-200 dark:shadow-indigo-900/30"
           >
             <div className="flex items-center gap-2.5 mb-4">
               <Radio size={16} className="text-indigo-200" />

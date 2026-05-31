@@ -272,7 +272,7 @@ const DonationTerminal = () => {
 
         {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
         <div style={{
-          padding: isMobile ? '12px 16px' : '14px 20px',
+          padding: isMobile ? '12px 14px' : '14px 20px',
           borderBottom: '1px solid rgba(99,102,241,0.18)',
           background: 'rgba(99,102,241,0.04)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -307,7 +307,7 @@ const DonationTerminal = () => {
         </div>
 
         {/* ══ STATS BAR ════════════════════════════════════════════════════════ */}
-        <div className="grid grid-cols-4 md:grid-cols-7 gap-px p-px border-b border-white/[0.04] bg-white/[0.02]">
+        <div className="grid grid-cols-3 md:grid-cols-7 gap-px p-3 md:p-0 border-b border-white/[0.04] bg-white/[0.02]">
           <StatCard label="Total"      value={donations.length}                          color="#818cf8" />
           <StatCard label="Paid"       value={paid.length}                               color="#22c55e" />
           <StatCard label="Pending"    value={pending.length}                            color="#facc15" />
@@ -319,7 +319,7 @@ const DonationTerminal = () => {
 
         {/* ══ CONTROLS ════════════════════════════════════════════════════════ */}
         <div style={{
-          padding: isMobile ? '12px 16px' : '12px 15px',
+          padding: isMobile ? '12px 14px' : '12px 15px',
           borderBottom: '1px solid rgba(255,255,255,0.04)',
           background: 'rgba(0,0,0,0.35)',
           display: 'flex', flexDirection: 'column', gap: 10,

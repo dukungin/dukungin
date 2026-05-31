@@ -89,7 +89,7 @@ const MaintenancePage = () => {
 
       <CustomToast toastState={toastState} />
 
-      <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-100/10 p-5 rounded-none">
+      <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-100/10 p-4 md:p-5 rounded-none">
         <div className="grid gap-4">
           {pages.map(({ key, label, desc }) => (
             <div key={key} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">

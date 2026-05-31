@@ -173,7 +173,7 @@ export const DashboardSuperPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
         {/* Top Donatur */}
-        <motion.div {...staggerChild(10)} className="bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6">
+        <motion.div {...staggerChild(10)} className="md:bg-white md:dark:bg-slate-900 md:border dark:border-slate-800 rounded-none p-0 md:p-6">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-8 h-8 bg-amber-500/10 border border-amber-500/20 rounded-none flex items-center justify-center">
               <Trophy size={14} className="text-amber-400" />
@@ -206,7 +206,7 @@ export const DashboardSuperPage = () => {
         </motion.div>
 
         {/* Pending Withdrawals Alert */}
-        <motion.div {...staggerChild(11)} className="w-full bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6 flex justify-center md:items-center text-center flex-col">
+        <motion.div {...staggerChild(11)} className="w-full md:bg-white md:dark:bg-slate-900 md:border dark:border-slate-800 rounded-none p-0 md:my-0 my-2 md:p-6 flex justify-center md:items-center text-center flex-col">
           {/* <div className="flex justify-center items-center gap-2 pt-0 mb-5">
             <div>
               <p className="font-black text-sm text-slate-900 dark:text-white">Pending Withdraw</p>
@@ -249,7 +249,7 @@ export const DashboardSuperPage = () => {
         </motion.div>
 
         {/* Donasi Terbaru */}
-        <motion.div {...staggerChild(12)} className="bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-none p-5 md:p-6">
+        <motion.div {...staggerChild(12)} className="md:bg-white md:dark:bg-slate-900 md:border dark:border-slate-800 rounded-none p-0 md:p-6">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-8 h-8 bg-indigo-500/10 border border-indigo-500/20 rounded-none flex items-center justify-center">
               <ArrowUpRight size={14} className="text-indigo-400" />
