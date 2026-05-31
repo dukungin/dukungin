@@ -260,7 +260,7 @@ const DonationTerminal = () => {
   const colHeaders = ['TIMESTAMP', 'STREAMER', 'DONOR', 'NOMINAL', 'STATUS', 'PESAN'];
 
   return (
-    <div style={{ height: 'max-content', background: '#080a0f', color: '#e2e8f0', fontFamily: mono }}>
+    <div style={{ height: 'max-content', color: '#e2e8f0', fontFamily: mono }}>
 
       {/* Scanline */}
       <div style={{
@@ -321,7 +321,7 @@ const DonationTerminal = () => {
         <div style={{
           padding: isMobile ? '12px 14px' : '12px 15px',
           borderBottom: '1px solid rgba(255,255,255,0.04)',
-          background: 'rgba(0,0,0,0.35)',
+          // background: 'rgba(0,0,0,0.35)',
           display: 'flex', flexDirection: 'column', gap: 10,
         }}>
 
