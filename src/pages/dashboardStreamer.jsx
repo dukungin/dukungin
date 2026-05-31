@@ -382,7 +382,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
   const [lastSent, setLastSent] = useState(null);
   const [formData, setFormData] = useState({
     donorName: 'Mas Dev',
-    amount: 25000,
+    amount: '25000',
     message: 'Terima kasih atas dukungannya! 🔥',
     mediaUrl: 'https://picsum.photos/400/300',
     mediaType: 'image'
@@ -395,7 +395,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
       await api.post('/api/midtrans/test-mediashare/send', {
         targetUsername: user.username,
         donorName: formData.donorName,
-        amount: formData.amount,
+        amount: Number(formData.amount) || 0,
         message: formData.message || null,
         mediaUrl: formData.mediaUrl,
         mediaType: formData.mediaType,
@@ -437,7 +437,10 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nominal</label>
-          <input type="number" value={formData.amount} onChange={e => updateForm('amount', Number(e.target.value))}
+          <input 
+            type="number" 
+            value={formData.amount}
+            onChange={e => updateForm('amount', e.target.value === '' ? '' : e.target.value)}
             className="p-3 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm focus:border-emerald-400 focus:outline-none transition-all"
             placeholder="25000" />
         </div>
