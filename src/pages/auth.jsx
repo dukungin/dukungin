@@ -551,19 +551,6 @@ const ForgotPasswordPage = ({
       animate={{ opacity:1, y:0 }} 
       exit={{ opacity:0, y:-20 }}
     >
-      <button 
-        onClick={() => setCurrentPage('main')}
-        className='active:scale-[0.99] hover:brightness-80'
-        style={{ 
-          position: 'absolute', top: 40, marginLeft: -3,
-          background:'none', border:'none', cursor:'pointer', 
-          color: T.backBtn, fontSize:14, fontWeight:700, 
-          display:'flex', alignItems:'center', gap:6 
-        }}
-      >
-        <ArrowLeft size={18} /> Kembali
-      </button>
-
       <div style={{ textAlign: 'left', marginBottom: 32 }}>
         <div style={{ 
           width: 72, height: 72, margin: '50px 0 20px 0px', 
@@ -616,6 +603,18 @@ const ForgotPasswordPage = ({
             >
               {loading ? <Loader2 className="w-5 h-5 mx-auto animate-spin" /> : 'Lanjutkan →'}
             </button>
+              <button 
+              onClick={() => setCurrentPage('main')}
+              className='active:scale-[0.99] w-max justify-end text-right hover:brightness-80'
+              style={{ 
+                border:'none', cursor:'pointer', 
+                color: T.backBtn, fontSize:14, fontWeight:700, 
+                display:'flex', alignItems:'center', gap:6 
+              }}
+            >
+              <ArrowLeft size={18} /> Kembali sekarang
+            </button>
+
           </>
         ) : (
           <>
