@@ -556,7 +556,7 @@ export const SubathonManager = ({ overlayToken }) => {
         <div className="space-y-2">
           <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Mode</label>
           <div className="grid grid-cols-2 gap-3">
-            {[{ id: 'countdown', label: '⏱ Countdown', desc: 'Waktu berkurang' }, { id: 'countup', label: '⏫ Count Up', desc: 'Waktu bertambah' }].map(m => (
+            {[{ id: 'countdown', label: 'Countdown', desc: 'Waktu berkurang' }, { id: 'countup', label: 'Count Up', desc: 'Waktu bertambah' }].map(m => (
               <button key={m.id} onClick={() => upd('mode', m.id)}
                 className={`cursor-pointer active:scale-[0.97] p-3 rounded-none border-2 text-left font-black text-xs transition-all ${
                   localTimer.mode === m.id

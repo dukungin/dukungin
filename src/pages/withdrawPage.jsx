@@ -285,7 +285,7 @@ export const WithdrawPage = () => {
             { label: 'Berhasil', value: `Rp ${statsCompleted.toLocaleString('id-ID')}`, unit: '', color: 'text-green-600 dark:text-green-400', bg: 'bg-green-100 dark:bg-green-950/30 border-green-100 dark:border-green-900' },
             { label: 'Ditolak',  value: statsFailed,     unit: 'request', color: 'text-red-500 dark:text-red-400',    bg: 'bg-red-100 dark:bg-red-950/30 border-red-100 dark:border-red-900' },
           ].map(s => (
-            <div key={s.label} className={`${s.bg} border rounded-none p-4 text-center`}>
+            <div key={s.label} className={`${s.bg} border rounded-none px-4 py-3 md:px-4 md:py-4 text-center`}>
               <p className={`font-black text-sm ${s.color}`}>{s.value} <span className="text-xs font-bold">{s.unit}</span></p>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold mt-0.5">{s.label}</p>
             </div>

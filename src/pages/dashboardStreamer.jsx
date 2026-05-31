@@ -1313,28 +1313,32 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
     );
 
     const theme = settings.theme || 'modern';
+    const wrapperBase = {
+      backgroundColor: bg, color: fg,
+      maxWidth: `${settings.maxWidth || 380}px`,
+      minWidth: '340px',
+      width: '100%', overflow: 'hidden',
+    };
 
+    // ── MODERN ──────────────────────────────────────────────────────────────────
     if (theme === 'modern') {
       return (
         <>
           <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
-          <div style={{ backgroundColor: bg, color: fg, maxWidth: `${settings.maxWidth || 280}px`, width: '100%', overflow: 'hidden', boxShadow: `0 0 0 2px ${hl}30, 0 8px 32px rgba(0,0,0,0.6)`, border: `2px solid ${settings.borderColor || hl + '40'}`, imageRendering: 'pixelated', position: 'relative' }}>
+          <div style={{ ...wrapperBase, boxShadow: `0 0 0 2px ${hl}30, 0 8px 32px rgba(0,0,0,0.6)`, border: `2px solid ${settings.borderColor || hl + '40'}`, position: 'relative' }}>
             <div style={scanlineStyle} />
             <MediaBlock />
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: hl + '18', borderBottom: pixelBorder, padding: '5px 10px', position: 'relative', zIndex: 2 }}>
-              <span style={{ fontFamily: monospace, fontSize: 20, color: hl, textTransform: 'uppercase', letterSpacing: '0.18em', fontWeight: 700 }}>MEDIA SHARE</span>
-              <div style={{ display: 'flex', gap: 4 }}>
-                {['#ff4444', '#ffaa00', hl].map((c, i) => <span key={i} style={{ width: 7, height: 7, background: c, display: 'inline-block', border: '1px solid rgba(255,255,255,0.2)' }} />)}
-              </div>
-            </div>
-            <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
-              <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 4 }}>{currentDonor.name}</div>
-              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, borderLeft: `3px solid ${hl}`, paddingLeft: 8, marginBottom: 6, textShadow: `0 0 10px ${hl}55` }}>
-                Rp {currentDonor.amount.toLocaleString('id-ID')}
+            <div style={{ padding: '12px 14px', position: 'relative', zIndex: 2 }}>
+              <div style={{ fontFamily: monospace, fontSize: 20, color: fg, lineHeight: 1.5, marginBottom: 6 }}>
+                <span style={{ fontWeight: 900 }}>{currentDonor.name}</span>
+                <span style={{ opacity: 0.6 }}> mengirim </span>
+                <span style={{ fontWeight: 900, color: hl, textShadow: `0 0 10px ${hl}55` }}>
+                  Rp {currentDonor.amount.toLocaleString('id-ID')}
+                </span>
               </div>
               {currentDonor.msg && (
-                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.75, border: dimBorder, padding: '5px 8px', lineHeight: 1.4 }}>
-                  {'>> '}{currentDonor.msg}
+                <div style={{ fontFamily: monospace, fontSize: 18, color: fg, fontWeight: 400, lineHeight: 1.5 }}>
+                  {currentDonor.msg}
                 </div>
               )}
             </div>
@@ -1343,39 +1347,22 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
       );
     }
 
+    // ── SMOOTH ──────────────────────────────────────────────────────────────────
     if (theme === 'smooth') {
       return (
-        <div style={{
-          backgroundColor: bg,
-          color: fg,
-          maxWidth: `${settings.maxWidth || 280}px`,
-          width: '100%',
-          overflow: 'hidden',
-          borderRadius: 20,
-          border: `1.5px solid ${hl}30`,
-          boxShadow: `0 8px 32px ${hl}18`,
-        }}>
-          {/* Media */}
-          <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#000' }}>
-            <MediaBlock />
-          </div>
-          {/* Content */}
-          <div style={{ fontFamily: "'Poppins', sans-serif", padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: hl + '22', border: `1.5px solid ${hl}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
-                {renderIconPreview(settings.customIcon, 18)}
-              </div>
-              <div>
-                <div style={{ fontSize: 10, fontWeight: 500, color: fg, opacity: 0.45, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 1 }}>Media share</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: fg }}>{currentDonor.name}</div>
-              </div>
+        <div style={{ ...wrapperBase, borderRadius: 16, border: `1.5px solid ${hl}30`, boxShadow: `0 8px 32px ${hl}18` }}>
+          <MediaBlock />
+          <div style={{ fontFamily: "'Poppins', sans-serif", padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ fontSize: 15, color: fg, lineHeight: 1.6 }}>
+              <span style={{ fontWeight: 700 }}>{currentDonor.name}</span>
+              <span style={{ opacity: 0.55 }}> mengirim </span>
+              <span style={{ fontWeight: 800, color: hl, letterSpacing: '-0.5px' }}>
+                Rp {currentDonor.amount.toLocaleString('id-ID')}
+              </span>
             </div>
             <div style={{ height: 1, background: hl + '25', borderRadius: 99 }} />
-            <div style={{ fontSize: 22, fontWeight: 800, color: hl, letterSpacing: '-0.5px', lineHeight: 1 }}>
-              Rp {currentDonor.amount.toLocaleString('id-ID')}
-            </div>
             {currentDonor.msg && (
-              <div style={{ fontSize: 20, color: fg, opacity: 0.75, background: hl + '10', borderRadius: 8, padding: '6px 10px', lineHeight: 1.5, border: `1px solid ${hl}20` }}>
+              <div style={{ fontSize: 13, color: fg, fontWeight: 400, background: hl + '10', borderRadius: 8, padding: '7px 12px', lineHeight: 1.6, border: `1px solid ${hl}20` }}>
                 {currentDonor.msg}
               </div>
             )}
@@ -1384,43 +1371,50 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
       );
     }
 
+    // ── CLASSIC ──────────────────────────────────────────────────────────────────
     if (theme === 'classic') {
       return (
         <>
           <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
-          <div style={{ backgroundColor: bg, color: fg, maxWidth: `${settings.maxWidth || 280}px`, width: '100%', overflow: 'hidden', border: `2px solid ${hl}`, imageRendering: 'pixelated', position: 'relative' }}>
+          <div style={{ ...wrapperBase, border: `2px solid ${hl}`, position: 'relative' }}>
             <div style={scanlineStyle} />
-            <div style={{ height: 3, background: hl }} />
             <MediaBlock />
-            <div style={{ background: hl + '15', borderBottom: `1px solid ${hl}40`, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
-              <span style={{ fontFamily: monospace, fontSize: 10, fontWeight: 700, color: hl, textTransform: 'uppercase', letterSpacing: '0.15em' }}>★ Media share ★</span>
-            </div>
-            <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
-              <div style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: fg, marginBottom: 6, borderBottom: `1px dashed ${hl}30`, paddingBottom: 6 }}>{currentDonor.name}</div>
-              <div style={{ fontFamily: monospace, fontSize: 22, fontWeight: 900, color: hl, marginBottom: 5 }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</div>
+            <div style={{ padding: '12px 14px', position: 'relative', zIndex: 2 }}>
+              <div style={{ fontFamily: monospace, fontSize: 20, color: fg, lineHeight: 1.6, marginBottom: 8, borderBottom: `1px dashed ${hl}30`, paddingBottom: 8 }}>
+                <span style={{ fontWeight: 900 }}>{currentDonor.name}</span>
+                <span style={{ opacity: 0.55 }}> mengirim </span>
+                <span style={{ fontWeight: 900, color: hl, textShadow: `0 0 10px ${hl}50` }}>
+                  Rp {currentDonor.amount.toLocaleString('id-ID')}
+                </span>
+              </div>
               {currentDonor.msg && (
-                <div style={{ fontFamily: monospace, fontSize: 11, color: fg, opacity: 0.82, lineHeight: 1.45, borderLeft: `2px solid ${hl}`, paddingLeft: 8, marginBottom: 6 }}>
-                  {currentDonor.msg}<span style={{ color: hl, animation: 'blink 1s step-end infinite' }}>▮</span>
+                <div style={{ fontFamily: monospace, fontSize: 18, color: fg, lineHeight: 1.5 }}>
+                  {currentDonor.msg}
                 </div>
               )}
             </div>
-            <div style={{ height: 3, background: hl }} />
           </div>
         </>
       );
     }
 
-    // minimal
+    // ── MINIMAL ──────────────────────────────────────────────────────────────────
     return (
-      <div style={{ backgroundColor: bg, color: fg, maxWidth: `${settings.maxWidth || 280}px`, width: '100%', overflow: 'hidden', border: `2px solid ${hl}40`, position: 'relative' }}>
+      <div style={{ ...wrapperBase, border: `2px solid ${hl}40`, position: 'relative' }}>
         <div style={scanlineStyle} />
         <MediaBlock />
-        <div style={{ padding: '10px 12px', position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span style={{ fontFamily: monospace, fontSize: 11, color: fg, fontWeight: 900 }}>{'> '}{currentDonor.name}</span>
-            <span style={{ fontFamily: monospace, fontSize: 16, fontWeight: 900, color: hl }}>Rp {currentDonor.amount.toLocaleString('id-ID')}</span>
+        <div style={{ padding: '12px 14px', position: 'relative', zIndex: 2 }}>
+          <div style={{ fontFamily: monospace, fontSize: 20, color: fg, lineHeight: 1.6, marginBottom: 6 }}>
+            <span style={{ fontWeight: 900 }}>{currentDonor.name} - </span>
+            <span style={{ fontWeight: 900, color: hl, letterSpacing: '-0.5px', textShadow: `0 0 8px ${hl}50` }}>
+              Rp {currentDonor.amount.toLocaleString('id-ID')}
+            </span>
           </div>
-          {currentDonor.msg && <div style={{ fontFamily: monospace, fontSize: 10, color: fg, opacity: 0.72, lineHeight: 1.4 }}>{currentDonor.msg}</div>}
+          {currentDonor.msg && (
+            <div style={{ fontFamily: monospace, fontSize: 18, color: fg, lineHeight: 1.5, borderTop: `1px solid ${hl}20`, paddingTop: 8 }}>
+              {currentDonor.msg}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -2260,7 +2254,7 @@ const HistoryPage = () => {
 
   return (
     <div className="space-y-6 pb-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Semua Waktu', value: statsLoading ? '...' : maskAmount(stats?.allTime?.total || 0), sub: `${stats?.allTime?.count || 0} donasi`, color: 'bg-blue-600', icon: '💜' },
           { label: 'Bulan Ini', value: statsLoading ? '...' : maskAmount(stats?.thisMonth?.total || 0), sub: `${stats?.thisMonth?.count || 0} donasi`, color: 'bg-violet-500', icon: '📅' },
@@ -2268,7 +2262,7 @@ const HistoryPage = () => {
           { label: 'Top Donatur', value: statsLoading ? '...' : (stats?.topDonors?.[0]?.name || '-'), sub: stats?.topDonors?.[0] ? maskAmount(stats.topDonors[0].totalAmount) : 'Belum ada', color: 'bg-amber-500', icon: '🏆' },
         ].map((card) => (
           <div key={card.label} className={`${card.color} rounded-none p-4 md:p-6 text-white relative overflow-hidden`}>
-            <div className="absolute top-3 right-4 text-2xl opacity-20">{card.icon}</div>
+            {/* <div className="absolute top-3 right-4 text-2xl opacity-20">{card.icon}</div> */}
             <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">{card.label}</p>
             <p className="text-xl font-black leading-tight">{card.value}</p>
             <p className="text-xs opacity-70 font-medium mt-1">{card.sub}</p>

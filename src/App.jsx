@@ -180,9 +180,9 @@ function App() {
         </div>
 
         {/* Teks */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, animation: 'fadein 0.6s 0.1s ease both' }}>
-          <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, letterSpacing: '0.1em', color: '#f9f9f9', margin: 0 }}>
-            TIDAK ADA SINYAL
+        <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', gap: 8, animation: 'fadein 0.6s 0.1s ease both' }}>
+          <p className='md:text-[36px] text-[24px]' style={{ fontFamily: "'Bebas Neue', sans-serif", textAlign: 'center', letterSpacing: '0.1em', color: '#f9f9f9', margin: 0 }}>
+            TIDAK ADA SINYAL 
           </p>
           <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 15, color: '#64748b', margin: 0 }}>
             Server tidak dapat dijangkau. Periksa koneksimu.
@@ -190,7 +190,7 @@ function App() {
         </div>
 
         {/* Retry button */}
-        <button
+        {/* <button
           onClick={retry}
           style={{
             marginTop: '2rem', padding: '0.6rem 1.8rem',
@@ -202,7 +202,7 @@ function App() {
           }}
         >
           Coba Lagi
-        </button>
+        </button> */}
 
         {/* Bottom branding */}
         <div style={{ position: 'absolute', bottom: 18, display: 'flex', alignItems: 'center', gap: 8 }}>

@@ -167,7 +167,7 @@ function BigTitle({ children, style, C }) {
   return (
     <h2 style={{
       fontFamily: "'Bebas Neue', sans-serif",
-      fontSize: "clamp(42px,6vw,72px)",
+      fontSize: "clamp(32px,6vw,72px)",
       lineHeight: 0.95, letterSpacing: "0.01em", color: C.text,
       ...style,
     }}>
@@ -203,7 +203,7 @@ function BtnGhost({ children, href, style, C }) {
   return (
     <Link 
       to={href || "/"} 
-      className="w-[86vw] sm:w-auto text-center"
+      className="w-[86vw] md:w-auto text-center"
       target="__blank" 
       style={{
       fontFamily: "'Space Grotesk', sans-serif",
@@ -248,7 +248,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 99,
       display: "flex", alignItems: "center", justifyContent: "space-between",
-      padding: "18px clamp(24px, 5vw, 0px)",
+      padding: "18px clamp(15px, 5vw, 0px)",
       background: C.navBg,
       gap: 30,
       backdropFilter: "blur(12px)",
@@ -423,7 +423,7 @@ function Hero({ C, isDark }) {
           {/* Container Tombol */}
           <div className="w-full max-w-md md:max-w-none px-4">
             <div 
-              className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center"
+              className="flex flex-col md:flex-row items-center gap-4 w-full justify-center"
             >
               <BtnMain href="/register" C={C}>Mulai Sekarang →</BtnMain>
               <BtnGhost href="https://wa.me/6289513093406" C={C}>Hubungi Developer</BtnGhost>
@@ -508,7 +508,7 @@ function FeeComparison({ C }) {
     <section style={{ transition: "border-color 0.4s" }}>
       {/* Header */}
       <div className="text-center flex flex-col justify-center items-center"
-        style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+        style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
         <Kicker C={C}>Transparansi Biaya</Kicker>
         <BigTitle C={C}>POTONGAN TERKECIL DI{" "}
           <span style={{ color: C.lime }}>KELASNYA</span>
@@ -564,7 +564,7 @@ function FeeComparison({ C }) {
 function HowItWorks({ C }) {
   return (
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} id="cara-kerja">
-      <div className="text-center flex  flex-col justify-center items-center w-full" style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, flexWrap: "wrap", transition: "border-color 0.4s" }}>
+      <div className="text-center flex  flex-col justify-center items-center w-full" style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}`, flexWrap: "wrap", transition: "border-color 0.4s" }}>
         <div>
           <BigTitle C={C}>MULAI LIVE DALAM 5 MENIT</BigTitle>
         </div>
@@ -600,7 +600,7 @@ function HowStep({ step, last, C }) {
 function Testimonials({ C }) {
   return (
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
-      <div className="text-center justify-center items-center flex flex-col" style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+      <div className="text-center justify-center items-center flex flex-col" style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
          <div>
           <BigTitle C={C}>SUDAH TERUJI OLEH STREAMER</BigTitle>
         </div>
@@ -896,7 +896,7 @@ function SharePromo({ C }) {
     <section className="md:block hidden" style={{ borderBottom: `1px solid ${C.line}` }}>
       {/* Header */}
       <div className="text-center flex flex-col justify-center items-center"
-        style={{ padding: "100px 40px", borderBottom: `1px solid ${C.line}` }}>
+        style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}` }}>
         <Kicker C={C}>Share & Promosi</Kicker>
         <BigTitle C={C}>SEBARKAN KE SESAMA <span style={{ color: C.lime }}>STREAMER</span></BigTitle>
         <p style={{ fontSize: 14, color: C.muted, marginTop: 16 }}>
@@ -1068,7 +1068,7 @@ export default function TapTipTup() {
       <Footer C={C} />
 
       {/* ==================== INTRO MODAL ==================== */}
-      {!showModal && (
+      {showModal && (
         <div style={{
           position: "fixed",
           top: 0, left: 0, right: 0, bottom: 0,
