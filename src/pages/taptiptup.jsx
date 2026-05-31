@@ -208,7 +208,7 @@ function BtnGhost({ children, href, style, C }) {
       style={{
       fontFamily: "'Space Grotesk', sans-serif",
       fontSize: 13, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase",
-      padding: "13px 24px", border: `1px solid ${C.line2}`,
+      padding: "14px 24px", border: `1px solid ${C.line2}`,
       color: C.muted, background: "none", cursor: "pointer",
       textDecoration: "none", display: "inline-block", transition: "all 0.15s",
       ...style,
@@ -425,8 +425,16 @@ function Hero({ C, isDark }) {
             <div 
               className="flex flex-col md:flex-row items-center gap-4 w-full justify-center"
             >
-              <BtnMain href="/register" C={C}>Mulai Sekarang →</BtnMain>
-              <BtnGhost href="https://wa.me/6289513093406" C={C}>Hubungi Developer</BtnGhost>
+              <BtnMain href="/register" C={C}>
+                <p className="flex items-center gap-2">
+                  Mulai Sekarang <span className="relative top-[-2px]">→</span>
+                </p>
+              </BtnMain>
+              <BtnGhost href="https://wa.me/6289513093406" C={C}>
+                <p className="flex items-center gap-2">
+                  Hubungi Developer <span className="relative top-[-2px]">→</span>
+                </p>
+              </BtnGhost>
             </div>
           </div>
 
