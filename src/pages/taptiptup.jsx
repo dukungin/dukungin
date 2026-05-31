@@ -1068,7 +1068,7 @@ export default function TapTipTup() {
       <Footer C={C} />
 
       {/* ==================== INTRO MODAL ==================== */}
-      {showModal && (
+      {!showModal && (
         <div style={{
           position: "fixed",
           top: 0, left: 0, right: 0, bottom: 0,
@@ -1139,9 +1139,9 @@ export default function TapTipTup() {
             }}>
               <h2 style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(24px, 5vw, 48px)",
+                fontSize: "clamp(24px, 5vw, 36px)",
                 lineHeight: 1.1,
-                marginBottom: "16px",
+                marginBottom: "14px",
                 color: C.text,
               }}>
                 Ubah Streaming Kamu
@@ -1150,7 +1150,7 @@ export default function TapTipTup() {
 
               <p style={{
                 fontSize: "15.5px",
-                lineHeight: 1.7,
+                lineHeight: 1.4,
                 color: C.muted,
                 maxWidth: "580px",
                 margin: "0 auto",
