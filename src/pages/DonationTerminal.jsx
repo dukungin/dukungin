@@ -43,9 +43,16 @@ const mono = "'JetBrains Mono', 'Fira Code', 'Courier New', monospace";
 
 // ── Stat Card ────────────────────────────────────────────────────────────────
 const StatCard = ({ label, value, color }) => (
-  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px 14px', position: 'relative', overflow: 'hidden' }}>
-    <div style={{ fontSize: 10, color: 'white', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 5, fontFamily: mono }}>{label}</div>
-    <div style={{ fontSize: 16, fontWeight: 900, color, fontFamily: mono, lineHeight: 1 }}>{value}</div>
+  <div className="relative overflow-hidden bg-white/[0.03] md:px-4.5 px-3.5 py-2.5">
+    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-white mb-1">
+      {label}
+    </div>
+    <div 
+      className="font-mono font-black text-[16px] leading-none"
+      style={{ color }}
+    >
+      {value}
+    </div>
   </div>
 );
 
@@ -67,10 +74,10 @@ const LogRowDesktop = ({ d, idx, highlight }) => {
         transition: 'background 0.15s',
       }}
     >
-      <div style={{ padding: '9px 14px', color: 'white' }}>{formatTs(d.createdAt)}</div>
-      <div style={{ padding: '9px 14px', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>@{d.userId?.username || '—'}</div>
-      <div style={{ padding: '9px 14px', color: '#e2e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.donorName}</div>
-      <div style={{ padding: '9px 14px', color: '#34d399', fontWeight: 700 }}>{formatRp(d.amount)}</div>
+      <div style={{ padding: '9px 20px', color: 'white' }}>{formatTs(d.createdAt)}</div>
+      <div style={{ padding: '9px 20px', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>@{d.userId?.username || '—'}</div>
+      <div style={{ padding: '9px 20px', color: '#e2e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.donorName}</div>
+      <div style={{ padding: '9px 20px', color: '#34d399', fontWeight: 700 }}>{formatRp(d.amount)}</div>
       <div style={{ padding: '9px 10px' }}>
         <span style={{
           display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -82,7 +89,7 @@ const LogRowDesktop = ({ d, idx, highlight }) => {
           {d.status}
         </span>
       </div>
-      <div style={{ padding: '9px 14px', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.message || '—'}</div>
+      <div style={{ padding: '9px 20px', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.message || '—'}</div>
     </motion.div>
   );
 };
@@ -97,7 +104,7 @@ const LogRowMobile = ({ d, idx, highlight }) => {
       transition={{ duration: highlight ? 0.45 : 0.1, delay: highlight ? 0 : idx * 0.005 }}
       style={{
         borderBottom: '1px solid rgba(255,255,255,0.05)',
-        padding: '12px 16px',
+        padding: '12px 14px',
         fontFamily: mono,
         display: 'flex', flexDirection: 'column', gap: 6,
       }}
@@ -260,7 +267,7 @@ const DonationTerminal = () => {
   const colHeaders = ['TIMESTAMP', 'STREAMER', 'DONOR', 'NOMINAL', 'STATUS', 'PESAN'];
 
   return (
-    <div style={{ height: 'max-content', color: '#e2e8f0', fontFamily: mono }}>
+    <div style={{ height: 'max-content', color: '#e2e8f0', fontFamily: mono }} className='bg-white dark:bg-slate-900 rounded-none border border-slate-100 dark:border-slate-800'>
 
       {/* Scanline */}
       <div style={{
@@ -271,10 +278,11 @@ const DonationTerminal = () => {
       <div style={{ position: 'relative', zIndex: 1 }}>
 
         {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
-        <div style={{
-          padding: isMobile ? '12px 14px' : '14px 20px',
+        <div 
+        style={{
+          padding: isMobile ? '12px 14px' : '14px 19px',
           borderBottom: '1px solid rgba(99,102,241,0.18)',
-          background: 'rgba(99,102,241,0.04)',
+          // background: 'rgba(99,102,241,0.04)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           flexWrap: 'wrap', gap: 8,
         }}>
@@ -319,7 +327,7 @@ const DonationTerminal = () => {
 
         {/* ══ CONTROLS ════════════════════════════════════════════════════════ */}
         <div style={{
-          padding: isMobile ? '12px 14px' : '12px 15px',
+          padding: isMobile ? '12px 12px' : '12px 19px',
           borderBottom: '1px solid rgba(255,255,255,0.04)',
           // background: 'rgba(0,0,0,0.35)',
           display: 'flex', flexDirection: 'column', gap: 10,
@@ -375,7 +383,7 @@ const DonationTerminal = () => {
                   }}>✕</button>
                 )}
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className='ml-[1.5px] md:ml-[2px]' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <FilterInput label="Rows">
                   <div style={{ display: 'flex' }}>
                     {[25, 50, 100].map(n => (
@@ -481,8 +489,10 @@ const DonationTerminal = () => {
             borderBottom: '1px solid rgba(99,102,241,0.15)',
           }}>
             {colHeaders.map(h => (
-              <div key={h} style={{
-                padding: '7px 14px',
+              <div
+                className='py-[7px] px-[14px] md:px-[19px]'
+                key={h} style={{
+                // padding: '7px 14px',
                 fontFamily: mono, fontSize: 11, fontWeight: 900,
                 color: '#6366f1', letterSpacing: '0.13em', textTransform: 'uppercase',
               }}>{h}</div>
