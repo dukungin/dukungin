@@ -331,13 +331,13 @@ function Hero({ C, isDark }) {
          <h1
             className="select-none hero-title font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400"
           >
-            <p className="text-5xl md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
+            <p className="text-[3.1rem] md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
               AMBIL UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
             </p>
-            <p className="text-5xl w-max lg:text-8xl 2xl:text-[7.8rem] w-[80vw] select-none hidden md:flex items-center justify-center">
+            <p className="text-5xl w-max lg:text-8xl 2xl:text-[7rem] w-[80vw] select-none hidden md:flex items-center justify-center">
               
               <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
-                <p className="top-[-3px] px-2 2xl:min-w-[65.6vw] min-w-[64vw] relative text-black 2xl:h-[110px] md:h-[85px] bg-[azure]">{" "} DAPAT UNTUNG LEBIH BANYAK {" "}</p> BERSAMA TAPTIPTUP
+                <p className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative text-black 2xl:h-[98px] md:h-[85px] bg-[azure]">{" "} DAPAT UNTUNG LEBIH BANYAK {" "}</p> BERSAMA TAPTIPTUP
               </p>
             </p>
           </h1>
@@ -645,9 +645,9 @@ function FeeComparison({ C }) {
         <BigTitle C={C}>POTONGAN TERKECIL DI{" "}
           <span style={{ color: C.lime }}>KELASNYA</span>
         </BigTitle>
-        <p style={{ fontSize: 14, color: C.muted, marginTop: 8, transition: "color 0.4s" }}>
+        {/* <p style={{ fontSize: 14, color: C.muted, marginTop: 8, transition: "color 0.4s" }}>
           Kami hanya ambil 2.5% — sisanya langsung ke kantongmu.
-        </p>
+        </p> */}
       </div>
 
       {/* <div className="absolute w-full hidden md:flex justify-center items-center" style={{ zIndex: 2 }}>
@@ -670,28 +670,28 @@ function FeeComparison({ C }) {
                   padding: "32px 24px",
                   borderRight: !isLast ? `1px solid ${C.line}` : "none",
                   borderBottom: isMobile ? `1px solid ${C.line}` : "none",
-                  background: p.winner ? 'blue' : "transparent",
+                  background: p.winner ? 'cyan' : "transparent",
                   transition: "all 0.4s",
                 }}>
                 {p.winner
                   ? <span style={{ display: "inline-block", marginBottom: 10, background: "orange", color: C.bg, fontSize: 10, padding: "3px 10px", letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 700 }}>Terkecil</span>
                   : <div style={{ height: 24, marginBottom: 10 }} />}
 
-                <div style={{ fontSize: 20, fontWeight: 700, color: p.winner ? C.text : "#000000", marginBottom: 4, fontFamily: "'Space Grotesk',sans-serif" }}>
+                <div style={{ fontSize: 20, fontWeight: 700, color: p.winner ? "#000000" : "#000000", marginBottom: 4, fontFamily: "'Space Grotesk',sans-serif" }}>
                   {p.name}
                 </div>
 
                 {/* Progress bar */}
                 <div style={{ height: 1, background: C.line2, borderRadius: 2, marginBottom: 16, marginTop: 14 }}>
-                  <div style={{ height: 1, width: `${barWidth}%`, background: p.winner ? C.lime : C.dim, borderRadius: 2 }} />
+                  <div style={{ height: 1, width: `${barWidth}%`, background: p.winner ? "#000000" : C.dim, borderRadius: 2 }} />
                 </div>
 
                 {/* Fee donate */}
                 <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 26, lineHeight: 1, color: p.winner ? C.lime : "#000000" }}>
+                  <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 26, lineHeight: 1, color: p.winner ? "#000000" : "#000000" }}>
                     {p.feeDonate.toFixed(1)}% + {p.feeWdLabel || '—'}
                   </div>
-                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: p.winner ? C.muted : "black", letterSpacing: "0.05em", textTransform: "uppercase", marginTop: 10 }}>
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: p.winner ? "#000000" : "black", letterSpacing: "0.05em", textTransform: "uppercase", marginTop: 10 }}>
                     {p.winner ? 'potongan per donasi + WD semua metode' : 'potongan per donasi + WD Bank'}
                   </div>
                 </div>
@@ -924,7 +924,7 @@ export default function TapTipTup() {
       <Hero C={C} isDark={isDark} />
       <Marquee C={C} />
       <FeeComparison C={C} /> 
-      <Footer C={C} />
+      {/* <Footer C={C} /> */}
 
       {/* ==================== INTRO MODAL ==================== */}
       {showModal && (
@@ -935,7 +935,7 @@ export default function TapTipTup() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          zIndex: 9999,
+          zIndex: 999999,
           padding: "20px",
         }}>
           <div style={{
