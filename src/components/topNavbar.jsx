@@ -126,10 +126,10 @@ const ThemeToggle = ({ theme, onToggle }) => {
 // ─── TopNavbar ─────────────────────────────────────────────────────────────────
 
 export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, navbar, isCollapsed, setIsCollapsed }) => {
-  const [showLogout, setShowLogout]           = useState(false);
+  const [showLogout, setShowLogout]               = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [showTransfer, setShowTransfer]       = useState(false); // ← BARU
-  const [currentBalance, setCurrentBalance]   = useState(user?.balance ?? 0); // ← BARU
+  const [showTransfer, setShowTransfer]           = useState(false);
+  const [currentBalance, setCurrentBalance]       = useState(user?.balance ?? 0);
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const [showBalance, setShowBalance] = useState(() => {
@@ -137,7 +137,6 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
     return saved === 'true';
   });
 
-  // Sinkronkan balance dari props user ketika user berubah
   useEffect(() => {
     setCurrentBalance(user?.balance ?? 0);
   }, [user?.balance]);
@@ -170,12 +169,10 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
     window.dispatchEvent(new Event('storage'));
   };
 
-  // ── Callback setelah transfer sukses — update balance lokal ─────────────────
   const handleTransferSuccess = (newBalance) => {
     if (newBalance !== undefined) {
       setCurrentBalance(newBalance);
     }
-    // Opsional: trigger storage event agar komponen lain juga tahu
     window.dispatchEvent(new Event('storage'));
   };
 
@@ -197,6 +194,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
         {/* Kanan */}
         <div className="flex items-center gap-2.5 md:pr-[7px] flex-shrink-0">
           <button
+            id="tour-sidebar-toggle"
             onClick={() => setIsCollapsed(v => !v)}
             title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             className="cursor-pointer flex-shrink-0 h-[40px] border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60 w-max px-2 mx-[1px] flex items-center justify-center gap-1 text-slate-500 dark:text-slate-400 hover:brightness-110 transition-all"
@@ -217,7 +215,10 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           </button>
 
           {/* ── Saldo + Tombol Kirim ─────────────────────────────────────── */}
-          <div className="hidden sm:flex items-center h-[40px] gap-0 rounded-none border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60 overflow-hidden">
+          <div
+            id="tour-balance"  
+            className="hidden sm:flex items-center h-[40px] gap-0 rounded-none border border-slate-200/80 dark:border-slate-700 dark:bg-slate-800/60 overflow-hidden"
+          >
             {/* Info saldo */}
             <div className="flex items-center gap-2 px-3.5 py-2 border-r border-slate-200/80 dark:border-slate-700">
               <Wallet size={18} className="text-blue-400" />
@@ -237,6 +238,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
 
             {/* Tombol Kirim Saldo */}
             <button
+              id="tour-balance"
               onClick={() => setShowTransfer(true)}
               title="Kirim saldo ke streamer lain"
               className="cursor-pointer h-full px-3.5 flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 dark:hover:text-blue-400 transition-all active:scale-[0.97] group"
@@ -253,6 +255,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           <ThemeToggle theme={theme} onToggle={toggle} />
 
           <button
+            id="tour-help"
             onClick={() => setActiveTab('contact')}
             className={`cursor-pointer h-[40px] active:scale-[0.99] flex items-center gap-2 px-3.5 rounded-none border font-bold text-md transition-all ${
               activeTab === 'contact'
@@ -267,6 +270,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
 
           {/* Komunitas */}
           <button
+            id="tour-community"
             onClick={() => setActiveTab('community')}
             className="cursor-pointer hover:brightness-90 h-[38px] active:scale-[0.99] relative flex items-center gap-2 px-3.5 py-3 rounded-none font-bold text-md overflow-hidden"
             style={{
@@ -290,6 +294,7 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
           {/* Avatar + dropdown */}
           <div className="relative">
             <button
+              id="tour-profile"
               onClick={() => setShowLogout(v => !v)}
               className="cursor-pointer h-[38.4px] flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-none px-1.5 py-3 transition-all active:scale-[0.99]"
             >
@@ -335,7 +340,6 @@ export const TopNavbar = ({ user, onLogout, onProfile, activeTab, setActiveTab, 
                           Rp {parseFloat(currentBalance).toLocaleString('id-ID')}
                         </span>
                       </div>
-                      {/* Kirim saldo di mobile (dropdown) */}
                       <button
                         onClick={() => { setShowLogout(false); setShowTransfer(true); }}
                         className="cursor-pointer mt-2 w-full flex items-center gap-2 py-2 px-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 text-xs font-bold hover:bg-blue-100 dark:hover:bg-blue-950/60 transition-all"

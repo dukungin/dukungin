@@ -71,6 +71,7 @@ import { useMaintenance } from '../hooks/useMaintenance';
 import MaintenanceScreen from '../components/MaintenanceScreen';
 import VoiceSettingsPage from './voiceSetting';
 import DonationTerminal from './DonationTerminal';
+import OnboardingTour from '../components/onboardingTour';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -3115,6 +3116,8 @@ const handleChangePin = async () => {
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
+
+      <OnboardingTour />
 
       {/* <video src="/glass.mp4" className='absolute z-[1]' autoplay={true}></video> */}
       <img src="/glass.jpg" className='opacity-[10%] fixed top-0 left-0 w-screen h-screen z-[1]' autoplay={true}></img>

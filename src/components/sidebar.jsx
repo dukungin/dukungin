@@ -54,8 +54,6 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
   const superAdminOnly = ['whatsapp', 'suggestions', 'ghostAlert'];
 
   const hideForSuperAdmin = [
-    // 'settings',
-    // 'inbox',
     'alertSettings',
     'mediaSettings',
     'voiceSettings',
@@ -73,7 +71,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
     { id: 'settings',      label: 'Editor Overlay',   icon: <Layout size={20} /> },
     { id: 'alertSettings', label: 'Alert OBS',         icon: <ZapIcon size={20} /> },
     { id: 'mediaSettings', label: 'Media Share',       icon: <Video size={20} /> },
-    { id: 'voiceSettings', label: 'Voice Note',       icon: <Mic size={20} /> },
+    { id: 'voiceSettings', label: 'Voice Note',        icon: <Mic size={20} /> },
     { id: 'store',         label: 'Toko OBS',          icon: <ShoppingBag size={20} /> },
     { id: 'history',       label: 'Riwayat Donasi',    icon: <History size={20} /> },
     { id: 'wallet',        label: 'Penarikan Dana',    icon: <Wallet size={20} /> },
@@ -94,10 +92,10 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
     {
       groupLabel: 'OBS & Overlay',
       items: [
-        { id: 'settings', label: isSuperAdmin ? 'Statistik Overall' : 'Editor Overlay', icon: <Layout size={20} /> },
+        { id: 'settings',      label: isSuperAdmin ? 'Statistik Overall' : 'Editor Overlay', icon: <Layout size={20} /> },
         { id: 'alertSettings', label: 'Alert OBS',      icon: <ZapIcon size={20} /> },
         { id: 'mediaSettings', label: 'Media Share',    icon: <Video size={20} /> },
-        { id: 'voiceSettings', label: 'Voice Note',    icon: <Mic size={20} /> },
+        { id: 'voiceSettings', label: 'Voice Note',     icon: <Mic size={20} /> },
         { id: 'store',         label: 'Toko OBS',       icon: <ShoppingBag size={20} /> },
       ]
     },
@@ -111,7 +109,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
     {
       groupLabel: 'Interaksi',
       items: [
-        { id: 'inbox', label: 'Inbox', icon: <Mail size={20} /> },
+        { id: 'inbox',       label: 'Inbox',        icon: <Mail size={20} /> },
         { id: 'poll',        label: 'Poll & Voting', icon: <Vote size={20} /> },
         { id: 'subathon',    label: 'Subathon',      icon: <Timer size={20} /> },
         { id: 'milestones',  label: 'Milestones',    icon: <TrendingUp size={20} /> },
@@ -128,16 +126,11 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
     ...(isSuperAdmin ? [{
       groupLabel: 'Admin',
       items: [
-        // { id: 'whatsapp',    label: 'WhatsApp',          icon: <MessageSquare size={20} /> },
-        { id: 'suggestions', label: 'Masukan Streamer',  icon: <MessageSquare size={20} /> },
-        { id: 'ghostAlert',  label: 'Notif Hantu',       icon: <Zap size={20} /> },
-        { id: 'terminal', label: 'Log Donasi', icon: <Terminal size={20} /> },
-        { 
-          id: 'maintenance', 
-          label: 'Maintenance Mode', 
-          icon: <ShieldAlert size={20} /> 
-        },
-        { id: 'announcements', label: 'Pengumuman', icon: <Megaphone size={20} /> },
+        { id: 'suggestions',  label: 'Masukan Streamer', icon: <MessageSquare size={20} /> },
+        { id: 'ghostAlert',   label: 'Notif Hantu',      icon: <Zap size={20} /> },
+        { id: 'terminal',     label: 'Log Donasi',       icon: <Terminal size={20} /> },
+        { id: 'maintenance',  label: 'Maintenance Mode', icon: <ShieldAlert size={20} /> },
+        { id: 'announcements',label: 'Pengumuman',       icon: <Megaphone size={20} /> },
       ]
     }] : [])
   ];
@@ -273,6 +266,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
                   {visibleItems.map((item) => (
                     <button
                       key={item.id}
+                      id={`tour-${item.id}`}
                       onClick={() => {
                         setActiveTab(item.id);
                         setIsSidebarOpen(false);
@@ -319,6 +313,7 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
 
           {isSuperAdmin && (
             <button
+              id="tour-admin" 
               onClick={() => {
                 setActiveTab('admin');
                 setIsSidebarOpen(false);
