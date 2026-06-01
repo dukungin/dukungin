@@ -194,8 +194,8 @@ const LeftPanel = () => (
 const ThemeToggle = ({ isDark, onToggle, T }) => (
   <motion.button
     onClick={onToggle}
-    whileTap={{ scale: 0.90 }}
-    className="absolute top-0 md:top-[30px] left-[16.5px] md:right-[35px] flex items-center gap-[7px] dark:bg-[rgba(255,255,255,0.08)] bg-[rgba(79,70,229,0.08)] px-[18px] py-[12px] cursor-pointer z-20 rounded-none transition-colors duration-[350ms]"
+    whileTap={{ scale: 0.98 }}
+    className="absolute top-0 md:top-[30px] left-[16.5px] w-max md:right-[35px] flex items-center gap-[7px] dark:bg-[rgba(255,255,255,0.08)] bg-[rgba(79,70,229,0.08)] px-[18px] py-[12px] cursor-pointer z-20 rounded-none transition-colors duration-[350ms]"
   >
     <AnimatePresence mode="wait">
       <motion.div key={isDark ? 'moon' : 'sun'}
@@ -1213,8 +1213,8 @@ const Auth = () => {
         * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
         .auth-input-field::placeholder { color: #94a3b8 !important; font-weight: 400; }
         .tab-btn { transition: all 0.22s cubic-bezier(.4,0,.2,1); }
-        .tab-btn:active { transform: scale(0.97); }
-        .submit-btn:active:not(:disabled) { transform: scale(0.97) !important; }
+        .tab-btn:active { transform: scale(0.99); }
+        .submit-btn:active:not(:disabled) { transform: scale(0.99) !important; }
         .submit-btn:hover:not(:disabled) { filter: brightness(1.08); }
         @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 768px) {
