@@ -279,7 +279,7 @@ function Hero({ C, isDark }) {
 
       <div
         style={{ zIndex: 4, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}
-        className="select-none relative top-[-22px] hero-main-grid relative h-full flex items-center"
+        className="select-none relative top-[-23px] hero-main-grid relative h-full flex items-center"
       >
         <div
           className="select-none text-center mx-auto w-full flex flex-col justify-center items-center px-6"
@@ -416,10 +416,11 @@ function Marquee({ C }) {
 }
 
 const PLATFORMS = [
-  { name: "Saweria",    fee: 5.0 },
-  { name: "TapTipTup", fee: 2.5, winner: true },
-  { name: "Trakteer",  fee: 5.0 },
+  { name: "Saweria",    feeDonate: 5.0,  feeWd: 5000,  feeWdLabel: "Rp 5.000" },
+  { name: "TapTipTup", feeDonate: 2.5,  feeWd: 1500,  feeWdLabel: "Rp 1.500", winner: true },
+  { name: "Sociabuzz",  feeDonate: 5.0,  feeWd: 4500,  feeWdLabel: "Rp 4.500" },
 ];
+
 function FeeComparison({ C }) {
   const maxFee = Math.max(...PLATFORMS.map(p => p.fee));
 
@@ -501,38 +502,45 @@ function FeeComparison({ C }) {
       {/* Grid perbandingan */}
       <div className="select-none w-[90vw] grid grid-cols-1 bg-white relative md:grid-cols-3"
         style={{ borderBottom: `1px solid ${C.line}`, zIndex: 40 }}>
-        {PLATFORMS.map((p, i) => {
-          const barWidth = Math.round((p.fee / maxFee) * 100);
-          const isLast = i === PLATFORMS.length - 1;
-          const isMobile = window.innerWidth < 768;
+          {PLATFORMS.map((p, i) => {
+            const barWidth = Math.round((p.feeDonate / maxFee) * 100);
+            const isLast = i === PLATFORMS.length - 1;
+            const isMobile = window.innerWidth < 768;
 
-          return (
-            <div key={p.name}
-              style={{
-                padding: "32px 24px",
-                borderRight: !isLast ? `1px solid ${C.line}` : "none",
-                borderBottom: isMobile ? `1px solid ${C.line}` : "none",
-                background: p.winner ? C.bg2 : "transparent",
-                transition: "all 0.4s",
-              }}>
-              {p.winner
-                ? <span style={{ display: "inline-block", marginBottom: 10, background: C.lime, color: C.bg, fontSize: 10, padding: "3px 10px", letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 700 }}>Terkecil</span>
-                : <div style={{ height: 24, marginBottom: 10 }} />}
-              <div style={{ fontSize: 12, fontWeight: 700, color: p.winner ? C.text : "#000000", marginBottom: 4, fontFamily: "'Space Grotesk',sans-serif" }}>
-                {p.name}
+            return (
+              <div key={p.name}
+                style={{
+                  padding: "32px 24px",
+                  borderRight: !isLast ? `1px solid ${C.line}` : "none",
+                  borderBottom: isMobile ? `1px solid ${C.line}` : "none",
+                  background: p.winner ? C.bg2 : "transparent",
+                  transition: "all 0.4s",
+                }}>
+                {p.winner
+                  ? <span style={{ display: "inline-block", marginBottom: 10, background: "orange", color: C.bg, fontSize: 10, padding: "3px 10px", letterSpacing: "0.06em", textTransform: "uppercase", fontWeight: 700 }}>Terkecil</span>
+                  : <div style={{ height: 24, marginBottom: 10 }} />}
+
+                <div style={{ fontSize: 20, fontWeight: 700, color: p.winner ? C.text : "#000000", marginBottom: 4, fontFamily: "'Space Grotesk',sans-serif" }}>
+                  {p.name}
+                </div>
+
+                {/* Progress bar */}
+                <div style={{ height: 1, background: C.line2, borderRadius: 2, marginBottom: 16, marginTop: 14 }}>
+                  <div style={{ height: 1, width: `${barWidth}%`, background: p.winner ? C.lime : C.dim, borderRadius: 2 }} />
+                </div>
+
+                {/* Fee donate */}
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 26, lineHeight: 1, color: p.winner ? C.lime : "#000000" }}>
+                    {p.feeDonate.toFixed(1)}% + {p.feeWdLabel || '—'}
+                  </div>
+                  <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: p.winner ? C.muted : "black", letterSpacing: "0.05em", textTransform: "uppercase", marginTop: 10 }}>
+                    potongan per donasi + per withdraw
+                  </div>
+                </div>
               </div>
-              <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 32, lineHeight: 1, marginBottom: 12, color: p.winner ? C.lime : "#000000" }}>
-                {p.fee.toFixed(1)}%
-              </div>
-              <div style={{ height: 4, background: C.line2, borderRadius: 2, marginBottom: 8 }}>
-                <div style={{ height: 4, width: `${barWidth}%`, background: p.winner ? C.lime : C.dim, borderRadius: 2 }} />
-              </div>
-              <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: p.winner ? C.muted : "#000000", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                potongan withdraw
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </section>
   );
