@@ -369,7 +369,7 @@ function Hero({ C, isDark }) {
             <p className="text-5xl w-max lg:text-8xl 2xl:text-[7.8rem] w-[80vw] select-none hidden md:flex items-center justify-center">
               
               <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
-                <p className="top-[-3px] px-2 min-w-[64vw] relative text-black h-[85px] bg-[azure]">{" "} DAPAT UNTUNG LEBIH BANYAK {" "}</p> BERSAMA TAPTIPTUP
+                <p className="top-[-3px] px-2 min-w-[64vw] relative text-black 2xl:h-[110px] md:h-[85px] bg-[azure]">{" "} DAPAT UNTUNG LEBIH BANYAK {" "}</p> BERSAMA TAPTIPTUP
               </p>
             </p>
           </h1>
