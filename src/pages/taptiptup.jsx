@@ -118,7 +118,7 @@ function Kicker({ children, C }) {
       fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase",
       color: C.lime, marginBottom: 16, display: "block",
     }}>
-      — {children}
+      {children}
     </span>
   );
 }
@@ -217,7 +217,7 @@ function Hero({ C, isDark }) {
 
   return (
     <section id="home"
-      className="select-none hero-wrapper md:py-0 min-h-[62vh] md:h-[89vh] overflow-hidden relative"
+      className="select-none hero-wrapper md:py-0 min-h-max md:h-[89vh] overflow-hidden relative"
       style={{
         display: "grid",
         gridTemplateRows: "1fr auto",
@@ -279,53 +279,48 @@ function Hero({ C, isDark }) {
 
       <div
         style={{ zIndex: 4, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}
-        className="select-none relative top-[-12px] hero-main-grid relative h-full flex items-center"
+        className="select-none relative top-[-22px] hero-main-grid relative h-full flex items-center"
       >
         <div
           className="select-none text-center mx-auto w-full flex flex-col justify-center items-center px-6"
           style={{ paddingBottom: "0px" }}
         >
-          {/* Judul Hero */}
-          <h1
-            className="select-none hero-title"
-            style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(3.5rem, 12vw, 8rem)",
-              lineHeight: 0.85,
-              letterSpacing: "-0.01em",
-              color: "#ffffff",
-              marginBottom: 16,
-              textAlign: "center",
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.1em",
-              transition: "color 0.4s",
-            }}
+        {/* Judul Hero */}
+         <h1
+            className="select-none hero-title font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400"
           >
-            <span className="select-none flex items-center justify-center gap-[0.1em]">
-              UBAH HOBI
+            <p className="text-5xl md:text-8xl select-none flex items-center justify-center gap-[0.1em]">
+              UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
               <img
                 draggable={false}
                 className="select-none relative top-[-2px] md:top-[-7px] md:inline-block hidden h-[0.8em] md:h-[0.85em] w-auto"
                 src="/jellyfish.png"
                 alt="icon"
               />
-            </span>
-            <span>LIVE STREAMING</span>
-            <span className="select-none w-full">MENJADI BER-CUAN</span>
+            </p>
+            <p className="text-5xl md:text-8xl select-none hidden md:flex items-center justify-center gap-[0.1em]">
+              UBAH HOBI 
+              <img
+                draggable={false}
+                className="select-none relative top-[-2px] md:top-[-7px] md:inline-block hidden h-[0.8em] md:h-[0.85em] w-auto"
+                src="/jellyfish.png"
+                alt="icon"
+              />
+            </p>
+            <p className="text-5xl md:text-8xl hidden md:flex">LIVE STREAMING</p>
+            <p className="text-5xl md:text-8xl hidden md:flex select-none w-full">MENJADI BER-CUAN</p>
           </h1>
+
+          <br className="md:hidden flex" />
 
           {/* Deskripsi */}
           <p
-            className="select-none"
+            className="select-none w-[86vw] md:max-w-[50vw]"
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(13px, 1.5vw, 16px)",
               color: "rgba(255,255,255,0.6)",
               lineHeight: 1.7,
-              maxWidth: '50vw',
               marginBottom: 36,
               textAlign: "center",
             }}
@@ -334,20 +329,16 @@ function Hero({ C, isDark }) {
           </p>
 
           {/* Container Tombol */}
-          <div className="select-none w-full max-w-md md:max-w-none px-4">
+          <div className="select-none mb-20 w-full max-w-md md:max-w-none px-4">
             <div className="select-none flex flex-col md:flex-row items-center gap-4 w-full justify-center">
               <BtnMain href="/register" C={C}>
                 <p draggable={false} className="select-none w-full flex justify-center items-center mx-auto text-center flex items-center gap-2">
                   Mulai Sekarang 
                 </p>
               </BtnMain>
-              {/* <BtnGhost href="https://wa.me/6289513093406" C={C}>
-                <p className="text-black select-none select-none w-full flex justify-center items-center mx-auto text-center flex items-center gap-2">
-                  Hubungi Developer <span className="select-none relative top-[-2px]">→</span>
-                </p>
-              </BtnGhost> */}
             </div>
           </div>
+          <br className="md:hidden flex" />
         </div>
       </div>
 
@@ -493,8 +484,7 @@ function FeeComparison({ C }) {
       {/* ===== KONTEN (z-index di atas efek) ===== */}
 
       {/* Header */}
-      <div className="select-none text-center flex flex-col justify-center items-center"
-        style={{ padding: "80px 20px", transition: "border-color 0.4s", position: "relative", zIndex: 2 }}>
+      <div className="select-none text-center flex flex-col justify-center items-center !py-11 !md:py-20 !px-5 transition-colors duration-400 relative z-[2]">
         <Kicker C={C}>Transparansi Biaya</Kicker>
         <BigTitle C={C}>POTONGAN TERKECIL DI{" "}
           <span style={{ color: C.lime }}>KELASNYA</span>
