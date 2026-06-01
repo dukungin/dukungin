@@ -141,11 +141,11 @@ function BtnMain({ children, href, style, C }) {
     <Link 
       to={href || "/"} 
       draggable={false}
-      className="select-none w-[90vw] relativeflex justify-center items-center md:w-[18vw] text-center" // Tambahkan class ini
+      className="select-none w-[90vw] relative flex justify-center items-center md:w-max text-center" // Tambahkan class ini
       style={{
         fontFamily: "'Space Grotesk', sans-serif",
         fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
-        padding: "14px 28px", background: 'transparent', color: 'azure',
+        padding: "16px 46px", background: 'transparent', color: 'azure',
         border: "1px solid azure", cursor: "pointer", textDecoration: "none",
         display: "inline-block", // Penting agar width: 100% bekerja
         transition: "background 0.15s, opacity 0.15s",
@@ -313,42 +313,10 @@ function Hero({ C, isDark }) {
         </svg>
       </div>
 
-      {/* Aurora Blobs */}
-      {/* <div
-        className="select-none absolute inset-0 overflow-hidden pointer-events-none"
-        style={{ zIndex: 4, opacity: 0.25 }}
-      >
-        <div className="select-none aurora-blob aurora-2" style={{ background: "#6366f1" }} />
-        <div className="select-none aurora-blob aurora-3" style={{ background: "#a855f7" }} />
-      </div> */}
-
       <img src="/man2.png" alt="image woman" className="absolute md:flex hidden bottom-0 md:bottom-[-56px] left-[-40px] 2xl:left-[-270px] md:left-[-257px] w-[44%] md:w-[50%] z-[99999]" />
       <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-34px] md:left-[-50px] w-[46%] md:w-[43%] z-[99999]" />
       <img src="/woman2.png" alt="image woman" className="absolute bottom-0 md:flex hidden md:bottom-[-100px] right-12 w-[32%] z-[99999]" />
       <img src="/man1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] right-[-17px] md:right-[-200px] w-[39.5%] md:w-[40%] z-[999]" />
-
-      {/* ===== MODERN SIDE WAVES (UNGU) ===== */}
-      {/* Gelombang Kiri */}
-      {/* <div 
-        className="absolute left-0 top-0 bottom-0 w-[30vw] md:w-[25vw] pointer-events-none select-none"
-        style={{ 
-          zIndex: 3,
-          background: "linear-gradient(90deg, rgba(99,102,241,0.35) 0%, rgba(139,92,246,0.2) 50%, transparent 100%)",
-          filter: "blur(60px)",
-          animation: "waveLeft 15s ease-in-out infinite alternate",
-        }} 
-      /> */}
-
-      {/* Gelombang Kanan */}
-      {/* <div 
-        className="absolute right-0 top-0 bottom-0 w-[30vw] md:w-[25vw] pointer-events-none select-none"
-        style={{ 
-          zIndex: 3,
-          background: "linear-gradient(270deg, rgba(168,85,247,0.35) 0%, rgba(124,58,237,0.2) 50%, transparent 100%)",
-          filter: "blur(60px)",
-          animation: "waveRight 18s ease-in-out infinite alternate",
-        }} 
-      /> */}
 
       {/* Main Content */}
       <div
@@ -369,7 +337,7 @@ function Hero({ C, isDark }) {
             <p className="text-5xl w-max lg:text-8xl 2xl:text-[7.8rem] w-[80vw] select-none hidden md:flex items-center justify-center">
               
               <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
-                <p className="top-[-3px] px-2 min-w-[64vw] relative text-black 2xl:h-[110px] md:h-[85px] bg-[azure]">{" "} DAPAT UNTUNG LEBIH BANYAK {" "}</p> BERSAMA TAPTIPTUP
+                <p className="top-[-3px] px-2 2xl:min-w-[65.6vw] min-w-[64vw] relative text-black 2xl:h-[110px] md:h-[85px] bg-[azure]">{" "} DAPAT UNTUNG LEBIH BANYAK {" "}</p> BERSAMA TAPTIPTUP
               </p>
             </p>
           </h1>
@@ -396,7 +364,7 @@ function Hero({ C, isDark }) {
           <div className="select-none mb-20 w-full max-w-md md:max-w-none px-4">
             <div className="select-none flex flex-col md:flex-row items-center gap-4 w-full justify-center">
               <BtnMain href="/register" C={C}>
-                <p draggable={false} className="select-none w-full flex justify-center items-center mx-auto text-center flex items-center gap-2">
+                <p draggable={false} className="select-none w-max flex justify-center items-center mx-auto text-center flex items-center gap-2">
                   Mulai Sekarang - Gratis
                 </p>
               </BtnMain>

@@ -422,6 +422,14 @@ const OnboardingTour = ({ forceShow = false, onComplete }) => {
   const [phase, setPhase]         = useState('idle');
   const [stepIndex, setStepIndex] = useState(0);
 
+  const payload = getTokenPayload();
+  const isSuperAdmin = payload?.role === 'superAdmin';
+
+  // Jika SuperAdmin → langsung return null (tour tidak muncul)
+  if (isSuperAdmin) {
+    return null;
+  }
+
   const currentStep = TOUR_STEPS[stepIndex];
   const targetRect  = useTargetRect(currentStep?.target, phase === 'touring');
 
