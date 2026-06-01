@@ -322,7 +322,7 @@ function Hero({ C, isDark }) {
         <div className="select-none aurora-blob aurora-3" style={{ background: "#a855f7" }} />
       </div> */}
 
-      <img src="/man2.png" alt="image woman" className="absolute md:flex hidden bottom-0 md:bottom-[-40px] left-[-60px] md:left-[-260px] w-[44%] md:w-[50%] z-[99999]" />
+      <img src="/man2.png" alt="image woman" className="absolute md:flex hidden bottom-0 md:bottom-[-56px] left-[-60px] md:left-[-275px] w-[44%] md:w-[50%] z-[99999]" />
       <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-34px] md:left-[-50px] w-[46%] md:w-[43%] z-[99999]" />
       <img src="/woman2.png" alt="image woman" className="absolute bottom-0 md:flex hidden md:bottom-[-100px] right-12 w-[32%] z-[99999]" />
       <img src="/man1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] right-[-17px] md:right-[-200px] w-[39.5%] md:w-[40%] z-[999]" />
