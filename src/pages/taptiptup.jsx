@@ -289,7 +289,7 @@ function Hero({ C, isDark }) {
          <h1
             className="select-none hero-title font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400"
           >
-            <p className="text-5xl md:text-8xl select-none flex items-center justify-center gap-[0.1em]">
+            <p className="text-5xl md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
               UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
               <img
                 draggable={false}
@@ -307,8 +307,8 @@ function Hero({ C, isDark }) {
                 alt="icon"
               />
             </p>
-            <p className="text-5xl md:text-8xl hidden md:flex">LIVE STREAMING</p>
-            <p className="text-5xl md:text-8xl hidden md:flex select-none w-full">MENJADI BER-CUAN</p>
+            <p className="text-5xl md:text-8xl hidden md:inline">LIVE STREAMING</p>
+            <p className="text-5xl md:text-8xl hidden md:inline select-none w-full">MENJADI BER-CUAN</p>
           </h1>
 
           <br className="md:hidden flex" />
