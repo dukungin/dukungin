@@ -353,7 +353,7 @@ function Hero({ C, isDark }) {
       {/* Main Content */}
       <div
         style={{ zIndex: 4, transition: "border-color 0.4s" }}
-        className="select-none relative top-[-4thpx] hero-main-grid relative h-full flex items-center"
+        className="select-none relative top-[-40px] hero-main-grid relative h-full flex items-center"
       >
         <div
           className="select-none text-center mx-auto w-full flex flex-col justify-center items-center px-6"
@@ -369,7 +369,7 @@ function Hero({ C, isDark }) {
             <p className="text-5xl w-max lg:text-8xl 2xl:text-[7.8rem] w-[80vw] select-none hidden md:flex items-center justify-center">
               
               <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
-                DAPAT <p className="underline relative">UNTUNG LEBIH BANYAK</p> BERSAMA TAPTIPTUP
+                <p className="top-[-3px] px-2 min-w-[64vw] relative text-black h-[85px] bg-[azure]">{" "} DAPAT UNTUNG LEBIH BANYAK {" "}</p> BERSAMA TAPTIPTUP
               </p>
             </p>
           </h1>
