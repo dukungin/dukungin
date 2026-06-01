@@ -195,7 +195,7 @@ const ThemeToggle = ({ isDark, onToggle, T }) => (
   <motion.button
     onClick={onToggle}
     whileTap={{ scale: 0.98 }}
-    className="absolute top-0 md:top-[30px] left-[16.5px] w-max md:right-[35px] flex items-center gap-[7px] dark:bg-[rgba(255,255,255,0.08)] bg-[rgba(79,70,229,0.08)] px-[18px] py-[12px] cursor-pointer z-20 rounded-none transition-colors duration-[350ms]"
+    className="absolute top-0 md:top-[30px] left-[34px] w-max md:right-[35px] flex items-center gap-[7px] dark:bg-[rgba(255,255,255,0.08)] bg-[rgba(79,70,229,0.08)] px-[18px] py-[12px] cursor-pointer z-20 rounded-none transition-colors duration-[350ms]"
   >
     <AnimatePresence mode="wait">
       <motion.div key={isDark ? 'moon' : 'sun'}

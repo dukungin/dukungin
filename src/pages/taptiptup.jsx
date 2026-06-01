@@ -322,8 +322,10 @@ function Hero({ C, isDark }) {
         <div className="select-none aurora-blob aurora-3" style={{ background: "#a855f7" }} />
       </div> */}
 
-      <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-17px] md:left-[-50px] w-[39.5%] md:w-[43%] z-[99999]" />
-      <img src="/man1.png" alt="image woman" className="absolute bottom-0 right-0 w-[34%] z-[99999]" />
+      <img src="/man2.png" alt="image woman" className="absolute md:flex hidden bottom-0 md:bottom-[-40px] left-[-60px] md:left-[-260px] w-[44%] md:w-[50%] z-[99999]" />
+      <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-34px] md:left-[-50px] w-[46%] md:w-[43%] z-[99999]" />
+      <img src="/woman2.png" alt="image woman" className="absolute bottom-0 md:flex hidden md:bottom-[-100px] right-12 w-[32%] z-[99999]" />
+      <img src="/man1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] right-[-17px] md:right-[-200px] w-[39.5%] md:w-[40%] z-[999]" />
 
       {/* ===== MODERN SIDE WAVES (UNGU) ===== */}
       {/* Gelombang Kiri */}
@@ -350,12 +352,12 @@ function Hero({ C, isDark }) {
 
       {/* Main Content */}
       <div
-        style={{ zIndex: 4, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}
-        className="select-none relative top-[-30px] hero-main-grid relative h-full flex items-center"
+        style={{ zIndex: 4, transition: "border-color 0.4s" }}
+        className="select-none relative top-[-4thpx] hero-main-grid relative h-full flex items-center"
       >
         <div
           className="select-none text-center mx-auto w-full flex flex-col justify-center items-center px-6"
-          style={{ paddingBottom: "0px" }}
+          style={{ paddingBottom: "0px", paddingTop: 40 }}
         >
         {/* Judul Hero */}
          <h1
@@ -363,24 +365,12 @@ function Hero({ C, isDark }) {
           >
             <p className="text-5xl md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
               AMBIL UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
-              <img
-                draggable={false}
-                className="select-none relative top-[-2px] md:top-[-7px] md:inline-block hidden h-[0.8em] md:h-[0.85em] w-auto"
-                src="/jellyfish.png"
-                alt="icon"
-              />
             </p>
             <p className="text-5xl w-max lg:text-8xl 2xl:text-[7.8rem] w-[80vw] select-none hidden md:flex items-center justify-center">
               
-              <p className="flex gap-x-5 flex-wrap w-[80vw] text-center justify-center items-center">
+              <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
                 DAPAT <p className="underline relative">UNTUNG LEBIH BANYAK</p> BERSAMA TAPTIPTUP
               </p>
-              {/* <img
-                draggable={false}
-                className="select-none relative top-[-2px] md:top-[-7px] md:inline-block hidden h-[0.8em] md:h-[0.85em] w-auto"
-                src="/jellyfish.png"
-                alt="icon"
-              /> */}
             </p>
           </h1>
 
@@ -616,8 +606,14 @@ function FeeComparison({ C }) {
   const maxFee = Math.max(...PLATFORMS.map(p => p.fee));
 
   return (
-    <section id="biaya" className="flex flex-col justify-center items-center relative overflow-hidden"
-      style={{ transition: "border-color 0.4s", background: C.bg }}>
+    <section id="biaya" className="flex flex-col bg-blue-900 justify-center items-center relative overflow-hidden"
+      style={{ 
+        transition: "border-color 0.4s",
+        padding: '20px 0px 60px 0px',           // mobile
+        '@media (max-width: 768px)': {           // md breakpoint
+          padding: '20px 0px 30px 0px'
+        }
+      }}>
 
       {/* ===== GALAXY / BLACKHOLE EFFECT ===== */}
       <div className="pointer-events-none select-none absolute inset-0" style={{ zIndex: 0 }}>
@@ -686,13 +682,14 @@ function FeeComparison({ C }) {
         </p>
       </div>
 
-      <div className="relative w-full hidden md:flex justify-center items-center" style={{ zIndex: 2 }}>
-        <img src="/man.png" alt="image" className="w-[50%] md:w-[20%] mx-auto relative top-2.5 left-1" style={{ zIndex: 33 }} />
-      </div>
+      {/* <div className="absolute w-full hidden md:flex justify-center items-center" style={{ zIndex: 2 }}>
+        <img src="/man2.png" alt="image" className="w-[50%] md:w-[30%] mx-auto relative top-2.5 left-1" style={{ zIndex: 33 }} />
+      </div> */}
 
       {/* Grid perbandingan */}
-      <div className="select-none w-[90vw] grid grid-cols-1 bg-white relative md:grid-cols-3"
-        style={{ borderBottom: `1px solid ${C.line}`, zIndex: 40 }}>
+      <div className="select-none w-[90vw] relative grid grid-cols-1 bg-white md:grid-cols-3"
+        style={{ borderBottom: `1px solid ${C.line}`, zIndex: 40 }}
+        >
           {PLATFORMS.map((p, i) => {
             const barWidth = Math.round((p.feeDonate / maxFee) * 100);
             const isLast = i === PLATFORMS.length - 1;
@@ -705,7 +702,7 @@ function FeeComparison({ C }) {
                   padding: "32px 24px",
                   borderRight: !isLast ? `1px solid ${C.line}` : "none",
                   borderBottom: isMobile ? `1px solid ${C.line}` : "none",
-                  // background: p.winner ? 'purple' : "transparent",
+                  background: p.winner ? 'blue' : "transparent",
                   transition: "all 0.4s",
                 }}>
                 {p.winner
@@ -740,8 +737,8 @@ function FeeComparison({ C }) {
 
 function Footer({ C }) {
   return (
-    <footer className="select-none text-center flex justify-center items-center" style={{ display: "grid", gridTemplateColumns: "1fr", borderTop: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
-      <div className="select-none w-full text-center mx-auto flex flex-col justify-between items-center" style={{ padding: "32px 32px", borderRight: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+    <footer className="select-none text-center flex justify-center items-center" style={{ background: C.bg2, display: "grid", gridTemplateColumns: "1fr", transition: "border-color 0.4s" }}>
+      <div className="select-none w-full text-center mx-auto flex flex-col justify-between items-center" style={{ padding: "20px 32px", borderRight: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 15, marginTop: 6, marginBottom: 12, color: C.text, transition: "color 0.4s" }}>
           TapTipTup
         </div>
@@ -898,70 +895,6 @@ function SharePromo({ C }) {
         <p style={{ fontSize: 14, color: C.muted, marginTop: 16 }}>
           Pilih gambar & salin teks siap pakai untuk Instagram atau media sosial lainnya
         </p>
-      </div>
-
-      <br />
-
-      <div style={{ padding: "48px 30px" }}>
-        {/* Image cards */}
-        <div className="select-none grid-cols-1 md:grid-cols-4" style={{ display: "grid", gap: 16, marginBottom: 32 }}>
-          {[2,3, 4, 5].map(n => (
-            <div 
-              key={n} 
-              className="select-none bg-white" 
-              // onClick={() => setSelectedCard(n)} 
-              style={{
-                border: `${selectedCard === n ? 2 : 1}px solid ${selectedCard === n ? C.lime : C.line}`,
-                // cursor: "pointer", 
-                overflow: "hidden", 
-                transition: "border-color 0.15s",
-                position: "relative",
-              }}
-            >
-              <div 
-                className="select-none flex items-center justify-center"
-                style={{ 
-                  // aspectRatio: format === 'ig' ? '1/1' : '16/9', 
-                  background: 'white', 
-                  height: 500,
-                  overflow: "hidden" 
-                }}>
-                <img
-                draggable={false}
-                  src={`/share-${format === 'ig' ? 'ig' : 'desktop'}-${n}.jpg`}
-                  alt={`Template ${n}`}
-                  style={{ 
-                    width: "100%", 
-                    height: "100%", 
-                    objectFit: format === 'ig' ? 'cover' : 'cover',
-                    objectPosition: "center",
-                  }}
-                />
-              </div>
-
-              {/* Tombol Download */}
-              <a
-                href={`/share-ig-${n}.jpg`}
-                download={`taptiptup-${format}-${n}.jpg`}
-                className="select-none w-full text-center mx-auto active:scale-[0.98] hover:brightness-90"
-                onClick={e => e.stopPropagation()}
-                style={{
-                  position: "absolute", 
-                  bottom: 0, 
-                  right: 0,
-                  padding: "11px 12px", fontSize: 16, fontWeight: 600,
-                  background: C.lime, color: C.bg,
-                  border: "none", cursor: "pointer",
-                  textDecoration: "none", display: "inline-block",
-                  letterSpacing: "0.04em", textTransform: "uppercase",
-                  // opacity: 0.92,
-                }}
-              >
-                ⬇ Download
-              </a>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
