@@ -420,7 +420,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
   return (
     <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xl border border-slate-100 dark:border-slate-800 space-y-4">
       <div className="flex items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-700">
-        <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-none text-white shadow-lg">
+        <div className="bg-cyan-600 p-3 rounded-none text-white shadow-lg">
           <Video size={20} />
         </div>
         <div>

@@ -26,7 +26,7 @@
     const SectionHeader = ({ icon, title, color }) => (
     <div className="flex items-center gap-4">
         {icon && (
-        <div className={`${color} p-3 rounded-none text-white shadow-lg`}>{icon}</div>
+        <div className={`${color} p-2 rounded-none text-white shadow-lg`}>{icon}</div>
         )}
         <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">{title}</h3>
     </div>
