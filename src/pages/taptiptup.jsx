@@ -217,7 +217,7 @@ function Hero({ C, isDark }) {
 
   return (
     <section id="home"
-      className="select-none hero-wrapper md:py-0 min-h-max md:h-[89vh] overflow-hidden relative"
+      className="select-none hero-wrapper md:py-0 min-h-max md:h-[100vh] overflow-hidden relative"
       style={{
         display: "grid",
         gridTemplateRows: "1fr auto",
@@ -245,7 +245,7 @@ function Hero({ C, isDark }) {
         style={{
           zIndex: 1,
           background: isDark
-            ? "rgba(0,0,0,0.94)"
+            ? "rgba(0,0,0,0.93)"
             : "rgba(0,0,0,0.9)",
         }}
       />
@@ -298,36 +298,34 @@ function Hero({ C, isDark }) {
                 alt="icon"
               />
             </p>
-            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] select-none hidden md:flex items-center justify-center gap-[0.1em]">
-              UBAH HOBI 
-              <img
+            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] w-[80vw] select-none hidden md:flex items-center justify-center">
+              DAPAT UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
+              {/* <img
                 draggable={false}
                 className="select-none relative top-[-2px] md:top-[-7px] md:inline-block hidden h-[0.8em] md:h-[0.85em] w-auto"
                 src="/jellyfish.png"
                 alt="icon"
-              />
+              /> */}
             </p>
-            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] hidden md:inline">LIVE STREAMING</p>
-            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] hidden md:inline select-none w-full">MENJADI <span className="text-pink-400">BER-CUAN</span></p>
           </h1>
 
           <br className="md:hidden flex" />
           <br />
 
           {/* Deskripsi */}
-          {/* <p
+          <p
             className="select-none w-[86vw] md:max-w-[50vw]"
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(13px, 1.5vw, 16px)",
               color: "rgba(255,255,255,0.6)",
-              lineHeight: 1.7,
+              lineHeight: 0,
               marginBottom: 36,
               textAlign: "center",
             }}
           >
             Platform donasi streamer asal Indonesia dengan potongan terkecil yaitu 2.5%. 
-          </p> */}
+          </p>
 
           {/* Container Tombol */}
           <div className="select-none mb-20 w-full max-w-md md:max-w-none px-4">
@@ -350,7 +348,7 @@ function Hero({ C, isDark }) {
                 width: "28px",
                 height: "48px",
                 border: `2px solid azure`,
-                borderRadius: "9999px",
+                // borderRadius: "9999px",
                 position: "relative",
                 display: "flex",
                 justifyContent: "center",
@@ -362,7 +360,7 @@ function Hero({ C, isDark }) {
                   width: "5px",
                   height: "10px",
                   background: 'azure',
-                  borderRadius: "9999px",
+                  // borderRadius: "9999px",
                   position: "absolute",
                   top: "8px",
                   animation: "mouseScroll 2s infinite ease-in-out",
@@ -872,9 +870,9 @@ export default function TapTipTup() {
       }}
     >
       <style>{buildGlobalStyles(C)}</style>
-      <Marquee C={C} />
+      {/* <Marquee C={C} /> */}
       <Hero C={C} isDark={isDark} />
-      <Marquee C={C} />
+      {/* <Marquee C={C} /> */}
       <FeeComparison C={C} /> 
       <Footer C={C} />
 
