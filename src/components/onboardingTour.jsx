@@ -272,7 +272,7 @@ const TourCard = ({ step, stepIndex, total, rect, onNext, onSkip }) => {
   return (
     <motion.div
       ref={cardRef}
-      className="fixed z-[99999] w-[300px] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-2xl p-5"
+      className="fixed z-[99999] w-[300px] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-none shadow-2xl p-5"
       style={{ top: pos.top, left: pos.left }}
       initial={{ opacity: 0, scale: 0.92, y: 8 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -303,7 +303,7 @@ const TourCard = ({ step, stepIndex, total, rect, onNext, onSkip }) => {
         {Array.from({ length: total }).map((_, i) => (
           <div
             key={i}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
+            className={`h-1.5 rounded-none transition-all duration-300 ${
               i < stepIndex
                 ? 'bg-blue-300 dark:bg-blue-700 w-2'
                 : i === stepIndex
@@ -349,19 +349,19 @@ const TourStartModal = ({ onStart, onSkip }) => (
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+      className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
       onClick={onSkip}
     />
     <motion.div
       initial={{ opacity: 0, scale: 0.9, y: 16 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9, y: 16 }}
-      className="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-8 w-full max-w-sm text-center shadow-2xl"
+      className="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-100/5 p-6 w-full max-w-md text-center shadow-2xl"
     >
-      <div className="w-16 h-16 bg-blue-50 dark:bg-blue-950/40 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5">
+      <div className="w-16 h-16 bg-blue-50 dark:bg-blue-950/40 text-blue-600 rounded-none flex items-center justify-center mx-auto mb-5">
         <Map size={28} />
       </div>
-      <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-2">Selamat datang!</h3>
+      <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-2">Selamat datang</h3>
       <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
         Kamu baru pertama kali di sini. Yuk kenalan dulu dengan semua fitur TAPTIPTUP — hanya butuh beberapa detik.
       </p>
@@ -396,9 +396,9 @@ const TourFinishModal = ({ onDone }) => (
       initial={{ opacity: 0, scale: 0.9, y: 16 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9, y: 16 }}
-      className="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-8 w-full max-w-sm text-center shadow-2xl"
+      className="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-none p-8 w-full max-w-sm text-center shadow-2xl"
     >
-      <div className="w-16 h-16 bg-green-50 dark:bg-green-950/40 text-green-600 rounded-full flex items-center justify-center mx-auto mb-5">
+      <div className="w-16 h-16 bg-green-50 dark:bg-green-950/40 text-green-600 rounded-none flex items-center justify-center mx-auto mb-5">
         <Check size={28} />
       </div>
       <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-2">Tur selesai! 🎉</h3>
@@ -417,6 +417,16 @@ const TourFinishModal = ({ onDone }) => (
 
 // ─── Komponen utama ───────────────────────────────────────────────────────────
 const STORAGE_KEY = 'taptiptup_tour_done';
+
+const getTokenPayload = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return null;
+  }
+};
 
 const OnboardingTour = ({ forceShow = false, onComplete }) => {
   const [phase, setPhase]         = useState('idle');
