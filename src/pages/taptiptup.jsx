@@ -217,41 +217,87 @@ function Hero({ C, isDark }) {
 
   return (
     <section id="home"
-      className="select-none hero-wrapper md:py-0 min-h-max md:h-[100vh] overflow-hidden relative"
+      className="select-none bg-blue-900 hero-wrapper md:py-0 min-h-max md:h-[89vh] overflow-hidden relative"
       style={{
         display: "grid",
         gridTemplateRows: "1fr auto",
         paddingTop: 70,
         borderBottom: `1px solid ${C.line}`,
-        transition: "border-color 0.4s",
-        background: C.bg,
       }}
     >
-      {/* ===== VIDEO BACKGROUND ===== */}
-      <video
-        className="select-none md:flex hidden pointer-events-none absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: 0 }}
-        src="/live2.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        draggable={false}
-      />
+      {/* ===== GALAXY + STARS BACKGROUND ===== */}
+      <div className="pointer-events-none select-none absolute inset-0" style={{ zIndex: 1 }}>
+  
+        {/* BINTANG-BINTANG YANG LEBIH BANYAK & JELAS */}
+        {/* <svg 
+          width="100%" 
+          height="100%" 
+          xmlns="http://www.w3.org/2000/svg" 
+          style={{ position: "absolute", inset: 0 }}
+        >
+          {Array.from({ length: 280 }).map((_, i) => {
+            const size = Math.random() * 2.2 + 0.4;        // Ukuran lebih bervariasi
+            const opacity = Math.random() * 0.85 + 0.35;   // Opacity lebih terang
+            const delay = Math.random() * 4;                // Untuk twinkling
+            
+            return (
+              <circle
+                key={i}
+                cx={`${Math.random() * 100}%`}
+                cy={`${Math.random() * 100}%`}
+                r={size}
+                fill="white"
+                opacity={opacity}
+                style={{
+                  animation: `twinkle ${2.5 + Math.random() * 3.5}s infinite alternate ease-in-out`,
+                  animationDelay: `-${delay}s`,
+                }}
+              />
+            );
+          })}
+        </svg> */}
 
-      {/* ===== DARK OVERLAY ===== */}
-      <div
+        {/* Galaxy Radial Glows (tetap sama) */}
+        {/* <div style={{
+          position: "absolute",
+          top: "-15%",
+          left: "-10%",
+          width: "70vw",
+          height: "70vw",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(99,102,241,0.25) 20%, transparent 60%)",
+          filter: "blur(80px)",
+          opacity: 0.6,
+          animation: "galaxyDrift 35s ease-in-out infinite alternate",
+        }} />
+
+        <div style={{
+          position: "absolute",
+          bottom: "-20%",
+          right: "-5%",
+          width: "65vw",
+          height: "65vw",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(168,85,247,0.22) 15%, transparent 65%)",
+          filter: "blur(90px)",
+          opacity: 0.5,
+          animation: "galaxyDrift 42s ease-in-out infinite alternate-reverse",
+        }} /> */}
+      </div>
+
+      {/* Dark Overlay */}
+      {/* <div
         className="select-none pointer-events-none absolute inset-0"
         style={{
-          zIndex: 1,
+          zIndex: 2,
           background: isDark
-            ? "rgba(0,0,0,0.93)"
-            : "rgba(0,0,0,0.9)",
+            ? "rgba(0,0,0,0.88)"
+            : "rgba(0,0,0,0.85)",
         }}
-      />
+      /> */}
 
-      {/* Grid Background */}
-      <div className="select-none md:hidden flex absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
+      {/* Grid Background (Mobile) */}
+      <div className="select-none md:hidden flex absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="crossgrid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -267,19 +313,45 @@ function Hero({ C, isDark }) {
         </svg>
       </div>
 
-      {/* Aurora Background Effect */}
-      <div
+      {/* Aurora Blobs */}
+      {/* <div
         className="select-none absolute inset-0 overflow-hidden pointer-events-none"
-        style={{ zIndex: 3, opacity: 0.2 }}
+        style={{ zIndex: 4, opacity: 0.25 }}
       >
-        {/* <div className="select-none aurora-blob aurora-1" style={{ background: C.lime }} /> */}
         <div className="select-none aurora-blob aurora-2" style={{ background: "#6366f1" }} />
         <div className="select-none aurora-blob aurora-3" style={{ background: "#a855f7" }} />
-      </div>
+      </div> */}
 
+      <img src="/woman1.png" alt="image woman" className="absolute bottom-[-40px] left-[-50px] w-[43%] z-[99999]" />
+      <img src="/man1.png" alt="image woman" className="absolute bottom-0 right-0 w-[34%] z-[99999]" />
+
+      {/* ===== MODERN SIDE WAVES (UNGU) ===== */}
+      {/* Gelombang Kiri */}
+      {/* <div 
+        className="absolute left-0 top-0 bottom-0 w-[30vw] md:w-[25vw] pointer-events-none select-none"
+        style={{ 
+          zIndex: 3,
+          background: "linear-gradient(90deg, rgba(99,102,241,0.35) 0%, rgba(139,92,246,0.2) 50%, transparent 100%)",
+          filter: "blur(60px)",
+          animation: "waveLeft 15s ease-in-out infinite alternate",
+        }} 
+      /> */}
+
+      {/* Gelombang Kanan */}
+      {/* <div 
+        className="absolute right-0 top-0 bottom-0 w-[30vw] md:w-[25vw] pointer-events-none select-none"
+        style={{ 
+          zIndex: 3,
+          background: "linear-gradient(270deg, rgba(168,85,247,0.35) 0%, rgba(124,58,237,0.2) 50%, transparent 100%)",
+          filter: "blur(60px)",
+          animation: "waveRight 18s ease-in-out infinite alternate",
+        }} 
+      /> */}
+
+      {/* Main Content */}
       <div
         style={{ zIndex: 4, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}
-        className="select-none relative top-[-23px] hero-main-grid relative h-full flex items-center"
+        className="select-none relative top-[-30px] hero-main-grid relative h-full flex items-center"
       >
         <div
           className="select-none text-center mx-auto w-full flex flex-col justify-center items-center px-6"
@@ -298,8 +370,11 @@ function Hero({ C, isDark }) {
                 alt="icon"
               />
             </p>
-            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] w-[80vw] select-none hidden md:flex items-center justify-center">
-              DAPAT UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
+            <p className="text-5xl w-max lg:text-8xl 2xl:text-[7.8rem] w-[80vw] select-none hidden md:flex items-center justify-center">
+              
+              <p className="flex gap-x-5 flex-wrap w-[80vw] text-center justify-center items-center">
+                DAPAT <p className="underline relative">UNTUNG LEBIH BANYAK</p> BERSAMA TAPTIPTUP
+              </p>
               {/* <img
                 draggable={false}
                 className="select-none relative top-[-2px] md:top-[-7px] md:inline-block hidden h-[0.8em] md:h-[0.85em] w-auto"
@@ -382,14 +457,57 @@ function Hero({ C, isDark }) {
             </p>
           <br className="md:hidden flex" />
         </div>
-      </div>
+        </div>
       </div>
 
-      {/* Global CSS */}
+      {/* Global CSS (tambahkan animasi galaxy) */}
       <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
+       @keyframes twinkle {
+          0%   { opacity: 0.35; }
+          50%  { opacity: 0.95; }
+          100% { opacity: 0.45; }
+        }
+
+        @keyframes galaxyDrift {
+          from { transform: translate(0, 0) scale(1); }
+          to   { transform: translate(8%, 12%) scale(1.08); }
+        }
+
+        @keyframes waveLeft {
+          0% { 
+            transform: translateX(0) scaleX(1); 
+            opacity: 0.8;
+          }
+          100% { 
+            transform: translateX(10%) scaleX(1.1); 
+            opacity: 1;
+          }
+        }
+
+        @keyframes waveRight {
+          0% { 
+            transform: translateX(0) scaleX(1); 
+            opacity: 0.8;
+          }
+          100% { 
+            transform: translateX(-10%) scaleX(1.1); 
+            opacity: 1;
+          }
+        }
+
+        @keyframes wavePulse {
+          0% { 
+            transform: scale(1); 
+            opacity: 0.6;
+          }
+          50% { 
+            transform: scale(1.2); 
+            opacity: 1;
+          }
+          100% { 
+            transform: scale(0.9); 
+            opacity: 0.7;
+          }
         }
 
         .aurora-blob {
@@ -415,8 +533,38 @@ function Hero({ C, isDark }) {
           100% { transform: translate(-5%, 10%) scale(0.9) rotate(-45deg); }
         }
 
-        @media (max-width: 640px) {
-          .hero-title span { width: 100%; }
+        @keyframes twinkle {
+          0%   { opacity: 0.35; }
+          50%  { opacity: 0.95; }
+          100% { opacity: 0.45; }
+        }
+
+        @keyframes galaxyDrift {
+          from { transform: translate(0, 0) scale(1); }
+          to   { transform: translate(8%, 12%) scale(1.08); }
+        }
+
+        .aurora-blob {
+          position: absolute;
+          width: 50vw;
+          height: 50vw;
+          min-width: 300px;
+          min-height: 300px;
+          border-radius: 50%;
+          filter: blur(100px);
+          mix-blend-mode: screen;
+          opacity: 0.4;
+          animation: move 20s infinite alternate ease-in-out;
+        }
+
+        .aurora-1 { top: -10%; left: -10%; animation-duration: 18s; }
+        .aurora-2 { bottom: -10%; right: -5%; animation-delay: -5s; animation-duration: 25s; }
+        .aurora-3 { top: 20%; left: 30%; animation-delay: -2s; animation-duration: 30s; }
+
+        @keyframes move {
+          0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+          50% { transform: translate(10%, 15%) scale(1.1) rotate(45deg); }
+          100% { transform: translate(-5%, 10%) scale(0.9) rotate(-45deg); }
         }
       `}</style>
     </section>
@@ -552,11 +700,12 @@ function FeeComparison({ C }) {
 
             return (
               <div key={p.name}
+                className={`${p.winner ? "bg-blue-900" : "bg-transparent"}`}
                 style={{
                   padding: "32px 24px",
                   borderRight: !isLast ? `1px solid ${C.line}` : "none",
                   borderBottom: isMobile ? `1px solid ${C.line}` : "none",
-                  background: p.winner ? C.bg2 : "transparent",
+                  // background: p.winner ? 'purple' : "transparent",
                   transition: "all 0.4s",
                 }}>
                 {p.winner
@@ -870,9 +1019,9 @@ export default function TapTipTup() {
       }}
     >
       <style>{buildGlobalStyles(C)}</style>
-      {/* <Marquee C={C} /> */}
+      <Marquee C={C} />
       <Hero C={C} isDark={isDark} />
-      {/* <Marquee C={C} /> */}
+      <Marquee C={C} />
       <FeeComparison C={C} /> 
       <Footer C={C} />
 
