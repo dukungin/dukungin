@@ -145,8 +145,8 @@ function BtnMain({ children, href, style, C }) {
       style={{
         fontFamily: "'Space Grotesk', sans-serif",
         fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
-        padding: "14px 28px", background: C.lime, color: C.bg,
-        border: "none", cursor: "pointer", textDecoration: "none",
+        padding: "14px 28px", background: 'transparent', color: 'azure',
+        border: "1px solid azure", cursor: "pointer", textDecoration: "none",
         display: "inline-block", // Penting agar width: 100% bekerja
         transition: "background 0.15s, opacity 0.15s",
         boxSizing: "border-box", // Pastikan padding tidak merusak lebar
@@ -308,13 +308,14 @@ function Hero({ C, isDark }) {
               />
             </p>
             <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] hidden md:inline">LIVE STREAMING</p>
-            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] hidden md:inline select-none w-full">MENJADI BER-CUAN</p>
+            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] hidden md:inline select-none w-full">MENJADI <span className="text-pink-400">BER-CUAN</span></p>
           </h1>
 
           <br className="md:hidden flex" />
+          <br />
 
           {/* Deskripsi */}
-          <p
+          {/* <p
             className="select-none w-[86vw] md:max-w-[50vw]"
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
@@ -326,20 +327,64 @@ function Hero({ C, isDark }) {
             }}
           >
             Platform donasi streamer asal Indonesia dengan potongan terkecil yaitu 2.5%. 
-          </p>
+          </p> */}
 
           {/* Container Tombol */}
           <div className="select-none mb-20 w-full max-w-md md:max-w-none px-4">
             <div className="select-none flex flex-col md:flex-row items-center gap-4 w-full justify-center">
               <BtnMain href="/register" C={C}>
                 <p draggable={false} className="select-none w-full flex justify-center items-center mx-auto text-center flex items-center gap-2">
-                  Mulai Sekarang 
+                  Mulai Sekarang - Gratis
                 </p>
               </BtnMain>
             </div>
           </div>
+
+          <br />
+          <br />
+
+          {/* BOUNCING MOUSE */}
+          <div className="select-none flex flex-col items-center">
+            <div 
+              style={{
+                width: "28px",
+                height: "48px",
+                border: `2px solid azure`,
+                borderRadius: "9999px",
+                position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                opacity: 0.75,
+              }}
+            >
+              <div
+                style={{
+                  width: "5px",
+                  height: "10px",
+                  background: 'azure',
+                  borderRadius: "9999px",
+                  position: "absolute",
+                  top: "8px",
+                  animation: "mouseScroll 2s infinite ease-in-out",
+                }}
+              />
+            </div>
+
+            <p 
+              style={{
+                marginTop: "14px",
+                fontSize: "10px",
+                letterSpacing: "0.12em",
+                color: 'azure',
+                fontFamily: "'Space Mono', monospace",
+                textTransform: "uppercase",
+              }}
+            >
+              Scroll ke bawah
+            </p>
           <br className="md:hidden flex" />
         </div>
+      </div>
       </div>
 
       {/* Global CSS */}
