@@ -298,7 +298,7 @@ function Hero({ C, isDark }) {
                 alt="icon"
               />
             </p>
-            <p className="text-5xl md:text-8xl select-none hidden md:flex items-center justify-center gap-[0.1em]">
+            <p className="text-5xl lg:text-8xl 2xl:text-9xl select-none hidden md:flex items-center justify-center gap-[0.1em]">
               UBAH HOBI 
               <img
                 draggable={false}
@@ -307,8 +307,8 @@ function Hero({ C, isDark }) {
                 alt="icon"
               />
             </p>
-            <p className="text-5xl md:text-8xl hidden md:inline">LIVE STREAMING</p>
-            <p className="text-5xl md:text-8xl hidden md:inline select-none w-full">MENJADI BER-CUAN</p>
+            <p className="text-5xl lg:text-8xl 2xl:text-9xl hidden md:inline">LIVE STREAMING</p>
+            <p className="text-5xl lg:text-8xl 2xl:text-9xl hidden md:inline select-none w-full">MENJADI BER-CUAN</p>
           </h1>
 
           <br className="md:hidden flex" />
