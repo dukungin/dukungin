@@ -535,7 +535,7 @@ function FeeComparison({ C }) {
                     {p.feeDonate.toFixed(1)}% + {p.feeWdLabel || '—'}
                   </div>
                   <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: p.winner ? C.muted : "black", letterSpacing: "0.05em", textTransform: "uppercase", marginTop: 10 }}>
-                    potongan per donasi + per withdraw
+                    {p.winner ? 'potongan per donasi + WD semua metode' : 'potongan per donasi + WD Bank'}
                   </div>
                 </div>
               </div>
