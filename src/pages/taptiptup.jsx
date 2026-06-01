@@ -418,12 +418,14 @@ function Marquee({ C }) {
 function LiveStreamers({ C }) {
   const [streamers, setStreamers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalLive, setTotalLive] = useState(0);
 
   useEffect(() => {
-    fetch('https://server-dukungin-production.up.railway.app/api/streamers/public') // ganti dengan URL production kamu
+    fetch('https://server-dukungin-production.up.railway.app/api/streamers/public')
       .then(res => res.json())
       .then(data => {
         setStreamers(data.streamers || []);
+        setTotalLive(data.totalLive || 0);
         setLoading(false);
       })
       .catch(err => {
@@ -444,12 +446,24 @@ function LiveStreamers({ C }) {
           STREAMER SEDANG <span style={{ color: C.lime }}>LIVE</span>
         </BigTitle>
         <p style={{ color: C.muted, fontSize: 15, maxWidth: 600, margin: "16px auto" }}>
-          Temukan streamer Indonesia yang sedang live sekarang
+          {totalLive > 0 
+            ? `${totalLive} streamer sedang live sekarang` 
+            : "Belum ada streamer yang sedang live"}
         </p>
       </div>
 
       {loading ? (
-        <div className="text-center py-20">Loading streamer...</div>
+        <div className="text-center py-20">Mengecek live streamer...</div>
+      ) : streamers.length === 0 ? (
+        <div className="text-center py-20">
+          <div style={{ fontSize: 60, marginBottom: 16, opacity: 0.3 }}>📡</div>
+          <p style={{ color: C.muted, fontSize: 18 }}>
+            Saat ini belum ada streamer yang sedang live
+          </p>
+          <p style={{ color: C.dim, marginTop: 8 }}>
+            Cek lagi nanti atau jadi yang pertama live!
+          </p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           {streamers.map(s => (
@@ -458,37 +472,21 @@ function LiveStreamers({ C }) {
               className="rounded-2xl overflow-hidden border border-[#333]"
               style={{ background: C.bg3 }}
             >
-              {/* Thumbnail / Live Video */}
               <div className="relative aspect-video bg-black">
-                {s.isLive && s.liveVideoId ? (
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    src={`https://www.youtube.com/embed/${s.liveVideoId}?autoplay=0&modestbranding=1`}
-                    frameBorder="0"
-                    allowFullScreen
-                  />
-                ) : s.thumbnail ? (
-                  <img 
-                    src={s.thumbnail} 
-                    alt={s.username}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-purple-900 to-black flex items-center justify-center">
-                    <span style={{ fontSize: 48, opacity: 0.3 }}>📺</span>
-                  </div>
-                )}
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${s.liveVideoId}?autoplay=0&modestbranding=1&rel=0`}
+                  frameBorder="0"
+                  allowFullScreen
+                />
 
-                {s.isLive && (
-                  <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                    LIVE
-                  </div>
-                )}
+                <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                  LIVE
+                </div>
               </div>
 
-              {/* Info */}
               <div className="p-5">
                 <div className="flex items-center gap-4">
                   <img 
@@ -518,25 +516,19 @@ function LiveStreamers({ C }) {
                 )}
 
                 <a
-                  href={`/streamer/${s.username}`} // atau link ke halaman profil
+                  href={`/streamer/${s.username}`}
                   className="mt-5 block text-center py-3 rounded-xl font-semibold text-sm"
                   style={{ 
                     background: C.lime, 
                     color: C.bg 
                   }}
                 >
-                  {s.isLive ? "Tonton Live" : "Kunjungi Channel"}
+                  Tonton Live Sekarang
                 </a>
               </div>
             </div>
           ))}
         </div>
-      )}
-
-      {streamers.length === 0 && !loading && (
-        <p className="text-center text-gray-500 py-20">
-          Belum ada streamer yang terhubung dengan YouTube
-        </p>
       )}
     </section>
   );
