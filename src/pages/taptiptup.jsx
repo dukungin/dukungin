@@ -290,7 +290,7 @@ function Hero({ C, isDark }) {
             className="select-none hero-title font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400"
           >
             <p className="text-5xl md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
-              UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
+              AMBIL UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
               <img
                 draggable={false}
                 className="select-none relative top-[-2px] md:top-[-7px] md:inline-block hidden h-[0.8em] md:h-[0.85em] w-auto"
