@@ -127,8 +127,8 @@ function BigTitle({ children, style, C }) {
   return (
     <h2 style={{
       fontFamily: "'Bebas Neue', sans-serif",
-      fontSize: "clamp(32px,6vw,72px)",
-      lineHeight: 0.95, letterSpacing: "0.01em", color: C.text,
+      fontSize: "clamp(32px,6vw,76px)",
+      lineHeight: 1.2, letterSpacing: "0.01em", color: C.text,
       ...style,
     }}>
       {children}
@@ -298,7 +298,7 @@ function Hero({ C, isDark }) {
                 alt="icon"
               />
             </p>
-            <p className="text-5xl lg:text-8xl 2xl:text-9xl select-none hidden md:flex items-center justify-center gap-[0.1em]">
+            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] select-none hidden md:flex items-center justify-center gap-[0.1em]">
               UBAH HOBI 
               <img
                 draggable={false}
@@ -307,8 +307,8 @@ function Hero({ C, isDark }) {
                 alt="icon"
               />
             </p>
-            <p className="text-5xl lg:text-8xl 2xl:text-9xl hidden md:inline">LIVE STREAMING</p>
-            <p className="text-5xl lg:text-8xl 2xl:text-9xl hidden md:inline select-none w-full">MENJADI BER-CUAN</p>
+            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] hidden md:inline">LIVE STREAMING</p>
+            <p className="text-5xl lg:text-8xl 2xl:text-[7.8rem] hidden md:inline select-none w-full">MENJADI BER-CUAN</p>
           </h1>
 
           <br className="md:hidden flex" />
@@ -490,7 +490,7 @@ function FeeComparison({ C }) {
         <BigTitle C={C}>POTONGAN TERKECIL DI{" "}
           <span style={{ color: C.lime }}>KELASNYA</span>
         </BigTitle>
-        <p style={{ fontSize: 14, color: C.muted, marginTop: 16, transition: "color 0.4s" }}>
+        <p style={{ fontSize: 14, color: C.muted, marginTop: 8, transition: "color 0.4s" }}>
           Kami hanya ambil 2.5% — sisanya langsung ke kantongmu.
         </p>
       </div>
