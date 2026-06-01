@@ -322,7 +322,7 @@ function Hero({ C, isDark }) {
         <div className="select-none aurora-blob aurora-3" style={{ background: "#a855f7" }} />
       </div> */}
 
-      <img src="/woman1.png" alt="image woman" className="absolute bottom-[-40px] left-[-50px] w-[43%] z-[99999]" />
+      <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-17px] md:left-[-50px] w-[39.5%] md:w-[43%] z-[99999]" />
       <img src="/man1.png" alt="image woman" className="absolute bottom-0 right-0 w-[34%] z-[99999]" />
 
       {/* ===== MODERN SIDE WAVES (UNGU) ===== */}
