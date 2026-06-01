@@ -353,7 +353,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
       </div>
 
       <button onClick={sendTest} disabled={isSending || !overlayToken}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60 shadow-lg shadow-rose-200 dark:shadow-rose-900/30">
+        className="cursor-pointer active:scale-[0.97] w-full py-3 hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-60">
         {isSending ? (
           <><RefreshCw size={18} className="animate-spin" /> Mengirim...</>
         ) : (
@@ -479,7 +479,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
       </div>
 
       <button onClick={sendTestMedia} disabled={isSending || !overlayToken || !formData.mediaUrl}
-        className="cursor-pointer hover:brightness-90 w-full py-3 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-600 text-white rounded-none font-black text-sm active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3">
+        className="cursor-pointer hover:brightness-90 w-full py-3 hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white rounded-none font-black text-sm active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3">
         {isSending ? (
           <><div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Mengirim...</span></>
         ) : (
@@ -717,7 +717,7 @@ const BannedWordsEditor = ({ saveSettingsMutation, settings }) => {
               </div>
         }
         <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
           <Save size={20} />
           {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}
         </button>
@@ -776,7 +776,7 @@ const MilestonesEditor = () => {
           </button>
           {list.length > 0 && (
             <button onClick={() => mutation.mutate(list)} disabled={mutation.isPending}
-              className="cursor-pointer active:scale-[0.97] w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+              className="cursor-pointer active:scale-[0.97] w-full py-3 md:py-4 bg-green-600 hover:bg-green-700 text-white rounded-none font-black text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-70">
               <Save size={16} /> {mutation.isPending ? 'Menyimpan...' : 'Simpan Milestones'}
             </button>
           )}
@@ -875,7 +875,7 @@ const SoundTiersEditor = ({ tiers = [], onChange, saveSettingsMutation, settings
         <Plus size={16} /> Tambah Suara per Nominal
       </button>
       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
         <Save size={20} />
         {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Audio Terbaru'}
       </button>
@@ -899,12 +899,12 @@ const QrCodeCard = ({ username }) => {
         <p className="font-black text-slate-700 dark:text-slate-300 text-sm">{donateUrl}</p>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <button onClick={copy} className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-none font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>
+        <button onClick={copy} className={`cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-3 md:py-4 rounded-none font-black text-sm transition-all ${copied ? 'bg-green-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'}`}>
           {copied ? <><CheckCircle2 size={16} /> Tersalin!</> : <><Copy size={16} /> Salin URL</>}
         </button>
         <a href={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(donateUrl)}&color=0f172a&format=png`}
           download={`qr-donasi-${username}.png`} target="_blank" rel="noreferrer"
-          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-4 rounded-none font-black text-sm bg-slate-900/70 dark:bg-slate-700 text-white hover:bg-slate-800 dark:hover:bg-slate-600 transition-all">
+          className="cursor-pointer active:scale-[0.97] flex items-center justify-center gap-2 py-3 md:py-4 rounded-none font-black text-sm bg-slate-900/70 dark:bg-slate-700 text-white hover:bg-slate-800 dark:hover:bg-slate-600 transition-all">
           ↓ Download QR
         </a>
       </div>
@@ -1045,8 +1045,8 @@ const AdminWithdrawalPage = () => {
                         <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">Konfirmasi Approve</h3>
                         <p className="text-slate-600 dark:text-slate-400 mb-8">Apakah Anda yakin sudah mentransfer dana ke streamer ini?</p>
                         <div className="flex gap-3">
-                          <button onClick={() => setShowApproveModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-none">Batal</button>
-                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-green-600 hover:bg-green-700 text-white font-black rounded-none transition-all disabled:opacity-70">
+                          <button onClick={() => setShowApproveModal(false)} className="cursor-pointer flex-1 py-3 md:py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-none">Batal</button>
+                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'COMPLETED' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-3 md:py-4 bg-green-600 hover:bg-green-700 text-white font-black rounded-none transition-all disabled:opacity-70">
                             {updateMutation.isPending ? 'Memproses...' : 'Ya, Sudah Transfer'}
                           </button>
                         </div>
@@ -1062,8 +1062,8 @@ const AdminWithdrawalPage = () => {
                         <p className="text-slate-600 dark:text-slate-400 text-center mb-6">Berikan alasan penolakan (opsional)</p>
                         <textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Contoh: Rekening tidak valid..." className="w-full h-32 p-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-none focus:border-red-400 outline-none resize-y font-medium" />
                         <div className="flex gap-3 mt-6">
-                          <button onClick={() => setShowRejectModal(false)} className="cursor-pointer flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-none">Batal</button>
-                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'FAILED', note: rejectNote || 'Ditolak oleh admin' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-4 bg-red-600 hover:bg-red-700 text-white font-black rounded-none transition-all disabled:opacity-70">
+                          <button onClick={() => setShowRejectModal(false)} className="cursor-pointer flex-1 py-3 md:py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black rounded-none">Batal</button>
+                          <button onClick={() => updateMutation.mutate({ id: selectedId, status: 'FAILED', note: rejectNote || 'Ditolak oleh admin' })} disabled={updateMutation.isPending} className="cursor-pointer flex-1 py-3 md:py-4 bg-red-600 hover:bg-red-700 text-white font-black rounded-none transition-all disabled:opacity-70">
                             {updateMutation.isPending ? 'Memproses...' : 'Konfirmasi Tolak'}
                           </button>
                         </div>
@@ -1188,7 +1188,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly 
       </div>
 
       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
         <Save size={20} />
         {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Pengaturan Durasi'}
       </button>
@@ -1245,7 +1245,7 @@ const MediaTriggersEditor = ({ triggers, onChange, saveSettingsMutation, setting
         <Plus size={16} /> Tambah Ketentuan Media Alert
       </button>
       <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
         <Save size={20} />
         {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Izin Media'}
       </button>
@@ -1255,7 +1255,7 @@ const MediaTriggersEditor = ({ triggers, onChange, saveSettingsMutation, setting
 
 // ─── YouTubeLivePreview ───────────────────────────────────────────────────────
 
-const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
+const YouTubeLivePreview = ({ settings, username, testFullScreen, onPreviewModeChange }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [animKey, setAnimKey] = useState(0);
   const [currentDonor, setCurrentDonor] = useState(null);
@@ -1289,6 +1289,7 @@ const YouTubeLivePreview = ({ settings, username, testFullScreen }) => {
 
   const renderMediaAlert = () => {
     if (!currentDonor) return null;
+    if (settings.theme === 'gifCard') return null;
     const hl = settings.highlightColor || '#39ff14';
     const fg = settings.textColor || '#c8f5c8';
     const bg = settings.primaryColor || '#0a1f0a';
@@ -2062,7 +2063,7 @@ const smoothInner = (
     <AnimatePresence>
       {isFullscreen && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed w-[100%] right-0 inset-0 z-[999999999] bg-black flex flex-col">
-          <div className="flex items-center justify-between px- py-4 bg-black/80 backdrop-blur-sm border-b border-white/10 flex-shrink-0">
+          <div className="flex items-center justify-between px- py-3 md:py-4 bg-black/80 backdrop-blur-sm border-b border-white/10 flex-shrink-0">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 bg-red-500 rounded-none animate-pulse" />
               <span className="text-white font-black text-sm tracking-wide">LIVE PREVIEW</span>
@@ -2109,7 +2110,10 @@ const smoothInner = (
       {/* Tab switcher */}
       <div className="flex gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-none">
         {[{ id: 'alert', label: '⚡ Alert OBS' }, { id: 'media', label: '🎬 Media share' }].map(tab => (
-          <button key={tab.id} onClick={() => setPreviewMode(tab.id)}
+            <button key={tab.id} onClick={() => {
+              setPreviewMode(tab.id);
+              onPreviewModeChange?.(tab.id); // ← ini yang update state di parent
+            }}
             className={`cursor-pointer flex-1 py-2 text-xs font-black rounded-none transition-all ${previewMode === tab.id ? 'bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm text-slate-800 dark:text-slate-100 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}>
             {tab.label}
           </button>
@@ -2132,10 +2136,12 @@ const smoothInner = (
                 {renderAlert()}
               </motion.div>
             )}
-            {showAlert && previewMode === 'media' && (
-              <motion.div className='ml-4 max-w-[80%]' key={`media-${animKey}`} initial={anim.initial} animate={anim.animate} exit={anim.exit} style={{ position: 'absolute', ...pos, zIndex: 10, top: 20,   transform: 'scale(0.4) translateX(-50%)', }}>
-                {renderMediaAlert()}
-              </motion.div>
+           {showAlert && previewMode === 'media' && (
+              settings.theme === 'gifCard' ? null : (
+                <motion.div className='ml-4 max-w-[80%]' key={`media-${animKey}`} initial={anim.initial} animate={anim.animate} exit={anim.exit} style={{ position: 'absolute', ...pos, zIndex: 10, top: 20, transform: 'scale(0.4) translateX(-50%)' }}>
+                  {renderMediaAlert()}
+                </motion.div>
+              )
             )}
           </AnimatePresence>
         </div>
@@ -2148,6 +2154,12 @@ const smoothInner = (
         {previewMode === 'alert' && <span>Durasi alert: <span className="text-blue-600">{currentDonor ? dur : '-'}s</span></span>}
         {previewMode === 'media' && <span>Durasi medser: <span className="text-purple-500">{currentDonor ? mediaShareDuration : '-'}s</span></span>}
       </div>
+
+      {previewMode === 'media' && settings.theme === 'gifCard' && (
+        <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-none text-xs font-bold text-amber-600 dark:text-amber-400">
+          <span>⚠️</span> Tema GIF Card tidak mendukung media share preview
+        </div>
+      )}
 
       {/* Media URL picker — hanya muncul saat tab media aktif */}
       {previewMode === 'media' && (
@@ -2291,7 +2303,7 @@ const HistoryPage = () => {
         </div>
 
         {historyTab === 'received' && (
-          <div className="px-4 md:px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-3">
+          <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-3">
             <div className="flex gap-1.5">
               <button onClick={() => {
                 const next = !showAmounts;
@@ -2406,7 +2418,7 @@ const HistoryPage = () => {
             </table>
           )}
           {pagination.totalPages > 1 && (
-            <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+            <div className="flex items-center justify-between px-6 py-3 md:py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
                 className="px-4 py-2 rounded-none bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-100 dark:hover:bg-slate-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
                 ← Sebelumnya
@@ -2538,8 +2550,6 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
           <h2 className="text-3xl font-black tracking-tight">Community.</h2>
           <p className="text-blue-200 text-sm font-medium mt-1">Temukan & ikuti sesama streamer</p>
         </div>
-        <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[-10px] md:right-[-40px] w-[17%] -rotate-25 opacity-[90%]" />
-        <img src="/jellyfish.png" alt="icon" className="absolute top-3 right-[130px] w-[7%] rotate-25 opacity-[90%]" />
       </div>
 
       <div className="gap-3 grid grid-cols-3 md:grid-cols-5">
@@ -2768,6 +2778,7 @@ export const DashboardStreamer = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showToast, setShowToast]         = useState(false);
   const [localSettings, setLocalSettings] = useState(null);
+  const [previewMode, setPreviewMode] = useState('alert'); 
   const [donationToasts, setDonationToasts] = useState([]);
   const [formData, setFormData] = useState({ publicSounds: [], publicSoundDefault: '' });
   const [uploading, setUploading] = useState(false);
@@ -3118,7 +3129,7 @@ const handleChangePin = async () => {
                 </div>
                 <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-2">URL Tersalin!</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-6">Widget <span className="font-bold text-blue-600 dark:text-blue-400">{copiedLabel}</span> berhasil disalin.</p>
-                <button onClick={() => setShowCopyModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900/70 dark:bg-slate-700 text-white font-black rounded-none transition-all active:scale-[0.99]">OK, Mengerti</button>
+                <button onClick={() => setShowCopyModal(false)} className="cursor-pointer hover:brightness-90 w-full py-3 md:py-4 bg-slate-900/70 dark:bg-slate-700 text-white font-black rounded-none transition-all active:scale-[0.99]">OK, Mengerti</button>
               </div>
             </motion.div>
           </motion.div>
@@ -3136,7 +3147,7 @@ const handleChangePin = async () => {
                 </div>
                 <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-1">{followAction.type === 'follow' ? 'Berhasil Follow!' : 'Berhasil Unfollow'}</h3>
                 <p className="text-slate-600 dark:text-slate-400 mb-8">Kamu {followAction.type === 'follow' ? 'sekarang mengikuti' : 'tidak lagi mengikuti'} <span className="font-bold text-blue-600 dark:text-blue-400">@{followAction.username}</span></p>
-                <button onClick={() => setShowFollowModal(false)} className="cursor-pointer hover:brightness-90 w-full py-4 bg-slate-900/70 dark:bg-slate-700 text-white font-black rounded-none transition-all active:scale-[0.97]">OK, Mengerti</button>
+                <button onClick={() => setShowFollowModal(false)} className="cursor-pointer hover:brightness-90 w-full py-3 md:py-4 bg-slate-900/70 dark:bg-slate-700 text-white font-black rounded-none transition-all active:scale-[0.97]">OK, Mengerti</button>
               </div>
             </motion.div>
           </motion.div>
@@ -3147,7 +3158,7 @@ const handleChangePin = async () => {
       <AnimatePresence>
         {showToast && (
           <motion.div initial={{ y: -50, opacity: 0 }} animate={{ y: 20, opacity: 1 }} exit={{ y: -50, opacity: 0 }}
-            className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-slate-900/70 text-white px-8 py-4 rounded-none shadow-2xl flex items-center gap-3 font-bold border border-white/10 backdrop-blur-md">
+            className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-slate-900/70 text-white px-8 py-3 md:py-4 rounded-none shadow-2xl flex items-center gap-3 font-bold border border-white/10 backdrop-blur-md">
             <CheckCircle2 size={18} className="text-green-500" /> Pengaturan Tersimpan!
           </motion.div>
         )}
@@ -3176,7 +3187,7 @@ const handleChangePin = async () => {
       </div>
 
       {/* ── Mobile Navbar ── */}
-      <div className="lg:hidden fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 z-50 px-4 py-4 flex justify-between items-center">
+      <div className="lg:hidden fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 z-50 px-4 py-3 md:py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="w-11.5 md:w-10 h-11.5 md:h-10 p-2 bg-red-200 rounded-none flex items-center justify-center"><img src="/jellyfish.png" alt="icon" /></div>
           {/* <span className="font-black text-lg tracking-tight text-slate-800 dark:text-slate-100">TTT</span> */}
@@ -3414,9 +3425,9 @@ const handleChangePin = async () => {
                       <div className="md:col-span-2">
                         <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-4 uppercase tracking-widest">Tema Visual</label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {['modern', 'classic', 'minimal', 'smooth', 'gifCard'].map(t => (
+                         {['modern', 'classic', 'minimal', 'smooth', ...(previewMode !== 'media' ? ['gifCard'] : [])].map(t => (
                             <button key={t} onClick={() => upd('theme', t)}
-                              className={`cursor-pointer active:scale-[0.97] py-4 rounded-none border-2 transition-all font-black text-sm capitalize ${
+                              className={`cursor-pointer active:scale-[0.97] py-3 md:py-4 rounded-none border-2 transition-all font-black text-sm capitalize ${
                                 settings.theme === t
                                   ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 shadow-md'
                                   : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500'
@@ -3454,13 +3465,13 @@ const handleChangePin = async () => {
                       <ColorInput id="color-borderColor" label="Warna Border" value={settings.borderColor || '#ffffff26'} onChange={v => upd('borderColor', v)} allowAlpha={true} />
                     </div>
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2 mt-8">
+                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2 mt-8">
                       <Save size={20} />{saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Overlay Terbaru'}
                     </button>
                   </div>
 
                   {/* Preset Warna Siap Pakai */}
-                  <div className="md:col-span-2 px-4 md:bg-white/30 md:dark:bg-slate-900/60 backdrop-blur-sm border border-slate-100 dark:border-slate-800 md:py-6 py-4 md:px-6">
+                  <div className="md:col-span-2 px-4 md:bg-white/30 md:dark:bg-slate-900/60 backdrop-blur-sm border border-slate-100 dark:border-slate-800 md:py-6 py-3 md:py-4 md:px-6">
                     <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-widest">
                       Preset Warna Siap Pakai
                     </label>
@@ -3511,7 +3522,7 @@ const handleChangePin = async () => {
                       </div>
                     ))}
                     <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+                      className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
                       <Save size={20} />{saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Perubahan'}
                     </button>
                   </div>
@@ -3560,7 +3571,7 @@ const handleChangePin = async () => {
                 </section>
 
                 <section className="xl:col-span-5 z-[2]">
-                  <YouTubeLivePreview settings={settings} username={user.username} testFullScreen={() => setNavbar(!navbar)} />
+                  <YouTubeLivePreview settings={settings} username={user.username} testFullScreen={() => setNavbar(!navbar)} onPreviewModeChange={setPreviewMode} />
                 </section>
               </motion.div>
             )}

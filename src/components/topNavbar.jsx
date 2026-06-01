@@ -64,7 +64,7 @@ const ThemeToggle = ({ theme, onToggle }) => {
         style={{
           background: isDark
             ? 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)'
-            : 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)',
+            : 'linear-gradient(135deg, #1e1b4b 0%, #1e1b4b 100%)',
         }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -91,7 +91,7 @@ const ThemeToggle = ({ theme, onToggle }) => {
         animate={{ x: isDark ? 30 : 0 }}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
         style={{
-          background: isDark ? '#1e1b4b' : '#ffffff',
+          background: isDark ? '#1e1b4b' : 'white',
           border: isDark ? '1px solid #4338ca' : '1px solid #e2e8f0',
         }}
       >

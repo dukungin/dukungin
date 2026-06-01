@@ -181,7 +181,7 @@ export const TransferModal = ({ user, onClose, onSuccess }) => {
           </div>
           <button
             onClick={onClose}
-            className="cursor-pointer w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+            className="cursor-pointer w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-red-600 transition-all"
           >
             <X size={16} />
           </button>
