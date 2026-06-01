@@ -415,125 +415,6 @@ function Marquee({ C }) {
   );
 }
 
-function LiveStreamers({ C }) {
-  const [streamers, setStreamers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [totalLive, setTotalLive] = useState(0);
-
-  useEffect(() => {
-    fetch('https://server-dukungin-production.up.railway.app/api/streamers/public')
-      .then(res => res.json())
-      .then(data => {
-        setStreamers(data.streamers || []);
-        setTotalLive(data.totalLive || 0);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
-
-  return (
-    <section style={{ 
-      background: C.bg2, 
-      padding: "80px 20px", 
-      borderBottom: `1px solid ${C.line}` 
-    }}>
-      <div className="text-center mb-12">
-        <Kicker C={C}>LIVE COMMUNITY</Kicker>
-        <BigTitle C={C}>
-          STREAMER SEDANG <span style={{ color: C.lime }}>LIVE</span>
-        </BigTitle>
-        <p style={{ color: C.muted, fontSize: 15, maxWidth: 600, margin: "16px auto" }}>
-          {totalLive > 0 
-            ? `${totalLive} streamer sedang live sekarang` 
-            : "Belum ada streamer yang sedang live"}
-        </p>
-      </div>
-
-      {loading ? (
-        <div className="text-center py-20">Mengecek live streamer...</div>
-      ) : streamers.length === 0 ? (
-        <div className="text-center py-20">
-          <div style={{ fontSize: 60, marginBottom: 16, opacity: 0.3 }}>📡</div>
-          <p style={{ color: C.muted, fontSize: 18 }}>
-            Saat ini belum ada streamer yang sedang live
-          </p>
-          <p style={{ color: C.dim, marginTop: 8 }}>
-            Cek lagi nanti atau jadi yang pertama live!
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-          {streamers.map(s => (
-            <div 
-              key={s.id}
-              className="rounded-2xl overflow-hidden border border-[#333]"
-              style={{ background: C.bg3 }}
-            >
-              <div className="relative aspect-video bg-black">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${s.liveVideoId}?autoplay=0&modestbranding=1&rel=0`}
-                  frameBorder="0"
-                  allowFullScreen
-                />
-
-                <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                  LIVE
-                </div>
-              </div>
-
-              <div className="p-5">
-                <div className="flex items-center gap-4">
-                  <img 
-                    src={s.profilePicture} 
-                    alt={s.username}
-                    className="w-12 h-12 rounded-full border-2 border-[#444]"
-                  />
-                  <div>
-                    <div className="font-bold text-lg" style={{ color: C.text }}>
-                      {s.username}
-                    </div>
-                    <a 
-                      href={s.youtubeUrl} 
-                      target="_blank" 
-                      className="text-sm hover:underline"
-                      style={{ color: C.lime }}
-                    >
-                      {s.youtubeUrl.replace('https://www.youtube.com/', '')}
-                    </a>
-                  </div>
-                </div>
-
-                {s.bio && (
-                  <p className="mt-4 text-sm line-clamp-2" style={{ color: C.muted }}>
-                    {s.bio}
-                  </p>
-                )}
-
-                <a
-                  href={`/streamer/${s.username}`}
-                  className="mt-5 block text-center py-3 rounded-xl font-semibold text-sm"
-                  style={{ 
-                    background: C.lime, 
-                    color: C.bg 
-                  }}
-                >
-                  Tonton Live Sekarang
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </section>
-  );
-}
-
 const PLATFORMS = [
   { name: "Saweria",    feeDonate: 5.0,  feeWd: 5000,  feeWdLabel: "Rp 5.000" },
   { name: "TapTipTup", feeDonate: 2.5,  feeWd: 1500,  feeWdLabel: "Rp 1.500", winner: true },
@@ -950,7 +831,6 @@ export default function TapTipTup() {
       <Hero C={C} isDark={isDark} />
       <Marquee C={C} />
       <FeeComparison C={C} /> 
-      <LiveStreamers C={C} />
       <Footer C={C} />
 
       {/* ==================== INTRO MODAL ==================== */}
