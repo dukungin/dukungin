@@ -180,7 +180,8 @@ function BtnMain({ children, href, style, C }) {
   return (
     <Link 
       to={href || "/"} 
-      className="w-[92vw] md:w-auto text-center" // Tambahkan class ini
+      draggable={false}
+      className="select-none w-[90vw] flex justify-center items-center md:w-auto text-center" // Tambahkan class ini
       style={{
         fontFamily: "'Space Grotesk', sans-serif",
         fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
@@ -202,14 +203,15 @@ function BtnMain({ children, href, style, C }) {
 function BtnGhost({ children, href, style, C }) {
   return (
     <Link 
+      draggable={false}
       to={href || "/"} 
-      className="w-[86vw] md:w-auto text-center"
+      className="select-none w-[86vw] md:w-auto text-center"
       target="__blank" 
       style={{
       fontFamily: "'Space Grotesk', sans-serif",
       fontSize: 13, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase",
       padding: "14px 24px", border: `1px solid ${C.line2}`,
-      color: C.muted, background: "none", cursor: "pointer",
+      background: "white", cursor: "pointer",
       textDecoration: "none", display: "inline-block", transition: "all 0.15s",
       ...style,
     }}
@@ -245,38 +247,44 @@ function AlertPop({ visible, C }) {
 
 function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
   return (
-    <nav style={{
+    <nav 
+      draggable={false}
+      style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 99,
       display: "flex", alignItems: "center", justifyContent: "space-between",
-      padding: "18px clamp(15px, 5vw, 0px)",
+      padding: "18px clamp(20.8px, 5vw, 0px)",
       background: C.navBg,
       gap: 30,
       backdropFilter: "blur(12px)",
       transition: "background 0.4s, border-color 0.4s",
     }}>
       <Link 
+        draggable={false}
         to="/" 
-        className="md:w-[33%] flex items-center gap-[10px] font-bold text-[16px] no-underline transition-colors duration-[400ms]"
+        className="select-none md:w-[33%] flex items-center gap-[10px] font-bold text-[16px] no-underline transition-colors duration-[400ms]"
         style={{ color: C.text }}
       >
         <div 
-          className="w-[32px] md:w-[38px] h-[32px] md:h-[38px] flex items-center justify-center text-[13px] md:text-[16px] font-black transition-colors duration-[400ms]"
+          className="select-none w-[32px] md:w-[38px] h-[32px] md:h-[38px] flex items-center justify-center text-[13px] md:text-[16px] font-black transition-colors duration-[400ms]"
           style={{ background: C.lime, color: C.bg }}
         >
-          <img src="/jellyfish.png" alt="icon" className="w-5 md:w-6" />
+          <img
+          draggable={false} src="/jellyfish.png" alt="icon" className="select-none w-5 md:w-6" />
         </div>
-        <p className="relative flex item-center gap-1 md:top-0 top-[1.2px]">
-          TAP-TIP-TUP <span className="md:flex hidden">FOR STREAMER</span>
+        <p className="select-none relative flex item-center gap-1 md:top-0 top-[1.2px]">
+          TAP-TIP-TUP <span className="select-none md:flex hidden">FOR STREAMER</span>
         </p>
       </Link>
 
-      <div className="flex w-[33%] justify-end items-center gap-9">
+      <div className="select-none flex w-[33%] justify-end items-center gap-9">
 
-        <div className="md:flex hidden mx-[5x]" style={{ color: C.line2 }}>|</div>
+        <div className="select-none md:flex hidden mx-[5x]" style={{ color: C.line2 }}>|</div>
 
-        <div className="flex items-center gap-5 md:gap-4">
-          <div style={{ display: "flex", gap: 14 }} className="hide-mobile h-[32px] md:h-[38px]">
-            <Link to="/login" style={{
+        <div className="select-none flex items-center gap-5 md:gap-4">
+          <div style={{ display: "flex", gap: 14 }} className="select-none hide-mobile h-[32px] md:h-[38px]">
+            <Link to="/login" 
+              draggable={false}
+              style={{
               fontFamily: "'Space Grotesk',sans-serif", fontSize: 13, fontWeight: 600,
               letterSpacing: "0.05em", textTransform: "uppercase",
               padding: "6px 16px", background: C.lime, color: isDark ? 'black' : C.bg,
@@ -291,7 +299,7 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
           {/* Theme Toggle */}
           <ThemeToggle isDark={isDark} onToggle={onToggleTheme} C={C} />
 
-          {/* <div style={{ display: "flex" }} className="hide-mobile">
+          {/* <div style={{ display: "flex" }} className="select-none hide-mobile">
             <h2 style={{ color: C.muted, fontSize: 13, transition: "color 0.4s" }}>MADE WITH ❤️ FROM INDONESIA</h2>
           </div> */}
         </div>
@@ -311,7 +319,9 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
             </span>
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} C={C} />
           </div>
-          <Link to="/register" onClick={() => setMenuOpen(false)}
+          <Link to="/register" 
+            draggable={false}
+            onClick={() => setMenuOpen(false)}
             style={{ marginTop: 8, padding: "12px 0", textAlign: "center", background: C.lime, color: C.bg, fontWeight: 700, fontSize: 13, textDecoration: "none", letterSpacing: "0.04em", textTransform: "uppercase", transition: "background 0.4s" }}
           >
             Mulai Sekarang
@@ -321,7 +331,6 @@ function Navbar({ menuOpen, setMenuOpen, isDark, onToggleTheme, C }) {
     </nav>
   );
 }
-
 function Hero({ C, isDark }) {
   const [alertVisible, setAlertVisible] = useState(false);
   const [ref, inView] = useInView(0.3);
@@ -337,26 +346,49 @@ function Hero({ C, isDark }) {
   }, []);
 
   return (
-    <section 
-      className="hero-wrapper md:py-0 min-h-[62vh] md:h-[93vh] overflow-hidden relative" 
-      style={{ 
-        display: "grid", 
-        gridTemplateRows: "1fr auto", 
-        paddingTop: 70, 
-        borderBottom: `1px solid ${C.line}`, 
+    <section
+      className="select-none hero-wrapper md:py-0 min-h-[62vh] md:h-[93vh] overflow-hidden relative"
+      style={{
+        display: "grid",
+        gridTemplateRows: "1fr auto",
+        paddingTop: 70,
+        borderBottom: `1px solid ${C.line}`,
         transition: "border-color 0.4s",
-        background: C.bg 
+        background: C.bg,
       }}
     >
+      {/* ===== VIDEO BACKGROUND ===== */}
+      <video
+        className="select-none md:flex hidden pointer-events-none absolute inset-0 w-full h-full object-cover"
+        style={{ zIndex: 0 }}
+        src="/live2.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        draggable={false}
+      />
+
+      {/* ===== DARK OVERLAY ===== */}
+      <div
+        className="select-none pointer-events-none absolute inset-0"
+        style={{
+          zIndex: 1,
+          background: isDark
+            ? "rgba(0,0,0,0.9)"
+            : "rgba(0,0,0,0.9)",
+        }}
+      />
+
       {/* Grid Background */}
-      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+      <div className="select-none absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="crossgrid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path 
-                d="M 40 0 L 0 0 0 40" 
-                fill="none" 
-                stroke={isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.6)"} 
+              <path
+                d="M 40 0 L 0 0 0 40"
+                fill="none"
+                stroke="rgba(255,255,255,0.08)"
                 strokeWidth="0.5"
               />
             </pattern>
@@ -366,38 +398,46 @@ function Hero({ C, isDark }) {
       </div>
 
       {/* Aurora Background Effect */}
-      <div 
-        className="absolute inset-0 overflow-hidden pointer-events-none" 
-        style={{ zIndex: 1, opacity: isDark ? 0.3 : 0.5 }}
+      <div
+        className="select-none absolute inset-0 overflow-hidden pointer-events-none"
+        style={{ zIndex: 3, opacity: 0.2 }}
       >
-        <div className="aurora-blob aurora-1" style={{ background: C.lime }} />
-        <div className="aurora-blob aurora-2" style={{ background: '#6366f1' }} />
-        <div className="aurora-blob aurora-3" style={{ background: '#a855f7' }} />
+        <div className="select-none aurora-blob aurora-1" style={{ background: C.lime }} />
+        <div className="select-none aurora-blob aurora-2" style={{ background: "#6366f1" }} />
+        <div className="select-none aurora-blob aurora-3" style={{ background: "#a855f7" }} />
       </div>
 
-      <div style={{ zIndex: 2, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} className="hero-main-grid relative h-full flex items-center">
-        <div className="text-center mx-auto w-full flex flex-col justify-center items-center px-6" style={{ paddingBottom: "0px" }}>
-          
+      <div
+        style={{ zIndex: 4, borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}
+        className="select-none hero-main-grid relative h-full flex items-center"
+      >
+        <div
+          className="select-none text-center mx-auto w-full flex flex-col justify-center items-center px-6"
+          style={{ paddingBottom: "0px" }}
+        >
           {/* Badge Atas */}
-          <div style={{ 
-            display: "inline-flex", alignItems: "center", gap: 8, 
-            fontFamily: "'Space Mono',monospace", fontSize: 10, 
-            marginTop: 6,
-            letterSpacing: "0.1em", textTransform: "uppercase", 
-            color: C.muted, marginBottom: 30, transition: "color 0.4s" 
-          }}>
+          <div
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontFamily: "'Space Mono',monospace", fontSize: 10,
+              marginTop: 6,
+              letterSpacing: "0.1em", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.6)", marginBottom: 30,
+              transition: "color 0.4s",
+            }}
+          >
             Platform Donasi Streamer Dari Indonesia
           </div>
 
           {/* Judul Hero */}
           <h1
-            className="hero-title"
+            className="select-none hero-title"
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(3.5rem, 12vw, 9rem)", // Responsif font size
+              fontSize: "clamp(3.5rem, 12vw, 9rem)",
               lineHeight: 0.85,
               letterSpacing: "-0.01em",
-              color: C.text,
+              color: "#ffffff", // putih agar kontras di atas video
               marginBottom: 40,
               textAlign: "center",
               display: "flex",
@@ -408,40 +448,38 @@ function Hero({ C, isDark }) {
               transition: "color 0.4s",
             }}
           >
-            <span className="flex items-center justify-center gap-[0.1em]">
+            <span className="select-none flex items-center justify-center gap-[0.1em]">
               UBAH HOBI
               <img
-                className="relative top-[-2px] md:top-[-7px] md:inline-block hidden ml-[7px] h-[0.8em] md:h-[0.85em] w-auto"
+                draggable={false}
+                className="select-none relative top-[-2px] md:top-[-7px] md:inline-block hidden ml-[7px] h-[0.8em] md:h-[0.85em] w-auto"
                 src="/jellyfish.png"
                 alt="icon"
               />
             </span>
             <span>STREAMING</span>
-            <span className="w-full">MENJADI BER-CUAN</span>
+            <span className="select-none w-full">MENJADI BER-CUAN</span>
           </h1>
 
           {/* Container Tombol */}
-          <div className="w-full max-w-md md:max-w-none px-4">
-            <div 
-              className="flex flex-col md:flex-row items-center gap-4 w-full justify-center"
-            >
+          <div className="select-none w-full max-w-md md:max-w-none px-4">
+            <div className="select-none flex flex-col md:flex-row items-center gap-4 w-full justify-center">
               <BtnMain href="/register" C={C}>
-                <p className="flex items-center gap-2">
-                  Mulai Sekarang <span className="relative top-[-2px]">→</span>
+                <p draggable={false} className="select-none w-full flex justify-center items-center mx-auto text-center flex items-center gap-2">
+                  Mulai Sekarang <span className="select-none relative top-[-2px]">→</span>
                 </p>
               </BtnMain>
               <BtnGhost href="https://wa.me/6289513093406" C={C}>
-                <p className="flex items-center gap-2">
-                  Hubungi Developer <span className="relative top-[-2px]">→</span>
+                <p className="text-black select-none select-none w-full flex justify-center items-center mx-auto text-center flex items-center gap-2">
+                  Hubungi Developer <span className="select-none relative top-[-2px]">→</span>
                 </p>
               </BtnGhost>
             </div>
           </div>
-
         </div>
       </div>
 
-      {/* Global CSS for Animations */}
+      {/* Global CSS */}
       <style>{`
         @keyframes blink {
           0%, 100% { opacity: 1; }
@@ -456,11 +494,11 @@ function Hero({ C, isDark }) {
           min-height: 300px;
           border-radius: 50%;
           filter: blur(100px);
-          mix-blend-mode: ${isDark ? 'screen' : 'multiply'};
+          mix-blend-mode: screen;
           opacity: 0.4;
           animation: move 20s infinite alternate ease-in-out;
         }
-        
+
         .aurora-1 { top: -10%; left: -10%; animation-duration: 18s; }
         .aurora-2 { bottom: -10%; right: -5%; animation-delay: -5s; animation-duration: 25s; }
         .aurora-3 { top: 20%; left: 30%; animation-delay: -2s; animation-duration: 30s; }
@@ -515,7 +553,7 @@ function FeeComparison({ C }) {
   return (
     <section style={{ transition: "border-color 0.4s" }}>
       {/* Header */}
-      <div className="text-center flex flex-col justify-center items-center"
+      <div className="select-none text-center flex flex-col justify-center items-center"
         style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
         <Kicker C={C}>Transparansi Biaya</Kicker>
         <BigTitle C={C}>POTONGAN TERKECIL DI{" "}
@@ -527,7 +565,7 @@ function FeeComparison({ C }) {
       </div>
 
       {/* Grid perbandingan */}
-      <div className="grid grid-cols-2 md:grid-cols-4"
+      <div className="select-none grid grid-cols-2 md:grid-cols-4"
         style={{ borderBottom: `1px solid ${C.line}` }}
         >
         {PLATFORMS.map((p, i) => {
@@ -572,7 +610,7 @@ function FeeComparison({ C }) {
 function HowItWorks({ C }) {
   return (
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }} id="cara-kerja">
-      <div className="text-center flex  flex-col justify-center items-center w-full" style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}`, flexWrap: "wrap", transition: "border-color 0.4s" }}>
+      <div className="select-none text-center flex  flex-col justify-center items-center w-full" style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}`, flexWrap: "wrap", transition: "border-color 0.4s" }}>
         <div>
           <BigTitle C={C}>MULAI LIVE DALAM 5 MENIT</BigTitle>
         </div>
@@ -580,7 +618,7 @@ function HowItWorks({ C }) {
           Proses setup yang dirancang seminimal mungkin
         </p>
       </div>
-      <div className="grid grid-cols-4 how-steps-grid md:grid flex-col hidden">
+      <div className="select-none grid grid-cols-4 how-steps-grid md:grid flex-col hidden">
         {HOW_IT_WORKS.map((step, i) => (
           <HowStep key={step.num} step={step} last={i === HOW_IT_WORKS.length - 1} C={C} />
         ))}
@@ -608,7 +646,7 @@ function HowStep({ step, last, C }) {
 function Testimonials({ C }) {
   return (
     <section style={{ borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
-      <div className="text-center justify-center items-center flex flex-col" style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+      <div className="select-none text-center justify-center items-center flex flex-col" style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
          <div>
           <BigTitle C={C}>SUDAH TERUJI OLEH STREAMER</BigTitle>
         </div>
@@ -617,7 +655,7 @@ function Testimonials({ C }) {
         </p>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)" }}
-        className="testimonials-grid">
+        className="select-none testimonials-grid">
         {TESTIMONIALS.map((t, i) => (
           <div key={t.name} style={{ padding: "36px 30px", borderRight: i < 2 ? `1px solid ${C.line}` : "none", display: "flex", flexDirection: "column", transition: "border-color 0.4s" }}>
             <span style={{ fontSize: 12, color: C.lime, letterSpacing: 2, marginBottom: 20, display: "block", transition: "color 0.4s" }}>★★★★★</span>
@@ -644,7 +682,7 @@ function CTA({ C, isDark }) {
   return (
     <section id="dashboards" className='relative flex flex-col justify-center h-max items-center text-center pb-12'>
       <div
-        className="w-full flex flex-col justify-center items-center"
+        className="select-none w-full flex flex-col justify-center items-center"
         style={{
           padding: "120px 40px 80px 40px",
           borderRight: `1px solid ${C.line}`,
@@ -654,7 +692,7 @@ function CTA({ C, isDark }) {
           transition: "border-color 0.4s"
         }}
       >
-      <div className="w-max text-center flex flex-col justify-center items-center">
+      <div className="select-none w-max text-center flex flex-col justify-center items-center">
       <h2
         style={{
             fontFamily: "'Bebas Neue',sans-serif",
@@ -670,6 +708,7 @@ function CTA({ C, isDark }) {
         <span style={{ color: C.lime, transition: "color 0.4s" }}>
             NAIK{" "}
             <img
+            draggable={false}
             src="/jellyfish.png"
             alt="icon"
             style={{
@@ -694,12 +733,12 @@ function CTA({ C, isDark }) {
 
       {/* Stacked images layout */}
       <div
-        className="relative w-full flex h-max justify-center items-center"
+        className="select-none relative w-full flex h-max justify-center items-center"
         style={{ height: "clamp(320px, 50vw, 600px)", marginTop: -170 }}
         >
         {/* Gambar kiri */}
         <div
-            className="absolute border border-slate-300 shadow-md overflow-hidden"
+            className="select-none absolute border border-slate-300 shadow-md overflow-hidden"
             style={{
             width: "clamp(220px, 38vw, 480px)",
             aspectRatio: "16/10",
@@ -712,12 +751,13 @@ function CTA({ C, isDark }) {
             opacity: 0.85,
             }}
         >
-            <img src="/dash2.png" alt="gambar dashboard" className="w-full h-full object-cover" />
+            <img
+            draggable={false} src="/dash2.png" alt="gambar dashboard" className="select-none w-full h-full object-cover" />
         </div>
 
         {/* Gambar kanan */}
         <div
-            className="absolute border border-slate-300 shadow-md overflow-hidden"
+            className="select-none absolute border border-slate-300 shadow-md overflow-hidden"
             style={{
             width: "clamp(220px, 38vw, 480px)",
             aspectRatio: "16/10",
@@ -730,12 +770,13 @@ function CTA({ C, isDark }) {
             opacity: 0.85,
             }}
         >
-            <img src="/dash3.png" alt="gambar dashboard" className="w-full h-full object-cover" />
+            <img
+            draggable={false} src="/dash3.png" alt="gambar dashboard" className="select-none w-full h-full object-cover" />
         </div>
 
         {/* Gambar tengah — paling depan */}
         <div
-            className="absolute border border-slate-300 shadow-xl overflow-hidden"
+            className="select-none absolute border border-slate-300 shadow-xl overflow-hidden"
             style={{
             width: "clamp(260px, 46vw, 580px)",
             aspectRatio: "16/10",
@@ -745,7 +786,8 @@ function CTA({ C, isDark }) {
             zIndex: 2,
             }}
         >
-            <img src="/dash.png" alt="gambar dashboard" className="w-full h-full object-cover" />
+            <img
+            draggable={false} src="/dash.png" alt="gambar dashboard" className="select-none w-full h-full object-cover" />
         </div>
         </div>
     </section>
@@ -754,8 +796,8 @@ function CTA({ C, isDark }) {
 
 function Footer({ C }) {
   return (
-    <footer className="text-center flex justify-center items-center" style={{ display: "grid", gridTemplateColumns: "1fr", borderTop: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
-      <div className="w-full text-center mx-auto flex flex-col justify-between items-center" style={{ padding: "32px 32px", borderRight: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+    <footer className="select-none text-center flex justify-center items-center" style={{ display: "grid", gridTemplateColumns: "1fr", borderTop: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
+      <div className="select-none w-full text-center mx-auto flex flex-col justify-between items-center" style={{ padding: "32px 32px", borderRight: `1px solid ${C.line}`, transition: "border-color 0.4s" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 15, marginTop: 6, marginBottom: 12, color: C.text, transition: "color 0.4s" }}>
           TapTipTup
         </div>
@@ -901,9 +943,9 @@ function SharePromo({ C }) {
   }
 
   return (
-    <section className="md:block hidden" style={{ borderBottom: `1px solid ${C.line}` }}>
+    <section className="select-none md:block hidden" style={{ borderBottom: `1px solid ${C.line}` }}>
       {/* Header */}
-      <div className="text-center flex flex-col justify-center items-center"
+      <div className="select-none text-center flex flex-col justify-center items-center"
         style={{ padding: "80px 20px", borderBottom: `1px solid ${C.line}` }}>
         <Kicker C={C}>Share & Promosi</Kicker>
         <BigTitle C={C}>SEBARKAN KE SESAMA <span style={{ color: C.lime }}>STREAMER</span></BigTitle>
@@ -916,9 +958,9 @@ function SharePromo({ C }) {
 
       <div style={{ padding: "48px 30px" }}>
         {/* Format tabs */}
-        {/* <div className="justify-center items-center" style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+        {/* <div className="select-none justify-center items-center" style={{ display: "flex", gap: 8, marginBottom: 24 }}>
           {['ig', 'desktop'].map(f => (
-            <button className="active:scale-[0.98]" key={f} onClick={() => setFormat(f)} style={{
+            <button className="select-none active:scale-[0.98]" key={f} onClick={() => setFormat(f)} style={{
               padding: "8px 20px", fontSize: 13, fontWeight: 600,
               border: `1px solid ${format === f ? C.lime : C.line2}`,
               background: format === f ? C.lime : "transparent",
@@ -931,11 +973,11 @@ function SharePromo({ C }) {
         </div> */}
 
         {/* Image cards */}
-        <div className="grid-cols-1 md:grid-cols-4" style={{ display: "grid", gap: 16, marginBottom: 32 }}>
+        <div className="select-none grid-cols-1 md:grid-cols-4" style={{ display: "grid", gap: 16, marginBottom: 32 }}>
           {[2,3, 4, 5].map(n => (
             <div 
               key={n} 
-              className="bg-white" 
+              className="select-none bg-white" 
               // onClick={() => setSelectedCard(n)} 
               style={{
                 border: `${selectedCard === n ? 2 : 1}px solid ${selectedCard === n ? C.lime : C.line}`,
@@ -946,7 +988,7 @@ function SharePromo({ C }) {
               }}
             >
               <div 
-                className="flex items-center justify-center"
+                className="select-none flex items-center justify-center"
                 style={{ 
                   // aspectRatio: format === 'ig' ? '1/1' : '16/9', 
                   background: 'white', 
@@ -954,6 +996,7 @@ function SharePromo({ C }) {
                   overflow: "hidden" 
                 }}>
                 <img
+                draggable={false}
                   src={`/share-${format === 'ig' ? 'ig' : 'desktop'}-${n}.jpg`}
                   alt={`Template ${n}`}
                   style={{ 
@@ -969,7 +1012,7 @@ function SharePromo({ C }) {
               <a
                 href={`/share-ig-${n}.jpg`}
                 download={`taptiptup-${format}-${n}.jpg`}
-                className="w-full text-center mx-auto active:scale-[0.98] hover:brightness-90"
+                className="select-none w-full text-center mx-auto active:scale-[0.98] hover:brightness-90"
                 onClick={e => e.stopPropagation()}
                 style={{
                   position: "absolute", 
@@ -994,7 +1037,7 @@ function SharePromo({ C }) {
             <div style={{ fontFamily: "'Space Mono',monospace", fontSize: 10, color: C.lime, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>
               Template Teks — Gambar {selectedCard}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }} className="feat-list-grid">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }} className="select-none feat-list-grid">
               {tpls.map((t, i) => (
                 <div key={i} style={{ background: C.bg, border: `1px solid ${C.line}`, padding: 16, position: "relative" }}>
                   <div style={{ fontSize: 10, fontFamily: "'Space Mono',monospace", color: C.lime, letterSpacing: "0.06em", marginBottom: 8 }}>{t.platform}</div>
@@ -1054,7 +1097,7 @@ export default function TapTipTup() {
 
   return (
     <div
-      className="overflow-hidden w-[100vw]"
+      className="select-none overflow-hidden w-[100vw]"
       style={{
         minHeight: "100vh",
         background: C.bg,
