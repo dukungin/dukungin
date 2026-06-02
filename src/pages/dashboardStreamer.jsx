@@ -3081,52 +3081,125 @@ const handleChangePin = async () => {
 
   // ─── SoundTiersEditor ─────────────────────────────────────────────────────────
 
+ // ─── SoundTiersEditor ─────────────────────────────────────────────────────────
+
   const SoundTiersEditor = ({ tiers, onChange, saveSettingsMutation, settings, onPreview }) => {
-    const add    = () => onChange([...tiers, { minAmount: 50000, maxAmount: null, soundUrl: '', label: '' }]);
-    const remove = (i) => onChange(tiers.filter((_, idx) => idx !== i));
-    const upd    = (i, key, val) => onChange(tiers.map((t, idx) => idx === i ? { ...t, [key]: key === 'minAmount' || key === 'maxAmount' ? (val === '' ? null : Number(val)) : val } : t));
+    // ✅ Local state untuk tracking input - tidak trigger parent update
+    const [localTiers, setLocalTiers] = useState(() => 
+      tiers.map(t => ({ ...t }))
+    );
+
+    // Sync local state with props when props change (but only from outside)
+    useEffect(() => {
+      setLocalTiers(tiers.map(t => ({ ...t })));
+    }, [tiers.length]); // Only sync when array length changes
+
+    const add = () => {
+      const newTiers = [...localTiers, { minAmount: 50000, maxAmount: null, soundUrl: '', label: '' }];
+      setLocalTiers(newTiers);
+      onChange(newTiers); // Still sync to parent
+    };
+    
+    const remove = (i) => {
+      const newTiers = localTiers.filter((_, idx) => idx !== i);
+      setLocalTiers(newTiers);
+      onChange(newTiers);
+    };
+    
+    // ✅ Handle change - simpan ke local dulu, jangan langsung ke parent
+    const handleLocalChange = useCallback((i, key, value) => {
+      setLocalTiers(prev => prev.map((t, idx) => {
+        if (idx !== i) return t;
+        
+        let parsedValue = value;
+        if (key === 'minAmount' || key === 'maxAmount') {
+          parsedValue = value === '' ? null : Number(value);
+        }
+        
+        return { ...t, [key]: parsedValue };
+      }));
+    }, []);
+
+    // ✅ Sync ke parent saat user klikSimpan / blur
+    const syncToParent = useCallback(() => {
+      onChange(localTiers);
+    }, [localTiers, onChange]);
+
+    // ✅ Handler stabil untuk SoundPicker
+    const handleSoundChange = useCallback((i, soundUrl) => {
+      setLocalTiers(prev => prev.map((t, idx) => 
+        idx === i ? { ...t, soundUrl } : t
+      ));
+    }, []);
+
     return (
       <div className="space-y-3">
-        {tiers.map((t, i) => (
+        {localTiers.map((t, i) => (
           <div key={i} className="bg-slate-50 dark:bg-slate-800 rounded-none p-4 border border-slate-100 dark:border-slate-700 space-y-4">
             <div className="flex items-center justify-between">
               <span className="font-black text-slate-600 dark:text-slate-300 text-sm">{t.label || `Tier Suara ${i + 1}`}</span>
               <button onClick={() => remove(i)} className="cursor-pointer text-red-400 hover:text-red-600 p-1"><Trash2 size={15} /></button>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {[['Min (Rp)', 'minAmount', t.minAmount], ['Max (kosong=∞)', 'maxAmount', t.maxAmount ?? '']].map(([lbl, key, val]) => (
-                <div key={key} className="flex flex-col gap-1">
-                  <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
-                  <input type="number" value={val} placeholder={key === 'maxAmount' ? '∞' : ''} onChange={e => upd(i, key, e.target.value)}
-                    className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
-                </div>
-              ))}
+              <div className="flex flex-col gap-1">
+                <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Min (Rp)</label>
+                <input 
+                  type="number" 
+                  // ✅ Value dari local state
+                  value={t.minAmount ?? ''}
+                  // ✅ onChange KE LOCAL STATE, bukan langsung parent
+                  onChange={(e) => handleLocalChange(i, 'minAmount', e.target.value)}
+                  // ✅ onBlur - sync ke parent saat focus keluar
+                  onBlur={syncToParent}
+                  placeholder="50000"
+                  className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" 
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Max (kosong=∞)</label>
+                <input 
+                  type="number" 
+                  value={t.maxAmount ?? ''}
+                  onChange={(e) => handleLocalChange(i, 'maxAmount', e.target.value)}
+                  onBlur={syncToParent}
+                  placeholder="∞"
+                  className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" 
+                />
+              </div>
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Label (opsional)</label>
-              <input value={t.label} placeholder="contoh: Sultan Alert Sound" onChange={e => upd(i, 'label', e.target.value)}
-                className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
-            </div>
-              <SoundPicker
-                value={t.soundUrl || ''}
-                onChange={v => {
-                  upd(i, 'soundUrl', v);   // atau upd(i, 'soundUrl', v) kalau pakai yang lama
-                  onPreview?.(v);
-                }}
+              <input 
+                value={t.label || ''} 
+                onChange={(e) => handleLocalChange(i, 'label', e.target.value)}
+                onBlur={syncToParent}
+                placeholder="contoh: Sultan Alert Sound"
+                className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" 
               />
+            </div>
+            <SoundPicker
+              value={t.soundUrl || ''}
+              onChange={(v) => handleSoundChange(i, v)}
+              onPreview={onPreview}
+            />
           </div>
         ))}
         <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-blue-200 dark:border-blue-900 text-blue-500 dark:text-blue-400 rounded-none font-black text-sm hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-center gap-2">
           <Plus size={16} /> Tambah Suara per Nominal
-      </button>
-      <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
-        <Save size={20} />
-        {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Audio Terbaru'}
-      </button>
-    </div>
-  );
-};
+        </button>
+        <button 
+          onClick={() => {
+            syncToParent(); // ✅ Sync semua data ke parent dulu sebelum simpan
+            saveSettingsMutation.mutate(settings);
+          }} 
+          disabled={saveSettingsMutation.isPending}
+          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+          <Save size={20} />
+          {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Audio Terbaru'}
+        </button>
+      </div>
+    );
+  };
 
   const handleUploadAudio = async (file) => {
     const uploadFormData = new FormData();
