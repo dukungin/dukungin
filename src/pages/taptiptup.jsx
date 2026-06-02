@@ -225,76 +225,6 @@ function Hero({ C, isDark }) {
         borderBottom: `1px solid ${C.line}`,
       }}
     >
-      {/* ===== GALAXY + STARS BACKGROUND ===== */}
-      <div className="pointer-events-none select-none absolute inset-0" style={{ zIndex: 1 }}>
-  
-        {/* BINTANG-BINTANG YANG LEBIH BANYAK & JELAS */}
-        {/* <svg 
-          width="100%" 
-          height="100%" 
-          xmlns="http://www.w3.org/2000/svg" 
-          style={{ position: "absolute", inset: 0 }}
-        >
-          {Array.from({ length: 280 }).map((_, i) => {
-            const size = Math.random() * 2.2 + 0.4;        // Ukuran lebih bervariasi
-            const opacity = Math.random() * 0.85 + 0.35;   // Opacity lebih terang
-            const delay = Math.random() * 4;                // Untuk twinkling
-            
-            return (
-              <circle
-                key={i}
-                cx={`${Math.random() * 100}%`}
-                cy={`${Math.random() * 100}%`}
-                r={size}
-                fill="white"
-                opacity={opacity}
-                style={{
-                  animation: `twinkle ${2.5 + Math.random() * 3.5}s infinite alternate ease-in-out`,
-                  animationDelay: `-${delay}s`,
-                }}
-              />
-            );
-          })}
-        </svg> */}
-
-        {/* Galaxy Radial Glows (tetap sama) */}
-        {/* <div style={{
-          position: "absolute",
-          top: "-15%",
-          left: "-10%",
-          width: "70vw",
-          height: "70vw",
-          borderRadius: "0%",
-          background: "radial-gradient(circle, rgba(99,102,241,0.25) 20%, transparent 60%)",
-          filter: "blur(80px)",
-          opacity: 0.6,
-          animation: "galaxyDrift 35s ease-in-out infinite alternate",
-        }} />
-
-        <div style={{
-          position: "absolute",
-          bottom: "-20%",
-          right: "-5%",
-          width: "65vw",
-          height: "65vw",
-          borderRadius: "0%",
-          background: "radial-gradient(circle, rgba(168,85,247,0.22) 15%, transparent 65%)",
-          filter: "blur(90px)",
-          opacity: 0.5,
-          animation: "galaxyDrift 42s ease-in-out infinite alternate-reverse",
-        }} /> */}
-      </div>
-
-      {/* Dark Overlay */}
-      {/* <div
-        className="select-none pointer-events-none absolute inset-0"
-        style={{
-          zIndex: 2,
-          background: isDark
-            ? "rgba(0,0,0,0.88)"
-            : "rgba(0,0,0,0.85)",
-        }}
-      /> */}
 
       {/* Grid Background (Mobile) */}
       <div className="select-none md:hidden flex absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
@@ -313,10 +243,10 @@ function Hero({ C, isDark }) {
         </svg>
       </div>
 
-      <img src="/man2.png" alt="image woman" className="absolute md:flex hidden bottom-0 md:bottom-[-56px] left-[-40px] 2xl:left-[-270px] md:left-[-257px] w-[44%] md:w-[50%] z-[99999]" />
+      <img src="/man2.png" alt="image woman" className="absolute md:flex hidden bottom-0 md:bottom-[-56px] left-[-40px] 2xl:left-[-280px] md:left-[-257px] w-[44%] md:w-[50%] z-[99999]" />
       <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-34px] md:left-[-50px] w-[46%] md:w-[43%] z-[99999]" />
       <img src="/woman2.png" alt="image woman" className="absolute bottom-0 md:flex hidden md:bottom-[-100px] right-12 w-[32%] z-[99999]" />
-      <img src="/man1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] right-[-17px] md:right-[-200px] w-[39.5%] md:w-[40%] z-[999]" />
+      <img src="/man1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] right-[-17px] md:right-[-208px] w-[39.5%] md:w-[40%] z-[999]" />
 
       {/* Main Content */}
       <div
@@ -328,20 +258,21 @@ function Hero({ C, isDark }) {
           style={{ paddingBottom: "0px", paddingTop: 40 }}
         >
         {/* Judul Hero */}
-         <h1
-            className="select-none hero-title font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400"
-          >
-            <p className="text-[3.1rem] md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
+         <h1 className="select-none hero-title font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400">
+            
+            <span className="text-[3.1rem] md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
               AMBIL UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
-            </p>
-            <p className="text-5xl w-max lg:text-8xl 2xl:text-[7rem] w-[80vw] select-none hidden md:flex items-center justify-center">
-             <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
+            </span>
+
+            <span className="relative top-[-10px] text-5xl w-max lg:text-8xl 2xl:text-[7rem] w-[80vw] select-none hidden md:flex items-center justify-center">
+              <span className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
                 <span className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative text-black 2xl:h-[98px] md:h-[85px] bg-[azure]">
                   POTONGAN HANYA 2.5% UNTUK
                 </span>
-                  SETIAP DONASI MASUK
-              </p>
-            </p>
+                SETIAP DONASI MASUK
+              </span>
+            </span>
+
           </h1>
 
           <br className="md:hidden flex" />
@@ -349,7 +280,7 @@ function Hero({ C, isDark }) {
 
           {/* Deskripsi */}
           <p
-            className="select-none w-[86vw] md:max-w-[50vw]"
+            className="select-none w-[86vw] !py-1 md:max-w-[50vw]"
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(13px, 1.5vw, 16px)",
@@ -419,6 +350,29 @@ function Hero({ C, isDark }) {
         </div>
         </div>
       </div>
+      {[
+        { left: "25%",  size: "20px", dur: "6s",   delay: "0s"   , rot: "-10deg" },
+        { left: "10%", size: "20px", dur: "8s",   delay: "1.5s" , rot: "8deg"  },
+        { left: "32%", size: "20px", dur: "7s",   delay: "0.5s"   , rot: "-5deg" },
+        { left: "42%", size: "20px", dur: "9s",   delay: "2.5s" , rot: "12deg" },
+        { left: "60%", size: "20px", dur: "6.5s", delay: "1s" , rot: "-8deg" },
+        { left: "50%", size: "20px", dur: "7.5s", delay: "3s"   , rot: "6deg"  },
+        { left: "70%", size: "20px", dur: "8.5s", delay: "1.8s" , rot: "-14deg"},
+      ].map((item, i) => (
+        <span
+          key={i}
+          className="thumb-float"
+          style={{
+            left: item.left,
+            "--size": item.size,
+            "--dur": item.dur,
+            "--delay": item.delay,
+            "--rot": item.rot,
+          }}
+        >
+          👍
+        </span>
+      ))}
 
       {/* Global CSS (tambahkan animasi galaxy) */}
       <style>{`
@@ -526,6 +480,24 @@ function Hero({ C, isDark }) {
           50% { transform: translate(10%, 15%) scale(1.1) rotate(45deg); }
           100% { transform: translate(-5%, 10%) scale(0.9) rotate(-45deg); }
         }
+
+        {/* Tambahkan di dalam <style> yang sudah ada, setelah animasi lainnya */}
+        @keyframes floatUpHero {
+          0%   { transform: translateY(0) scale(0.5) rotate(var(--rot)); opacity: 0; }
+          10%  { opacity: 0.7; }
+          85%  { opacity: 0.5; }
+          100% { transform: translateY(-44vh) scale(1.1) rotate(calc(var(--rot) + 15deg)); opacity: 0; }
+        }
+        .thumb-float {
+          position: absolute;
+          bottom: -30px;
+          animation: floatUpHero var(--dur) ease-in infinite;
+          animation-delay: var(--delay);
+          pointer-events: none;
+          user-select: none;
+          z-index: 2;
+          font-size: var(--size);
+        }
       `}</style>
     </section>
   );
@@ -580,7 +552,7 @@ function FeeComparison({ C }) {
       style={{ 
         transition: "border-color 0.4s",
         padding: '20px 0px 60px 0px',           // mobile
-        '@media (max-width: 768px)': {           // md breakpoint
+        '@media (maxWidth: 768px)': {           // md breakpoint
           padding: '20px 0px 30px 0px'
         }
       }}>
@@ -639,22 +611,13 @@ function FeeComparison({ C }) {
         }
       `}</style>
 
-      {/* ===== KONTEN (z-index di atas efek) ===== */}
-
       {/* Header */}
       <div className="select-none text-center flex flex-col justify-center items-center !py-11 !md:py-20 !px-5 transition-colors duration-400 relative z-[2]">
         <Kicker C={C}>Transparansi Biaya</Kicker>
         <BigTitle C={C}>POTONGAN TERKECIL DI{" "}
           <span style={{ color: C.lime }}>KELASNYA</span>
         </BigTitle>
-        {/* <p style={{ fontSize: 14, color: C.muted, marginTop: 8, transition: "color 0.4s" }}>
-          Kami hanya ambil 2.5% — sisanya langsung ke kantongmu.
-        </p> */}
       </div>
-
-      {/* <div className="absolute w-full hidden md:flex justify-center items-center" style={{ zIndex: 2 }}>
-        <img src="/man2.png" alt="image" className="w-[50%] md:w-[30%] mx-auto relative top-2.5 left-1" style={{ zIndex: 33 }} />
-      </div> */}
 
       {/* Grid perbandingan */}
       <div className="select-none w-[90vw] relative grid grid-cols-1 bg-white md:grid-cols-3"
@@ -875,6 +838,7 @@ function SharePromo({ C }) {
 ───────────────────────────────────────── */
 export default function TapTipTup() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [trigger, setTrigger] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   // Inisialisasi dari localStorage atau preferensi sistem
@@ -890,11 +854,41 @@ export default function TapTipTup() {
 
   // Modal Intro Logic
   useEffect(() => {
-    const hasSeenIntro = localStorage.getItem("hasSeenIntro");
-    if (!hasSeenIntro) {
-      setShowModal(true);
-    }
+    setShowModal(true);
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTrigger(true);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const audio = new Audio('/sound.mp3');
+    audio.loop = true;
+    audio.volume = 1.0;
+    
+    const play = () => {
+      audio.play().catch(() => {});
+      document.removeEventListener('click', play);
+      document.removeEventListener('touchstart', play);
+    };
+
+    // Coba autoplay langsung
+    audio.play().catch(() => {
+      // Kalau browser blokir, tunggu interaksi pertama user
+      document.addEventListener('click', play);
+      document.addEventListener('touchstart', play);
+    });
+
+    return () => {
+      audio.pause();
+      audio.src = '';
+      document.removeEventListener('click', play);
+      document.removeEventListener('touchstart', play);
+    };
+  }, [trigger]);
 
   const closeModal = () => {
     setShowModal(false);
@@ -926,83 +920,102 @@ export default function TapTipTup() {
       <Hero C={C} isDark={isDark} />
       <Marquee C={C} />
       <FeeComparison C={C} /> 
-      <section className="w-screen min-h-[70vh] flex flex-col justify-center items-center bg-blue-900"
-        style={{ padding: "60px 20px", gap: "24px", position: "relative", overflow: "hidden" }}>
+    <section className="w-screen md:!min-h-[70vh] !pb-20 !pt-4 flex flex-col justify-center items-center bg-blue-900 !px-[20px] gap-6 relative overflow-hidden">
 
-        {/* Taburan gambar kecil kiri kanan */}
-        {[
-          { src: "/yt.png",   left: "2%",  top: "8%",  size: 38, rot: -15 },
-          { src: "/tt2.png",  left: "7%",  top: "28%", size: 30, rot: 10  },
-          { src: "/yt.png",   left: "3%",  top: "55%", size: 44, rot: 20  },
-          { src: "/tt2.png",  left: "9%",  top: "75%", size: 28, rot: -8  },
-          { src: "/yt.png",   left: "13%", top: "88%", size: 34, rot: 14  },
-          { src: "/tt2.png",  left: "1%",  top: "42%", size: 26, rot: -20 },
-          { src: "/yt.png",   left: "16%", top: "15%", size: 32, rot: 5   },
-          { src: "/tt2.png",  left: "11%", top: "62%", size: 36, rot: -12 },
+  {/* Animasi love TikTok */}
+  <style>{`
+    @keyframes floatUp {
+      0%   { transform: translateY(0) scale(0.5) rotate(var(--rot)); opacity: 0; }
+      10%  { opacity: 1; }
+      80%  { opacity: 0.8; }
+      100% { transform: translateY(-110vh) scale(1.2) rotate(calc(var(--rot) + 20deg)); opacity: 0; }
+    }
+    .love-float {
+      position: absolute;
+      bottom: -40px;
+      animation: floatUp var(--dur) ease-in infinite;
+      animation-delay: var(--delay);
+      pointer-events: none;
+      user-select: none;
+      z-index: 1;
+      font-size: var(--size);
+      filter: drop-shadow(0 0 4px rgba(255,100,150,0.6));
+    }
+  `}</style>
 
-          { src: "/tt2.png",  right: "2%",  top: "8%",  size: 38, rot: 15  },
-          { src: "/yt.png",   right: "7%",  top: "28%", size: 30, rot: -10 },
-          { src: "/tt2.png",  right: "3%",  top: "55%", size: 44, rot: -20 },
-          { src: "/yt.png",   right: "9%",  top: "75%", size: 28, rot: 8   },
-          { src: "/tt2.png",  right: "13%", top: "88%", size: 34, rot: -14 },
-          { src: "/yt.png",   right: "1%",  top: "42%", size: 26, rot: 20  },
-          { src: "/tt2.png",  right: "16%", top: "15%", size: 32, rot: -5  },
-          { src: "/yt.png",   right: "11%", top: "62%", size: 36, rot: 12  },
-        ].map((item, i) => (
-          <img
-            key={i}
-            src={item.src}
-            alt=""
-            style={{
-              position: "absolute",
-              left: item.left,
-              right: item.right,
-              top: item.top,
-              width: item.size,
-              height: item.size,
-              objectFit: "contain",
-              transform: `rotate(${item.rot}deg)`,
-              opacity: 0.55,
-              pointerEvents: "none",
-              userSelect: "none",
-              zIndex: 1,
-            }}
-          />
-        ))}
+  {[
+    { left: "3%",  size: "20px", dur: "4.2s", delay: "0s",    rot: "-12deg", emoji: "❤️" },
+    { left: "8%",  size: "20px", dur: "5.1s", delay: "0.8s",  rot: "8deg",   emoji: "🔁" },
+    { left: "14%", size: "20px", dur: "3.8s", delay: "1.5s",  rot: "-5deg",  emoji: "❤️" },
+    { left: "20%", size: "20px", dur: "6.0s", delay: "0.3s",  rot: "15deg",  emoji: "🔁" },
+    { left: "27%", size: "20px", dur: "4.5s", delay: "2.1s",  rot: "-20deg", emoji: "❤️" },
+    { left: "33%", size: "20px", dur: "5.5s", delay: "1.0s",  rot: "6deg",   emoji: "🔁" },
+    { left: "40%", size: "20px", dur: "4.8s", delay: "0.5s",  rot: "-10deg", emoji: "❤️" },
+    { left: "47%", size: "20px", dur: "3.6s", delay: "1.8s",  rot: "18deg",  emoji: "🔁" },
+    { left: "54%", size: "20px", dur: "5.2s", delay: "0.2s",  rot: "-8deg",  emoji: "❤️" },
+    { left: "61%", size: "20px", dur: "4.0s", delay: "2.5s",  rot: "12deg",  emoji: "🔁" },
+    { left: "68%", size: "20px", dur: "5.8s", delay: "0.9s",  rot: "-15deg", emoji: "❤️" },
+    { left: "74%", size: "20px", dur: "3.9s", delay: "1.3s",  rot: "5deg",   emoji: "🔁" },
+    { left: "80%", size: "20px", dur: "6.2s", delay: "0.6s",  rot: "-18deg", emoji: "❤️" },
+    { left: "86%", size: "20px", dur: "4.3s", delay: "2.0s",  rot: "10deg",  emoji: "🔁" },
+    { left: "91%", size: "20px", dur: "5.0s", delay: "0.4s",  rot: "-6deg",  emoji: "❤️" },
+    { left: "96%", size: "20px", dur: "4.7s", delay: "1.6s",  rot: "14deg",  emoji: "🔁" },
+    { left: "5%",  size: "20px", dur: "5.3s", delay: "3.0s",  rot: "9deg",   emoji: "❤️" },
+    { left: "11%", size: "20px", dur: "4.1s", delay: "3.5s",  rot: "-11deg", emoji: "🔁" },
+    { left: "24%", size: "20px", dur: "6.4s", delay: "2.8s",  rot: "16deg",  emoji: "❤️" },
+    { left: "37%", size: "20px", dur: "3.7s", delay: "3.2s",  rot: "-7deg",  emoji: "🔁" },
+    { left: "50%", size: "20px", dur: "5.6s", delay: "2.4s",  rot: "20deg",  emoji: "❤️" },
+    { left: "63%", size: "20px", dur: "4.4s", delay: "3.8s",  rot: "-14deg", emoji: "🔁" },
+    { left: "76%", size: "20px", dur: "5.9s", delay: "1.1s",  rot: "7deg",   emoji: "❤️" },
+    { left: "89%", size: "20px", dur: "4.6s", delay: "2.7s",  rot: "-9deg",  emoji: "🔁" },
+  ].map((item, i) => (
+    <span
+      key={i}
+      className="love-float"
+      style={{
+        left: item.left,
+        "--size": item.size,
+        "--dur": item.dur,
+        "--delay": item.delay,
+        "--rot": item.rot,
+      }}
+    >
+      {item.emoji}
+    </span>
+  ))}
+  {/* Judul */}
+  <div className="text-center" style={{ zIndex: 2 }}>
+    <Kicker C={C}>Setup Cepat</Kicker>
+    <BigTitle C={C}>
+      LIVE BARENG{" "}
+      <span style={{ color: C.lime }}>TAPTIPTUP</span>
+    </BigTitle>
+  </div>
 
-        {/* Judul */}
-        <div className="text-center" style={{ zIndex: 2 }}>
-          <Kicker C={C}>Setup Cepat</Kicker>
-          <BigTitle C={C}>
-            LIVE BARENG{" "}
-            <span style={{ color: C.lime }}>TAPTIPTUP</span>
-          </BigTitle>
-        </div>
-
-        {/* Video */}
-        <video
-          src="/live2.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          style={{ maxWidth: "50vw", width: "100%", borderRadius: 0, border: "1px solid black", position: "relative", zIndex: 2 }}
-        />
-      </section>
+  {/* Video */}
+  <video
+    className="!w-[90vw] md:!w-[60vw]"
+    src="/live2.mp4"
+    autoPlay
+    muted
+    loop
+    playsInline
+    style={{ borderRadius: 0, border: "1px solid black", position: "relative", zIndex: 2 }}
+  />
+</section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="text-center flex flex-col justify-center items-center w-full" 
+     <footer className="text-center flex flex-col justify-center items-center w-full px-0 !pt-[20px] !pb-[0px] md:!pt-[90px] md:!pb-[60px]" 
         style={{
           background: "#0a0f1e",
           borderTop: `1px solid rgba(255,255,255,0.08)`,
-          padding: "100px 0 60px 0",
         }}>
-        <div className="max-w-7xl mx-auto px-8 text-center flex flex-col justify-center items-center"
-          style={{ gap: "32px", paddingBottom: "48px" }}
+        <div className="max-w-7xl mx-auto px-8 !md:pb-[48px] !pb-5 text-center flex flex-col justify-center items-center"
+          style={{ gap: "32px" }}
           >
 
           {/* Kolom 1 — Brand */}
-          <div className="w-full mx-auto">
+          <div className="w-full mx-auto text-center">
             <div style={{
               fontFamily: "'Bebas Neue', sans-serif",
               fontSize: 28, letterSpacing: "0.04em",
@@ -1010,7 +1023,7 @@ export default function TapTipTup() {
             }}>
               TapTipTup
             </div>
-            <p style={{
+            <p className="md:flex hidden w-full mx-auto !justify-center" style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontSize: 13, color: "rgba(255,255,255,0.5)",
               lineHeight: 0.4, marginBottom: 20,
@@ -1022,7 +1035,7 @@ export default function TapTipTup() {
             </a>
           </div>
 
-          <div className="w-full  flex flex-col justify-center items-center text-center">
+          <div className="w-full hidden md:flex flex-col justify-center items-center text-center">
           {/* Kolom 3 — Platform */}
             <div className="flex w-max text-center justify-between m-auto items-center gap-3">
             {[
@@ -1093,11 +1106,11 @@ export default function TapTipTup() {
         </div>
 
         {/* Bottom bar */}
-        <div style={{
+        <div className="md:flex hidden" style={{
           borderTop: "1px solid rgba(255,255,255,0.07)",
           padding: "30px 32px 20px",
           // width: '100%',
-          display: "flex", flexWrap: "wrap",
+          flexWrap: "wrap",
           justifyContent: "space-center", alignItems: "center",
           gap: 10,
         }}>
@@ -1107,7 +1120,6 @@ export default function TapTipTup() {
           {/* <span className="relative top-[0px] text-[9px] text-slate-500">/</span> */}
         </div>
       </footer>
-      {/* <Footer C={C} /> */}
 
       {/* ==================== INTRO MODAL ==================== */}
       {showModal && (
