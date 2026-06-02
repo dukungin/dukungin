@@ -257,8 +257,9 @@ function Hero({ C, isDark }) {
               <path
                 d="M 40 0 L 0 0 0 40"
                 fill="none"
-                stroke="rgba(255,255,255,0.4)"
+                // stroke="rgba(255,255,255,0.4)"
                 strokeWidth="0.5"
+                className="stroke-white/30 md:stroke-white/50"
               />
             </pattern>
           </defs>
