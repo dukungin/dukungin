@@ -920,89 +920,89 @@ export default function TapTipTup() {
       <Hero C={C} isDark={isDark} />
       <Marquee C={C} />
       <FeeComparison C={C} /> 
-    <section className="w-screen md:!min-h-[70vh] !pb-20 !pt-4 flex flex-col justify-center items-center bg-blue-900 !px-[20px] gap-6 relative overflow-hidden">
+      <section className="w-screen md:!min-h-[70vh] !pb-20 !pt-4 flex flex-col justify-center items-center bg-blue-900 !px-[20px] gap-6 relative overflow-hidden">
 
-  {/* Animasi love TikTok */}
-  <style>{`
-    @keyframes floatUp {
-      0%   { transform: translateY(0) scale(0.5) rotate(var(--rot)); opacity: 0; }
-      10%  { opacity: 1; }
-      80%  { opacity: 0.8; }
-      100% { transform: translateY(-110vh) scale(1.2) rotate(calc(var(--rot) + 20deg)); opacity: 0; }
-    }
-    .love-float {
-      position: absolute;
-      bottom: -40px;
-      animation: floatUp var(--dur) ease-in infinite;
-      animation-delay: var(--delay);
-      pointer-events: none;
-      user-select: none;
-      z-index: 1;
-      font-size: var(--size);
-      filter: drop-shadow(0 0 4px rgba(255,100,150,0.6));
-    }
-  `}</style>
+        {/* Animasi love TikTok */}
+        <style>{`
+          @keyframes floatUp {
+            0%   { transform: translateY(0) scale(0.5) rotate(var(--rot)); opacity: 0; }
+            10%  { opacity: 1; }
+            80%  { opacity: 0.8; }
+            100% { transform: translateY(-110vh) scale(1.2) rotate(calc(var(--rot) + 20deg)); opacity: 0; }
+          }
+          .love-float {
+            position: absolute;
+            bottom: -40px;
+            animation: floatUp var(--dur) ease-in infinite;
+            animation-delay: var(--delay);
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            font-size: var(--size);
+            filter: drop-shadow(0 0 4px rgba(255,100,150,0.6));
+          }
+        `}</style>
 
-  {[
-    { left: "3%",  size: "20px", dur: "4.2s", delay: "0s",    rot: "-12deg", emoji: "❤️" },
-    { left: "8%",  size: "20px", dur: "5.1s", delay: "0.8s",  rot: "8deg",   emoji: "🔁" },
-    { left: "14%", size: "20px", dur: "3.8s", delay: "1.5s",  rot: "-5deg",  emoji: "❤️" },
-    { left: "20%", size: "20px", dur: "6.0s", delay: "0.3s",  rot: "15deg",  emoji: "🔁" },
-    { left: "27%", size: "20px", dur: "4.5s", delay: "2.1s",  rot: "-20deg", emoji: "❤️" },
-    { left: "33%", size: "20px", dur: "5.5s", delay: "1.0s",  rot: "6deg",   emoji: "🔁" },
-    { left: "40%", size: "20px", dur: "4.8s", delay: "0.5s",  rot: "-10deg", emoji: "❤️" },
-    { left: "47%", size: "20px", dur: "3.6s", delay: "1.8s",  rot: "18deg",  emoji: "🔁" },
-    { left: "54%", size: "20px", dur: "5.2s", delay: "0.2s",  rot: "-8deg",  emoji: "❤️" },
-    { left: "61%", size: "20px", dur: "4.0s", delay: "2.5s",  rot: "12deg",  emoji: "🔁" },
-    { left: "68%", size: "20px", dur: "5.8s", delay: "0.9s",  rot: "-15deg", emoji: "❤️" },
-    { left: "74%", size: "20px", dur: "3.9s", delay: "1.3s",  rot: "5deg",   emoji: "🔁" },
-    { left: "80%", size: "20px", dur: "6.2s", delay: "0.6s",  rot: "-18deg", emoji: "❤️" },
-    { left: "86%", size: "20px", dur: "4.3s", delay: "2.0s",  rot: "10deg",  emoji: "🔁" },
-    { left: "91%", size: "20px", dur: "5.0s", delay: "0.4s",  rot: "-6deg",  emoji: "❤️" },
-    { left: "96%", size: "20px", dur: "4.7s", delay: "1.6s",  rot: "14deg",  emoji: "🔁" },
-    { left: "5%",  size: "20px", dur: "5.3s", delay: "3.0s",  rot: "9deg",   emoji: "❤️" },
-    { left: "11%", size: "20px", dur: "4.1s", delay: "3.5s",  rot: "-11deg", emoji: "🔁" },
-    { left: "24%", size: "20px", dur: "6.4s", delay: "2.8s",  rot: "16deg",  emoji: "❤️" },
-    { left: "37%", size: "20px", dur: "3.7s", delay: "3.2s",  rot: "-7deg",  emoji: "🔁" },
-    { left: "50%", size: "20px", dur: "5.6s", delay: "2.4s",  rot: "20deg",  emoji: "❤️" },
-    { left: "63%", size: "20px", dur: "4.4s", delay: "3.8s",  rot: "-14deg", emoji: "🔁" },
-    { left: "76%", size: "20px", dur: "5.9s", delay: "1.1s",  rot: "7deg",   emoji: "❤️" },
-    { left: "89%", size: "20px", dur: "4.6s", delay: "2.7s",  rot: "-9deg",  emoji: "🔁" },
-  ].map((item, i) => (
-    <span
-      key={i}
-      className="love-float"
-      style={{
-        left: item.left,
-        "--size": item.size,
-        "--dur": item.dur,
-        "--delay": item.delay,
-        "--rot": item.rot,
-      }}
-    >
-      {item.emoji}
-    </span>
-  ))}
-  {/* Judul */}
-  <div className="text-center" style={{ zIndex: 2 }}>
-    <Kicker C={C}>Setup Cepat</Kicker>
-    <BigTitle C={C}>
-      LIVE BARENG{" "}
-      <span style={{ color: C.lime }}>TAPTIPTUP</span>
-    </BigTitle>
-  </div>
+        {[
+          { left: "3%",  size: "20px", dur: "4.2s", delay: "0s",    rot: "-12deg", emoji: "❤️" },
+          { left: "8%",  size: "20px", dur: "5.1s", delay: "0.8s",  rot: "8deg",   emoji: "🔁" },
+          { left: "14%", size: "20px", dur: "3.8s", delay: "1.5s",  rot: "-5deg",  emoji: "❤️" },
+          { left: "20%", size: "20px", dur: "6.0s", delay: "0.3s",  rot: "15deg",  emoji: "🔁" },
+          { left: "27%", size: "20px", dur: "4.5s", delay: "2.1s",  rot: "-20deg", emoji: "❤️" },
+          { left: "33%", size: "20px", dur: "5.5s", delay: "1.0s",  rot: "6deg",   emoji: "🔁" },
+          { left: "40%", size: "20px", dur: "4.8s", delay: "0.5s",  rot: "-10deg", emoji: "❤️" },
+          { left: "47%", size: "20px", dur: "3.6s", delay: "1.8s",  rot: "18deg",  emoji: "🔁" },
+          { left: "54%", size: "20px", dur: "5.2s", delay: "0.2s",  rot: "-8deg",  emoji: "❤️" },
+          { left: "61%", size: "20px", dur: "4.0s", delay: "2.5s",  rot: "12deg",  emoji: "🔁" },
+          { left: "68%", size: "20px", dur: "5.8s", delay: "0.9s",  rot: "-15deg", emoji: "❤️" },
+          { left: "74%", size: "20px", dur: "3.9s", delay: "1.3s",  rot: "5deg",   emoji: "🔁" },
+          { left: "80%", size: "20px", dur: "6.2s", delay: "0.6s",  rot: "-18deg", emoji: "❤️" },
+          { left: "86%", size: "20px", dur: "4.3s", delay: "2.0s",  rot: "10deg",  emoji: "🔁" },
+          { left: "91%", size: "20px", dur: "5.0s", delay: "0.4s",  rot: "-6deg",  emoji: "❤️" },
+          { left: "96%", size: "20px", dur: "4.7s", delay: "1.6s",  rot: "14deg",  emoji: "🔁" },
+          { left: "5%",  size: "20px", dur: "5.3s", delay: "3.0s",  rot: "9deg",   emoji: "❤️" },
+          { left: "11%", size: "20px", dur: "4.1s", delay: "3.5s",  rot: "-11deg", emoji: "🔁" },
+          { left: "24%", size: "20px", dur: "6.4s", delay: "2.8s",  rot: "16deg",  emoji: "❤️" },
+          { left: "37%", size: "20px", dur: "3.7s", delay: "3.2s",  rot: "-7deg",  emoji: "🔁" },
+          { left: "50%", size: "20px", dur: "5.6s", delay: "2.4s",  rot: "20deg",  emoji: "❤️" },
+          { left: "63%", size: "20px", dur: "4.4s", delay: "3.8s",  rot: "-14deg", emoji: "🔁" },
+          { left: "76%", size: "20px", dur: "5.9s", delay: "1.1s",  rot: "7deg",   emoji: "❤️" },
+          { left: "89%", size: "20px", dur: "4.6s", delay: "2.7s",  rot: "-9deg",  emoji: "🔁" },
+        ].map((item, i) => (
+          <span
+            key={i}
+            className="love-float"
+            style={{
+              left: item.left,
+              "--size": item.size,
+              "--dur": item.dur,
+              "--delay": item.delay,
+              "--rot": item.rot,
+            }}
+          >
+            {item.emoji}
+          </span>
+        ))}
+        {/* Judul */}
+        <div className="text-center" style={{ zIndex: 2 }}>
+          <Kicker C={C}>Setup Cepat</Kicker>
+          <BigTitle C={C}>
+            LIVE BARENG{" "}
+            <span style={{ color: C.lime }}>TAPTIPTUP</span>
+          </BigTitle>
+        </div>
 
-  {/* Video */}
-  <video
-    className="!w-[90vw] md:!w-[60vw]"
-    src="/live2.mp4"
-    autoPlay
-    muted
-    loop
-    playsInline
-    style={{ borderRadius: 0, border: "1px solid black", position: "relative", zIndex: 2 }}
-  />
-</section>
+        {/* Video */}
+        <video
+          className="!w-[90vw] md:!w-[60vw]"
+          src="/live2.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{ borderRadius: 0, border: "1px solid black", position: "relative", zIndex: 2 }}
+        />
+      </section>
 
       {/* ===== FOOTER ===== */}
      <footer className="text-center flex flex-col justify-center items-center w-full px-0 !pt-[20px] !pb-[0px] md:!pt-[90px] md:!pb-[60px]" 
@@ -1160,7 +1160,7 @@ export default function TapTipTup() {
             {/* Video */}
             <div style={{ padding: "20px 14px 0" }}>
               <video
-                src="./ttt.mp4"
+                src="./live.mp4"
                 controls
                 autoPlay
                 muted
