@@ -141,18 +141,21 @@ function BtnMain({ children, href, style, C }) {
     <Link 
       to={href || "/"} 
       draggable={false}
-      className="select-none w-[90vw] relative flex justify-center items-center md:w-max text-center" // Tambahkan class ini
+      className="hover:bg-[azure] active:scale-[0.98] opacity-100 text-[azure] hover:text-blue-900 select-none w-[90vw] relative flex justify-center items-center md:w-max text-center" // Tambahkan class ini
       style={{
         fontFamily: "'Space Grotesk', sans-serif",
         fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
-        padding: "16px 46px", background: 'transparent', color: 'azure',
+        padding: "16px 46px", 
+        // background: 'transparent', 
+        // color: 'azure',
         border: "1px solid azure", cursor: "pointer", textDecoration: "none",
         display: "inline-block", // Penting agar width: 100% bekerja
-        transition: "background 0.15s, opacity 0.15s",
+        // transition: "background 0.15s, opacity 0.15s",
+        opacity: 1,
         boxSizing: "border-box", // Pastikan padding tidak merusak lebar
         ...style,
       }}
-      onMouseOver={e => e.currentTarget.style.opacity = "0.85"}
+      onMouseOver={e => e.currentTarget.style.opacity = "1"}
       onMouseOut={e => e.currentTarget.style.opacity = "1"}
     >
       {children}
@@ -351,29 +354,35 @@ function Hero({ C, isDark }) {
         </div>
       </div>
       {[
-        { left: "25%",  size: "20px", dur: "6s",   delay: "0s"   , rot: "-10deg" },
-        { left: "10%", size: "20px", dur: "8s",   delay: "1.5s" , rot: "8deg"  },
-        { left: "32%", size: "20px", dur: "7s",   delay: "0.5s"   , rot: "-5deg" },
-        { left: "42%", size: "20px", dur: "9s",   delay: "2.5s" , rot: "12deg" },
-        { left: "60%", size: "20px", dur: "6.5s", delay: "1s" , rot: "-8deg" },
-        { left: "50%", size: "20px", dur: "7.5s", delay: "3s"   , rot: "6deg"  },
-        { left: "70%", size: "20px", dur: "8.5s", delay: "1.8s" , rot: "-14deg"},
+        { left: "18%", dur: "7s",   delay: "1.2s", emoji: "💰" },
+        { left: "25%", dur: "5s", delay: "0s",   emoji: "🤑" },
+        { left: "32%", dur: "9s",   delay: "0.7s", emoji: "👍" },
+        { left: "38%", dur: "7.5s", delay: "1.5s", emoji: "💵" },
+        { left: "42%", dur: "6s",   delay: "0.2s", emoji: "💰" },
+        { left: "50%", dur: "8.5s", delay: "1s",   emoji: "🤑" },
+        { left: "55%", dur: "7s",   delay: "0s",   emoji: "👍" },
+        { left: "60%", dur: "6.5s", delay: "0.8s", emoji: "💵" },
+        { left: "65%", dur: "9s",   delay: "1.8s", emoji: "💰" },
+        { left: "70%", dur: "7.5s", delay: "0.4s", emoji: "🤑" },
+        { left: "76%", dur: "6s",   delay: "1.3s", emoji: "👍" },
+        { left: "82%", dur: "8s",   delay: "0s",   emoji: "💵" },
+        { left: "88%", dur: "7s",   delay: "0.6s", emoji: "💰" },
+        { left: "94%", dur: "6.5s", delay: "1.1s", emoji: "🤑" },
       ].map((item, i) => (
         <span
           key={i}
           className="thumb-float"
           style={{
             left: item.left,
-            "--size": item.size,
+            "--size": "26px",
             "--dur": item.dur,
             "--delay": item.delay,
-            "--rot": item.rot,
+            "--rot": `${i % 2 === 0 ? "-" : ""}${6 + (i % 5) * 3}deg`,
           }}
         >
-          👍
+          {item.emoji}
         </span>
       ))}
-
       {/* Global CSS (tambahkan animasi galaxy) */}
       <style>{`
        @keyframes twinkle {
@@ -928,7 +937,7 @@ export default function TapTipTup() {
             0%   { transform: translateY(0) scale(0.5) rotate(var(--rot)); opacity: 0; }
             10%  { opacity: 1; }
             80%  { opacity: 0.8; }
-            100% { transform: translateY(-110vh) scale(1.2) rotate(calc(var(--rot) + 20deg)); opacity: 0; }
+            100% { transform: translateY(-130vh) scale(1.2) rotate(calc(var(--rot) + 20deg)); opacity: 0; }
           }
           .love-float {
             position: absolute;
@@ -944,30 +953,30 @@ export default function TapTipTup() {
         `}</style>
 
         {[
-          { left: "3%",  size: "20px", dur: "4.2s", delay: "0s",    rot: "-12deg", emoji: "❤️" },
-          { left: "8%",  size: "20px", dur: "5.1s", delay: "0.8s",  rot: "8deg",   emoji: "🔁" },
-          { left: "14%", size: "20px", dur: "3.8s", delay: "1.5s",  rot: "-5deg",  emoji: "❤️" },
-          { left: "20%", size: "20px", dur: "6.0s", delay: "0.3s",  rot: "15deg",  emoji: "🔁" },
-          { left: "27%", size: "20px", dur: "4.5s", delay: "2.1s",  rot: "-20deg", emoji: "❤️" },
-          { left: "33%", size: "20px", dur: "5.5s", delay: "1.0s",  rot: "6deg",   emoji: "🔁" },
-          { left: "40%", size: "20px", dur: "4.8s", delay: "0.5s",  rot: "-10deg", emoji: "❤️" },
-          { left: "47%", size: "20px", dur: "3.6s", delay: "1.8s",  rot: "18deg",  emoji: "🔁" },
-          { left: "54%", size: "20px", dur: "5.2s", delay: "0.2s",  rot: "-8deg",  emoji: "❤️" },
-          { left: "61%", size: "20px", dur: "4.0s", delay: "2.5s",  rot: "12deg",  emoji: "🔁" },
-          { left: "68%", size: "20px", dur: "5.8s", delay: "0.9s",  rot: "-15deg", emoji: "❤️" },
-          { left: "74%", size: "20px", dur: "3.9s", delay: "1.3s",  rot: "5deg",   emoji: "🔁" },
-          { left: "80%", size: "20px", dur: "6.2s", delay: "0.6s",  rot: "-18deg", emoji: "❤️" },
-          { left: "86%", size: "20px", dur: "4.3s", delay: "2.0s",  rot: "10deg",  emoji: "🔁" },
-          { left: "91%", size: "20px", dur: "5.0s", delay: "0.4s",  rot: "-6deg",  emoji: "❤️" },
-          { left: "96%", size: "20px", dur: "4.7s", delay: "1.6s",  rot: "14deg",  emoji: "🔁" },
-          { left: "5%",  size: "20px", dur: "5.3s", delay: "3.0s",  rot: "9deg",   emoji: "❤️" },
-          { left: "11%", size: "20px", dur: "4.1s", delay: "3.5s",  rot: "-11deg", emoji: "🔁" },
-          { left: "24%", size: "20px", dur: "6.4s", delay: "2.8s",  rot: "16deg",  emoji: "❤️" },
-          { left: "37%", size: "20px", dur: "3.7s", delay: "3.2s",  rot: "-7deg",  emoji: "🔁" },
-          { left: "50%", size: "20px", dur: "5.6s", delay: "2.4s",  rot: "20deg",  emoji: "❤️" },
-          { left: "63%", size: "20px", dur: "4.4s", delay: "3.8s",  rot: "-14deg", emoji: "🔁" },
-          { left: "76%", size: "20px", dur: "5.9s", delay: "1.1s",  rot: "7deg",   emoji: "❤️" },
-          { left: "89%", size: "20px", dur: "4.6s", delay: "2.7s",  rot: "-9deg",  emoji: "🔁" },
+          { left: "3%",  size: "30px", dur: "4.2s", delay: "0s",    rot: "-12deg", emoji: "❤️" },
+          { left: "8%",  size: "30px", dur: "5.1s", delay: "0.8s",  rot: "8deg",   emoji: "🔁" },
+          { left: "14%", size: "30px", dur: "3.8s", delay: "1.5s",  rot: "-5deg",  emoji: "❤️" },
+          { left: "20%", size: "30px", dur: "6.0s", delay: "0.3s",  rot: "15deg",  emoji: "🔁" },
+          { left: "27%", size: "30px", dur: "4.5s", delay: "2.1s",  rot: "-20deg", emoji: "❤️" },
+          { left: "33%", size: "30px", dur: "5.5s", delay: "1.0s",  rot: "6deg",   emoji: "🔁" },
+          { left: "40%", size: "30px", dur: "4.8s", delay: "0.5s",  rot: "-10deg", emoji: "❤️" },
+          { left: "47%", size: "30px", dur: "3.6s", delay: "1.8s",  rot: "18deg",  emoji: "🔁" },
+          { left: "54%", size: "30px", dur: "5.2s", delay: "0.2s",  rot: "-8deg",  emoji: "❤️" },
+          { left: "61%", size: "30px", dur: "4.0s", delay: "2.5s",  rot: "12deg",  emoji: "🔁" },
+          { left: "68%", size: "30px", dur: "5.8s", delay: "0.9s",  rot: "-15deg", emoji: "❤️" },
+          { left: "74%", size: "30px", dur: "3.9s", delay: "1.3s",  rot: "5deg",   emoji: "🔁" },
+          { left: "80%", size: "30px", dur: "6.2s", delay: "0.6s",  rot: "-18deg", emoji: "❤️" },
+          { left: "86%", size: "30px", dur: "4.3s", delay: "2.0s",  rot: "10deg",  emoji: "🔁" },
+          { left: "91%", size: "30px", dur: "5.0s", delay: "0.4s",  rot: "-6deg",  emoji: "❤️" },
+          { left: "96%", size: "30px", dur: "4.7s", delay: "1.6s",  rot: "14deg",  emoji: "🔁" },
+          { left: "5%",  size: "30px", dur: "5.3s", delay: "3.0s",  rot: "9deg",   emoji: "❤️" },
+          { left: "11%", size: "30px", dur: "4.1s", delay: "3.5s",  rot: "-11deg", emoji: "🔁" },
+          { left: "24%", size: "30px", dur: "6.4s", delay: "2.8s",  rot: "16deg",  emoji: "❤️" },
+          { left: "37%", size: "30px", dur: "3.7s", delay: "3.2s",  rot: "-7deg",  emoji: "🔁" },
+          { left: "50%", size: "30px", dur: "5.6s", delay: "2.4s",  rot: "20deg",  emoji: "❤️" },
+          { left: "63%", size: "30px", dur: "4.4s", delay: "3.8s",  rot: "-14deg", emoji: "🔁" },
+          { left: "76%", size: "30px", dur: "5.9s", delay: "1.1s",  rot: "7deg",   emoji: "❤️" },
+          { left: "89%", size: "30px", dur: "4.6s", delay: "2.7s",  rot: "-9deg",  emoji: "🔁" },
         ].map((item, i) => (
           <span
             key={i}
@@ -994,7 +1003,7 @@ export default function TapTipTup() {
 
         {/* Video */}
         <video
-          className="!w-[90vw] md:!w-[60vw]"
+          className="!w-[90vw] md:!w-[80vw] h-[100%] !border !p-4 !border-white"
           src="/live2.mp4"
           autoPlay
           muted
