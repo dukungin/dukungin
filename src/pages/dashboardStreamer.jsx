@@ -2256,7 +2256,7 @@ const HistoryPage = () => {
   const [historyTab, setHistoryTab] = useState('received');
   const [replayLoading, setReplayLoading] = useState(new Set());
   const [lastReplayTime, setLastReplayTime] = useState({});
-  const [viewMode, setViewMode] = useState('table'); // 'table' | 'card'
+  const [viewMode, setViewMode] = useState('card'); // 'table' | 'card'
   const [showAmounts, setShowAmounts] = useState(() => {
     const saved = localStorage.getItem('showBalance');
     return saved === null ? true : saved === 'true'; // default true kalau belum ada
@@ -2502,7 +2502,7 @@ const HistoryPage = () => {
                     return (
                       <div
                         key={item._id}
-                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 hover:shadow-lg transition-all duration-200"
+                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none p-6 hover:shadow-lg transition-all duration-200"
                       >
                         <div className="flex justify-between items-start mb-5">
                           <div>
@@ -2540,10 +2540,10 @@ const HistoryPage = () => {
                             <button
                               onClick={() => replayDonation(item._id)}
                               disabled={isReplaying}
-                              className={`flex items-center gap-1.5 font-black text-blue-600 hover:text-blue-500 transition-all ${isReplaying ? 'opacity-50 cursor-not-allowed' : ''}`}
+                              className={`flex relative mt-[1.3px] items-center gap-1.5 font-black text-blue-600 hover:text-blue-500 transition-all ${isReplaying ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
-                              {isReplaying ? <Loader2 size={18} className="animate-spin" /> : <Video size={18} />}
-                              Replay
+                              {isReplaying ? <Loader2 size={18} className="animate-spin" /> : <Video className='relative top-[-1px]' size={22} />}
+                              REPLAY
                             </button>
                           </div>
                         </div>

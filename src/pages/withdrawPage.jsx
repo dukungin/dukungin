@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, ArrowRight, CheckCircle2, Clock, CreditCard, Eye, EyeOff, Loader2, RefreshCw, ShieldCheck, Smartphone, Wallet, XCircle, AlertTriangle } from 'lucide-react';
+import { AlertCircle, ArrowRight, CheckCircle2, Clock, CreditCard, Eye, EyeOff, Loader2, RefreshCw, ShieldCheck, Smartphone, Wallet, XCircle, AlertTriangle, List, Grid } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 const BASE_URL = 'https://server-dukungin-production.up.railway.app';
@@ -91,6 +91,7 @@ export const WithdrawPage = () => {
   const [formData, setFormData] = useState({
     amount: '', formattedAmount: '', channelCode: 'BCA', accountNumber: '', accountName: '',
   });
+  const [viewMode, setViewMode] = useState('card'); 
   const [historyPage, setHistoryPage] = useState(1);
   const [showBalance, setShowBalance] = useState(() => localStorage.getItem('showBalance') === 'true');
 
@@ -507,69 +508,71 @@ export const WithdrawPage = () => {
             <p className="font-black text-slate-800 dark:text-slate-100">Riwayat Penarikan</p>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">{pagination.total || 0} total request</p>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">Auto 30s</span>
-            <button onClick={() => refetchHistory()} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-none transition-all text-slate-400 hover:text-blue-600 dark:hover:text-blue-400">
-              <RefreshCw size={14} className={historyFetching ? 'animate-spin' : ''} />
-            </button>
-          </div>
+           <div className="flex gap-1.5 rounded-none overflow-hidden">
+              <button
+                onClick={() => setViewMode('table')}
+                className={`px-4 py-1 flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 text-xs cursor-pointer font-black transition-all ${viewMode === 'table' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 hover:border-white'}`}
+              >
+                <List size={13} className='relative top-[-0.5px]' />
+                Table
+              </button>
+              <button
+                onClick={() => setViewMode('card')}
+                className={`px-4 py-1 flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 text-xs cursor-pointer font-black transition-all ${viewMode === 'card' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 hover:border-white'}`}
+              >
+                <Grid size={13} className='relative top-[-0.5px]' />
+                Card
+              </button>
+            </div>
         </div>
 
         {historyLoading ? (
-          <div className="flex items-center justify-center py-16 text-slate-400 dark:text-slate-500 font-bold gap-3">
-            <div className="w-5 h-5 border-4 border-slate-200 dark:border-slate-700 border-t-blue-600 rounded-none animate-spin" /> Memuat riwayat...
-          </div>
-        ) : withdrawals.length === 0 ? (
-          <div className="py-16 text-center text-slate-400">
-            <p className="text-4xl mb-3">💸</p>
-            <p className="font-black text-slate-500 dark:text-slate-400">Belum ada riwayat penarikan</p>
-            <p className="text-sm font-medium mt-1 text-slate-400 dark:text-slate-500">Ajukan penarikan pertamamu di atas</p>
-          </div>
-        ) : (
-          <>
-            {/* Mobile cards */}
-            <div className="md:hidden divide-y divide-slate-50 dark:divide-slate-800">
-              {withdrawals.map(wd => {
+            <div className="flex items-center justify-center py-16 text-slate-400 dark:text-slate-500 font-bold gap-3">
+              <div className="w-5 h-5 border-4 border-slate-200 dark:border-slate-700 border-t-blue-600 rounded-none animate-spin" /> 
+              Memuat riwayat...
+            </div>
+          ) : withdrawals.length === 0 ? (
+            <div className="py-16 text-center text-slate-400">
+              <p className="text-4xl mb-3">💸</p>
+              <p className="font-black text-slate-500 dark:text-slate-400">Belum ada riwayat penarikan</p>
+              <p className="text-sm font-medium mt-1 text-slate-400 dark:text-slate-500">Ajukan penarikan pertamamu di atas</p>
+            </div>
+          ) : viewMode === 'card' ? (
+            /* ==================== CARD VIEW ==================== */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
+              {withdrawals.map((wd) => {
                 const cfg = STATUS_CONFIG[wd.status] || STATUS_CONFIG.PENDING;
                 return (
-                  <div key={wd._id} className="p-5 space-y-3">
-                    <div className="flex items-center justify-between">
+                  <div key={wd._id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none p-5 hover:shadow-md transition-all">
+                    <div className="flex justify-between items-start mb-4">
                       <div>
-                        <p className="font-black text-slate-800 dark:text-slate-100 text-sm">Rp {Number(wd.amount).toLocaleString('id-ID')}</p>
-                        <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">{wd.channelCode} • {wd.accountNumber}</p>
+                        <p className="text-xl font-medium text-slate-800 dark:text-slate-100">
+                          Rp {Number(wd.amount).toLocaleString('id-ID')}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-1">
+                          {wd.channelCode} {wd.accountNumber}
+                        </p>
                       </div>
-                      <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${cfg.className}`}>
+                      <span className={`flex items-center gap-1.5 px-3 py-1 rounded-none text-xs font-black ${cfg.className}`}>
                         {cfg.icon} {cfg.label}
                       </span>
                     </div>
-                    <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500 font-medium">
-                      <span>{wd.accountName}</span>
-                      <span>{formatDate(wd.createdAt)}</span>
+
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{wd.accountName}</p>
+
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between text-xs">
+                      <span className="text-slate-400">{formatDate(wd.createdAt)}</span>
+                      {wd.status === 'FAILED' && wd.note && (
+                        <span className="text-red-500 text-right text-[10px] max-w-[140px] line-clamp-2">{wd.note}</span>
+                      )}
                     </div>
-                    {wd.status === 'FAILED' && wd.note && (
-                      <div className="bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900 rounded-none px-4 py-2.5">
-                        <p className="text-[11px] text-red-600 dark:text-red-400 font-bold">Alasan penolakan: {wd.note}</p>
-                      </div>
-                    )}
-                    {wd.status === 'PENDING' && (
-                      <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900 rounded-none px-4 py-2.5">
-                        <div className="w-1.5 h-1.5 bg-amber-400 rounded-none animate-pulse flex-shrink-0" />
-                        <p className="text-[11px] text-amber-600 dark:text-amber-400 font-bold">Menunggu diproses admin</p>
-                      </div>
-                    )}
-                    {wd.status === 'COMPLETED' && (
-                      <div className="flex items-center gap-2 bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-none px-4 py-2.5">
-                        <CheckCircle2 size={13} className="text-green-500 flex-shrink-0" />
-                        <p className="text-[11px] text-green-600 dark:text-green-400 font-bold">Dana telah ditransfer oleh admin</p>
-                      </div>
-                    )}
                   </div>
                 );
               })}
             </div>
-
-            {/* Desktop table */}
-            <div className="hidden md:block overflow-x-auto">
+          ) : (
+            /* ==================== TABLE VIEW ==================== */
+            <div className="overflow-x-auto">
               <table className="w-full text-left min-w-[700px]">
                 <thead>
                   <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
@@ -582,17 +585,17 @@ export const WithdrawPage = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
-                  {withdrawals.map(wd => {
+                  {withdrawals.map((wd) => {
                     const cfg = STATUS_CONFIG[wd.status] || STATUS_CONFIG.PENDING;
                     return (
                       <tr key={wd._id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all">
                         <td className="px-5 md:px-8 py-5">
-                          <p className="flex items-center text-sm text-slate-800 dark:text-green-300">
-                            {Number(wd.amount - 1500).toLocaleString('id-ID')}
+                          <p className="text-sm text-slate-800 dark:text-green-300 font-medium">
+                            Rp {Number(wd.amount - 1500).toLocaleString('id-ID')}
                           </p>
                         </td>
-                        <td className="px-6">
-                          <p className="text-sm relative top-[-1.4px] text-slate-400 dark:text-red-300 font-medium">1.500</p>
+                        <td className="px-5 md:px-8 py-5">
+                          <p className="text-sm text-slate-400 dark:text-red-300">Rp 1.500</p>
                         </td>
                         <td className="px-5 md:px-8 py-5">
                           <p className="text-slate-600 dark:text-slate-300 text-sm">{wd.paymentMethod || 'BANK'}</p>
@@ -600,15 +603,15 @@ export const WithdrawPage = () => {
                         <td className="px-5 md:px-8 py-5">
                           <p className="font-mono font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.accountNumber}</p>
                         </td>
-                        <td className="px-5 md:px-8 py-5">
-                          <div className="flex flex-col items-center gap-1.5">
-                            <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${cfg.className}`}>
-                              {cfg.icon} {cfg.label}
-                            </span>
-                          </div>
+                        <td className="px-5 md:px-8 py-5 text-center">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${cfg.className}`}>
+                            {cfg.icon} {cfg.label}
+                          </span>
                         </td>
                         <td className="px-5 md:px-8 py-5">
-                          <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{formatDate(wd.createdAt)}</p>
+                          <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">
+                            {formatDate(wd.createdAt)}
+                          </p>
                         </td>
                       </tr>
                     );
@@ -616,30 +619,78 @@ export const WithdrawPage = () => {
                 </tbody>
               </table>
             </div>
-
-            {/* Pagination */}
-            {pagination.totalPages > 1 && (
-              <div className="flex items-center justify-between px-5 md:px-8 py-4 border-t border-slate-100 dark:border-slate-800">
-                <button
-                  onClick={() => setHistoryPage(p => Math.max(1, p - 1))}
-                  disabled={historyPage === 1}
-                  className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-                  ← Sebelumnya
-                </button>
-                <span className="text-xs font-bold text-slate-400 dark:text-slate-500">
-                  Halaman <span className="text-blue-600 dark:text-blue-400 font-black">{historyPage}</span> dari {pagination.totalPages}
-                </span>
-                <button
-                  onClick={() => setHistoryPage(p => Math.min(pagination.totalPages, p + 1))}
-                  disabled={historyPage === pagination.totalPages}
-                  className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-                  Berikutnya →
-                </button>
-              </div>
-            )}
-          </>
-        )}
+          )}
       </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full text-left min-w-[700px]">
+          <thead>
+            <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
+              <th className="px-5 md:px-8 py-4">Nominal</th>
+              <th className="px-5 md:px-8 py-4">Fee</th>
+              <th className="px-5 md:px-8 py-4">Metode</th>
+              <th className="px-5 md:px-8 py-4">No. Rekening</th>
+              <th className="px-5 md:px-8 py-4 text-center">Status</th>
+              <th className="px-5 md:px-8 py-4">Waktu Pengajuan</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
+            {withdrawals.map(wd => {
+              const cfg = STATUS_CONFIG[wd.status] || STATUS_CONFIG.PENDING;
+              return (
+                <tr key={wd._id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all">
+                  <td className="px-5 md:px-8 py-5">
+                    <p className="flex items-center text-sm text-slate-800 dark:text-green-300">
+                      {Number(wd.amount - 1500).toLocaleString('id-ID')}
+                    </p>
+                  </td>
+                  <td className="px-6">
+                    <p className="text-sm relative top-[-1.4px] text-slate-400 dark:text-red-300 font-medium">1.500</p>
+                  </td>
+                  <td className="px-5 md:px-8 py-5">
+                    <p className="text-slate-600 dark:text-slate-300 text-sm">{wd.paymentMethod || 'BANK'}</p>
+                  </td>
+                  <td className="px-5 md:px-8 py-5">
+                    <p className="font-mono font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.accountNumber}</p>
+                  </td>
+                  <td className="px-5 md:px-8 py-5">
+                    <div className="flex flex-col items-center gap-1.5">
+                      <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${cfg.className}`}>
+                        {cfg.icon} {cfg.label}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-5 md:px-8 py-5">
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{formatDate(wd.createdAt)}</p>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      {pagination.totalPages > 1 && (
+        <div className="flex items-center justify-between px-5 md:px-8 py-4 border-t border-slate-100 dark:border-slate-800">
+          <button
+            onClick={() => setHistoryPage(p => Math.max(1, p - 1))}
+            disabled={historyPage === 1}
+            className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+            ← Sebelumnya
+          </button>
+          <span className="text-xs font-bold text-slate-400 dark:text-slate-500">
+            Halaman <span className="text-blue-600 dark:text-blue-400 font-black">{historyPage}</span> dari {pagination.totalPages}
+          </span>
+          <button
+            onClick={() => setHistoryPage(p => Math.min(pagination.totalPages, p + 1))}
+            disabled={historyPage === pagination.totalPages}
+            className="px-4 py-2 rounded-none bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-black text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+            Berikutnya →
+          </button>
+        </div>
+      )}
     </motion.div>
   );
 };
