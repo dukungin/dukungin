@@ -1121,7 +1121,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly 
                   <div className='md:mt-0 mt-4'>
                     <label className="text-xs font-black text-slate-500 block mb-1.5">Detik</label>
                     <input type="number" value={settings.alertExtraDuration || ''}
-                      onChange={(e) => onChange('mediaShareExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
+                      onChange={(e) => onChange('alertExtraDuration', e.target.value === '' ? '' : Number(e.target.value))}
                       className="w-full md:w-20 text-center text-lg font-bold bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-none p-2" />
                   </div>
                 </div>
