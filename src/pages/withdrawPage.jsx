@@ -213,7 +213,7 @@ export const WithdrawPage = () => {
   const canSubmit = availableBalance >= MIN_SALDO && amt >= MIN_TARIK;
 
   return (
-    <motion.div className="w-full mx-auto space-y-5 pb-6" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+    <motion.div className="w-full mx-auto space-y-5" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
 
       {/* Alert Modal */}
       <AlertModal modal={alertModal} onClose={closeAlert} />
@@ -539,11 +539,11 @@ export const WithdrawPage = () => {
             </div>
           ) : viewMode === 'card' ? (
             /* ==================== CARD VIEW ==================== */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 md:p-8">
               {withdrawals.map((wd) => {
                 const cfg = STATUS_CONFIG[wd.status] || STATUS_CONFIG.PENDING;
                 return (
-                  <div key={wd._id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none p-5 hover:shadow-md transition-all">
+                  <div key={wd._id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-none p-5 hover:shadow-md transition-all">
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <p className="text-xl font-medium text-slate-800 dark:text-slate-100">
@@ -620,55 +620,6 @@ export const WithdrawPage = () => {
               </table>
             </div>
           )}
-      </div>
-
-      {/* Desktop table */}
-      <div className="hidden md:block overflow-x-auto">
-        <table className="w-full text-left min-w-[700px]">
-          <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-              <th className="px-5 md:px-8 py-4">Nominal</th>
-              <th className="px-5 md:px-8 py-4">Fee</th>
-              <th className="px-5 md:px-8 py-4">Metode</th>
-              <th className="px-5 md:px-8 py-4">No. Rekening</th>
-              <th className="px-5 md:px-8 py-4 text-center">Status</th>
-              <th className="px-5 md:px-8 py-4">Waktu Pengajuan</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
-            {withdrawals.map(wd => {
-              const cfg = STATUS_CONFIG[wd.status] || STATUS_CONFIG.PENDING;
-              return (
-                <tr key={wd._id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all">
-                  <td className="px-5 md:px-8 py-5">
-                    <p className="flex items-center text-sm text-slate-800 dark:text-green-300">
-                      {Number(wd.amount - 1500).toLocaleString('id-ID')}
-                    </p>
-                  </td>
-                  <td className="px-6">
-                    <p className="text-sm relative top-[-1.4px] text-slate-400 dark:text-red-300 font-medium">1.500</p>
-                  </td>
-                  <td className="px-5 md:px-8 py-5">
-                    <p className="text-slate-600 dark:text-slate-300 text-sm">{wd.paymentMethod || 'BANK'}</p>
-                  </td>
-                  <td className="px-5 md:px-8 py-5">
-                    <p className="font-mono font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.accountNumber}</p>
-                  </td>
-                  <td className="px-5 md:px-8 py-5">
-                    <div className="flex flex-col items-center gap-1.5">
-                      <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-[10px] font-black ${cfg.className}`}>
-                        {cfg.icon} {cfg.label}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-5 md:px-8 py-5">
-                    <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{formatDate(wd.createdAt)}</p>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
       </div>
 
       {/* Pagination */}

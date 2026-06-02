@@ -1023,7 +1023,7 @@ const AdminWithdrawalPage = () => {
   const formatRupiah = (num) => new Intl.NumberFormat('id-ID').format(Math.round(num || 0));
 
   return (
-    <div className="w-full space-y-5 pb-6">
+    <div className="w-full space-y-5 pb-0">
       <div className="bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 from-blue-700 to-indigo-800  rounded-none p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
@@ -2323,7 +2323,7 @@ const HistoryPage = () => {
   };
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 pb-0">
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Semua Waktu', value: statsLoading ? '...' : maskAmount(stats?.allTime?.total || 0), sub: `${stats?.allTime?.count || 0} donasi`, color: 'bg-blue-600', icon: '💜' },
@@ -2702,7 +2702,7 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
   };
 
   return (
-    <div className="space-y-3 pb-6 min-h-[90vh]">
+    <div className="space-y-3 pb-0 min-h-[90vh]">
       {viewingProfile && (
         <StreamerProfileModal username={viewingProfile} currentUserId={currentUserId} onClose={() => setViewingProfile(null)} onFollow={null} />
       )}
@@ -3559,7 +3559,7 @@ const handleChangePin = async () => {
                 key="voiceSettings"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="space-y-6 pb-6 w-full"
+                className="space-y-6 pb-0 w-full"
               >
                 <VoiceSettingsPage
                   user={user}
@@ -3645,19 +3645,6 @@ const handleChangePin = async () => {
                           <button onClick={() => copyToClipboard(`https://taptiptup.vercel.app/donate/${user.username}`)} className="text-slate-400 hover:text-blue-600 cursor-pointer active:scale-[0.98]"><Copy size={18} /></button>
                         </div>
                       </div>
-
-                      {/* <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">Icon Alert</label>
-                        <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
-                          {ICON_PRESETS.map(({ emoji, label }) => (
-                            <button key={emoji} onClick={() => upd('customIcon', emoji === '💜' ? '' : emoji)} title={label}
-                              className={`flex flex-col items-center gap-1 p-3 rounded-none border-2 text-lg transition-all cursor-pointer active:scale-[0.95] ${(settings.customIcon || '💜') === emoji || (!settings.customIcon && emoji === '💜') ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40' : 'border-slate-100 dark:border-slate-700 hover:border-slate-300 bg-slate-50 dark:bg-slate-800'}`}>
-                              <span>{emoji}</span>
-                              <span className="text-[8px] font-black text-slate-400 leading-none">{label}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div> */}
 
                       {/* Icon Alert */}
                         <div className="space-y-3">
@@ -3890,7 +3877,7 @@ const handleChangePin = async () => {
 
             {/* ══════════════════════ ALERT SETTINGS ══════════════════════ */}
             {activeTab === 'alertSettings' && (
-              <motion.div key="alertSettings" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 pb-6 w-full">
+              <motion.div key="alertSettings" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 pb-0 w-full">
 
                 {/* Header */}
                 {/* <div className="bg-gradient-to-br from-rose-500 to-orange-500 rounded-none p-4 md:p-6 text-white relative overflow-hidden">
@@ -3926,17 +3913,7 @@ const handleChangePin = async () => {
 
             {/* ══════════════════════ MEDIA SETTINGS ══════════════════════ */}
             {activeTab === 'mediaSettings' && (
-              <motion.div key="mediaSettings" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 pb-6 w-full">
-
-                {/* Header */}
-                {/* <div className="bg-gradient-to-br from-purple-600 to-pink-500 rounded-none p-4 md:p-6 text-white relative overflow-hidden">
-                  <div className="relative z-10">
-                    <p className="text-purple-200 text-xs font-black uppercase tracking-widest mb-2">Pengaturan</p>
-                    <h2 className="text-3xl font-black tracking-tight">Media share</h2>
-                    <p className="text-purple-200 text-sm font-medium mt-1">Test, kontrol, dan izin media dari donatur</p>
-                  </div>
-                  <div className="absolute top-3 right-4 text-6xl opacity-10">🎬</div>
-                </div> */}
+              <motion.div key="mediaSettings" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 pb-0 w-full">
 
                 {/* Instant Test MediaShare */}
                 <InstantTestMediaShare overlayToken={user.overlayToken} settings={settings} user={user} />
@@ -3975,7 +3952,7 @@ const handleChangePin = async () => {
 
             {/* ══════════════════════ PROFILE ══════════════════════ */}
             {activeTab === 'profile' && (
-              <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-3 pb-6">
+              <motion.div key="profile" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-3 pb-0">
                 <div className="relative bg-slate-900/70 backdrop-blur-sm rounded-none pt-8 pb-7 md:pl-7 pr-8 shadow-sm border border-slate-100 dark:border-slate-800 px-8 py-0 text-white relative overflow-hidden">
                   <div className="relative z-2 flex flex-col md:flex-row items-center gap-6">
                     <div className="w-26 h-26 mt-[-1.6px] mx-auto rounded-none overflow-hidden bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-white dark:border-slate-900">
