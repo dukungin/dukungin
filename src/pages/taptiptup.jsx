@@ -250,14 +250,14 @@ function Hero({ C, isDark }) {
 
 
       {/* Grid Background (Mobile) */}
-      <div className="select-none md:hidden flex absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
+      <div className="select-none flex absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="crossgrid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path
                 d="M 40 0 L 0 0 0 40"
                 fill="none"
-                stroke="rgba(255,255,255,0.08)"
+                stroke="rgba(255,255,255,0.4)"
                 strokeWidth="0.5"
               />
             </pattern>
@@ -625,6 +625,22 @@ function FeeComparison({ C }) {
         }
       }}>
 
+      <div className="select-none flex absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="crossgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path
+                d="M 40 0 L 0 0 0 40"
+                fill="none"
+                stroke="rgba(255,255,255,0.4)"
+                strokeWidth="0.5"
+              />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#crossgrid)" />
+        </svg>
+      </div>
+
       {/* ===== GALAXY / BLACKHOLE EFFECT ===== */}
       <div className="pointer-events-none select-none absolute inset-0" style={{ zIndex: 0 }}>
         {/* Bintang-bintang */}
@@ -991,6 +1007,21 @@ export default function TapTipTup() {
       <FeeComparison C={C} /> 
       <section className="w-screen md:!min-h-[70vh] !pb-20 !pt-4 flex flex-col justify-center items-center bg-blue-900 !px-[20px] gap-6 relative overflow-hidden">
 
+        <div className="select-none flex absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="crossgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path
+                  d="M 40 0 L 0 0 0 40"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.4)"
+                  strokeWidth="0.5"
+                />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#crossgrid)" />
+          </svg>
+        </div>
         {/* Animasi love TikTok */}
         <style>{`
           @keyframes floatUp {
@@ -1079,6 +1110,7 @@ export default function TapTipTup() {
           background: "#0a0f1e",
           borderTop: `1px solid rgba(255,255,255,0.08)`,
         }}>
+
         <div className="max-w-7xl mx-auto px-8 !md:pb-[48px] !pb-5 text-center flex flex-col justify-center items-center"
           style={{ gap: "32px" }}
           >
