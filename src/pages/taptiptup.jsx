@@ -527,7 +527,7 @@ function Marquee({ C }) {
             display: "inline-flex", alignItems: "center", gap: 10, whiteSpace: "nowrap",
             transition: "color 0.4s, border-color 0.4s",
           }}>
-            <span style={{ width: 4, height: 4, borderRadius: "0%", background: C.lime, display: "inline-block", flexShrink: 0, transition: "background 0.4s" }} />
+            {/* <span style={{ width: 4, height: 4, borderRadius: "0%", background: C.lime, display: "inline-block", flexShrink: 0, transition: "background 0.4s" }} /> */}
             <span style={{ color: C.text, fontWeight: 700 }}>{item.name}</span>
             <span>mengirim</span>
             <span style={{ color: C.lime, fontWeight: 700 }}>Rp.{item.amount}</span>
