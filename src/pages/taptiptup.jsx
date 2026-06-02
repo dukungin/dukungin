@@ -300,7 +300,7 @@ function Hero({ C, isDark }) {
           <div className="select-none mb-20 w-full max-w-md md:max-w-none px-4">
             <div className="select-none flex flex-col md:flex-row items-center gap-4 w-full justify-center">
               <BtnMain href="/register" C={C}>
-                <p draggable={false} className="select-none w-max flex justify-center items-center mx-auto text-center flex items-center gap-2">
+                <p draggable={false} className="select-none w-full flex justify-center items-center mx-auto text-center flex items-center gap-2">
                   Mulai Sekarang - Gratis
                 </p>
               </BtnMain>
@@ -371,7 +371,7 @@ function Hero({ C, isDark }) {
       ].map((item, i) => (
         <span
           key={i}
-          className="thumb-float"
+          className="thumb-float md:flex hidden"
           style={{
             left: item.left,
             "--size": "26px",
