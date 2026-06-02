@@ -1263,7 +1263,7 @@ export default function TapTipTup() {
             <div style={{ padding: "20px 14px 0" }}>
               <video
                 src="./live.mp4"
-                controls
+                controls={false}
                 autoPlay
                 muted
                 loop
