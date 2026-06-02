@@ -396,7 +396,7 @@ const TourFinishModal = ({ onDone }) => (
       initial={{ opacity: 0, scale: 0.9, y: 16 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9, y: 16 }}
-      className="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-none p-8 w-full max-w-sm text-center shadow-2xl"
+      className="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-none p-8 w-full max-w-md text-center shadow-2xl"
     >
       <div className="w-16 h-16 bg-green-50 dark:bg-green-950/40 text-green-600 rounded-none flex items-center justify-center mx-auto mb-5">
         <Check size={28} />
@@ -407,7 +407,7 @@ const TourFinishModal = ({ onDone }) => (
       </p>
       <button
         onClick={onDone}
-        className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-black rounded-xl text-sm cursor-pointer transition-all active:scale-[0.99] shadow-lg shadow-green-100 dark:shadow-green-900/20"
+        className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-black rounded-none text-sm cursor-pointer transition-all active:scale-[0.99] shadow-lg shadow-green-100 dark:shadow-green-900/20"
       >
         Mulai Gunakan Dashboard
       </button>

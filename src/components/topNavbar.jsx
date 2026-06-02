@@ -55,6 +55,7 @@ const ThemeToggle = ({ theme, onToggle }) => {
 
   return (
     <button
+      id="tour-theme-toggle"
       onClick={onToggle}
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       className="cursor-pointer relative h-[38px] w-[70px] rounded-none border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center px-1 transition-all active:scale-[0.99] hover:brightness-95 overflow-hidden"
