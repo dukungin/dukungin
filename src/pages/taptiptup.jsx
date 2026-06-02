@@ -264,7 +264,7 @@ function Hero({ C, isDark }) {
           left: "-10%",
           width: "70vw",
           height: "70vw",
-          borderRadius: "50%",
+          borderRadius: "0%",
           background: "radial-gradient(circle, rgba(99,102,241,0.25) 20%, transparent 60%)",
           filter: "blur(80px)",
           opacity: 0.6,
@@ -277,7 +277,7 @@ function Hero({ C, isDark }) {
           right: "-5%",
           width: "65vw",
           height: "65vw",
-          borderRadius: "50%",
+          borderRadius: "0%",
           background: "radial-gradient(circle, rgba(168,85,247,0.22) 15%, transparent 65%)",
           filter: "blur(90px)",
           opacity: 0.5,
@@ -335,9 +335,11 @@ function Hero({ C, isDark }) {
               AMBIL UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
             </p>
             <p className="text-5xl w-max lg:text-8xl 2xl:text-[7rem] w-[80vw] select-none hidden md:flex items-center justify-center">
-              
-              <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
-                <p className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative text-black 2xl:h-[98px] md:h-[85px] bg-[azure]">{" "} PLATFORM DONATE UNTUK LIVE {" "}</p> STREAMING KAMU
+             <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
+                <span className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative text-black 2xl:h-[98px] md:h-[85px] bg-[azure]">
+                  POTONGAN HANYA 2.5% UNTUK
+                </span>
+                  SETIAP DONASI MASUK
               </p>
             </p>
           </h1>
@@ -553,7 +555,7 @@ function Marquee({ C }) {
             display: "inline-flex", alignItems: "center", gap: 10, whiteSpace: "nowrap",
             transition: "color 0.4s, border-color 0.4s",
           }}>
-            <span style={{ width: 4, height: 4, borderRadius: "50%", background: C.lime, display: "inline-block", flexShrink: 0, transition: "background 0.4s" }} />
+            <span style={{ width: 4, height: 4, borderRadius: "0%", background: C.lime, display: "inline-block", flexShrink: 0, transition: "background 0.4s" }} />
             <span style={{ color: C.text, fontWeight: 700 }}>{item.name}</span>
             <span>mengirim</span>
             <span style={{ color: C.lime, fontWeight: 700 }}>Rp.{item.amount}</span>
@@ -603,7 +605,7 @@ function FeeComparison({ C }) {
         <div style={{
           position: "absolute", top: "-20%", left: "-10%",
           width: "50vw", height: "50vw",
-          borderRadius: "50%",
+          borderRadius: "0%",
           background: "radial-gradient(circle, rgba(99,102,241,0.15), transparent 70%)",
           filter: "blur(60px)",
           animation: "aurora-drift 15s ease-in-out infinite alternate",
@@ -611,7 +613,7 @@ function FeeComparison({ C }) {
         <div style={{
           position: "absolute", top: "-20%", right: "-10%",
           width: "50vw", height: "50vw",
-          borderRadius: "50%",
+          borderRadius: "0%",
           background: "radial-gradient(circle, rgba(168,85,247,0.12), transparent 70%)",
           filter: "blur(60px)",
           animation: "aurora-drift 18s ease-in-out infinite alternate-reverse",
@@ -924,6 +926,187 @@ export default function TapTipTup() {
       <Hero C={C} isDark={isDark} />
       <Marquee C={C} />
       <FeeComparison C={C} /> 
+      <section className="w-screen min-h-[70vh] flex flex-col justify-center items-center bg-blue-900"
+        style={{ padding: "60px 20px", gap: "24px", position: "relative", overflow: "hidden" }}>
+
+        {/* Taburan gambar kecil kiri kanan */}
+        {[
+          { src: "/yt.png",   left: "2%",  top: "8%",  size: 38, rot: -15 },
+          { src: "/tt2.png",  left: "7%",  top: "28%", size: 30, rot: 10  },
+          { src: "/yt.png",   left: "3%",  top: "55%", size: 44, rot: 20  },
+          { src: "/tt2.png",  left: "9%",  top: "75%", size: 28, rot: -8  },
+          { src: "/yt.png",   left: "13%", top: "88%", size: 34, rot: 14  },
+          { src: "/tt2.png",  left: "1%",  top: "42%", size: 26, rot: -20 },
+          { src: "/yt.png",   left: "16%", top: "15%", size: 32, rot: 5   },
+          { src: "/tt2.png",  left: "11%", top: "62%", size: 36, rot: -12 },
+
+          { src: "/tt2.png",  right: "2%",  top: "8%",  size: 38, rot: 15  },
+          { src: "/yt.png",   right: "7%",  top: "28%", size: 30, rot: -10 },
+          { src: "/tt2.png",  right: "3%",  top: "55%", size: 44, rot: -20 },
+          { src: "/yt.png",   right: "9%",  top: "75%", size: 28, rot: 8   },
+          { src: "/tt2.png",  right: "13%", top: "88%", size: 34, rot: -14 },
+          { src: "/yt.png",   right: "1%",  top: "42%", size: 26, rot: 20  },
+          { src: "/tt2.png",  right: "16%", top: "15%", size: 32, rot: -5  },
+          { src: "/yt.png",   right: "11%", top: "62%", size: 36, rot: 12  },
+        ].map((item, i) => (
+          <img
+            key={i}
+            src={item.src}
+            alt=""
+            style={{
+              position: "absolute",
+              left: item.left,
+              right: item.right,
+              top: item.top,
+              width: item.size,
+              height: item.size,
+              objectFit: "contain",
+              transform: `rotate(${item.rot}deg)`,
+              opacity: 0.55,
+              pointerEvents: "none",
+              userSelect: "none",
+              zIndex: 1,
+            }}
+          />
+        ))}
+
+        {/* Judul */}
+        <div className="text-center" style={{ zIndex: 2 }}>
+          <Kicker C={C}>Setup Cepat</Kicker>
+          <BigTitle C={C}>
+            LIVE BARENG{" "}
+            <span style={{ color: C.lime }}>TAPTIPTUP</span>
+          </BigTitle>
+        </div>
+
+        {/* Video */}
+        <video
+          src="/live2.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{ maxWidth: "50vw", width: "100%", borderRadius: 0, border: "1px solid black", position: "relative", zIndex: 2 }}
+        />
+      </section>
+
+      {/* ===== FOOTER ===== */}
+      <footer className="text-center flex flex-col justify-center items-center w-full" 
+        style={{
+          background: "#0a0f1e",
+          borderTop: `1px solid rgba(255,255,255,0.08)`,
+          padding: "100px 0 60px 0",
+        }}>
+        <div className="max-w-7xl mx-auto px-8 text-center flex flex-col justify-center items-center"
+          style={{ gap: "32px", paddingBottom: "48px" }}
+          >
+
+          {/* Kolom 1 — Brand */}
+          <div className="w-full mx-auto">
+            <div style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: 28, letterSpacing: "0.04em",
+              color: "white", marginBottom: 12,
+            }}>
+              TapTipTup
+            </div>
+            <p style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 13, color: "rgba(255,255,255,0.5)",
+              lineHeight: 0.4, marginBottom: 20,
+            }}>
+              Platform donasi streaming lokal terbaik untuk konten kreator Indonesia. Potongan hanya 2.5%, alert langsung di OBS, setup dalam 5 menit.
+            </p>
+            <a href="/privacy-policy" style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: "#BBDEFB", letterSpacing: "0.06em", textDecoration: "none" }}>
+              KEBIJAKAN PRIVASI TAPTIPTUP
+            </a>
+          </div>
+
+          <div className="w-full  flex flex-col justify-center items-center text-center">
+          {/* Kolom 3 — Platform */}
+            <div className="flex w-max text-center justify-between m-auto items-center gap-3">
+            {[
+              "YouTube Live",
+              "TikTok Live",
+              "Twitch",
+              "Facebook Gaming",
+              "Instagram Live",
+            ].map((item, i) => (
+              <div key={i} style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 13, color: "rgba(255,255,255,0.55)",
+                padding: "6px 0",
+                borderBottom: "1px solid rgba(255,255,255,0.05)",
+                display: "flex", alignItems: "center", gap: 8,
+              }}>
+                <span style={{ width: 4, height: 4, borderRadius: "0%", background: "azure", display: "inline-block", flexShrink: 0, opacity: 0.7 }} />
+                {item}
+              </div>
+            ))}
+            </div>
+            {/* Kolom 4 — Platform */}
+            <div className="flex w-max text-center justify-between m-auto items-center gap-3">
+              {[
+                "Komunitas Streamer",
+                "Transfer Saldo",
+                "Penarikan Dana",
+                "Support Streamer",
+                "Konfigurasi Fee",
+                "Dark & Light Mode",
+              ].map((item, i) => (
+                <div key={i} style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: 13, color: "rgba(255,255,255,0.55)",
+                  padding: "6px 0",
+                  borderBottom: "1px solid rgba(255,255,255,0.05)",
+                  display: "flex", alignItems: "center", gap: 8,
+                }}>
+                  <span style={{ width: 4, height: 4, borderRadius: "0%", background: "azure", display: "inline-block", flexShrink: 0, opacity: 0.7 }} />
+                  {item}
+                </div>
+              ))}
+            </div>
+            {/* Kolom 2 — Overlay Tersedia */}
+            <div className="flex w-max text-center justify-between m-auto items-center gap-3">
+              {[
+                "Alert Donasi Real-Time",
+                "Leaderboard Top Donor",
+                "Milestone & Goal Bar",
+                "Subathon Timer",
+                "Poll Penonton",
+                "Media Alert (Gambar/Video)",
+                "Sound Tier Kustom",
+              ].map((item, i) => (
+                <div key={i} style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: 13, color: "rgba(255,255,255,0.55)",
+                  padding: "6px 0",
+                  borderBottom: "1px solid rgba(255,255,255,0.05)",
+                  display: "flex", alignItems: "center", gap: 8,
+                }}>
+                  <span style={{ width: 4, height: 4, borderRadius: "0%", background: "azure", display: "inline-block", flexShrink: 0, opacity: 0.7 }} />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div style={{
+          borderTop: "1px solid rgba(255,255,255,0.07)",
+          padding: "30px 32px 20px",
+          // width: '100%',
+          display: "flex", flexWrap: "wrap",
+          justifyContent: "space-center", alignItems: "center",
+          gap: 10,
+        }}>
+          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.06em" }}>
+            2026 TAPTIPTUP.COM — ALL RIGHTS RESERVED - PLATFORM DONATE LOCAL
+          </span>
+          {/* <span className="relative top-[0px] text-[9px] text-slate-500">/</span> */}
+        </div>
+      </footer>
       {/* <Footer C={C} /> */}
 
       {/* ==================== INTRO MODAL ==================== */}
