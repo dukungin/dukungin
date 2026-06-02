@@ -359,7 +359,7 @@ function Hero({ C, isDark }) {
         { left: "32%", dur: "9s",   delay: "0.7s", emoji: "👍" },
         { left: "38%", dur: "7.5s", delay: "1.5s", emoji: "💵" },
         { left: "42%", dur: "6s",   delay: "0.2s", emoji: "💰" },
-        { left: "50%", dur: "8.5s", delay: "1s",   emoji: "🤑" },
+        // { left: "50%", dur: "8.5s", delay: "1s",   emoji: "🤑" },
         { left: "55%", dur: "7s",   delay: "0s",   emoji: "👍" },
         { left: "60%", dur: "6.5s", delay: "0.8s", emoji: "💵" },
         { left: "65%", dur: "9s",   delay: "1.8s", emoji: "💰" },
