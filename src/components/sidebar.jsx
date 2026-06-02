@@ -252,10 +252,10 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
               <div key={group.groupLabel}>
                 {/* Group Label */}
                 {!isCollapsed && (
-                  <p className="relative text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">
+                  <div className="relative text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">
                     {group.groupLabel}
                     <div className='top-1/2 absolute right-0 w-[66%] h-[1px] bg-white/10'></div>
-                  </p>
+                  </div>
                 )}
                 {isCollapsed && (
                   <div className="w-6 h-[1px] mx-auto bg-slate-300 dark:bg-slate-700 mb-1" />

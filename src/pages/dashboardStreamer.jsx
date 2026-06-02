@@ -3120,7 +3120,7 @@ const handleChangePin = async () => {
       <OnboardingTour />
 
       {/* <video src="/glass.mp4" className='absolute z-[1]' autoplay={true}></video> */}
-      <img src="/glass.jpg" className='opacity-[10%] fixed top-0 left-0 w-screen h-screen z-[1]' autoplay={true}></img>
+      <img src="/glass.jpg" className='opacity-[10%] fixed top-0 left-0 w-screen h-screen z-[1]' autoPlay={true}></img>
       {/* ── Modal Copy URL ── */}
       <AnimatePresence>
         {showCopyModal && (

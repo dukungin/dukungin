@@ -337,7 +337,7 @@ function Hero({ C, isDark }) {
             <p className="text-5xl w-max lg:text-8xl 2xl:text-[7rem] w-[80vw] select-none hidden md:flex items-center justify-center">
               
               <p className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
-                <p className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative text-black 2xl:h-[98px] md:h-[85px] bg-[azure]">{" "} DAPAT UNTUNG LEBIH BANYAK {" "}</p> BERSAMA TAPTIPTUP
+                <p className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative text-black 2xl:h-[98px] md:h-[85px] bg-[azure]">{" "} PLATFORM DONATE UNTUK LIVE {" "}</p> STREAMING KAMU
               </p>
             </p>
           </h1>
@@ -670,7 +670,7 @@ function FeeComparison({ C }) {
                   padding: "32px 24px",
                   borderRight: !isLast ? `1px solid ${C.line}` : "none",
                   borderBottom: isMobile ? `1px solid ${C.line}` : "none",
-                  background: p.winner ? 'cyan' : "transparent",
+                  background: p.winner ? '#99FFFF' : "transparent",
                   transition: "all 0.4s",
                 }}>
                 {p.winner

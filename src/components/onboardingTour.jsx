@@ -431,19 +431,19 @@ const getTokenPayload = () => {
 const OnboardingTour = ({ forceShow = false, onComplete }) => {
   const [phase, setPhase]         = useState('idle');
   const [stepIndex, setStepIndex] = useState(0);
-
-  const payload = getTokenPayload();
-  const isSuperAdmin = payload?.role === 'superAdmin';
-
-  // Jika SuperAdmin → langsung return null (tour tidak muncul)
-  if (isSuperAdmin) {
-    return null;
-  }
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false); // ← jadi state
 
   const currentStep = TOUR_STEPS[stepIndex];
   const targetRect  = useTargetRect(currentStep?.target, phase === 'touring');
 
+  // ← cek superAdmin di useEffect, bukan di render level
   useEffect(() => {
+    const payload = getTokenPayload();
+    if (payload?.role === 'superAdmin') {
+      setIsSuperAdmin(true);
+      return;
+    }
+
     if (forceShow) { setPhase('start'); return; }
     const done = localStorage.getItem(STORAGE_KEY);
     if (!done) setPhase('start');
@@ -454,6 +454,9 @@ const OnboardingTour = ({ forceShow = false, onComplete }) => {
     if (phase !== 'touring') return;
     scrollTargetIntoView(currentStep?.target);
   }, [phase, stepIndex, currentStep?.target]);
+
+  // ← conditional return SETELAH semua hooks
+  if (isSuperAdmin) return null;
 
   const handleStart = () => { setStepIndex(0); setPhase('touring'); };
 
