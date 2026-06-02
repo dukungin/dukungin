@@ -258,7 +258,7 @@ function Hero({ C, isDark }) {
           style={{ paddingBottom: "0px", paddingTop: 40 }}
         >
         {/* Judul Hero */}
-         <h1 className="select-none hero-title !mt-[-10px] font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400">
+         <h1 className="select-none hero-title md:!mt-[-10px] font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400">
             
             {/* <span className="text-[3.1rem] md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
               AMBIL UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
