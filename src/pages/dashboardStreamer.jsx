@@ -12,10 +12,12 @@ import {
   Eye,
   EyeOff,
   Globe,
+  Grid,
   HeadphonesIcon,
   Heart,
   Image,
   ImageIcon,
+  List,
   Loader2,
   Menu,
   MessageSquare,
@@ -256,7 +258,7 @@ const QuickAmountsEditor = ({ amounts = [], onChange, saveSettingsMutation, sett
           </div>
         ))}
       </div>
-      <button onClick={add} className="cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full mt-4 py-2.5 border-2 border-dashed border-emerald-400/30 text-emerald-600 rounded-none font-black text-sm">
+      <button onClick={add} className="cursor-pointer active:scale-[0.98] hover:brightness-[85%] w-full mt-4 py-2.5 border-2 border-dashed border-emerald-400/30 text-white rounded-none font-black text-sm">
         + Tambah Nominal
       </button>
       <button
@@ -367,7 +369,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
 
       {lastSent && (
         <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900">
+          className="flex items-center gap-2 text-xs text-white dark:text-white font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900">
           <CheckCircle2 size={14} /> Test terakhir dikirim: {lastSent.toLocaleTimeString('id-ID')}
         </motion.div>
       )}
@@ -493,7 +495,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
 
       {lastSent && (
         <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900">
+          className="flex items-center gap-2 text-xs text-white dark:text-white font-bold bg-emerald-50 dark:bg-emerald-950/40 rounded-none px-4 py-3 border border-emerald-100 dark:border-emerald-900">
           <CheckCircle2 size={14} /> MediaShare berhasil dikirim: {lastSent.toLocaleTimeString('id-ID')}
         </motion.div>
       )}
@@ -1068,7 +1070,7 @@ const AdminWithdrawalPage = () => {
                     {withdrawals.map(wd => (
                       <tr key={wd._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">
                         <td className="px-6 py-5"><p className="font-black text-slate-700 dark:text-slate-200 text-sm">@{wd.userId?.username || '-'}</p></td>
-                        <td className="px-6 py-5"><p className="text-emerald-600 dark:text-emerald-400 font-black text-sm">Rp {formatRupiah(Number(wd.amount) * 0.975)}</p></td>
+                        <td className="px-6 py-5"><p className="text-white dark:text-white font-black text-sm">Rp {formatRupiah(Number(wd.amount) * 0.975)}</p></td>
                         <td className="px-6 py-5"><p className="font-bold text-slate-600 dark:text-slate-300 text-sm">{wd.paymentMethod || 'BANK'}</p></td>
                         <td className="px-6 py-5"><p className="font-mono font-bold text-slate-700 dark:text-slate-200 text-sm">{wd.accountNumber}</p></td>
                         <td className="px-6 py-5">
@@ -2254,6 +2256,7 @@ const HistoryPage = () => {
   const [historyTab, setHistoryTab] = useState('received');
   const [replayLoading, setReplayLoading] = useState(new Set());
   const [lastReplayTime, setLastReplayTime] = useState({});
+  const [viewMode, setViewMode] = useState('table'); // 'table' | 'card'
   const [showAmounts, setShowAmounts] = useState(() => {
     const saved = localStorage.getItem('showBalance');
     return saved === null ? true : saved === 'true'; // default true kalau belum ada
@@ -2344,13 +2347,34 @@ const HistoryPage = () => {
           <div>
             <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Riwayat Donasi</p>
           </div>
-          <div className="flex gap-2">
-            {[{ id: 'received', label: '📥 Diterima' }, { id: 'sent', label: '📤 Terkirim' }].map((t) => (
-              <button key={t.id} onClick={() => { setHistoryTab(t.id); setPage(1); setStatusFilter(''); }}
-                className={`px-5 py-2.5 rounded-none font-black text-sm transition-all ${historyTab === t.id ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:border-blue-200'}`}>
-                {t.label}
+          <div className='flex items-center gap-1.5'>
+            <div className="flex gap-1.5">
+              {[{ id: 'received', label: 'Diterima' }, { id: 'sent', label: 'Terkirim' }].map((t) => (
+                <button key={t.id} onClick={() => { setHistoryTab(t.id); setPage(1); setStatusFilter(''); }}
+                  className={`px-4 py-1 text-xs cursor-pointer font-black rounded-none transition-all border border-slate-200 dark:border-slate-700 ${historyTab === t.id ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 hover:border-blue-200'}`}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+            <div className='!text-slate-500 h-[1px] bg-slate-700 mx-[2px] !w-[10px]'>
+              
+            </div>
+            <div className="flex gap-1.5 rounded-none overflow-hidden">
+              <button
+                onClick={() => setViewMode('table')}
+                className={`px-4 py-1 flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 text-xs cursor-pointer font-black transition-all ${viewMode === 'table' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 hover:border-white'}`}
+              >
+                <List size={13} className='relative top-[-0.5px]' />
+                Table
               </button>
-            ))}
+              <button
+                onClick={() => setViewMode('card')}
+                className={`px-4 py-1 flex items-center gap-1.5 border border-slate-200 dark:border-slate-700 text-xs cursor-pointer font-black transition-all ${viewMode === 'card' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-500 hover:border-white'}`}
+              >
+                <Grid size={13} className='relative top-[-0.5px]' />
+                Card
+              </button>
+            </div>
           </div>
         </div>
 
@@ -2378,21 +2402,18 @@ const HistoryPage = () => {
                 </button>
               ))}
             </div>
-            {/* <div className="ml-auto flex items-center gap-2 text-xs text-green-500 font-bold">
-              <span className="w-2 h-2 bg-green-400 rounded-none animate-pulse" /> Auto 15s
-              <button onClick={() => refetch()} disabled={isFetching} className="ml-1 text-slate-400 hover:text-blue-600">
-                <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
-              </button>
-            </div> */}
           </div>
         )}
 
+        {/* Content Area */}
         <div className="overflow-x-auto">
           {historyTab === 'received' ? (
-            <>
-              {isLoading ? (
+            viewMode === 'table' ? (
+              /* ==================== TABLE VIEW ==================== */
+              isLoading ? (
                 <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3">
-                  <div className="w-5 h-5 border-4 border-slate-200 border-t-blue-600 rounded-none animate-spin" />Memuat riwayat...
+                  <div className="w-5 h-5 border-4 border-slate-200 border-t-blue-600 rounded-none animate-spin" />
+                  Memuat riwayat...
                 </div>
               ) : (
                 <table className="w-full text-left min-w-[700px]">
@@ -2415,60 +2436,152 @@ const HistoryPage = () => {
                         const isReplaying = replayLoading.has(item._id);
                         return (
                           <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
-                            <td className="px-5 md:px-8 py-5"><p className="font-black text-slate-700 dark:text-slate-200 text-sm">{item.donorName || 'Anonim'}</p></td>
-                            <td className="px-5 md:px-8 py-5"><p className={`font-black ${showAmounts ? 'text-emerald-400' : 'text-slate-300'}`}>{maskAmount(item.amount)}</p></td>
-                            <td className="px-5 md:px-8 py-5 max-w-[220px]"><p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic line-clamp-2">{item.message || '-'}</p></td>
+                            <td className="px-5 md:px-8 py-5">
+                              <p className="font-black text-slate-700 dark:text-slate-200 text-sm">
+                                {item.donorName || 'Anonim'}
+                              </p>
+                              {showEmails && item.donorEmail && (
+                                <p className="text-xs text-slate-500 mt-0.5">{item.donorEmail}</p>
+                              )}
+                            </td>
+                            <td className="px-5 md:px-8 py-5">
+                              <p className={`font-medium ${showAmounts ? 'text-white' : 'text-slate-300'}`}>
+                                {maskAmount(item.amount)}
+                              </p>
+                            </td>
+                            <td className="px-5 md:px-8 py-5 max-w-[220px]">
+                              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium italic line-clamp-2">
+                                {item.message || '-'}
+                              </p>
+                            </td>
                             <td className="px-5 md:px-8 py-5 text-center">
-                              <button onClick={() => replayDonation(item._id)} disabled={isReplaying}
-                                className={`cursor-pointer active:scale-[0.99] inline-flex items-center gap-1.5 px-4 py-2 rounded-none text-xs font-black transition-all ${isReplaying ? 'text-slate-400 cursor-not-allowed' : 'text-blue-500 hover:text-blue-300'}`}>
-                                {isReplaying ? <><Loader2 size={14} className="animate-spin" />Replay...</> : <><Video size={15} />Replay</>}
+                              <button
+                                onClick={() => replayDonation(item._id)}
+                                disabled={isReplaying}
+                                className={`cursor-pointer active:scale-[0.99] inline-flex items-center gap-1.5 px-4 py-2 rounded-none text-xs font-black transition-all ${isReplaying ? 'text-slate-400 cursor-not-allowed' : 'text-blue-500 hover:text-blue-300'}`}
+                              >
+                                {isReplaying ? (
+                                  <><Loader2 size={14} className="animate-spin" /> Replay...</>
+                                ) : (
+                                  <><Video size={15} /> Replay</>
+                                )}
                               </button>
                             </td>
                             <td className="px-5 md:px-8 py-5">
                               {item.mediaUrl ? (
-                                <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline flex items-center gap-1 text-sm"><ImageIcon size={14} /> Lihat</a>
+                                <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline flex items-center gap-1 text-sm">
+                                  <ImageIcon size={14} /> Lihat
+                                </a>
                               ) : <span className="text-slate-300 text-xs">-</span>}
                             </td>
                             <td className="px-5 md:px-8 py-5">
-                              <span className={`px-3 py-1 rounded-none text-[10px] font-black ${item.status === 'PAID' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>{item.status}</span>
+                              <span className={`px-3 py-1 rounded-none text-[10px] font-black ${item.status === 'PAID' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>
+                                {item.status}
+                              </span>
                             </td>
-                            <td className="px-5 md:px-8 py-5 text-[10px] text-slate-400 whitespace-nowrap">{formatDate(item.createdAt)}</td>
+                            <td className="px-5 md:px-8 py-5 text-[10px] text-slate-400 whitespace-nowrap">
+                              {formatDate(item.createdAt)}
+                            </td>
                           </tr>
                         );
                       })
                     )}
                   </tbody>
                 </table>
-              )}
-            </>
-          ) : (
-            <table className="w-full text-left min-w-[600px]">
-              <thead>
-                <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                  {['Kepada', 'Jumlah', 'Pesan', 'Status', 'Waktu'].map(h => <th key={h} className="px-5 md:px-8 py-6">{h}</th>)}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
-                {sentLoading ? (
-                  <tr><td colSpan={5} className="text-center py-20">Memuat donasi terkirim...</td></tr>
-                ) : (sentData?.donations || []).length === 0 ? (
-                  <tr><td colSpan={5} className="text-center py-16 text-slate-400 font-bold">Belum ada donasi terkirim</td></tr>
+              )
+            ) : (
+              /* ==================== CARD VIEW ==================== */
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 md:p-6">
+                {donations.length === 0 ? (
+                  <div className="col-span-full text-center py-20 text-slate-400 font-bold">
+                    Belum ada donasi masuk
+                  </div>
                 ) : (
-                  (sentData?.donations || []).map((item) => (
-                    <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
-                      <td className="px-5 md:px-8 py-5"><p className="font-black text-slate-700 dark:text-slate-200">@{item.userId?.username || item.username || '-'}</p></td>
-                      <td className="px-5 md:px-8 py-5 font-black text-blue-600">Rp {Number(item.amount).toLocaleString('id-ID')}</td>
-                      <td className="px-5 md:px-8 py-5 max-w-[250px]"><p className="text-slate-500 dark:text-slate-400 text-sm italic truncate">{item.message || '-'}</p></td>
-                      <td className="px-5 md:px-8 py-5">
-                        <span className={`px-3 py-1.5 rounded-none text-[10px] font-black ${item.status === 'PAID' ? 'bg-green-100 text-green-600 dark:bg-green-950/40 dark:text-green-400' : 'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400'}`}>{item.status}</span>
-                      </td>
-                      <td className="px-5 md:px-8 py-5 text-[10px] text-slate-400 dark:text-slate-500">{formatDate(item.createdAt)}</td>
-                    </tr>
-                  ))
+                  donations.map((item) => {
+                    const isReplaying = replayLoading.has(item._id);
+                    return (
+                      <div
+                        key={item._id}
+                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 hover:shadow-lg transition-all duration-200"
+                      >
+                        <div className="flex justify-between items-start mb-5">
+                          <div>
+                            <p className="font-black text-lg text-slate-800 dark:text-slate-100">
+                              {item.donorName || 'Anonim'}
+                            </p>
+                            {showEmails && item.donorEmail && (
+                              <p className="text-xs text-slate-500 mt-1">{item.donorEmail}</p>
+                            )}
+                          </div>
+                          <span className={`px-3 py-1 rounded-none text-xs font-black ${item.status === 'PAID' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>
+                            {item.status}
+                          </span>
+                        </div>
+
+                        <p className={`text-xl font-medium mb-4 ${showAmounts ? 'text-white' : 'text-slate-300'}`}>
+                          {maskAmount(item.amount)}
+                        </p>
+
+                        {item.message && (
+                          <p className="text-slate-600 dark:text-slate-400 italic text-sm mb-6 line-clamp-4">
+                            "{item.message}"
+                          </p>
+                        )}
+
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700 text-sm">
+                          <p className="text-slate-400 text-xs">{formatDate(item.createdAt)}</p>
+
+                          <div className="flex items-center gap-4">
+                            {item.mediaUrl && (
+                              <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">
+                                <ImageIcon size={20} />
+                              </a>
+                            )}
+                            <button
+                              onClick={() => replayDonation(item._id)}
+                              disabled={isReplaying}
+                              className={`flex items-center gap-1.5 font-black text-blue-600 hover:text-blue-500 transition-all ${isReplaying ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              {isReplaying ? <Loader2 size={18} className="animate-spin" /> : <Video size={18} />}
+                              Replay
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
                 )}
-              </tbody>
-            </table>
-          )}
+              </div>
+            )
+          ) : (
+              <table className="w-full text-left min-w-[600px]">
+                <thead>
+                  <tr className="bg-slate-100/50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                    {['Kepada', 'Jumlah', 'Pesan', 'Status', 'Waktu'].map(h => <th key={h} className="px-5 md:px-8 py-6">{h}</th>)}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
+                  {sentLoading ? (
+                    <tr><td colSpan={5} className="text-center py-20">Memuat donasi terkirim...</td></tr>
+                  ) : (sentData?.donations || []).length === 0 ? (
+                    <tr><td colSpan={5} className="text-center py-16 text-slate-400 font-bold">Belum ada donasi terkirim</td></tr>
+                  ) : (
+                    (sentData?.donations || []).map((item) => (
+                      <tr key={item._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
+                        <td className="px-5 md:px-8 py-5"><p className="font-black text-slate-700 dark:text-slate-200">@{item.userId?.username || item.username || '-'}</p></td>
+                        <td className="px-5 md:px-8 py-5 font-black text-blue-600">Rp {Number(item.amount).toLocaleString('id-ID')}</td>
+                        <td className="px-5 md:px-8 py-5 max-w-[250px]"><p className="text-slate-500 dark:text-slate-400 text-sm italic truncate">{item.message || '-'}</p></td>
+                        <td className="px-5 md:px-8 py-5">
+                          <span className={`px-3 py-1.5 rounded-none text-[10px] font-black ${item.status === 'PAID' ? 'bg-green-100 text-green-600 dark:bg-green-950/40 dark:text-green-400' : 'bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400'}`}>{item.status}</span>
+                        </td>
+                        <td className="px-5 md:px-8 py-5 text-[10px] text-slate-400 dark:text-slate-500">{formatDate(item.createdAt)}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            )}
+          </div>
           {pagination.totalPages > 1 && (
             <div className="flex items-center justify-between px-6 py-3 md:py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
@@ -2486,7 +2599,6 @@ const HistoryPage = () => {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 };
