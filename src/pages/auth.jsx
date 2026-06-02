@@ -24,16 +24,16 @@ const getTheme = (dark) => ({
   divider:          dark ? 'rgba(255,255,255,0.2)'        : 'rgba(0,0,0,0.08)',
   dividerText:      dark ? '#ffffff'                       : '#94a3b8',
   toggleBg:         dark ? 'rgba(255,255,255,0.08)'        : 'rgba(79,70,229,0.08)',
-  toggleColor:      dark ? '#a5b4fc'                       : '#4f46e5',
+  toggleColor:      dark ? '#a5b4fc'                       : '#2754FF',
   heading:          dark ? '#ffffff'                       : '#1e1b4b',
   subtext:          dark ? 'white'                       : '#64748b',
-  label:            dark ? '#818cf8'                       : '#4f46e5',
+  label:            dark ? '#818cf8'                       : '#2754FF',
   inputText:        dark ? 'white'                       : '#1e1b4b',
   iconDefault:      dark ? '#94a3b8'                       : '#94a3b8',
   switchText:       dark ? 'white'                       : '#64748b',
-  switchLink:       dark ? '#818cf8'                       : '#4f46e5',
+  switchLink:       dark ? '#818cf8'                       : '#2754FF',
   backBtn:          dark ? '#94a3b8'                       : '#64748b',
-  forgotColor:      dark ? '#818cf8'                       : '#4f46e5',
+  forgotColor:      dark ? '#818cf8'                       : '#2754FF',
   forgotHover:      dark ? '#a78bfa'                       : '#7c3aed',
 });
 
@@ -101,7 +101,7 @@ const NotifModal = ({ notification, onClose }) => (
               style={{ 
                 width:'100%', padding:'14px 0', borderRadius:0, fontWeight:900, fontSize:14, 
                 border:'none',  
-                background: notification.type==='success' ? '#4f46e5' : '#e11d48', 
+                background: notification.type==='success' ? '#2754FF' : '#e11d48', 
                 color:'white', transition:'opacity 0.2s' 
               }}
               onMouseEnter={e => e.target.style.opacity='0.88'} 
@@ -133,7 +133,7 @@ const AuthInput = ({ icon: Icon, type='text', value, onChange, placeholder, T, c
     <div style={{ position:'relative' }}>
       <div style={{ 
         position:'absolute', left:16, top:'50%', transform:'translateY(-50%)', 
-        color: focused ? '#4f46e5' : T.iconDefault, transition:'color 0.2s', 
+        color: focused ? '#2754FF' : T.iconDefault, transition:'color 0.2s', 
         zIndex:1, display:'flex' 
       }}>
         <Icon size={18} />
@@ -174,7 +174,7 @@ const AuthInput = ({ icon: Icon, type='text', value, onChange, placeholder, T, c
 const LeftPanel = () => (
   <div className="auth-left md:h-[100vh] h-max" style={{
     position:'relative', width:'48%',
-    background:'linear-gradient(145deg, #312e81 0%, #4f46e5 45%, #6d28d9 100%)',
+    background:'linear-gradient(145deg, #312e81 0%, #2754FF 45%, #6d28d9 100%)',
     display:'flex', flexDirection:'column', justifyContent:'space-between',
     padding:'48px 44px', overflow:'hidden',
   }}>
@@ -195,20 +195,22 @@ const ThemeToggle = ({ isDark, onToggle, T }) => (
   <motion.button
     onClick={onToggle}
     whileTap={{ scale: 0.98 }}
-    className="absolute top-0 md:top-[30px] left-[34px] w-max md:right-[35px] flex items-center gap-[7px] dark:bg-[rgba(255,255,255,0.08)] bg-[rgba(79,70,229,0.08)] px-[18px] py-[12px] cursor-pointer z-20 rounded-none transition-colors duration-[350ms]"
+    className="relative left-[0px] mb-8 !text-slate-900 dark:!text-white w-max md:right-[35px] flex items-center gap-[7px] dark:!bg-[white] !bg-slate-100 px-[18px] py-[12px] cursor-pointer z-20 rounded-none transition-colors duration-[350ms]"
   >
     <AnimatePresence mode="wait">
-      <motion.div key={isDark ? 'moon' : 'sun'}
+      <motion.div 
+        className='!text-slate-900 dark:!text-slate-900'
+        key={isDark ? 'moon' : 'sun'}
         initial={{ opacity:0, rotate:-30, scale:0.7 }}
         animate={{ opacity:1, rotate:0, scale:1 }}
         exit={{ opacity:0, rotate:30, scale:0.7 }}
         transition={{ duration:0.22 }}
-        style={{ display:'flex', color: T.toggleColor }}
+        style={{ display:'flex' }}
       >
         {isDark ? <Moon size={15}/> : <Sun size={15}/>}
       </motion.div>
     </AnimatePresence>
-    <span style={{ fontSize:12, fontWeight:800, color: T.toggleColor, letterSpacing:'0.02em' }}>
+    <span style={{ fontSize:12, fontWeight:800, letterSpacing:'0.02em' }}>
       {isDark ? 'Dark' : 'Light'}
     </span>
   </motion.button>
@@ -216,14 +218,14 @@ const ThemeToggle = ({ isDark, onToggle, T }) => (
 
 // ─── RIGHT PANEL WRAPPER ──────────────────────────────────────────────────────
 const RightPanel = ({ T, isDark, setIsDark, children }) => (
-  <div className='md:min-h-[100vh] h-max pb-8 md:pb-[40px] md:py-[40px] md:px-[0px] py-[20px]' 
+  <div className='md:min-h-[100vh] h-max mx-auto !px-4 w-[100%] !justify-center !items-center !md:flex pb-8 md:pb-[40px] md:py-[40px] md:!px-[30px] py-[20px]' 
     style={{
-      flex:1, position:'relative', background: T.rightBg, display:'flex', 
+      flex:1, position:'relative', background: T.rightBg,
       alignItems:'center', justifyContent:'center', transition:'background 0.35s',
     }}
   >
     <ThemeToggle isDark={isDark} onToggle={() => setIsDark(d => !d)} T={T} />
-    <div style={{ width:'100%', maxWidth: '92%', marginTop: 16 }}>
+    <div style={{ width:'100%', maxWidth: '100%', marginTop: 16 }} className='md:h-[80vh] flex flex-col justify-center'>
       {children}
     </div>
   </div>
@@ -341,7 +343,7 @@ const MainAuthForm = ({
               flex: 1, padding: '12px 0', fontSize: 14, fontWeight: 800,
               border: 'none', cursor: 'pointer', transition: 'all 0.15s',
               borderLeft: i > 0 ? `1px solid ${T.tabBorder}` : 'none',
-              background: isTabActive(i) ? '#4f46e5' : 'transparent',
+              background: isTabActive(i) ? '#2754FF' : 'transparent',
               color: isTabActive(i) ? 'white' : T.tabInactive,
             }}>{label}</button>
           ))}
@@ -424,7 +426,7 @@ const MainAuthForm = ({
             style={{ 
               width:'100%', padding:'16px 0', borderRadius:0, fontWeight:900, fontSize:15, 
               border:'none', cursor:'pointer', 
-              background: isFormValid ? 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' : '#e2e8f0',
+              background: isFormValid ? 'linear-gradient(135deg, #2754FF 0%, #7c3aed 100%)' : '#e2e8f0',
               color: isFormValid ? 'white' : '#64748b', 
               opacity: loading ? 0.65 : 1, display:'flex', alignItems:'center', 
               justifyContent:'center', gap:8, 
@@ -596,7 +598,7 @@ const ForgotPasswordPage = ({
               style={{ 
                 width:'100%', padding:'16px 0', borderRadius:0, fontWeight:900, fontSize:14, 
                 border:'none', cursor:'pointer', 
-                background: emailReset ? 'linear-gradient(135deg, #4f46e5, #7c3aed)' : '#e2e8f0', 
+                background: emailReset ? 'linear-gradient(135deg, #2754FF, #7c3aed)' : '#e2e8f0', 
                 color: emailReset ? 'white' : '#64748b', 
                 opacity: loading ? 0.6 : 1 
               }}
@@ -711,7 +713,7 @@ const VerifyPinPage = ({ T, notify, closeNotif, navigate, email }) => {
           width: 80, height: 80, margin: '50px 0 24px 0px', background: '#eff6ff', 
           borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center' 
         }}>
-          <ShieldCheck size={36} style={{ color: '#4f46e5' }} />
+          <ShieldCheck size={36} style={{ color: '#2754FF' }} />
         </div>
         <h2 style={{ fontSize: 28, fontWeight: 900, color: T.heading, marginBottom: 8 }}>
           Verifikasi PIN

@@ -77,6 +77,7 @@ import MaintenanceScreen from '../components/MaintenanceScreen';
 import VoiceSettingsPage from './voiceSetting';
 import DonationTerminal from './DonationTerminal';
 import OnboardingTour from '../components/onboardingTour';
+import LoadingOverlay from '../components/overlayLoading';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -2957,6 +2958,8 @@ export const DashboardStreamer = () => {
   const [iconMode, setIconMode] = useState('emoji');
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [pinStep, setPinStep] = useState('idle'); // idle | success | error
+  const [overlayDone, setOverlayDone] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
   const [showPins, setShowPins] = useState({
     currentPin: false,
     newPin: false,
@@ -2974,7 +2977,7 @@ export const DashboardStreamer = () => {
   });
   const { maintenance } = useMaintenance(); // ← tambah ini
 
-  // ─── PIN HANDLERS (dipindah ke dalam komponen) ─────────────────────────────────
+// ─── PIN HANDLERS (dipindah ke dalam komponen) ─────────────────────────────────
 
 const handlePinInputChange = useCallback((group, index, value, refs, setter) => {
   const sanitized = value.replace(/[^0-9]/g, '').slice(0, 1);
@@ -3373,48 +3376,51 @@ const handleChangePin = async () => {
       }
     };
 
-  return (
-    <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
-      <audio ref={previewAudioRef} />
-      <SectionHeader icon={<Music size={20} />} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-blue-500" />
-      <div className="md:p-5 md:bg-slate-50 md:dark:bg-slate-800/50 rounded-none md:border border-slate-200 dark:border-slate-700">
-        <h4 className="font-black text-sm text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">📢 Suara Default (Semua Donasi)</h4>
-        <SoundPicker
-          label="Pilih suara default"
-          value={settings.soundUrl || ''}
-          onChange={v => { upd('soundUrl', v); playPreview(v); }}
-        />
-      </div>
-      <SoundTiersEditor
-        saveSettingsMutation={saveSettingsMutation}
-        settings={settings}
-        tiers={settings.soundTiers || []}
-        onChange={v => upd('soundTiers', v)}
-        onPreview={playPreview}
-      />
-      <div className="pt-2 md:pt-8 md:border-t border-slate-200 dark:border-slate-700">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 w-11 h-11 bg-emerald-500 rounded-none flex items-center justify-center text-white shadow-lg"><Music size={20} /></div>
-          <div>
-            <h4 className="text-xl font-black text-slate-800 dark:text-white">Quick Soundboard</h4>
-            <p className="md:flex hidden text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ke streamer</p>
+    
+    return (
+      <>
+        <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
+          <audio ref={previewAudioRef} />
+          <SectionHeader icon={<Music size={20} />} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-blue-500" />
+          <div className="md:p-5 md:bg-slate-50 md:dark:bg-slate-800/50 rounded-none md:border border-slate-200 dark:border-slate-700">
+            <h4 className="font-black text-sm text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">📢 Suara Default (Semua Donasi)</h4>
+            <SoundPicker
+              label="Pilih suara default"
+              value={settings.soundUrl || ''}
+              onChange={v => { upd('soundUrl', v); playPreview(v); }}
+            />
+          </div>
+          <SoundTiersEditor
+            saveSettingsMutation={saveSettingsMutation}
+            settings={settings}
+            tiers={settings.soundTiers || []}
+            onChange={v => upd('soundTiers', v)}
+            onPreview={playPreview}
+          />
+          <div className="pt-2 md:pt-8 md:border-t border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 w-11 h-11 bg-emerald-500 rounded-none flex items-center justify-center text-white shadow-lg"><Music size={20} /></div>
+              <div>
+                <h4 className="text-xl font-black text-slate-800 dark:text-white">Quick Soundboard</h4>
+                <p className="md:flex hidden text-sm text-slate-500 dark:text-slate-400">Donatur bisa pilih suara ini saat donasi ke streamer</p>
+              </div>
+            </div>
+            <AudioManager
+              publicSounds={formData.publicSounds}
+              onUpdatePublicSounds={(sounds) => {
+                setFormData({ ...formData, publicSounds: sounds });
+                upd('publicSounds', sounds);
+              }}
+            />
+            <div className='w-full h-[1px] bg-slate-100/10 my-4' />
+            <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending || uploading}
+              className="cursor-pointer active:scale-[0.99] w-full py-3 bg-gradient-to-r from-blue-600 to-violet-600 hover:brightness-90 text-white font-black rounded-none transition-all disabled:opacity-60 flex items-center justify-center gap-2">
+              <Save size={20} />
+              {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Suara'}
+            </button>
           </div>
         </div>
-        <AudioManager
-          publicSounds={formData.publicSounds}
-          onUpdatePublicSounds={(sounds) => {
-            setFormData({ ...formData, publicSounds: sounds });
-            upd('publicSounds', sounds);
-          }}
-        />
-        <div className='w-full h-[1px] bg-slate-100/10 my-4' />
-        <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending || uploading}
-          className="cursor-pointer active:scale-[0.99] w-full py-3 bg-gradient-to-r from-blue-600 to-violet-600 hover:brightness-90 text-white font-black rounded-none transition-all disabled:opacity-60 flex items-center justify-center gap-2">
-          <Save size={20} />
-          {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Semua Suara'}
-        </button>
-      </div>
-    </div>
+      </>
   );
 }
 
@@ -3427,6 +3433,7 @@ const handleChangePin = async () => {
     <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-slate-950 font-sans pb-0 text-slate-900 dark:text-slate-100">
 
       <OnboardingTour />
+      {showOverlay && <LoadingOverlay onDone={() => setShowOverlay(false)} />}
 
       {/* <video src="/glass.mp4" className='absolute z-[1]' autoplay={true}></video> */}
       <img src="/glass.jpg" className='opacity-[10%] fixed top-0 left-0 w-screen h-screen z-[1]' autoPlay={true}></img>
