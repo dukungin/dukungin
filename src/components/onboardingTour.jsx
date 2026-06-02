@@ -432,9 +432,22 @@ const OnboardingTour = ({ forceShow = false, onComplete }) => {
   const [phase, setPhase]         = useState('idle');
   const [stepIndex, setStepIndex] = useState(0);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false); // ← jadi state
+  const [isMobile, setIsMobile]   = useState(false);   // ← Tambahan
 
   const currentStep = TOUR_STEPS[stepIndex];
   const targetRect  = useTargetRect(currentStep?.target, phase === 'touring');
+
+  // Cek ukuran layar
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 700);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // ← cek superAdmin di useEffect, bukan di render level
   useEffect(() => {
@@ -444,10 +457,13 @@ const OnboardingTour = ({ forceShow = false, onComplete }) => {
       return;
     }
 
+    // Jangan tampilkan tour di mobile
+    if (isMobile) return;
+
     if (forceShow) { setPhase('start'); return; }
     const done = localStorage.getItem(STORAGE_KEY);
     if (!done) setPhase('start');
-  }, [forceShow]);
+  }, [forceShow, isMobile]);
 
   // Auto-scroll sidebar setiap kali step berubah
   useEffect(() => {
@@ -456,7 +472,7 @@ const OnboardingTour = ({ forceShow = false, onComplete }) => {
   }, [phase, stepIndex, currentStep?.target]);
 
   // ← conditional return SETELAH semua hooks
-  if (isSuperAdmin) return null;
+  if (isSuperAdmin || isMobile) return null;
 
   const handleStart = () => { setStepIndex(0); setPhase('touring'); };
 
