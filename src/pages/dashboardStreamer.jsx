@@ -790,97 +790,6 @@ const MilestonesEditor = () => {
   );
 };
 
-// ─── SoundPicker ──────────────────────────────────────────────────────────────
-
-// const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
-//   const [mode, setMode] = useState(value && !SOUND_PRESETS.find(p => p.url === value) ? 'custom' : 'preset');
-//   const [customInput, setCustomInput] = useState(value && !SOUND_PRESETS.find(p => p.url === value) ? value : '');
-//   const audioRef = useRef(null); // JS object, bukan DOM element
-
-//   const playPreview = (url) => {
-//     if (!url) return;
-//     // Stop audio sebelumnya
-//     if (audioRef.current) {
-//       audioRef.current.pause();
-//       audioRef.current.src = '';
-//     }
-//     // Buat Audio baru di luar DOM — tidak kena AbortError
-//     const audio = new Audio(url);
-//     audioRef.current = audio;
-//     audio.play().catch(e => console.warn('Play failed:', e));
-//   };
-
-//   return (
-//     <div className="space-y-3">
-//       {label && <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{label}</label>}
-//       <div className="flex gap-2">
-//         {[{ id: 'preset', label: '🎵 Pilih Preset' }, { id: 'custom', label: '🔗 URL Custom' }].map(m => (
-//           <button key={m.id} onClick={() => setMode(m.id)}
-//             className={`cursor-pointer active:scale-[0.97] px-4 py-2 rounded-none font-black text-xs transition-all ${mode === m.id ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
-//             {m.label}
-//           </button>
-//         ))}
-//       </div>
-
-//       {mode === 'preset' && (
-//         <div className="grid grid-cols-2 uppercase md:grid-cols-4 gap-2">
-//           <button onClick={() => onChange('')}
-//             className={`cursor-pointer active:scale-[0.97] flex items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${!value ? 'border-slate-600 bg-slate-800 text-white shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
-//             <span className="text-lg">🔇</span><span className='text-xs md:text-sm uppercase'>Tanpa Suara</span>
-//           </button>
-//           {SOUND_PRESETS.map(preset => (
-//             <button key={preset.url}
-//               onClick={() => {
-//                 playPreview(preset.url); // play dulu
-//                 onChange(preset.url);    // baru update state
-//               }}
-//               className={`cursor-pointer active:scale-[0.97] flex items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${value === preset.url ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
-//               <span className="text-lg">{preset.label.split(' ')[1]}</span>
-//               <span className='text-xs md:text-sm uppercase'>{preset.label.split(' ')[0]}</span>
-//             </button>
-//           ))}
-//         </div>
-//       )}
-
-//       {mode === 'custom' && (
-//         <div className="space-y-2">
-//           <div className="flex gap-2">
-//             <input
-//               value={customInput}
-//               onChange={e => setCustomInput(e.target.value)}
-//               placeholder="https://... .mp3"
-//               className="flex-1 p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400 transition-all"
-//             />
-//             <button
-//               onClick={() => {
-//                 if (!customInput.trim()) return;
-//                 playPreview(customInput.trim());
-//                 onChange(customInput.trim());
-//               }}
-//               className="px-4 py-2 bg-blue-600 text-white rounded-none font-black text-xs hover:bg-blue-700 transition-all cursor-pointer active:scale-[0.97]"
-//             >
-//               Set & Play
-//             </button>
-//           </div>
-//         </div>
-//       )}
-
-//       {value && (
-//         <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-none p-3 border border-slate-100 dark:border-slate-700">
-//           <button onClick={() => playPreview(value)}
-//             className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-blue-600 rounded-none flex items-center justify-center text-white text-xs hover:bg-blue-700 transition-all flex-shrink-0">▶</button>
-//           <div className="flex-1 min-w-0">
-//             <p className="text-sm font-black text-slate-500 dark:text-slate-400">{SOUND_PRESETS.find(p => p.url === value)?.label || 'Custom Sound'}</p>
-//             <p className="text-xs text-slate-300 dark:text-slate-400 mt-1 font-mono truncate">{value}</p>
-//           </div>
-//           <button onClick={() => onChange('')} className="cursor-pointer text-slate-300 hover:text-red-400 transition-colors text-sm flex-shrink-0">✕</button>
-//         </div>
-//       )}
-//       {/* Tidak ada <audio> di JSX — pakai new Audio() saja */}
-//     </div>
-//   );
-// };
-
 // ─── SoundPicker (Upload MP3 Version) ─────────────────────────────────────
 
 const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
@@ -3201,7 +3110,7 @@ const handleChangePin = async () => {
               <SoundPicker
                 value={t.soundUrl || ''}
                 onChange={v => {
-                  updateTier(i, 'soundUrl', v);   // atau upd(i, 'soundUrl', v) kalau pakai yang lama
+                  upd(i, 'soundUrl', v);   // atau upd(i, 'soundUrl', v) kalau pakai yang lama
                   onPreview?.(v);
                 }}
               />

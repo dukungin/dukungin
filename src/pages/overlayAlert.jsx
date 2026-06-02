@@ -155,7 +155,36 @@
         setAlert(donationWithTime);
         setProgress(100);
 
-        const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
+        // const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
+        // if (soundToPlay && audioRef.current) {
+        //   audioRef.current.src = soundToPlay;
+        //   audioRef.current.play().catch(() => {});
+        // }
+
+        // ✅ LOGIC SOUND TIER BARU
+        let soundToPlay = data.voiceUrl || data.soundUrl;
+
+        if (!soundToPlay) {
+          const config = configRef.current;
+          if (config?.soundTiers && config.soundTiers.length > 0) {
+            const amount = Number(donationWithTime.amount);
+            const sortedTiers = [...config.soundTiers].sort((a, b) => b.minAmount - a.minAmount);
+
+            for (const tier of sortedTiers) {
+              if (amount >= tier.minAmount && 
+                  (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount)) {
+                soundToPlay = tier.soundUrl;
+                break;
+              }
+            }
+          }
+          // Fallback ke sound default
+          if (!soundToPlay) {
+            soundToPlay = config?.soundUrl;
+          }
+        }
+
+        // Play sound
         if (soundToPlay && audioRef.current) {
           audioRef.current.src = soundToPlay;
           audioRef.current.play().catch(() => {});
