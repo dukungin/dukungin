@@ -258,15 +258,15 @@ function Hero({ C, isDark }) {
           style={{ paddingBottom: "0px", paddingTop: 40 }}
         >
         {/* Judul Hero */}
-         <h1 className="select-none hero-title font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400">
+         <h1 className="select-none hero-title !mt-[-10px] font-['Bebas_Neue'] leading-[0.85] tracking-[-0.01em] text-white mb-4 text-center flex flex-wrap items-center justify-center gap-[0.1em] transition-colors duration-400">
             
-            <span className="text-[3.1rem] md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
+            {/* <span className="text-[3.1rem] md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
               AMBIL UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
-            </span>
+            </span> */}
 
             <span className="relative top-[-10px] text-5xl w-max lg:text-8xl 2xl:text-[7rem] w-[80vw] select-none hidden md:flex items-center justify-center">
               <span className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
-                <span className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative text-black 2xl:h-[98px] md:h-[85px] bg-[azure]">
+                <span className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative md:text-black 2xl:h-[98px] md:h-[85px] md:bg-[azure]">
                   POTONGAN HANYA 2.5% UNTUK
                 </span>
                 SETIAP DONASI MASUK
@@ -276,7 +276,7 @@ function Hero({ C, isDark }) {
           </h1>
 
           <br className="md:hidden flex" />
-          <br />
+          <br className="hidden md:flex" />
 
           {/* Deskripsi */}
           <p
@@ -1123,7 +1123,9 @@ export default function TapTipTup() {
 
       {/* ==================== INTRO MODAL ==================== */}
       {showModal && (
-        <div style={{
+        <div 
+        className="md:!p-[20px] !p-[10px]"  
+        style={{
           position: "fixed",
           top: 0, left: 0, right: 0, bottom: 0,
           background: "rgba(0,0,0,0.92)",
@@ -1131,12 +1133,11 @@ export default function TapTipTup() {
           alignItems: "center",
           justifyContent: "center",
           zIndex: 999999,
-          padding: "20px",
         }}>
           <div style={{
             background: C.bg2,
             border: `1px solid ${C.line}`,
-            borderRadius: "16px",
+            // borderRadius: "16px",
             maxWidth: "860px",
             width: "100%",
             overflow: "hidden",
@@ -1157,7 +1158,7 @@ export default function TapTipTup() {
             </div>
 
             {/* Video */}
-            <div style={{ padding: "20px 20px 0" }}>
+            <div style={{ padding: "20px 14px 0" }}>
               <video
                 src="./ttt.mp4"
                 controls
@@ -1166,7 +1167,7 @@ export default function TapTipTup() {
                 loop
                 style={{
                   width: "100%",
-                  borderRadius: "12px",
+                  // borderRadius: "12px",
                   background: "#000",
                   height: '40vh'
                 }}
@@ -1174,13 +1175,14 @@ export default function TapTipTup() {
             </div>
 
             {/* Content */}
-            <div style={{
+            <div 
+            className="text-[22px] md:text-[36px]"  
+            style={{
               textAlign: "center",
               padding: "32px 40px 40px",
             }}>
               <h2 style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(24px, 5vw, 36px)",
                 lineHeight: 1.1,
                 marginBottom: "14px",
                 color: C.text,
@@ -1189,8 +1191,9 @@ export default function TapTipTup() {
                 Menjadi <span style={{ color: C.lime }}>Cuan</span>
               </h2>
 
-              <p style={{
-                fontSize: "15.5px",
+              <p 
+              className="text-[12px] md:text-[15px]"  
+              style={{
                 lineHeight: 1.4,
                 color: C.muted,
                 maxWidth: "580px",
@@ -1201,14 +1204,14 @@ export default function TapTipTup() {
               </p>
 
               <button
+                className="md:!py-[14px] active:!scale-[0.98] md:!px-[42px] !py-[10px] !px-[30px]"
                 onClick={closeModal}
                 style={{
                   marginTop: "32px",
-                  padding: "14px 42px",
                   background: C.lime,
                   color: C.bg,
                   border: "none",
-                  borderRadius: "8px",
+                  // borderRadius: "8px",
                   fontSize: "14px",
                   fontWeight: 700,
                   letterSpacing: "0.05em",
