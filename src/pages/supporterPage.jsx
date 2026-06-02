@@ -1248,9 +1248,9 @@ const SupporterPage = () => {
     return () => clearTimeout(timeout);
   }, [mediaUrl]);
 
-  if (maintenance?.supporter) return (
-    <MaintenanceScreen title="Halaman donasi - maintenance" subtitle="Sementara kamu tidak bisa mengirim donasi. Coba lagi beberapa saat lagi." />
-  );
+  // if (maintenance?.supporter) return (
+  //   <MaintenanceScreen title="Halaman donasi - maintenance" subtitle="Sementara kamu tidak bisa mengirim donasi. Coba lagi beberapa saat lagi." />
+  // );
 
   const handleAuthSuccess = async (data) => {
     const newPayload = getPayload();
@@ -1448,6 +1448,10 @@ const SupporterPage = () => {
   const overlaySetting = streamer?.overlaySetting || streamer?.OverlaySetting || {};
   const minDonate  = overlaySetting?.minDonate  || 1000;
   const maxDonate  = overlaySetting?.maxDonate  || 10000000;
+
+  if (maintenance?.supporter) return (
+    <MaintenanceScreen title="Halaman donasi - maintenance" subtitle="Sementara kamu tidak bisa mengirim donasi. Coba lagi beberapa saat lagi." />
+  );
 
   const quickAmounts = (
     streamer?.overlaySetting?.quickAmounts ||
