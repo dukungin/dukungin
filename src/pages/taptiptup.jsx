@@ -283,13 +283,12 @@ function Hero({ C, isDark }) {
 
           {/* Deskripsi */}
           <p
-            className="select-none w-[86vw] !py-1 md:max-w-[50vw]"
+            className="select-none md:!mb-[26px] !mb-[20px] w-[86vw] !py-1 md:max-w-[50vw] leading-normal md:!leading-loose"
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontSize: "clamp(13px, 1.5vw, 16px)",
               color: "rgba(255,255,255,0.6)",
-              lineHeight: 0,
-              marginBottom: 36,
+              // marginBottom: 36,
               textAlign: "center",
             }}
           >
@@ -925,9 +924,13 @@ export default function TapTipTup() {
       }}
     >
       <style>{buildGlobalStyles(C)}</style>
-      <Marquee C={C} />
+      <div className="md:flex hidden">
+        <Marquee C={C} />
+      </div>
       <Hero C={C} isDark={isDark} />
-      <Marquee C={C} />
+      <div className="md:flex hidden">
+        <Marquee C={C} />
+      </div>
       <FeeComparison C={C} /> 
       <section className="w-screen md:!min-h-[70vh] !pb-20 !pt-4 flex flex-col justify-center items-center bg-blue-900 !px-[20px] gap-6 relative overflow-hidden">
 

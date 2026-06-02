@@ -1141,9 +1141,9 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly 
         title={mediaOnly ? 'Durasi Media share' : alertOnly ? 'Durasi Alert' : 'Pengaturan Durasi'}
         color="bg-amber-500"
       />
-      <p className="md:flex hidden text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+      {/* <p className="md:flex hidden text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
         Atur berapa lama {mediaOnly ? 'media share' : alertOnly ? 'alert' : 'alert'} muncul berdasarkan nominal donasi.
-      </p>
+      </p> */}
 
       <div className="space-y-10">
 
