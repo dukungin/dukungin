@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-
+import { motion, useMotionValue, useSpring } from "framer-motion";
 /* ─────────────────────────────────────────
    DATA
 ───────────────────────────────────────── */
@@ -207,6 +207,26 @@ function AlertPop({ visible, C }) {
 function Hero({ C, isDark }) {
   const [alertVisible, setAlertVisible] = useState(false);
   const [ref, inView] = useInView(0.3);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  const rotate = useMotionValue(0);
+  const smoothRotate = useSpring(rotate, {
+    stiffness: 120,
+    damping: 12,
+  });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+
+    const offset = e.clientX - centerX;
+
+    rotate.set(offset * 0.01);
+  };
+
+  const handleMouseLeave = () => {
+    rotate.set(0);
+  };
 
   useEffect(() => {
     const cycle = () => {
@@ -220,14 +240,17 @@ function Hero({ C, isDark }) {
 
   return (
     <section id="home"
-      className="select-none bg-blue-900 hero-wrapper md:py-0 min-h-max md:h-[89vh] overflow-hidden relative"
+      className="select-none bg-blue-900 !border-b border-[azure] hero-wrapper md:py-0 min-h-max md:h-[95vh] overflow-hidden relative"
       style={{
         display: "grid",
         gridTemplateRows: "1fr auto",
         paddingTop: 70,
-        borderBottom: `1px solid ${C.line}`,
+        // clipPath: "polygon(50% 0%, 100% 0, 100% 80%, 93% 100%, 9% 100%, 0 80%, 0 0)"
+        // clipPath: "polygon(50% 0%, 100% 0, 100% 100%, 20% 100%, 60% 88%, 40% 88%, 80% 100%, 10% 100%, 0 100%, 0 0)"
+        // borderBottom: `1px solid white`,
       }}
     >
+
 
       {/* Grid Background (Mobile) */}
       <div className="select-none md:hidden flex absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
@@ -246,11 +269,13 @@ function Hero({ C, isDark }) {
         </svg>
       </div>
 
-      <img src="/man2.png" alt="image woman" className="absolute md:flex hidden bottom-0 md:bottom-[-56px] left-[-40px] 2xl:left-[-280px] md:left-[-257px] w-[44%] md:w-[50%] z-[99999]" />
-      <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-34px] md:left-[-50px] w-[46%] md:w-[43%] z-[99999]" />
+      <img src="/man2.png" alt="image man" className="absolute md:flex hidden bottom-0 md:bottom-[-56px] left-[-40px] 2xl:left-[-280px] md:left-[-257px] w-[44%] md:w-[50%] z-[99999]" />
+      <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-34px] md:left-[-22px] 2xl:left-[-32px] w-[46%] md:w-[43%] z-[99999]" />
       <img src="/woman2.png" alt="image woman" className="absolute bottom-0 md:flex hidden md:bottom-[-100px] right-12 w-[32%] z-[99999]" />
-      <img src="/man1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] right-[-17px] md:right-[-208px] w-[39.5%] md:w-[40%] z-[999]" />
-
+      <img src="/man1.png" alt="image man" className="absolute bottom-0 md:bottom-[-40px] right-[-17px] md:right-[-208px] w-[39.5%] md:w-[40%] z-[999]" />
+      <div className="absolute bottom-0 md:flex hidden z-[5]">
+        <Marquee C={C} />
+      </div>
       {/* Main Content */}
       <div
         style={{ zIndex: 4, transition: "border-color 0.4s" }}
@@ -265,16 +290,54 @@ function Hero({ C, isDark }) {
             
             {/* <span className="text-[3.1rem] md:text-8xl select-none md:hidden flex items-center justify-center gap-[0.1em]">
               AMBIL UNTUNG LEBIH BANYAK BERSAMA TAPTIPTUP
-            </span> */}
+              </span> */}
 
-            <span className="relative top-[-10px] text-5xl w-max lg:text-8xl 2xl:text-[7rem] w-[80vw] select-none hidden md:flex items-center justify-center">
-              <span className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
-                <span className="top-[-3px] px-2 2xl:min-w-[70vw] min-w-[64vw] relative md:text-black 2xl:h-[98px] md:h-[85px] md:bg-[azure]">
+          <span className="relative top-[-10px] text-5xl lg:text-8xl 2xl:text-[7rem] w-[80vw] select-none hidden md:flex items-center justify-center">
+            <span className="flex gap-x-5 flex-wrap w-[80vw] relative mt-10 text-center justify-center items-center">
+
+              {/* Banner + tali */}
+              <motion.div
+                style={{
+                  rotate: isMobile ? 0 : smoothRotate,
+                  transformOrigin: "top center",
+                }}
+                animate={
+                  isMobile
+                    ? {}
+                    : {
+                        x: [-8, 8, -8],
+                      }
+                }
+                transition={{
+                  x: {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  },
+                }}
+                onMouseMove={!isMobile ? handleMouseMove : undefined}
+                onMouseLeave={!isMobile ? handleMouseLeave : undefined}
+                className="relative inline-block"
+              >
+                {/* Tali kiri */}
+                <div className="absolute w-[1px] h-[40vh] bg-white -rotate-30 top-[-34vh] left-[-64px] md:flex hidden" />
+
+                {/* Tali kanan */}
+                <div className="absolute w-[1px] h-[40vh] bg-white rotate-30 top-[-34vh] right-[-64px] md:flex hidden" />
+
+                {/* Banner */}
+                <span className="px-2 2xl:min-w-[70vw] min-w-[64vw] relative md:text-black 2xl:h-[98px] md:h-[85px] md:bg-[azure] inline-block">
                   POTONGAN HANYA 2.5% UNTUK
                 </span>
+              </motion.div>
+
+              {/* Tetap diam */}
+              <span>
                 SETIAP DONASI MASUK
               </span>
+
             </span>
+          </span>
 
           </h1>
 
@@ -916,7 +979,7 @@ export default function TapTipTup() {
       className="select-none overflow-hidden w-[100vw]"
       style={{
         minHeight: "100vh",
-        background: C.bg,
+        background: 'white',
         color: C.text,
         fontFamily: "'Space Grotesk', sans-serif",
         overflowX: "hidden",
@@ -928,9 +991,6 @@ export default function TapTipTup() {
         <Marquee C={C} />
       </div>
       <Hero C={C} isDark={isDark} />
-      <div className="md:flex hidden">
-        <Marquee C={C} />
-      </div>
       <FeeComparison C={C} /> 
       <section className="w-screen md:!min-h-[70vh] !pb-20 !pt-4 flex flex-col justify-center items-center bg-blue-900 !px-[20px] gap-6 relative overflow-hidden">
 
