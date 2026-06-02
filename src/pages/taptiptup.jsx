@@ -245,9 +245,6 @@ function Hero({ C, isDark }) {
         display: "grid",
         gridTemplateRows: "1fr auto",
         paddingTop: 70,
-        // clipPath: "polygon(50% 0%, 100% 0, 100% 80%, 93% 100%, 9% 100%, 0 80%, 0 0)"
-        // clipPath: "polygon(50% 0%, 100% 0, 100% 100%, 20% 100%, 60% 88%, 40% 88%, 80% 100%, 10% 100%, 0 100%, 0 0)"
-        // borderBottom: `1px solid white`,
       }}
     >
 
@@ -273,7 +270,7 @@ function Hero({ C, isDark }) {
       <img src="/woman1.png" alt="image woman" className="absolute bottom-0 md:bottom-[-40px] left-[-34px] md:left-[-22px] 2xl:left-[-32px] w-[46%] md:w-[43%] z-[99999]" />
       <img src="/woman2.png" alt="image woman" className="absolute bottom-0 md:flex hidden md:bottom-[-100px] right-12 w-[32%] z-[99999]" />
       <img src="/man1.png" alt="image man" className="absolute bottom-0 md:bottom-[-40px] right-[-17px] md:right-[-208px] w-[39.5%] md:w-[40%] z-[999]" />
-      <div className="absolute bottom-0 md:flex hidden z-[5]">
+      <div className="absolute bottom-0 flex z-[5]">
         <Marquee C={C} />
       </div>
       {/* Main Content */}
@@ -987,7 +984,7 @@ export default function TapTipTup() {
       }}
     >
       <style>{buildGlobalStyles(C)}</style>
-      <div className="md:flex hidden">
+      <div className="flex">
         <Marquee C={C} />
       </div>
       <Hero C={C} isDark={isDark} />
