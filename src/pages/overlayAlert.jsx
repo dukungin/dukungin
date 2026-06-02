@@ -155,34 +155,52 @@
         setAlert(donationWithTime);
         setProgress(100);
 
-        // const soundToPlay = data.voiceUrl || data.soundUrl || configRef.current?.soundUrl;
-        // if (soundToPlay && audioRef.current) {
-        //   audioRef.current.src = soundToPlay;
-        //   audioRef.current.play().catch(() => {});
-        // }
+        // ✅ LOGIC: CEK SOUNDTIERS TERLEBIH DULU BERDASARKAN AMOUNT
+        let soundToPlay = null;
+        const config = configRef.current;
+        const amount = Number(donationWithTime.amount);
 
-        // ✅ LOGIC SOUND TIER BARU
-        let soundToPlay = data.voiceUrl || data.soundUrl;
+        // ─────────────────────────────────────────────────────
+        // Priority 1: CEK SOUND TIERS (berdasarkan amount)
+        // ─────────────────────────────────────────────────────
+        if (config?.soundTiers && config.soundTiers.length > 0) {
+          const sortedTiers = [...config.soundTiers].sort((a, b) => b.minAmount - a.minAmount);
 
-        if (!soundToPlay) {
-          const config = configRef.current;
-          if (config?.soundTiers && config.soundTiers.length > 0) {
-            const amount = Number(donationWithTime.amount);
-            const sortedTiers = [...config.soundTiers].sort((a, b) => b.minAmount - a.minAmount);
-
-            for (const tier of sortedTiers) {
-              if (amount >= tier.minAmount && 
-                  (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount)) {
-                soundToPlay = tier.soundUrl;
-                break;
-              }
+          for (const tier of sortedTiers) {
+            if (amount >= tier.minAmount && 
+                (tier.maxAmount === null || tier.maxAmount === undefined || amount <= tier.maxAmount)) {
+              soundToPlay = tier.soundUrl;
+              console.log('[Sound] Using tier:', tier.label, '=>', tier.soundUrl);
+              break;
             }
           }
-          // Fallback ke sound default
-          if (!soundToPlay) {
-            soundToPlay = config?.soundUrl;
-          }
         }
+
+        // ─────────────────────────────────────────────────────
+        // Priority 2: voiceUrl dari donasi (kalo ada)
+        // ─────────────────────────────────────────────────────
+        if (!soundToPlay && data.voiceUrl) {
+          soundToPlay = data.voiceUrl;
+          console.log('[Sound] Using voiceUrl');
+        }
+
+        // ─────────────────────────────────────────────────────
+        // Priority 3: soundUrl dari data (default root)
+        // ─────────────────────────────────────────────────────
+        if (!soundToPlay && data.soundUrl) {
+          soundToPlay = data.soundUrl;
+          console.log('[Sound] Using data.soundUrl (default)');
+        }
+
+        // ─────────────────────────────────────────────────────
+        // Priority 4: default soundUrl dari config
+        // ─────────────────────────────────────────────────────
+        if (!soundToPlay && config?.soundUrl) {
+          soundToPlay = config.soundUrl;
+          console.log('[Sound] Using config.default');
+        }
+
+        console.log('[Sound] Final soundToPlay:', soundToPlay);
 
         // Play sound
         if (soundToPlay && audioRef.current) {
