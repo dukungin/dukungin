@@ -791,11 +791,22 @@ const MilestonesEditor = () => {
 
 const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
   const [mode, setMode] = useState(value && !SOUND_PRESETS.find(p => p.url === value) ? 'custom' : 'preset');
-  const audioRef = useRef(null);
+  const [customInput, setCustomInput] = useState(value && !SOUND_PRESETS.find(p => p.url === value) ? value : '');
+  const audioRef = useRef(null); // JS object, bukan DOM element
+
   const playPreview = (url) => {
     if (!url) return;
-    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = url; audioRef.current.play().catch(() => {}); }
+    // Stop audio sebelumnya
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+    // Buat Audio baru di luar DOM — tidak kena AbortError
+    const audio = new Audio(url);
+    audioRef.current = audio;
+    audio.play().catch(e => console.warn('Play failed:', e));
   };
+
   return (
     <div className="space-y-3">
       {label && <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{label}</label>}
@@ -807,6 +818,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
           </button>
         ))}
       </div>
+
       {mode === 'preset' && (
         <div className="grid grid-cols-2 uppercase md:grid-cols-4 gap-2">
           <button onClick={() => onChange('')}
@@ -814,7 +826,11 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
             <span className="text-lg">🔇</span><span className='text-xs md:text-sm uppercase'>Tanpa Suara</span>
           </button>
           {SOUND_PRESETS.map(preset => (
-            <button key={preset.url} onClick={() => { onChange(preset.url); playPreview(preset.url); }}
+            <button key={preset.url}
+              onClick={() => {
+                playPreview(preset.url); // play dulu
+                onChange(preset.url);    // baru update state
+              }}
               className={`cursor-pointer active:scale-[0.97] flex items-center gap-1.5 p-3 rounded-none border-2 font-black text-xs transition-all ${value === preset.url ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-md' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-500'}`}>
               <span className="text-lg">{preset.label.split(' ')[1]}</span>
               <span className='text-xs md:text-sm uppercase'>{preset.label.split(' ')[0]}</span>
@@ -822,13 +838,34 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
           ))}
         </div>
       )}
+
       {mode === 'custom' && (
-        <input value={value || ''} onChange={e => onChange(e.target.value)} placeholder="https://... .mp3"
-          className="w-full p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400 transition-all" />
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <input
+              value={customInput}
+              onChange={e => setCustomInput(e.target.value)}
+              placeholder="https://... .mp3"
+              className="flex-1 p-3 bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400 transition-all"
+            />
+            <button
+              onClick={() => {
+                if (!customInput.trim()) return;
+                playPreview(customInput.trim());
+                onChange(customInput.trim());
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded-none font-black text-xs hover:bg-blue-700 transition-all cursor-pointer active:scale-[0.97]"
+            >
+              Set & Play
+            </button>
+          </div>
+        </div>
       )}
+
       {value && (
         <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-none p-3 border border-slate-100 dark:border-slate-700">
-          <button onClick={() => playPreview(value)} className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-blue-600 rounded-none flex items-center justify-center text-white text-xs hover:bg-blue-700 transition-all flex-shrink-0">▶</button>
+          <button onClick={() => playPreview(value)}
+            className="cursor-pointer active:scale-[0.97] w-8 h-8 bg-blue-600 rounded-none flex items-center justify-center text-white text-xs hover:bg-blue-700 transition-all flex-shrink-0">▶</button>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-black text-slate-500 dark:text-slate-400">{SOUND_PRESETS.find(p => p.url === value)?.label || 'Custom Sound'}</p>
             <p className="text-xs text-slate-300 dark:text-slate-400 mt-1 font-mono truncate">{value}</p>
@@ -836,50 +873,7 @@ const SoundPicker = ({ value, onChange, label = 'Pilih Suara' }) => {
           <button onClick={() => onChange('')} className="cursor-pointer text-slate-300 hover:text-red-400 transition-colors text-sm flex-shrink-0">✕</button>
         </div>
       )}
-      <audio ref={audioRef} />
-    </div>
-  );
-};
-
-// ─── SoundTiersEditor ─────────────────────────────────────────────────────────
-
-const SoundTiersEditor = ({ tiers = [], onChange, saveSettingsMutation, settings }) => {
-  const add    = () => onChange([...tiers, { minAmount: 50000, maxAmount: null, soundUrl: '', label: '' }]);
-  const remove = (i) => onChange(tiers.filter((_, idx) => idx !== i));
-  const upd    = (i, key, val) => onChange(tiers.map((t, idx) => idx === i ? { ...t, [key]: key === 'minAmount' || key === 'maxAmount' ? (val === '' ? null : Number(val)) : val } : t));
-  return (
-    <div className="space-y-3">
-      {tiers.map((t, i) => (
-        <div key={i} className="bg-slate-50 dark:bg-slate-800 rounded-none p-4 border border-slate-100 dark:border-slate-700 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="font-black text-slate-600 dark:text-slate-300 text-sm">{t.label || `Tier Suara ${i + 1}`}</span>
-            <button onClick={() => remove(i)} className="cursor-pointer text-red-400 hover:text-red-600 p-1"><Trash2 size={15} /></button>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {[['Min (Rp)', 'minAmount', t.minAmount], ['Max (kosong=∞)', 'maxAmount', t.maxAmount ?? '']].map(([lbl, key, val]) => (
-              <div key={key} className="flex flex-col gap-1">
-                <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
-                <input type="number" value={val} placeholder={key === 'maxAmount' ? '∞' : ''} onChange={e => upd(i, key, e.target.value)}
-                  className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Label (opsional)</label>
-            <input value={t.label} placeholder="contoh: Sultan Alert Sound" onChange={e => upd(i, 'label', e.target.value)}
-              className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
-          </div>
-          <SoundPicker value={t.soundUrl} onChange={v => upd(i, 'soundUrl', v)} />
-        </div>
-      ))}
-      <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-blue-200 dark:border-blue-900 text-blue-500 dark:text-blue-400 rounded-none font-black text-sm hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-center gap-2">
-        <Plus size={16} /> Tambah Suara per Nominal
-      </button>
-      <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
-        className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
-        <Save size={20} />
-        {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Audio Terbaru'}
-      </button>
+      {/* Tidak ada <audio> di JSX — pakai new Audio() saja */}
     </div>
   );
 };
@@ -3028,6 +3022,52 @@ const handleChangePin = async () => {
     }
   };
 
+  // ─── SoundTiersEditor ─────────────────────────────────────────────────────────
+
+  const SoundTiersEditor = ({ tiers, onChange, saveSettingsMutation, settings, onPreview }) => {
+    const add    = () => onChange([...tiers, { minAmount: 50000, maxAmount: null, soundUrl: '', label: '' }]);
+    const remove = (i) => onChange(tiers.filter((_, idx) => idx !== i));
+    const upd    = (i, key, val) => onChange(tiers.map((t, idx) => idx === i ? { ...t, [key]: key === 'minAmount' || key === 'maxAmount' ? (val === '' ? null : Number(val)) : val } : t));
+    return (
+      <div className="space-y-3">
+        {tiers.map((t, i) => (
+          <div key={i} className="bg-slate-50 dark:bg-slate-800 rounded-none p-4 border border-slate-100 dark:border-slate-700 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="font-black text-slate-600 dark:text-slate-300 text-sm">{t.label || `Tier Suara ${i + 1}`}</span>
+              <button onClick={() => remove(i)} className="cursor-pointer text-red-400 hover:text-red-600 p-1"><Trash2 size={15} /></button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[['Min (Rp)', 'minAmount', t.minAmount], ['Max (kosong=∞)', 'maxAmount', t.maxAmount ?? '']].map(([lbl, key, val]) => (
+                <div key={key} className="flex flex-col gap-1">
+                  <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{lbl}</label>
+                  <input type="number" value={val} placeholder={key === 'maxAmount' ? '∞' : ''} onChange={e => upd(i, key, e.target.value)}
+                    className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Label (opsional)</label>
+              <input value={t.label} placeholder="contoh: Sultan Alert Sound" onChange={e => upd(i, 'label', e.target.value)}
+                className="w-full p-2.5 bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400" />
+            </div>
+              <SoundPicker
+                value={t.soundUrl}
+                onChange={v => { upd(i, 'soundUrl', v); onPreview?.(v); }}
+              />
+          </div>
+        ))}
+        <button onClick={add} className="cursor-pointer active:scale-[0.97] w-full py-3 border-2 border-dashed border-blue-200 dark:border-blue-900 text-blue-500 dark:text-blue-400 rounded-none font-black text-sm hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-center gap-2">
+          <Plus size={16} /> Tambah Suara per Nominal
+        </button>
+        <button onClick={() => saveSettingsMutation.mutate(settings)} disabled={saveSettingsMutation.isPending}
+          className="cursor-pointer active:scale-[0.97] hover:brightness-90 w-full bg-slate-900/70 dark:bg-slate-700 text-white py-3 md:py-4 rounded-none font-black text-sm transition-all shadow-xl shadow-slate-200 dark:shadow-none disabled:opacity-70 flex items-center justify-center gap-2">
+          <Save size={20} />
+          {saveSettingsMutation.isPending ? 'Menyimpan...' : 'Simpan Audio Terbaru'}
+        </button>
+      </div>
+    );
+  };
+
   const handleUploadAudio = async (file) => {
     const uploadFormData = new FormData();
     uploadFormData.append('audio', file);
@@ -3076,14 +3116,37 @@ const handleChangePin = async () => {
   const displayBalance = showBalance ? `Rp ${Number(user.balance).toLocaleString('id-ID')}` : 'Rp ••••••';
 
   // ── Shared Sound Section (dipakai di alertSettings) ──────────────────────────
-  const SoundSection = () => (
+  const SoundSection = () => {
+    const previewAudioRef = useRef(null);
+
+    const playPreview = (url) => {
+      if (!url) return;
+      if (previewAudioRef.current) {
+        previewAudioRef.current.pause();
+        previewAudioRef.current.src = url;
+        previewAudioRef.current.play().catch(() => {});
+      }
+    };
+
+  return (
     <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
+      <audio ref={previewAudioRef} />
       <SectionHeader icon={<Music size={20} />} title="Pengaturan Suara Alert" color="bg-gradient-to-r from-emerald-500 to-blue-500" />
       <div className="md:p-5 md:bg-slate-50 md:dark:bg-slate-800/50 rounded-none md:border border-slate-200 dark:border-slate-700">
         <h4 className="font-black text-sm text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">📢 Suara Default (Semua Donasi)</h4>
-        <SoundPicker label="Pilih suara default" value={settings.soundUrl || ''} onChange={v => upd('soundUrl', v)} />
+        <SoundPicker
+          label="Pilih suara default"
+          value={settings.soundUrl || ''}
+          onChange={v => { upd('soundUrl', v); playPreview(v); }}
+        />
       </div>
-      <SoundTiersEditor saveSettingsMutation={saveSettingsMutation} settings={settings} tiers={settings.soundTiers || []} onChange={v => upd('soundTiers', v)} />
+      <SoundTiersEditor
+        saveSettingsMutation={saveSettingsMutation}
+        settings={settings}
+        tiers={settings.soundTiers || []}
+        onChange={v => upd('soundTiers', v)}
+        onPreview={playPreview}
+      />
       <div className="pt-2 md:pt-8 md:border-t border-slate-200 dark:border-slate-700">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 w-11 h-11 bg-emerald-500 rounded-none flex items-center justify-center text-white shadow-lg"><Music size={20} /></div>
@@ -3108,6 +3171,7 @@ const handleChangePin = async () => {
       </div>
     </div>
   );
+}
 
   // Ganti blok if (maintenance?.dashboard) yang lama dengan:
   if (maintenance?.dashboard) return (
