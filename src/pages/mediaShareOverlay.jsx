@@ -4,7 +4,7 @@
   import { io } from 'socket.io-client';
   import axios from 'axios';
 
-  const API_URL = 'https://server-dukungin-production.up.railway.app';
+  const API_URL = 'https://server-ttt-production.up.railway.app';
 
   const isTikTokUrl = (url) => {
     if (!url) return false;
