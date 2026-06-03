@@ -84,6 +84,11 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
     ...(isSuperAdmin ? [
       { id: 'whatsapp',    label: 'WhatsApp',          icon: <MessageSquare size={20} /> },
       { id: 'suggestions', label: 'Masukan Streamer',  icon: <MessageSquare size={20} /> },
+      {
+        id: 'streamerManager',
+        label: 'Kelola Streamer',
+        icon: <Users size={20} />,
+      },
       { id: 'ghostAlert',  label: 'Admin Notif Hantu', icon: <Zap size={20} /> }
     ] : [])
   ];

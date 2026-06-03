@@ -78,6 +78,7 @@ import VoiceSettingsPage from './voiceSetting';
 import DonationTerminal from './DonationTerminal';
 import OnboardingTour from '../components/onboardingTour';
 import LoadingOverlay from '../components/overlayLoading';
+import StreamerManagerPage from './streamerManager';
 
 // ─── API ──────────────────────────────────────────────────────────────────────
 
@@ -3341,6 +3342,7 @@ const handleChangePin = async () => {
     voiceSettings: 'Voice Note',
     mediaSettings: 'Media share',
     store: 'Toko OBS',
+    streamerManager: 'Kelola Streamer',
     history:       'Riwayat',
     inbox: 'Inbox',
     terminal: 'Log Donasi',
@@ -3552,6 +3554,16 @@ const handleChangePin = async () => {
             {activeTab === 'maintenance' && (
               <motion.div key="maintenance" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <MaintenancePage />
+              </motion.div>
+            )}
+
+            {activeTab === 'streamerManager' && isSuperAdmin && (
+              <motion.div
+                key="streamerManager"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <StreamerManagerPage />
               </motion.div>
             )}
 
