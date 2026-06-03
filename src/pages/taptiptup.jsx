@@ -1117,10 +1117,10 @@ export default function TapTipTup() {
           >
 
           {/* Kolom 1 — Brand */}
-          <div className="w-full mx-auto text-center">
+          <div className="w-full mx-auto text-center text-[28px] md:text-[40px]">
             <div style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 28, letterSpacing: "0.04em",
+              letterSpacing: "0.04em",
               color: "white", marginBottom: 12,
             }}>
               TapTipTup
@@ -1132,7 +1132,7 @@ export default function TapTipTup() {
             }}>
               Platform donasi streaming lokal terbaik untuk konten kreator Indonesia. Potongan hanya 2.5%, alert langsung di OBS, setup dalam 5 menit.
             </p>
-            <a href="/privacy-policy" style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: "#BBDEFB", letterSpacing: "0.06em", textDecoration: "none" }}>
+            <a href="/privacy-policy" style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: "#BBDEFB", letterSpacing: "0.1em", textDecoration: "none" }}>
               KEBIJAKAN PRIVASI TAPTIPTUP
             </a>
           </div>

@@ -311,7 +311,7 @@ const InstantTestAlert = ({ overlayToken, settings, user }) => {
           <Zap size={20} />
         </div>
         <div>
-          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Instant Test Alert</h3>
+          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Testing Alert</h3>
         </div>
       </div>
 
@@ -431,7 +431,7 @@ const InstantTestMediaShare = ({ overlayToken, settings, user }) => {
           <Video size={20} />
         </div>
         <div>
-          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Instant Test Mediashare</h3>
+          <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Testing Medshare</h3>
         </div>
       </div>
 
@@ -1141,7 +1141,7 @@ const DurationSettings = ({ settings, onChange, saveSettingsMutation, alertOnly 
     <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-3 md:space-y-8">
       <SectionHeader
         icon={<Timer size={22} />}
-        title={mediaOnly ? 'Durasi Media share' : alertOnly ? 'Durasi Alert' : 'Pengaturan Durasi'}
+        title={mediaOnly ? 'Durasi Medshare' : alertOnly ? 'Durasi Alert' : 'Pengaturan Durasi'}
         color="bg-amber-500"
       />
       {/* <p className="md:flex hidden text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
@@ -2657,9 +2657,9 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
     if (isLoading) return <div className="flex items-center justify-center py-20 text-slate-400 font-bold gap-3"><div className="w-5 h-5 border-4 border-slate-200 border-t-blue-600 rounded-none animate-spin" />Memuat...</div>;
     if (!users?.length) return <div className="text-center py-20 text-slate-400"><p className="text-4xl mb-3">👥</p><p className="font-black text-slate-500">Belum ada streamer</p></div>;
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:mt-0 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map(u => (
-          <div key={u._id} className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-6 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4 hover:shadow-md hover:border-slate-200 dark:hover:border-slate-700 transition-all">
+          <div key={u._id} className="md:bg-white/30 dark:md:bg-slate-900/60 md:backdrop-blur-sm rounded-none md:p-6 md:mb-0 mb-2 md:border border-slate-100 dark:border-slate-800 md:shadow-sm flex flex-col gap-4 hover:shadow-md hover:border-slate-200 dark:hover:border-slate-700 transition-all">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-none bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-black text-xl flex-shrink-0 shadow-lg">
                 {
@@ -2703,21 +2703,21 @@ const CommunityPage = ({ currentUserId, onFollowAction }) => {
   };
 
   return (
-    <div className="space-y-3 pb-0 min-h-[90vh]">
+    <div className="space-y-3 pb-0 min-h-[90vh] md:bg-transparent bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm shadow-sm md:border-none border border-slate-100 dark:border-slate-800 md:p-0 p-4">
       {viewingProfile && (
         <StreamerProfileModal username={viewingProfile} currentUserId={currentUserId} onClose={() => setViewingProfile(null)} onFollow={null} />
       )}
 
-      <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-none p-4 md:p-6 text-white relative overflow-hidden">
+      <div className="md:flex hidden bg-gradient-to-br from-blue-600 to-purple-600 rounded-none p-4 md:p-6 text-white relative overflow-hidden">
         <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-none" />
         <div className="relative z-10">
-          <p className="text-blue-200 text-xs font-black uppercase tracking-widest mb-2">Streamer Network</p>
-          <h2 className="text-3xl font-black tracking-tight">Community.</h2>
+          <p className="text-blue-200 text-xs font-black uppercase tracking-widest mb-2">Jaringan Streamer</p>
+          <h2 className="text-3xl font-black tracking-tight">Komunitas</h2>
           <p className="text-blue-200 text-sm font-medium mt-1">Temukan & ikuti sesama streamer</p>
         </div>
       </div>
 
-      <div className="gap-3 grid grid-cols-3 md:grid-cols-5">
+      <div className="gap-3 grid grid-cols-3 md:grid-cols-5 mb-5 md:mb-3">
         {subTabs.map(t => (
           <button key={t.id} onClick={() => setSubTab(t.id)}
             className={`w-full cursor-pointer active:scale-[0.97] px-5 py-2.5 rounded-none font-black text-sm transition-all ${subTab === t.id ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-100 dark:border-slate-700 hover:brightness-[80%]'}`}>
@@ -3508,7 +3508,7 @@ const handleChangePin = async () => {
       {/* ── Mobile Navbar ── */}
       <div className="lg:hidden fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 z-50 px-4 py-3 md:py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-11.5 md:w-10 h-11.5 md:h-10 p-2 bg-red-200 rounded-none flex items-center justify-center"><img src="/jellyfish.png" alt="icon" /></div>
+          <div className="w-11.5 md:w-10 h-11.5 md:h-10 p-[6px] bg-blue-500 rounded-none flex items-center justify-center"><img src="/man1.png" className='relative left-[-0.8px]' alt="icon" /></div>
           {/* <span className="font-black text-lg tracking-tight text-slate-800 dark:text-slate-100">TTT</span> */}
         </div>
         <div className="flex items-center gap-2">
@@ -3928,12 +3928,12 @@ const handleChangePin = async () => {
                 {/* MediaShare Control */}
                 <MediaShareControl />
 
-                  <DurationSettings
-                    settings={settings}
-                    onChange={upd}
-                    saveSettingsMutation={saveSettingsMutation}
-                    mediaOnly={true}   
-                  />
+                <DurationSettings
+                  settings={settings}
+                  onChange={upd}
+                  saveSettingsMutation={saveSettingsMutation}
+                  mediaOnly={true}   
+                />
 
                 {/* Izin Media */}
                 <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-7">
@@ -4190,7 +4190,9 @@ const handleChangePin = async () => {
             {activeTab === 'poll' && (
               <motion.div key="poll" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-sm border border-slate-100 dark:border-slate-800 space-y-6">
-                  <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
+                  <div className='md:flex hidden'>
+                    <SectionHeader icon={<Vote size={20} />} title="Poll & Voting" color="bg-violet-500" />
+                  </div>
                   <PollManager overlayToken={user.overlayToken} username={user.username} />
                 </div>
               </motion.div>

@@ -142,7 +142,7 @@ export const PollManager = ({ overlayToken, username }) => {
           </div>
 
           <div className="p-6 space-y-4">
-            <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg">{getPollData(activePoll).question}</h3>
+            <h3 className="font-black text-slate-800 dark:text-slate-100 text-md md:text-lg">{getPollData(activePoll).question}</h3>
             <div className="space-y-3">
               {(getPollData(activePoll).options || []).map((opt) => {
                 const total = getTotalVotes(activePoll);

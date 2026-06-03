@@ -205,17 +205,17 @@ const Sidebar = ({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen, isC
           {!isCollapsed && (
             <a href='/'>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-red-200 rounded-none flex items-center justify-center text-white font-black text-xl italic shadow-lg">
-                  <img src="/jellyfish.png" alt="icon" className="w-[60%]" />
+                <div className="ml-0 mt-[-2px] w-10 h-10 bg-blue-500 rounded-none flex items-center justify-center text-white font-black text-xl italic shadow-lg">
+                  <img src="/man1.png" alt="icon" className="w-[100%]" />
                 </div>
-                <h1 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">TAPTIPTUP</h1>
+                <h1 className="text-lg ml-0 font-black tracking-tight text-slate-800 dark:text-slate-100 whitespace-nowrap">TAPTIPTUP</h1>
               </div>
             </a>
           )}
           {isCollapsed && (
             <a href='/'>
               <div className="w-full h-12 bg-red-200 rounded-none flex items-center justify-center shadow-lg">
-                <img src="/jellyfish.png" alt="icon" className={`${isCollapsed ? 'w-[30%]' : 'w-[60%]'}`} />
+                <img src="/man1.png" alt="icon" className={`${isCollapsed ? 'w-[30%]' : 'w-[60%]'}`} />
               </div>
             </a>
           )}

@@ -52,7 +52,7 @@
 
     return (
         <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-8">
-        <SectionHeader icon={<Timer size={20} />} title="Durasi Voice Note" color="bg-violet-500" />
+        <SectionHeader icon={<Timer size={20} />} title="Durasi VN" color="bg-violet-500" />
         <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
             Atur berapa lama voice note tampil di overlay berdasarkan nominal donasi.
             Durasi total = durasi dasar + (nominal ÷ per-amount × tambahan detik).
@@ -198,7 +198,7 @@
                     </div>
                     <div>
                         <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                            Instant Test Voice Note
+                            Testing VN
                         </h3>
                         <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
                             Rekam suara → kirim langsung ke OBS overlay
@@ -319,7 +319,7 @@
 
     return (
         <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
-        <SectionHeader icon={<Mic size={20} />} title="URL Overlay Voice Note" color="bg-violet-500" />
+        <SectionHeader icon={<Mic size={20} />} title="Overlay VN" color="bg-violet-500" />
         <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
             Tambahkan URL ini ke OBS sebagai Browser Source. Voice note dari donatur akan
             diputar otomatis saat donasi masuk.
@@ -356,7 +356,7 @@
 
     const VoiceSettingsInfo = () => (
     <div className="bg-white/30 dark:bg-slate-900/60 backdrop-blur-sm rounded-none p-4 md:p-6 shadow-xs border border-slate-100 dark:border-slate-800 space-y-4">
-        <SectionHeader icon={<span className="text-xl">🎙️</span>} title="Tentang Voice Note" color="bg-indigo-500" />
+        <SectionHeader icon={<span className="text-xl">🎙️</span>} title="Tentang VN" color="bg-indigo-500" />
         <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
         {[
             {
