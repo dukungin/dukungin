@@ -2,7 +2,7 @@ import axios from 'axios';
 import { showSessionExpiredModal } from './sessionModal';
 
 const api = axios.create({
-  baseURL: 'https://server-dukungin-production.up.railway.app',
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 api.interceptors.request.use((config) => {
