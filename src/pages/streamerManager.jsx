@@ -138,10 +138,10 @@ const UserCard = ({ user, onToggle, onDelete }) => {
       <div className="flex gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
         <button
           onClick={() => onToggle(user)}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.97] transition-all border ${
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.99] transition-all border ${
             isActive
-              ? 'border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30'
-              : 'border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/30'
+              ? 'border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 hover:bg-amber-900/30 dark:bg-amber-900/20'
+              : 'border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 hover:bg-green-900/30 dark:bg-green-900/20'
           }`}
         >
           {isActive ? <UserX size={13} /> : <UserCheck size={13} />}
@@ -149,7 +149,7 @@ const UserCard = ({ user, onToggle, onDelete }) => {
         </button>
         <button
           onClick={() => onDelete(user)}
-          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.97] border border-red-200 dark:border-red-900 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
+          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.99] border border-red-200 dark:border-red-900 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
         >
           <Trash2 size={13} />
         </button>
@@ -165,7 +165,7 @@ const StreamerManagerPage = () => {
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [viewMode, setViewMode] = useState('table'); // 'table' | 'grid'
+  const [viewMode, setViewMode] = useState('grid'); // 'table' | 'grid'
   const [confirmModal, setConfirmModal] = useState(null); // { type: 'toggle'|'delete', user }
 
   const { data, isLoading, isFetching, refetch } = useQuery({
@@ -251,27 +251,51 @@ const StreamerManagerPage = () => {
           />
           {/* <button
             onClick={handleSearch}
-            className="px-4 h-[37px] bg-blue-600 text-white rounded-none font-black text-sm cursor-pointer active:scale-[0.97] hover:bg-blue-700 transition-all flex items-center gap-1.5"
+            className="px-4 h-[37px] bg-blue-600 text-white rounded-none font-black text-sm cursor-pointer active:scale-[0.99] hover:bg-blue-700 transition-all flex items-center gap-1.5"
           >
             <Search size={15} /> Cari
           </button> */}
           {search && (
             <button
               onClick={() => { setSearch(''); setSearchInput(''); setPage(1); }}
-              className="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-none font-black text-xs cursor-pointer active:scale-[0.97]"
+              className="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-none font-black text-xs cursor-pointer active:scale-[0.99]"
             >
               <X size={14} />
             </button>
           )}
         </div>
 
+        {/* View mode */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`px-3 py-2 rounded-none border font-black text-xs cursor-pointer active:scale-[0.99] transition-all flex items-center gap-1.5 ${
+              viewMode === 'grid'
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'
+            }`}
+          >
+            <Grid size={13} /> Grid
+          </button>
+          <button
+            onClick={() => setViewMode('table')}
+            className={`px-3 py-2 rounded-none border font-black text-xs cursor-pointer active:scale-[0.99] transition-all flex items-center gap-1.5 ${
+              viewMode === 'table'
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'
+            }`}
+          >
+            <List size={13} /> Table
+          </button>
+        </div>
+
         {/* Status filter */}
         <div className="flex gap-2">
-          {[{ val: '', label: 'Semua' }, { val: 'active', label: 'Aktif' }, { val: 'inactive', label: 'Nonaktif' }].map((f) => (
+          {[{ val: 'active', label: 'Aktif' }, { val: 'inactive', label: 'Nonaktif' }].map((f) => (
             <button
               key={f.val}
               onClick={() => { setStatusFilter(f.val); setPage(1); }}
-              className={`px-4 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.97] transition-all border ${
+              className={`px-4 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.99] transition-all border ${
                 statusFilter === f.val
                   ? 'bg-blue-600 text-white border-blue-600'
                   : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'
@@ -280,30 +304,6 @@ const StreamerManagerPage = () => {
               {f.label}
             </button>
           ))}
-        </div>
-
-        {/* View mode */}
-        <div className="flex gap-1">
-          <button
-            onClick={() => setViewMode('table')}
-            className={`px-3 py-2 rounded-none border font-black text-xs cursor-pointer active:scale-[0.97] transition-all flex items-center gap-1.5 ${
-              viewMode === 'table'
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'
-            }`}
-          >
-            <List size={13} /> Table
-          </button>
-          <button
-            onClick={() => setViewMode('grid')}
-            className={`px-3 py-2 rounded-none border font-black text-xs cursor-pointer active:scale-[0.97] transition-all flex items-center gap-1.5 ${
-              viewMode === 'grid'
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'
-            }`}
-          >
-            <Grid size={13} /> Grid
-          </button>
         </div>
       </div>
 
@@ -389,7 +389,7 @@ const StreamerManagerPage = () => {
                           <button
                             onClick={() => setConfirmModal({ type: 'toggle', user: u })}
                             title={isActive ? 'Nonaktifkan' : 'Aktifkan'}
-                            className={`px-2.5 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.97] transition-all ${
+                            className={`px-2.5 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.99] transition-all ${
                               isActive
                                 ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 border border-amber-200 dark:border-amber-800 hover:bg-amber-100'
                                 : 'bg-green-50 dark:bg-green-950/30 text-green-600 border border-green-200 dark:border-green-800 hover:bg-green-100'
@@ -400,7 +400,7 @@ const StreamerManagerPage = () => {
                           <button
                             onClick={() => setConfirmModal({ type: 'delete', user: u })}
                             title="Hapus permanen"
-                            className="px-2.5 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.97] bg-red-50 dark:bg-red-950/30 text-red-500 border border-red-200 dark:border-red-900 hover:bg-red-100 transition-all"
+                            className="px-2.5 py-2 rounded-none font-black text-xs cursor-pointer active:scale-[0.99] bg-red-50 dark:bg-red-950/30 text-red-500 border border-red-200 dark:border-red-900 hover:bg-red-100 transition-all"
                           >
                             <Trash2 size={16} />
                           </button>
