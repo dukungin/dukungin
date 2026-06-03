@@ -249,18 +249,12 @@ const StreamerManagerPage = () => {
             placeholder="Cari username / email..."
             className="flex-1 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400 transition-all"
           />
-          {/* <button
-            onClick={handleSearch}
-            className="px-4 h-[37px] bg-blue-600 text-white rounded-none font-black text-sm cursor-pointer active:scale-[0.99] hover:bg-blue-700 transition-all flex items-center gap-1.5"
-          >
-            <Search size={15} /> Cari
-          </button> */}
           {search && (
             <button
               onClick={() => { setSearch(''); setSearchInput(''); setPage(1); }}
-              className="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-none font-black text-xs cursor-pointer active:scale-[0.99]"
+              className="px-1 py-2 text-slate-500 rounded-none font-black text-xs cursor-pointer active:scale-[0.99]"
             >
-              <X size={14} />
+              <X size={20} />
             </button>
           )}
         </div>
