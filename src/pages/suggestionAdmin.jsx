@@ -141,11 +141,11 @@ export const SuggestionsAdmin = () => {
       </AnimatePresence>
 
       {/* Header */}
-      <div className="bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 from-blue-700 to-indigo-800  rounded-none p-5 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 from-blue-700 to-indigo-800  rounded-none p-6 text-white relative overflow-hidden">
         <div className="relative z-10 flex items-center justify-between">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <MessageCircle size={20} />
+            <div className="flex items-center gap-2 mb-1">
+              {/* <MessageCircle size={20} /> */}
               <span className="text-blue-200 dark:text-slate-400 text-xs font-black uppercase tracking-widest">Super Admin</span>
             </div>
             <h2 className="text-md md:text-lg font-black tracking-tight">Kelola Masukan Streamer</h2>

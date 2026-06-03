@@ -316,22 +316,11 @@ export const AdminAnnouncementsPage = () => {
           </div>
           <button
             onClick={() => { setEditItem(null); setShowForm(true); }}
-            className="cursor-pointer flex-shrink-0 mt-3 flex items-center gap-2 px-2 md:px-4 py-2 md:py-3 bg-white/20 hover:bg-white/30 text-white rounded-none font-black text-sm border border-white/30 backdrop-blur-sm transition-all active:scale-[0.97]"
+            className="cursor-pointer flex-shrink-0 mt-3 md:mt-4 flex items-center gap-2 px-2 md:pl-2 md:pr-2.5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-none font-black text-sm border border-white/30 backdrop-blur-sm transition-all active:scale-[0.97]"
           >
             <Plus size={16} /> Buat Pengumuman
           </button>
         </div>
-        {/* <div className="relative mt-4 flex gap-3 flex-wrap text-xs font-black">
-          <span className="px-3 py-1.5 bg-white/15 rounded-none border border-white/20">
-            {pagination.total || 0} total
-          </span>
-          <span className="px-3 py-1.5 bg-white/15 rounded-none border border-white/20 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-none animate-pulse" /> Auto 30s
-          </span>
-          <button onClick={() => refetch()} disabled={isFetching} className="cursor-pointer px-3 py-1.5 bg-white/15 hover:bg-white/25 rounded-none border border-white/20 flex items-center gap-1.5 transition-all disabled:opacity-50">
-            <RefreshCw size={11} className={isFetching ? 'animate-spin' : ''} /> Refresh
-          </button>
-        </div> */}
       </div>
 
       {/* Form Modal */}
@@ -346,7 +335,7 @@ export const AdminAnnouncementsPage = () => {
               onClick={e => e.stopPropagation()}
             >
               <div className="flex items-center justify-between p-4 md:p-5 border-b border-slate-100 dark:border-slate-800">
-                <h3 className="font-black text-lg text-slate-800 dark:text-slate-100">
+                <h3 className="font-black md:text-md text-slate-800 dark:text-slate-100">
                   {editItem ? 'Edit Pengumuman' : 'Buat Pengumuman Baru'}
                 </h3>
                 <button onClick={closeForm} className="cursor-pointer text-slate-400 hover:text-slate-600 p-1"><X size={20} /></button>

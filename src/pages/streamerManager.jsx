@@ -122,14 +122,14 @@ const UserCard = ({ user, onToggle, onDelete }) => {
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-xs text-slate-500 dark:text-slate-400">
+      <div className="flex justify-between w-full gap-2 text-xs text-slate-500 dark:text-slate-400">
         <div>
           <span className="font-black text-[9px] uppercase tracking-widest text-slate-300 dark:text-slate-600 block mb-0.5">Donasi</span>
           <span className="font-bold text-slate-700 dark:text-slate-300">
             Rp {Number(user.totalDonations || 0).toLocaleString('id-ID')}
           </span>
         </div>
-        <div>
+        <div className='ml-aauto'>
           <span className="font-black text-[9px] uppercase tracking-widest text-slate-300 dark:text-slate-600 block mb-0.5">Daftar</span>
           <span className="font-bold text-slate-700 dark:text-slate-300">{formatDate(user.createdAt)}</span>
         </div>
@@ -228,20 +228,13 @@ const StreamerManagerPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Super Admin</p>
-            <h2 className="text-2xl font-black flex items-center gap-2">
-              <ShieldAlert size={22} /> Kelola Streamer
+            <h2 className="text-lg font-black flex items-center gap-2">
+              Kelola Streamer
             </h2>
             <p className="text-slate-400 text-sm font-medium mt-1">
               {pagination.total || 0} total akun terdaftar
             </p>
           </div>
-          <button
-            onClick={() => refetch()}
-            disabled={isFetching}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-none font-black text-xs transition-all cursor-pointer active:scale-[0.97]"
-          >
-            <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} /> Refresh
-          </button>
         </div>
       </div>
 
@@ -256,12 +249,12 @@ const StreamerManagerPage = () => {
             placeholder="Cari username / email..."
             className="flex-1 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-none font-bold text-sm text-slate-900 dark:text-slate-100 outline-none focus:border-blue-400 transition-all"
           />
-          <button
+          {/* <button
             onClick={handleSearch}
-            className="px-4 py-2 bg-blue-600 text-white rounded-none font-black text-sm cursor-pointer active:scale-[0.97] hover:bg-blue-700 transition-all flex items-center gap-1.5"
+            className="px-4 h-[37px] bg-blue-600 text-white rounded-none font-black text-sm cursor-pointer active:scale-[0.97] hover:bg-blue-700 transition-all flex items-center gap-1.5"
           >
             <Search size={15} /> Cari
-          </button>
+          </button> */}
           {search && (
             <button
               onClick={() => { setSearch(''); setSearchInput(''); setPage(1); }}
@@ -273,7 +266,7 @@ const StreamerManagerPage = () => {
         </div>
 
         {/* Status filter */}
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           {[{ val: '', label: 'Semua' }, { val: 'active', label: 'Aktif' }, { val: 'inactive', label: 'Nonaktif' }].map((f) => (
             <button
               key={f.val}
