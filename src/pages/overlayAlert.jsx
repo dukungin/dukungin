@@ -102,7 +102,7 @@
       const text = `${donation.donorName || 'Seseorang'} mengirimkan Rp ${Number(donation.amount).toLocaleString('id-ID')}. ${donation.message || ''}`;
 
       try {
-        const res = await fetch('https://server-dukungin-production.up.railway.app/api/overlay/tts/speak', {
+        const res = await fetch('https://server-ttt-production.up.railway.app/api/overlay/tts/speak', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text, voiceName: 'id-ID-GadisNeural' }),
@@ -124,14 +124,14 @@
     useEffect(() => {
       if (!token) return;
       axios
-        .get(`https://server-dukungin-production.up.railway.app/api/overlay/config/${token}`)
+        .get(`https://server-ttt-production.up.railway.app/api/overlay/config/${token}`)
         .then((res) => { setConfig(res.data); configRef.current = res.data; })
         .catch(() => console.error('[Overlay] Invalid token'));
     }, [token]);
 
     useEffect(() => {
       if (!token) return;
-      const socket = io('https://server-dukungin-production.up.railway.app', {
+      const socket = io('https://server-ttt-production.up.railway.app', {
         reconnection: true,
         reconnectionAttempts: Infinity,
         reconnectionDelay: 2000,
